@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.presentation.ui.theme.TAYAppTheme
+import com.example.tayapp.presentation.ui.theme.Typography
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,12 +22,13 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = TAYAppTheme.colors.border
                 ) {
                     Text(
                         text = "Hi",
-                        fontSize = 50.sp ,
-                        modifier = Modifier.fillMaxSize()
+                        style = MaterialTheme.typography.h1,
+                        modifier = Modifier.fillMaxSize(),
+                        color = TAYAppTheme.colors.primary
                     )
                 }
             }
