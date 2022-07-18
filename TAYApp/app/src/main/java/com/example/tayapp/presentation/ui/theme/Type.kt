@@ -18,7 +18,7 @@ private val SpoqaHanSansNeo = FontFamily(
 )
 
 
-val Typography = Typography(
+val TayTypography = Typography(
     defaultFontFamily = SpoqaHanSansNeo,
 
     h1 = TextStyle(
