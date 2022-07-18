@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 import androidx.navigation.compose.rememberNavController
+import com.example.tayapp.presentation.components.TAYBottomBar
 import com.example.tayapp.presentation.components.TAYScaffold
 import com.example.tayapp.presentation.home.HomeScreen
 import com.example.tayapp.presentation.ui.theme.TAYAppTheme
@@ -21,7 +22,9 @@ fun TAYApp() {
             modifier = Modifier,
             scaffoldState = appState.scaffoldState,
             topBar = {},
-            bottomBar = {},
+            bottomBar = {
+                TAYBottomBar(tabs = appState.bottomBarTabs)
+            },
         ) { innerPadding ->
             NavHost(
                 navController = appState.navController,

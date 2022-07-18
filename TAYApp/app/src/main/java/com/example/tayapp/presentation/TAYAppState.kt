@@ -1,16 +1,14 @@
 package com.example.tayapp.presentation
 
-import android.content.res.Resources
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.tayapp.presentation.components.BottomBarTabs
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 /** Destination 임시로 HOME, DETAIL 설정 */
 object MainDestination {
@@ -38,4 +36,5 @@ class TAYAppState(
 //
 //        }
 //    }
+    val bottomBarTabs = BottomBarTabs.values()
 }
