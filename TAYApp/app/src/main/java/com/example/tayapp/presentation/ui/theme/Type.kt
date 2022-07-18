@@ -23,38 +23,38 @@ val Typography = Typography(
 
     h1 = TextStyle(
         fontWeight = FontWeight.Bold,
-        fontSize = 34.sp,
-        letterSpacing = (-0.4).sp,
-        lineHeight = 22.sp
+        fontSize = 24.sp,
+        letterSpacing = (-0.3).sp,
+        lineHeight = (22.4).sp
     ),
     h2 = TextStyle(
         fontWeight = FontWeight.Medium,
-        fontSize = 27.sp,
-        letterSpacing = (-0.4).sp,
-        lineHeight = 22.sp
+        fontSize = 20.sp,
+        letterSpacing = (-0.3).sp,
+        lineHeight = (22.4).sp
     ),
 
     subtitle1 = TextStyle(
         fontWeight = FontWeight.Medium,
-        fontSize = 24.sp,
-        letterSpacing = (-0.4).sp,
-        lineHeight = 22.sp
+        fontSize = 18.sp,
+        letterSpacing = (-0.3).sp,
+        lineHeight = (22.4).sp
     ),
     body1 = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontSize = 21.sp,
-        letterSpacing = (-0.267).sp,
-        lineHeight = 26.sp
+        fontSize = 16.sp,
+        letterSpacing = (-0.2).sp,
+        lineHeight = (26.4).sp
     ),
     body2 = TextStyle(
         fontWeight = FontWeight.Light,
-        fontSize = 19.sp,
+        fontSize = 14.sp,
         letterSpacing = 0.sp,
-        lineHeight = 26.sp
+        lineHeight = (26.4).sp
     ),
     caption = TextStyle(
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 12.sp,
         letterSpacing = 0.sp,
         lineHeight = 26.sp
     )
