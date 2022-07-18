@@ -18,20 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TAYAppTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = TAYAppTheme.colors.border
-                ) {
-                    Text(
-                        text = "Hi",
-                        style = MaterialTheme.typography.h1,
-                        modifier = Modifier.fillMaxSize(),
-                        color = TAYAppTheme.colors.primary
-                    )
-                }
-            }
+            TAYApp()
         }
     }
 }
