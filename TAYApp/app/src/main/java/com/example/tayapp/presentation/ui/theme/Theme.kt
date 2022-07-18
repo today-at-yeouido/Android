@@ -5,7 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = TAYColorSystem(
+private val DarkColorPalette = TayColorSystem(
     primary = dark50,
     defaultButton = dark50,
     background = dm_gray000,
@@ -26,7 +26,7 @@ private val DarkColorPalette = TAYColorSystem(
 
     )
 
-private val LightColorPalette = TAYColorSystem(
+private val LightColorPalette = TayColorSystem(
     primary = light50,
     defaultButton = light50,
     background = lm_gray000,
@@ -48,7 +48,7 @@ private val LightColorPalette = TAYColorSystem(
     )
 
 @Composable
-fun TAYAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun TayAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val tayColorSystem = if (darkTheme) {
         DarkColorPalette
     } else {
@@ -59,7 +59,7 @@ fun TAYAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
         typography = TayTypography
     )
 
-    ProvideTAYSystem(colors = tayColorSystem, typo = tayTypographySystem) {
+    ProvideTaySystem(colors = tayColorSystem, typo = tayTypographySystem) {
         MaterialTheme(
             colors = debugColors(darkTheme),
             shapes = Shapes,
@@ -72,10 +72,10 @@ fun TAYAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
  * object TAYAppTheme 없으면
  * TAYAppTheme.colors. 호출불가
  */
-object TAYAppTheme {
-    val colors: TAYColorSystem
+object TayAppTheme {
+    val colors: TayColorSystem
         @Composable
-        get() = LocalTAYColorSystem.current
+        get() = LocalTayColorSystem.current
 
     val typo: TayTypographySystem
         @Composable
@@ -100,7 +100,7 @@ val LocalTayTypographySystem = staticCompositionLocalOf {
  * custom Color Palette
  */
 @Stable
-class TAYColorSystem(
+class TayColorSystem(
     primary: Color,
     defaultButton: Color,
     background: Color,
@@ -157,7 +157,7 @@ class TAYColorSystem(
     /**
      * set(update) function
      */
-    fun update(other: TAYColorSystem) {
+    fun update(other: TayColorSystem) {
         primary = other.primary
         defaultButton = other.defaultButton
         background = other.background
@@ -180,7 +180,7 @@ class TAYColorSystem(
     /**
      * return TAYColors( get)
      */
-    fun copy(): TAYColorSystem = TAYColorSystem(
+    fun copy(): TayColorSystem = TayColorSystem(
         primary = primary,
         defaultButton = defaultButton,
         background = background,
@@ -202,8 +202,8 @@ class TAYColorSystem(
 }
 
 @Composable
-fun ProvideTAYSystem(
-    colors: TAYColorSystem,
+fun ProvideTaySystem(
+    colors: TayColorSystem,
     typo: TayTypographySystem,
     content: @Composable () -> Unit
 ) {
@@ -213,13 +213,13 @@ fun ProvideTAYSystem(
 
     colorPalette.update(colors)
     CompositionLocalProvider(
-        LocalTAYColorSystem provides colorPalette,
+        LocalTayColorSystem provides colorPalette,
         LocalTayTypographySystem provides typo,
         content = content
     )
 }
 
-private val LocalTAYColorSystem = staticCompositionLocalOf<TAYColorSystem> {
+private val LocalTayColorSystem = staticCompositionLocalOf<TayColorSystem> {
     error("No ColorPalette")
 }
 

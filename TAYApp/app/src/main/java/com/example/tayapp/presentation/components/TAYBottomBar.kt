@@ -13,20 +13,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
-import com.example.tayapp.presentation.ui.theme.TAYAppTheme
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.ui.theme.lm_gray700
 
 @Composable
-fun TAYBottomBar(
+fun TayBottomBar(
     tabs: Array<BottomBarTabs>,
     currentRoute: String? = null,
     navigateToRoute: (String) -> Unit = {},
 
     /** icon에 color 필요? */
-    color: Color = TAYAppTheme.colors.icon,
-    contentColor: Color = TAYAppTheme.colors.subduedIcon
+    color: Color = TayAppTheme.colors.icon,
+    contentColor: Color = TayAppTheme.colors.subduedIcon
 ) {
     BottomNavigation(
         backgroundColor = lm_gray000,
@@ -39,7 +39,7 @@ fun TAYBottomBar(
                 label = {
                     Text(
                         text = stringResource(id = item.title),
-                        style = TAYAppTheme.typo.typography.body1,
+                        style = TayAppTheme.typo.typography.body1,
                         fontSize = 15.sp
                     )
                 },

@@ -1,29 +1,27 @@
 package com.example.tayapp.presentation
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
-import androidx.navigation.compose.rememberNavController
-import com.example.tayapp.presentation.components.TAYBottomBar
-import com.example.tayapp.presentation.components.TAYScaffold
+import com.example.tayapp.presentation.components.TayBottomBar
+import com.example.tayapp.presentation.components.TayScaffold
 import com.example.tayapp.presentation.home.HomeScreen
-import com.example.tayapp.presentation.ui.theme.TAYAppTheme
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
-fun TAYApp() {
-    TAYAppTheme {
-        val appState = rememberTAYAppState()
-        TAYScaffold(
+fun TayApp() {
+    TayAppTheme {
+        val appState = rememberTayAppState()
+        TayScaffold(
             modifier = Modifier,
             scaffoldState = appState.scaffoldState,
             topBar = {},
             bottomBar = {
-                TAYBottomBar(tabs = appState.bottomBarTabs)
+                TayBottomBar(tabs = appState.bottomBarTabs)
             },
         ) { innerPadding ->
             NavHost(

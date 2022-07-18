@@ -2,7 +2,7 @@ package com.example.tayapp.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.tayapp.data.local.TAYDatabase
+import com.example.tayapp.data.local.TayDatabase
 import com.example.tayapp.data.remote.RegisterApi
 import com.example.tayapp.util.Constants.BASE_URL
 import dagger.Module
@@ -18,10 +18,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(app: Application): TAYDatabase {
+    fun provideDatabase(app: Application): TayDatabase {
         return Room.databaseBuilder(
             app,
-            TAYDatabase::class.java,
+            TayDatabase::class.java,
             "tay+db"
         )
 //            .addTypeConverter()// TypeConverter 추가 예정

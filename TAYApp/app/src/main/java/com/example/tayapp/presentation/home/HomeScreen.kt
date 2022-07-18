@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.tayapp.presentation.components.BottomBarTabs
-import com.example.tayapp.presentation.ui.theme.TAYAppTheme
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 
 @Composable
@@ -24,13 +24,13 @@ private fun HomeTopAppBar(
         title = {
             Spacer(
                 modifier = Modifier
-                    .background(TAYAppTheme.colors.primary)
+                    .background(TayAppTheme.colors.primary)
                     .width(100.dp)
                     .height(26.dp)
             )
         },
         elevation = elevation,
-        backgroundColor = TAYAppTheme.colors.background,
+        backgroundColor = TayAppTheme.colors.background,
         actions = {
             /**
              * Icon 파일 생성하면 onClick 함께 구현할 예정
@@ -39,7 +39,7 @@ private fun HomeTopAppBar(
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
                     contentDescription = null,
-                    tint = TAYAppTheme.colors.icon
+                    tint = TayAppTheme.colors.icon
                 )
             }
         }
