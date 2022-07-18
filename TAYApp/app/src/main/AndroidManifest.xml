@@ -4,7 +4,7 @@
     package="com.example.tayapp">
 
     <application
-        android:name=".TAYApplication"
+        android:name=".TayApplication"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

@@ -17,15 +17,15 @@ object MainDestination {
 }
 
 @Composable
-fun rememberTAYAppState(
+fun rememberTayAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) = remember(scaffoldState, navController, coroutineScope) {
-    TAYAppState(scaffoldState, navController, coroutineScope)
+    TayAppState(scaffoldState, navController, coroutineScope)
 }
 
-class TAYAppState(
+class TayAppState(
     val scaffoldState: ScaffoldState,
     val navController: NavHostController,
     scope : CoroutineScope

@@ -9,7 +9,7 @@ import com.example.tayapp.data.local.entities.UserInfo
     version = 1,
     exportSchema = false
 )
-abstract class TAYDatabase:RoomDatabase() {
+abstract class TayDatabase:RoomDatabase() {
 
-    abstract val dao: TAYDao
+    abstract val dao: TayDao
 }

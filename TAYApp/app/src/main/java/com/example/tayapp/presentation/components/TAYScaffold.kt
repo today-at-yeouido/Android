@@ -4,15 +4,14 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import com.example.tayapp.presentation.ui.theme.TAYAppTheme
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
-fun TAYScaffold(
+fun TayScaffold(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable () -> Unit = {},
@@ -28,7 +27,7 @@ fun TAYScaffold(
     drawerBackgroundColor: Color = MaterialTheme.colors.surface,
     drawerContentColor: Color = contentColorFor(drawerBackgroundColor),
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
-    backgroundColor: Color = TAYAppTheme.colors.background,
+    backgroundColor: Color = TayAppTheme.colors.background,
     /** contentColorFor 적절한 색상 지정 */
     contentColor: Color = contentColorFor(backgroundColor),
     content: @Composable (PaddingValues) -> Unit
