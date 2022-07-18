@@ -1,14 +1,11 @@
 package com.example.tayapp.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = TAYColors(
+private val DarkColorPalette = TAYColorSystem(
     primary = dark50,
     defaultButton = dark50,
     background = dm_gray000,
@@ -27,9 +24,9 @@ private val DarkColorPalette = TAYColors(
     headText = dm_gray800,
     isDark = false,
 
-)
+    )
 
-private val LightColorPalette = TAYColors(
+private val LightColorPalette = TAYColorSystem(
     primary = light50,
     defaultButton = light50,
     background = lm_gray000,
@@ -48,20 +45,23 @@ private val LightColorPalette = TAYColors(
     headText = lm_gray800,
     isDark = true,
 
-)
+    )
 
 @Composable
 fun TAYAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
+    val tayColorSystem = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
 
-    ProvideTAYColors(colors = colors) {
+    val tayTypographySystem = TayTypographySystem(
+        typography = TayTypography
+    )
+
+    ProvideTAYSystem(colors = tayColorSystem, typo = tayTypographySystem) {
         MaterialTheme(
             colors = debugColors(darkTheme),
-            typography = Typography,
             shapes = Shapes,
             content = content
         )
@@ -73,16 +73,34 @@ fun TAYAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
  * TAYAppTheme.colors. 호출불가
  */
 object TAYAppTheme {
-    val colors: TAYColors
+    val colors: TAYColorSystem
         @Composable
-        get() = LocalTAYColors.current
+        get() = LocalTAYColorSystem.current
+
+    val typo: TayTypographySystem
+        @Composable
+        get() = LocalTayTypographySystem.current
+}
+
+/**
+ * custom Color Palette
+ */
+
+data class TayTypographySystem(
+    val typography: Typography
+)
+
+val LocalTayTypographySystem = staticCompositionLocalOf {
+    TayTypographySystem(
+        typography = TayTypography
+    )
 }
 
 /**
  * custom Color Palette
  */
 @Stable
-class TAYColors(
+class TAYColorSystem(
     primary: Color,
     defaultButton: Color,
     background: Color,
@@ -100,7 +118,7 @@ class TAYColors(
     icon: Color,
     headText: Color,
     isDark: Boolean
-){
+) {
     var primary by mutableStateOf(primary)
         private set
     var defaultButton by mutableStateOf(defaultButton)
@@ -139,10 +157,10 @@ class TAYColors(
     /**
      * set(update) function
      */
-    fun update(other: TAYColors){
+    fun update(other: TAYColorSystem) {
         primary = other.primary
         defaultButton = other.defaultButton
-        background= other.background
+        background = other.background
         layer1 = other.layer1
         layer2 = other.layer2
         layer2 = other.layer3
@@ -162,7 +180,7 @@ class TAYColors(
     /**
      * return TAYColors( get)
      */
-    fun copy(): TAYColors = TAYColors(
+    fun copy(): TAYColorSystem = TAYColorSystem(
         primary = primary,
         defaultButton = defaultButton,
         background = background,
@@ -184,19 +202,24 @@ class TAYColors(
 }
 
 @Composable
-fun ProvideTAYColors(
-    colors: TAYColors,
+fun ProvideTAYSystem(
+    colors: TAYColorSystem,
+    typo: TayTypographySystem,
     content: @Composable () -> Unit
-){
+) {
     val colorPalette = remember {
         colors.copy()
     }
 
     colorPalette.update(colors)
-    CompositionLocalProvider(LocalTAYColors provides  colorPalette, content = content)
+    CompositionLocalProvider(
+        LocalTAYColorSystem provides colorPalette,
+        LocalTayTypographySystem provides typo,
+        content = content
+    )
 }
 
-private val LocalTAYColors = staticCompositionLocalOf<TAYColors> {
+private val LocalTAYColorSystem = staticCompositionLocalOf<TAYColorSystem> {
     error("No ColorPalette")
 }
 
