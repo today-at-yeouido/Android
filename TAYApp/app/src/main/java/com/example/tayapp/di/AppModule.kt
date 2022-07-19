@@ -22,7 +22,7 @@ object AppModule {
         return Room.databaseBuilder(
             app,
             TayDatabase::class.java,
-            "tay+db"
+            "tay_db"
         )
 //            .addTypeConverter()// TypeConverter 추가 예정
             .build()
