@@ -54,16 +54,17 @@ fun TayAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
     } else {
         LightColorPalette
     }
-
+    val tayTypography = TayTypography
     val tayTypographySystem = TayTypographySystem(
-        typography = TayTypography
+        typography = tayTypography
     )
 
     ProvideTaySystem(colors = tayColorSystem, typo = tayTypographySystem) {
         MaterialTheme(
             colors = debugColors(darkTheme),
             shapes = Shapes,
-            content = content
+            content = content,
+            typography = tayTypography
         )
     }
 }
