@@ -45,13 +45,3 @@ private fun HomeTopAppBar(
         }
     )
 }
-
-@Composable
-fun HomeScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Icon(imageVector = BottomBarTabs.HOME.icon, contentDescription = "")
-        Icon(imageVector = BottomBarTabs.SCRAP.icon, contentDescription = "")
-        Icon(imageVector = BottomBarTabs.REPORT.icon, contentDescription = "")
-        Icon(imageVector = BottomBarTabs.PROFILE.icon, contentDescription = "")
-    }
-}

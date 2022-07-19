@@ -6,10 +6,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-
+import androidx.navigation.navigation
+import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.components.TayBottomBar
 import com.example.tayapp.presentation.components.TayScaffold
-import com.example.tayapp.presentation.home.HomeScreen
+import com.example.tayapp.presentation.components.addHomeGraph
+import com.example.tayapp.presentation.navigation.MainDestination
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
@@ -21,7 +23,13 @@ fun TayApp() {
             scaffoldState = appState.scaffoldState,
             topBar = {},
             bottomBar = {
-                TayBottomBar(tabs = appState.bottomBarTabs)
+                if (appState.shouldShowBottomBar) {
+                    TayBottomBar(
+                        tabs = appState.bottomBarTabs,
+                        currentRoute = appState.currentRoute,
+                        navigateToRoute = appState::navigateToBottomBarRoute
+                    )
+                }
             },
         ) { innerPadding ->
             NavHost(
@@ -32,20 +40,20 @@ fun TayApp() {
                 tayNavGraph()
             }
         }
-
     }
 }
 
 private fun NavGraphBuilder.tayNavGraph() {
-    composable(
-        route = MainDestination.HOME
-    ) { entry ->
-        HomeScreen()
+
+    /** nested Navigation */
+    navigation(
+        route = MainDestination.HOME,
+        startDestination = BottomBarTabs.Feed.route
+    ) {
+        addHomeGraph()
     }
 
     composable(
         route = MainDestination.DETAIL
-    ) { entry ->
-
-    }
+    ){}
 }
