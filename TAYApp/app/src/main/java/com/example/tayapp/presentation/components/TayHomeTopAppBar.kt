@@ -23,6 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.utils.ExpandButton
+import com.example.tayapp.presentation.utils.NotificationButton
+import com.example.tayapp.presentation.utils.TayIcons
 import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -64,16 +67,7 @@ fun TayHomeTopAppBar(
             elevation = elevation,
             backgroundColor = TayAppTheme.colors.background,
             actions = {
-                /**
-                 * Icon 파일 생성하면 onClick 함께 구현할 예정
-                 */
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Notifications,
-                        contentDescription = null,
-                        tint = TayAppTheme.colors.icon
-                    )
-                }
+                NotificationButton()
             }
         )
         HomeTabBar(
@@ -125,22 +119,9 @@ fun HomeTabBar(
                 isExpanded = isExpanded
             )
 
-        IconButton(
-            onClick = onArrowClick,
-            modifier = Modifier.weight(1f)
-        ){
-            Icon(
-                /**
-                 * Icon 수정 필요
-                 */
-                imageVector = if(isExpanded)
-                                Icons.Default.KeyboardArrowUp
-                              else
-                                Icons.Default.KeyboardArrowDown,
-
-                contentDescription = null,
-            )
-        }
+        ExpandButton(
+            isExpanded = isExpanded,
+            onClick = onArrowClick )
     }
 
 
