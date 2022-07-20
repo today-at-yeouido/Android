@@ -1,2 +1,233 @@
 package com.example.tayapp.presentation.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.google.accompanist.flowlayout.FlowRow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+
+/**
+ * Tag data model 생성시 수정
+ */
+var datalist = listOf<String>("전체","행정안전","보건복지","국토교통","기획재정","환경/노동","교육","사법","" +
+        "문화체육관광","정무","농림/해양","과학통신")
+
+
+@Composable
+fun TayHomeTopAppBar(
+    elevation: Dp = 0.dp,
+    modifier: Modifier = Modifier,
+//    onTagClick: (String) -> Unit = {},
+//    currentTag: String,
+//    listState: LazyListState,
+//    scope: CoroutineScope,
+//    isExpanded: Boolean
+) {
+    var currentTag by remember{ mutableStateOf("전체") }
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    var isExpanded by remember{ mutableStateOf(false)}
+
+
+    Column() {
+        TopAppBar(
+            title = {
+                Spacer(
+                    modifier = Modifier
+                        .background(TayAppTheme.colors.primary)
+                        .width(100.dp)
+                        .height(26.dp)
+                )
+            },
+            elevation = elevation,
+            backgroundColor = TayAppTheme.colors.background,
+            actions = {
+                /**
+                 * Icon 파일 생성하면 onClick 함께 구현할 예정
+                 */
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Notifications,
+                        contentDescription = null,
+                        tint = TayAppTheme.colors.icon
+                    )
+                }
+            }
+        )
+        HomeTabBar(
+            modifier = modifier,
+            currentTag = currentTag,
+            onTagClick = { it ->
+                currentTag = it
+                isExpanded = false
+                         },
+            listState = listState,
+            scope = scope,
+            isExpanded = isExpanded,
+            onArrowClick = {
+                isExpanded = !isExpanded;
+            }
+        )
+    }
+}
+
+
+
+
+@Composable
+fun HomeTabBar(
+    modifier: Modifier,
+    currentTag: String,
+    onTagClick: (String) -> Unit,
+    listState: LazyListState,
+    scope: CoroutineScope,
+    isExpanded: Boolean,
+    onArrowClick: () -> Unit
+){
+
+
+    Row(){
+        if(isExpanded)
+            ExpandedTagBar(
+                modifier = modifier.weight(7f),
+                currentTag = currentTag,
+                onTagClick = onTagClick
+            )
+        else
+            NotExpandedTagBar(
+                modifier = modifier.weight(7f),
+                currentTag = currentTag,
+                onTagClick = onTagClick,
+                listState = listState,
+                scope = scope,
+                isExpanded = isExpanded
+            )
+
+        IconButton(
+            onClick = onArrowClick,
+            modifier = Modifier.weight(1f)
+        ){
+            Icon(
+                /**
+                 * Icon 수정 필요
+                 */
+                imageVector = if(isExpanded)
+                                Icons.Default.KeyboardArrowUp
+                              else
+                                Icons.Default.KeyboardArrowDown,
+
+                contentDescription = null,
+            )
+        }
+    }
+
+
+}
+
+
+
+
+@Composable
+private fun NotExpandedTagBar(
+    modifier: Modifier,
+    currentTag: String,
+    onTagClick: (String) -> Unit,
+    listState: LazyListState,
+    scope: CoroutineScope,
+    isExpanded: Boolean
+){
+    LazyRow(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 7.dp, vertical = 7.dp),
+        horizontalArrangement = Arrangement.spacedBy(7.dp),
+        state = listState,
+    ){
+        items(datalist){ it ->
+            if(currentTag == it) HomeTag(it, true, onTagClick)
+            else HomeTag(it,false,onClick = onTagClick)
+        }
+    }
+
+    LaunchedEffect(isExpanded){
+        listState.animateScrollToItem(index = datalist.indexOf(currentTag))
+    }
+}
+
+@Composable
+private fun ExpandedTagBar(
+    modifier: Modifier,
+    currentTag: String,
+    onTagClick: (String) -> Unit
+){
+    FlowRow(
+        mainAxisSpacing = 7.dp,
+        crossAxisSpacing = 7.dp,
+        modifier = Modifier
+            .padding(horizontal = 7.dp, vertical = 7.dp)
+
+    ){
+        datalist.forEach{ it ->
+            if(currentTag == it) HomeTag(it, true,onTagClick)
+            else HomeTag(it,false,onClick = onTagClick)
+        }
+
+    }
+}
+
+
+
+@Composable
+private fun HomeTag(
+    string: String = "전체",
+    isClicked: Boolean = false,
+    onClick:(String)->Unit = {}
+){
+    Box(
+        modifier = Modifier
+            .background(
+                color = if (isClicked) TayAppTheme.colors.icon
+                else TayAppTheme.colors.background,
+                shape = RoundedCornerShape(100.dp)
+            )
+            .border(
+                width = 1.dp,
+                color = TayAppTheme.colors.border,
+                shape = RoundedCornerShape(100.dp)
+            )
+            .padding(
+                horizontal = 10.dp,
+                vertical = 5.dp
+            )
+            .clickable { onClick(string) }
+
+    ) {
+        Text(
+            text = "$string",
+            color = if (isClicked) TayAppTheme.colors.background
+                    else TayAppTheme.colors.bodyText
+        )
+    }
+}
+
