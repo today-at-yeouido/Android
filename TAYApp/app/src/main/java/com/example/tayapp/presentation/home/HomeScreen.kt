@@ -16,32 +16,4 @@ import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 
-@Composable
-private fun HomeTopAppBar(
-    elevation: Dp = 0.dp
-) {
-    TopAppBar(
-        title = {
-            Spacer(
-                modifier = Modifier
-                    .background(TayAppTheme.colors.primary)
-                    .width(100.dp)
-                    .height(26.dp)
-            )
-        },
-        elevation = elevation,
-        backgroundColor = TayAppTheme.colors.background,
-        actions = {
-            /**
-             * Icon 파일 생성하면 onClick 함께 구현할 예정
-             */
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = null,
-                    tint = TayAppTheme.colors.icon
-                )
-            }
-        }
-    )
-}
+
