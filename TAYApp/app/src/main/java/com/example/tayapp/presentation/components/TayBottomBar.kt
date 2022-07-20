@@ -8,8 +8,6 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +24,7 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.ui.theme.lm_gray700
+import com.example.tayapp.presentation.utils.TayIcons
 
 fun NavGraphBuilder.addHomeGraph() {
     composable(route = BottomBarTabs.Feed.route) { from ->
@@ -94,9 +93,9 @@ enum class BottomBarTabs(
     val icon: ImageVector,
     val route: String
 ) {
-    Feed(R.string.bottom_home, Icons.Outlined.Home, BottomBarDestination.FEED),
-    SCRAP(R.string.bottom_scrap, Icons.Outlined.Bookmark, BottomBarDestination.SCRAP),
-    SEARCH(R.string.bottom_search, Icons.Outlined.Search, BottomBarDestination.SEARCH),
-    REPORT(R.string.bottom_report, Icons.Outlined.Message, BottomBarDestination.REPORT),
-    PROFILE(R.string.bottom_profile, Icons.Outlined.Person, BottomBarDestination.PROFILE)
+    Feed(R.string.bottom_home, TayIcons.bottombar_home, BottomBarDestination.FEED),
+    SCRAP(R.string.bottom_scrap, TayIcons.bottombar_bookmark, BottomBarDestination.SCRAP),
+    SEARCH(R.string.bottom_search, TayIcons.bottombar_search, BottomBarDestination.SEARCH),
+    REPORT(R.string.bottom_report, TayIcons.bottombar_message, BottomBarDestination.REPORT),
+    PROFILE(R.string.bottom_profile, TayIcons.bottombar_person, BottomBarDestination.PROFILE)
 }
