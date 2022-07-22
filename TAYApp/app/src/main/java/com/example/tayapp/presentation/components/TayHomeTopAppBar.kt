@@ -26,7 +26,6 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.ExpandButton
 import com.example.tayapp.presentation.utils.NotificationButton
 import com.example.tayapp.presentation.utils.TayIcons
-import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -103,21 +102,27 @@ fun HomeTabBar(
 
 
     Row(){
-        if(isExpanded)
-            ExpandedTagBar(
-                modifier = modifier.weight(7f),
-                currentTag = currentTag,
-                onTagClick = onTagClick
-            )
-        else
-            NotExpandedTagBar(
-                modifier = modifier.weight(7f),
-                currentTag = currentTag,
-                onTagClick = onTagClick,
-                listState = listState,
-                scope = scope,
-                isExpanded = isExpanded
-            )
+        Box(
+            modifier = Modifier
+                .weight(7f)
+        ){
+            if(isExpanded)
+                Row() {
+                    Spacer(modifier = Modifier.width(16.dp))
+                    ExpandedTagBar(
+                        currentTag = currentTag,
+                        onTagClick = onTagClick
+                    )
+                }
+            else
+                NotExpandedTagBar(
+                    currentTag = currentTag,
+                    onTagClick = onTagClick,
+                    listState = listState,
+                    scope = scope,
+                    isExpanded = isExpanded
+                )
+        }
 
         ExpandButton(
             isExpanded = isExpanded,
@@ -132,7 +137,7 @@ fun HomeTabBar(
 
 @Composable
 private fun NotExpandedTagBar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     currentTag: String,
     onTagClick: (String) -> Unit,
     listState: LazyListState,
@@ -141,9 +146,9 @@ private fun NotExpandedTagBar(
 ){
     LazyRow(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 7.dp, vertical = 7.dp),
         horizontalArrangement = Arrangement.spacedBy(7.dp),
         state = listState,
+        contentPadding = PaddingValues(start = 16.dp)
     ){
         items(datalist){ it ->
             if(currentTag == it) HomeTag(it, true, onTagClick)
@@ -158,16 +163,14 @@ private fun NotExpandedTagBar(
 
 @Composable
 private fun ExpandedTagBar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     currentTag: String,
     onTagClick: (String) -> Unit
 ){
-    FlowRow(
-        mainAxisSpacing = 7.dp,
-        crossAxisSpacing = 7.dp,
-        modifier = Modifier
-            .padding(horizontal = 7.dp, vertical = 7.dp)
-
+    FlowLayout(
+        modifier = modifier,
+        verticalContentPadding = 7.dp,
+        horizontalContentPadding = 7.dp
     ){
         datalist.forEach{ it ->
             if(currentTag == it) HomeTag(it, true,onTagClick)
