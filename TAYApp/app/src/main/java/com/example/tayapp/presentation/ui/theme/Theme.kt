@@ -6,8 +6,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = TayColorSystem(
-    primary = dark50,
-    defaultButton = dark50,
+    primary = dm_primary50,
+    defaultButton = dm_primary50,
     background = dm_gray000,
     layer1 = dm_gray050,
     layer2 = dm_gray075,
@@ -22,13 +22,17 @@ private val DarkColorPalette = TayColorSystem(
     bodyText = dm_gray700,
     icon = dm_gray700,
     headText = dm_gray800,
+    textHighlight = dm_sub20,
+    danger = dm_sementic_red,
+    success = dm_sementic_green,
+    caution = dm_sementic_yellow,
+    information = dm_sementic_blue,
     isDark = false,
-
     )
 
 private val LightColorPalette = TayColorSystem(
-    primary = light50,
-    defaultButton = light50,
+    primary = lm_primary50,
+    defaultButton = lm_primary50,
     background = lm_gray000,
     layer1 = lm_gray050,
     layer2 = lm_gray075,
@@ -43,6 +47,11 @@ private val LightColorPalette = TayColorSystem(
     bodyText = lm_gray700,
     icon = lm_gray700,
     headText = lm_gray800,
+    textHighlight = lm_sub20,
+    danger = lm_sementic_red,
+    success = lm_sementic_green,
+    caution = lm_sementic_yellow,
+    information = lm_sementic_blue,
     isDark = true,
 
     )
@@ -118,6 +127,11 @@ class TayColorSystem(
     bodyText: Color,
     icon: Color,
     headText: Color,
+    textHighlight: Color,
+    danger: Color,
+    success: Color,
+    caution: Color,
+    information: Color,
     isDark: Boolean
 ) {
     var primary by mutableStateOf(primary)
@@ -152,6 +166,17 @@ class TayColorSystem(
         private set
     var headText by mutableStateOf(headText)
         private set
+    var textHighlight by mutableStateOf(textHighlight)
+        private set
+    var danger by mutableStateOf(danger)
+        private set
+    var success by mutableStateOf(success)
+        private set
+    var caution by mutableStateOf(caution)
+        private set
+    var information by mutableStateOf(information)
+        private set
+
     var isDark by mutableStateOf(isDark)
         private set
 
@@ -175,6 +200,11 @@ class TayColorSystem(
         bodyText = other.bodyText
         icon = other.icon
         headText = other.headText
+        textHighlight = other.textHighlight
+        danger = other.danger
+        success = other.success
+        caution = other.caution
+        information = other.information
         isDark = other.isDark
     }
 
@@ -198,6 +228,11 @@ class TayColorSystem(
         bodyText = bodyText,
         icon = icon,
         headText = headText,
+        textHighlight = textHighlight,
+        danger = danger,
+        success = success,
+        caution = caution,
+        information = information,
         isDark = isDark,
     )
 }
@@ -230,7 +265,7 @@ private val LocalTayColorSystem = staticCompositionLocalOf<TayColorSystem> {
  */
 fun debugColors(
     darkTheme: Boolean,
-    debugColor: Color = light50
+    debugColor: Color = lm_primary50
 ) = Colors(
     primary = debugColor,
     primaryVariant = debugColor,

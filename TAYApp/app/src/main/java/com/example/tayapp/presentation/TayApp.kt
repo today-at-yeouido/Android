@@ -7,10 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.tayapp.presentation.components.BottomBarTabs
-import com.example.tayapp.presentation.components.TayBottomBar
-import com.example.tayapp.presentation.components.TayScaffold
-import com.example.tayapp.presentation.components.addHomeGraph
+import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.navigation.MainDestination
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
@@ -21,7 +18,7 @@ fun TayApp() {
         TayScaffold(
             modifier = Modifier,
             scaffoldState = appState.scaffoldState,
-            topBar = {},
+            topBar = { TayHomeTopAppBar()},
             bottomBar = {
                 if (appState.shouldShowBottomBar) {
                     TayBottomBar(
