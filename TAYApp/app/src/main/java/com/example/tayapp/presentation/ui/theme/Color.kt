@@ -55,3 +55,4 @@ val dm_gray700 = Color(0xFFF5F5F5)
 val dm_gray800 = Color(0xFFFCFCFC)
 
 
+val card_yellow = Color(0xFFFFA200)
