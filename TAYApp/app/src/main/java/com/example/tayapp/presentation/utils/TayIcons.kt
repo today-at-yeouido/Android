@@ -62,6 +62,7 @@ object TayIcons {
     val arrowback = Icons.Filled.ArrowBack
     val arrowback_ios = Icons.Filled.ArrowBackIos
 
+    val navigate_next = Icons.Filled.NavigateNext
     val navigate_before = Icons.Filled.NavigateBefore
     val expand_more = Icons.Outlined.ExpandMore
     val expand_less = Icons.Outlined.ExpandLess
@@ -86,8 +87,13 @@ object TayIcons {
     val stacked_bar_chart = Icons.Filled.StackedBarChart
     val timeline = Icons.Outlined.Timeline
     val sort = Icons.Outlined.Sort
+
+    val card_article = Icons.Outlined.Article
 }
 
+object TayEmoji{
+    val card_emoji: String = "🏗"
+}
 
 @Composable
 fun NotificationButton(onClick: () -> Unit = {}){

@@ -7,8 +7,6 @@ val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
-
-
 val lm_primary10 = Color(0xFFF4FFFC)
 val lm_primary20 = Color(0xFFD2FFF4)
 val lm_primary30 = Color(0xFFB0FFEC)
@@ -79,7 +77,10 @@ val lm_sementic_green = Color(0xFFA2F221)
 val lm_sementic_yellow = Color(0xFFE7B10B)
 val lm_sementic_blue = Color(0xFF80D7FF)
 
+val dm_sementic_red = Color(0xFFFA1E38)
+val dm_sementic_green = Color(0xFFA8FD21)
+val dm_sementic_yellow = Color(0xFFFABE0A)
+val dm_sementic_blue = Color(0xFF8DD5F7)
 
-
-val card_yellow = Color(0xFFFFA200)
+val lm_card_yellow = Color(0xFFFFA200)
 

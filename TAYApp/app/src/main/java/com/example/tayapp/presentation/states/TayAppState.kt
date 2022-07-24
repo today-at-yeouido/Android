@@ -1,4 +1,4 @@
-package com.example.tayapp.presentation
+package com.example.tayapp.presentation.states
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
