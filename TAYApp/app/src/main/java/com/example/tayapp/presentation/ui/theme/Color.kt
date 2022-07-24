@@ -80,7 +80,6 @@ val lm_sementic_yellow = Color(0xFFE7B10B)
 val lm_sementic_blue = Color(0xFF80D7FF)
 
 
-val dm_sementic_red = Color(0xFFFA1E38)
-val dm_sementic_green = Color(0xFFA8FD21)
-val dm_sementic_yellow = Color(0xFFFABE0A)
-val dm_sementic_blue = Color(0xFF8DD5F7)
+
+val card_yellow = Color(0xFFFFA200)
+
