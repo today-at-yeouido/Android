@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.navigation.MainDestination
+import com.example.tayapp.presentation.states.rememberTayAppState
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
@@ -18,7 +19,7 @@ fun TayApp() {
         TayScaffold(
             modifier = Modifier,
             scaffoldState = appState.scaffoldState,
-            topBar = { TayHomeTopAppBar()},
+            topBar = { TayHomeTopAppBar() },
             bottomBar = {
                 if (appState.shouldShowBottomBar) {
                     TayBottomBar(
@@ -52,5 +53,5 @@ private fun NavGraphBuilder.tayNavGraph() {
 
     composable(
         route = MainDestination.DETAIL
-    ){}
+    ) {}
 }

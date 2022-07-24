@@ -8,3 +8,8 @@ val Shapes = Shapes(
     medium = RoundedCornerShape(12.dp),
     large = RoundedCornerShape(0.dp)
 )
+
+val CardNewsShape = Shapes(
+    medium = RoundedCornerShape(20.dp),
+    large = RoundedCornerShape(12.dp)
+)

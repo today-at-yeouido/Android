@@ -29,7 +29,7 @@ import com.example.tayapp.presentation.utils.TayIcons
 
 fun NavGraphBuilder.addHomeGraph() {
     composable(route = BottomBarTabs.Feed.route) { from ->
-        Feed(Modifier.fillMaxSize())
+        Feed()
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
         Search(Modifier.fillMaxSize())
