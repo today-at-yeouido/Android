@@ -1,10 +1,7 @@
 package com.example.tayapp.presentation.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -72,13 +69,13 @@ fun TayBottomBar(
                     Text(
                         text = stringResource(id = section.title),
                         fontWeight = FontWeight.Normal,
-                        fontSize = 15.sp
+                        fontSize = 12.sp
                     )
                 },
                 icon = {
                     Icon(
                         imageVector = section.icon,
-                        modifier = Modifier.size(26.dp),
+                        modifier = Modifier.padding(3.dp).size(26.dp),
                         contentDescription = null,
                     )
                 },
