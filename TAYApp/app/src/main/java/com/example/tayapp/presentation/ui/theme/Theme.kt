@@ -4,6 +4,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+
 
 private val DarkColorPalette = TayColorSystem(
     primary = dm_primary50,
@@ -53,7 +55,6 @@ private val LightColorPalette = TayColorSystem(
     caution = lm_sementic_yellow,
     information = lm_sementic_blue,
     isDark = true,
-
     )
 
 @Composable
@@ -67,6 +68,13 @@ fun TayAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
     val tayTypographySystem = TayTypographySystem(
         typography = tayTypography
     )
+
+    val sysUiController = rememberSystemUiController()
+    SideEffect {
+        sysUiController.setSystemBarsColor(
+            color = tayColorSystem.background.copy(alpha = AlphaNearOpaque)
+        )
+    }
 
     ProvideTaySystem(colors = tayColorSystem, typo = tayTypographySystem) {
         MaterialTheme(
@@ -176,7 +184,6 @@ class TayColorSystem(
         private set
     var information by mutableStateOf(information)
         private set
-
     var isDark by mutableStateOf(isDark)
         private set
 
