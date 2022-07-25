@@ -53,7 +53,10 @@ fun TayHomeTopAppBar(
     var isExpanded by remember{ mutableStateOf(false)}
 
 
-    Column() {
+    Column(
+        modifier = Modifier
+            .statusBarsPadding()
+    ) {
         TopAppBar(
             title = {
                 Spacer(
