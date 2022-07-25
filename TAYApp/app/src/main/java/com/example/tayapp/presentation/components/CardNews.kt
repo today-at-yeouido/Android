@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalPagerApi::class)
+
 package com.example.tayapp.presentation.components
 
 import androidx.compose.foundation.Image
@@ -17,40 +19,49 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayEmoji
 import com.example.tayapp.presentation.utils.TayIcons
+import com.google.accompanist.pager.*
 
 @Composable
 fun CardNewsRow(
-    scrollState: LazyListState,
+    pagerState: PagerState,
     modifier: Modifier = Modifier,
     items: List<Int>,
     cardIndex: Int
 ) {
+
     Box() {
-        LazyRow(
-            modifier = modifier,
-            state = scrollState,
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            modifier = Modifier
+                .zIndex(0.5f)
+                .align(Alignment.TopCenter)
+                .padding(top = 14.dp),
+            spacing = CardNews_Indicator_Spacing,
+            indicatorHeight = 6.dp,
+            indicatorWidth = 6.dp,
+            indicatorShape = CircleShape,
+            activeColor = lm_gray000,
+        )
+        HorizontalPager(
+            count = items.size,
+            state = pagerState,
             contentPadding = PaddingValues(horizontal = CardNews_KeyLine)
         ) {
-            items(items.size) {
-                CardNewsItem()
-            }
+            CardNewsItem()
         }
-        NewsIndicator(
-            modifier = Modifier.align(alignment = Alignment.TopCenter),
-            itemSize = items.size,
-            index = cardIndex
-        )
     }
 }
 
-
+@Preview
 @Composable
 private fun CardNewsItem(modifier: Modifier = Modifier) {
     Column(
@@ -59,23 +70,31 @@ private fun CardNewsItem(modifier: Modifier = Modifier) {
             .size(MainActivity.displayWidth - KeyLine.twice(), 280.dp)
             .background(color = lm_card_yellow, shape = CardNewsShape.large)
     ) {
-        Column(modifier = modifier.padding(14.dp)) {
-            Spacer(Modifier.height(25.dp))
+        Spacer(Modifier.height(40.dp))
+        Column(
+            modifier = modifier
+                .padding(horizontal = 14.dp)
+                .height(118.dp)
+                .fillMaxWidth()
+                .background(color = Color.Blue)
+        ) {
             NewsTopContent()
         }
+        Spacer(Modifier.height(12.dp))
         NewsBottomContent()
     }
 }
 
+@Preview
 @Composable
 private fun NewsBottomContent(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .fillMaxHeight()
+            .height(110.dp)
             .background(color = lm_gray700, shape = CardNewsShape.large)
-            .padding(top = 16.dp, start = 14.dp, end = 14.dp)
+            .padding(14.dp)
     ) {
-        NewsCap(Modifier.padding(bottom = 6.dp))
+        NewsCap(Modifier.padding(bottom = 5.dp))
         NewsHeaderItem()
         NewsHeaderItem()
     }
@@ -101,12 +120,16 @@ private fun NewsCap(modifier: Modifier) {
     }
 }
 
+@Preview
 @Composable
 private fun NewsTopContent() {
-    Row {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Column {
-            NewsLabel()
-            Spacer(modifier = Modifier.height(24.dp))
+//            NewsLabel()
+            Spacer(modifier = Modifier.height(43.dp))
             Text(
                 "중대재해처벌법 개정안",
                 color = lm_gray000,
@@ -119,14 +142,13 @@ private fun NewsTopContent() {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(Modifier.height(9.dp))
+            Spacer(Modifier.height(7.dp))
             Text(
                 "제적의원 2/3이 찬성, 압도적 찬성 속 통과",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Normal,
                 color = lm_gray050
             )
-            Spacer(Modifier.height(6.dp))
         }
         Text(
             text = TayEmoji.card_emoji,
@@ -137,7 +159,7 @@ private fun NewsTopContent() {
 
 @Composable
 private fun NewsLabel() {
-    Row {
+    Row() {
         NewsLabelIcon()
         NewsLabelIcon2()
     }
@@ -169,29 +191,12 @@ fun NewsLabelIcon2() {
 
 
 @Composable
-fun NewsIndicator(modifier: Modifier = Modifier, itemSize: Int, index: Int) {
-    Row(
-        modifier = modifier
-            .padding(top = 14.dp)
-    ) {
-        for (i in 0 until itemSize) {
-            Surface(
-                modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp),
-                shape = CircleShape,
-                color = if (i == index) lm_gray000 else Color.DarkGray
-
-            ) {
-                Box(modifier = Modifier.size(5.dp))
-            }
-        }
-    }
-}
-
-@Composable
 fun NewsHeaderItem() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(30.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "8시간 전 [더피알]",

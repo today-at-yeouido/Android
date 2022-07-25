@@ -10,48 +10,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.tayapp.presentation.components.CardNewsRow
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
 
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Feed(modifier: Modifier = Modifier) {
 
-    val scrollState = rememberLazyListState()
+    val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
     val items = listOf<Int>(1, 2, 3, 4, 5, 6, 7)
     var cardIndex by remember { mutableStateOf(0) }
 
     Box {
         CardNewsRow(
-            scrollState = scrollState,
+            pagerState = pagerState,
             items = items,
             cardIndex = cardIndex,
-            modifier = modifier
-                .fillMaxWidth()
-                .height(400.dp)
         )
     }
-
-    LaunchedEffect(key1 = scrollState.isScrollInProgress) {
-        val itemIndex = scrollState.firstVisibleItemIndex
-        val itemOffset = scrollState.firstVisibleItemScrollOffset
-
-        if (itemOffset != 0) {
-            if (getCardPosition(scrollState) > 0) {
-                scrollState.animateScrollToItem(itemIndex)
-            } else {
-                if (!(itemIndex == items.size - 2 && getCardPosition(scrollState) < 0)
-                ) {
-                    scrollState.animateScrollToItem(itemIndex + 1)
-                }
-            }
-        }
-        cardIndex = if (itemIndex == items.size - 2 && getCardPosition(scrollState) < 0)
-            scrollState.firstVisibleItemIndex + 1 else scrollState.firstVisibleItemIndex
-    }
 }
 
-private fun getCardPosition(scrollState: LazyListState): Int {
-    return scrollState.layoutInfo.visibleItemsInfo[0].size / 2 - scrollState.firstVisibleItemScrollOffset
-}
 
 
