@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -16,8 +17,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This app draws behind the system bars
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
+//         This app draws behind the system bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val density = resources.displayMetrics.density
 

@@ -84,3 +84,4 @@ val dm_sementic_blue = Color(0xFF8DD5F7)
 
 val lm_card_yellow = Color(0xFFFFA200)
 
+const val AlphaNearOpaque = 0.95f

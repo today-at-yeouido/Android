@@ -99,4 +99,7 @@ dependencies {
 
     //FlowLayout
     implementation "com.google.accompanist:accompanist-flowlayout:0.17.0"
+
+    // SystemUiController
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc"
 }

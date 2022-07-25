@@ -3,6 +3,7 @@ package com.example.tayapp.presentation.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -61,7 +62,7 @@ fun TayBottomBar(
 
     BottomNavigation(
         backgroundColor = lm_gray000,
-        modifier = Modifier.height(56.dp)
+        modifier = Modifier.navigationBarsPadding().height(56.dp)
     ) {
         tabs.forEach { section ->
             BottomNavigationItem(
