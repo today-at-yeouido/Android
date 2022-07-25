@@ -1,18 +1,13 @@
 package com.example.tayapp.presentation.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -26,6 +21,7 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.ExpandButton
 import com.example.tayapp.presentation.utils.NotificationButton
 import com.example.tayapp.presentation.utils.TayIcons
+import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -170,10 +166,11 @@ private fun ExpandedTagBar(
     currentTag: String,
     onTagClick: (String) -> Unit
 ){
-    FlowLayout(
-        modifier = modifier,
-        verticalContentPadding = 7.dp,
-        horizontalContentPadding = 7.dp
+    FlowRow(
+        mainAxisSpacing = 7.dp,
+        crossAxisSpacing = 7.dp,
+        modifier = Modifier.padding(bottom = 10.dp)
+
     ){
         datalist.forEach{ it ->
             if(currentTag == it) HomeTag(it, true,onTagClick)
