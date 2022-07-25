@@ -1,16 +1,10 @@
-@file:OptIn(ExperimentalPagerApi::class)
-
 package com.example.tayapp.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,9 +14,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.zIndex
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.ui.theme.*
@@ -30,6 +22,7 @@ import com.example.tayapp.presentation.utils.TayEmoji
 import com.example.tayapp.presentation.utils.TayIcons
 import com.google.accompanist.pager.*
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CardNewsRow(
     pagerState: PagerState,
@@ -37,7 +30,6 @@ fun CardNewsRow(
     items: List<Int>,
     cardIndex: Int
 ) {
-
     Box() {
         HorizontalPagerIndicator(
             pagerState = pagerState,
@@ -61,7 +53,6 @@ fun CardNewsRow(
     }
 }
 
-@Preview
 @Composable
 private fun CardNewsItem(modifier: Modifier = Modifier) {
     Column(
@@ -70,24 +61,27 @@ private fun CardNewsItem(modifier: Modifier = Modifier) {
             .size(MainActivity.displayWidth - KeyLine.twice(), 280.dp)
             .background(color = lm_card_yellow, shape = CardNewsShape.large)
     ) {
-        Spacer(Modifier.height(40.dp))
-        Column(
-            modifier = modifier
-                .padding(horizontal = 14.dp)
-                .height(118.dp)
-                .fillMaxWidth()
-                .background(color = Color.Blue)
-        ) {
-            NewsTopContent()
-        }
-        Spacer(Modifier.height(12.dp))
-        NewsBottomContent()
+        Spacer(Modifier.height(45.dp))
+        NewsTopLayout(modifier)
+        Spacer(Modifier.height(17.dp))
+        NewsBottomLayout()
     }
 }
 
-@Preview
 @Composable
-private fun NewsBottomContent(modifier: Modifier = Modifier) {
+private fun NewsTopLayout(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(118.dp)
+            .padding(horizontal = 14.dp)
+    ) {
+        NewsTopContent()
+    }
+}
+
+@Composable
+private fun NewsBottomLayout(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .height(110.dp)
@@ -115,12 +109,12 @@ private fun NewsCap(modifier: Modifier) {
             text = "관련 뉴스",
             fontWeight = FontWeight.Medium,
             color = lm_gray000,
-            fontSize = 12.sp
+            fontSize = 12.textDp
         )
     }
 }
 
-@Preview
+
 @Composable
 private fun NewsTopContent() {
     Row(
@@ -128,31 +122,32 @@ private fun NewsTopContent() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-//            NewsLabel()
-            Spacer(modifier = Modifier.height(43.dp))
+            NewsLabel()
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
                 "중대재해처벌법 개정안",
                 color = lm_gray000,
-                fontSize = 18.sp,
+                fontSize = 18.textDp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 "국회 본회의 통과",
                 color = lm_gray000,
-                fontSize = 18.sp,
+                fontSize = 18.textDp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(Modifier.height(7.dp))
             Text(
                 "제적의원 2/3이 찬성, 압도적 찬성 속 통과",
-                fontSize = 13.sp,
+                fontSize = 13.textDp,
                 fontWeight = FontWeight.Normal,
                 color = lm_gray050
             )
+            Spacer(Modifier.height(7.dp))
         }
         Text(
             text = TayEmoji.card_emoji,
-            fontSize = 72.sp
+            fontSize = 72.textDp
         )
     }
 }
@@ -173,7 +168,7 @@ fun NewsLabelIcon() {
             .background(color = lm_gray700, shape = CardNewsShape.medium)
             .padding(horizontal = 6.dp, vertical = 4.dp)
     ) {
-        Text(text = "개정안", color = lm_gray000, fontWeight = FontWeight.Normal, fontSize = 12.sp)
+        Text(text = "개정안", color = lm_gray000, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
     }
 }
 
@@ -185,7 +180,7 @@ fun NewsLabelIcon2() {
             .background(color = lm_gray000, shape = CardNewsShape.medium)
             .padding(horizontal = 6.dp, vertical = 4.dp)
     ) {
-        Text(text = "접수", color = lm_gray700, fontWeight = FontWeight.Normal, fontSize = 12.sp)
+        Text(text = "접수", color = lm_gray700, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
     }
 }
 
@@ -201,7 +196,7 @@ fun NewsHeaderItem() {
         Text(
             text = "8시간 전 [더피알]",
             color = lm_gray200,
-            fontSize = 12.sp,
+            fontSize = 12.textDp,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.weight(1f)
         )
@@ -211,7 +206,7 @@ fun NewsHeaderItem() {
             overflow = TextOverflow.Ellipsis,
             color = lm_gray050,
             maxLines = 1,
-            fontSize = 13.sp,
+            fontSize = 13.textDp,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.weight(2f)
         )
