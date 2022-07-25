@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.ExpandButton
 import com.example.tayapp.presentation.utils.NotificationButton
 import com.example.tayapp.presentation.utils.TayIcons
@@ -29,8 +30,27 @@ import kotlinx.coroutines.launch
 /**
  * Tag data model 생성시 수정
  */
-var datalist = listOf<String>("전체","행정안전","보건복지","국토교통","기획재정","환경/노동","교육","사법","" +
-        "문화체육관광","정무","농림/해양","과학통신")
+var datalist = listOf<String>(
+    "전체",
+    "행정안전${Emoij["행정안전"]}",
+    "보건복지${Emoij["보건복지"]}",
+    "국토교통${Emoij["국토교통"]}",
+    "기획재정${Emoij["기획재정"]}",
+    "환경${Emoij["환경"]}/노동${Emoij["노동"]}",
+    "교육${Emoij["교육"]}",
+    "사법${Emoij["사법"]}",
+    "문화체육관광${Emoij["문화체육관광"]}",
+    "정무${Emoij["정무"]}",
+    "농림${Emoij["농림"]}/해양${Emoij["해양"]}",
+    "과학통신${Emoij["과학통신"]}",
+    "산업기업${Emoij["산업기업"]}",
+    "정보${Emoij["정보"]}",
+    "외교통일${Emoij["외교통일"]}",
+    "여성가족${Emoij["여성가족"]}",
+    "국방${Emoij["국방"]}",
+    "국회운영${Emoij["국회운영"]}",
+    "기타"
+)
 
 
 @Composable
