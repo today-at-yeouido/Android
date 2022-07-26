@@ -1,4 +1,4 @@
-package com.example.tayapp.util
+package com.example.tayapp.utils
 
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
