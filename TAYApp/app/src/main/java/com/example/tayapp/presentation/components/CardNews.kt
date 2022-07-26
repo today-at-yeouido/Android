@@ -166,7 +166,7 @@ fun NewsLabelIcon() {
         modifier = Modifier
             .padding(end = 4.dp)
             .background(color = lm_gray700, shape = CardNewsShape.medium)
-            .padding(horizontal = 6.dp, vertical = 4.dp)
+            .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
         Text(text = "개정안", color = lm_gray000, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
     }
@@ -178,7 +178,7 @@ fun NewsLabelIcon2() {
         modifier = Modifier
             .padding(end = 4.dp)
             .background(color = lm_gray000, shape = CardNewsShape.medium)
-            .padding(horizontal = 6.dp, vertical = 4.dp)
+            .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
         Text(text = "접수", color = lm_gray700, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
     }
