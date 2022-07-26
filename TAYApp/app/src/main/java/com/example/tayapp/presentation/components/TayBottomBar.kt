@@ -17,31 +17,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.tayapp.R
-import com.example.tayapp.presentation.home.*
 import com.example.tayapp.presentation.navigation.BottomBarDestination
+import com.example.tayapp.presentation.screens.*
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.ui.theme.lm_gray700
 import com.example.tayapp.presentation.utils.TayIcons
-
-fun NavGraphBuilder.addHomeGraph() {
-    composable(route = BottomBarTabs.Feed.route) { from ->
-        Feed()
-    }
-    composable(BottomBarTabs.SCRAP.route) { from ->
-        Search(Modifier.fillMaxSize())
-    }
-    composable(BottomBarTabs.SEARCH.route) { from ->
-        Cart(Modifier.fillMaxSize())
-    }
-    composable(BottomBarTabs.REPORT.route) {
-        Report(Modifier.fillMaxSize())
-    }
-    composable(BottomBarTabs.PROFILE.route) {
-        Profile(Modifier.fillMaxSize())
-    }
-}
 
 @Composable
 fun TayBottomBar(

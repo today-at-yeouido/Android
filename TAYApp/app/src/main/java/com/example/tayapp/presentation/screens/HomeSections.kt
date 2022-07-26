@@ -1,4 +1,4 @@
-package com.example.tayapp.presentation.home
+package com.example.tayapp.presentation.screens
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

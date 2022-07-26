@@ -3,8 +3,11 @@ package com.example.tayapp.di
 import android.app.Application
 import androidx.room.Room
 import com.example.tayapp.data.local.TayDatabase
+import com.example.tayapp.data.pref.LoginPref
 import com.example.tayapp.data.remote.RegisterApi
-import com.example.tayapp.util.Constants.BASE_URL
+import com.example.tayapp.data.repository.LoginRepository
+import com.example.tayapp.domain.repository.LoginRepositoryImpl
+import com.example.tayapp.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,5 +47,4 @@ object AppModule {
     ): RegisterApi {
         return retrofit.create(RegisterApi::class.java)
     }
-
 }

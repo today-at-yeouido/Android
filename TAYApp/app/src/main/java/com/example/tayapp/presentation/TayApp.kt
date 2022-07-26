@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,6 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.navigation.MainDestination
+import com.example.tayapp.presentation.navigation.NavGraph
+import com.example.tayapp.presentation.states.TayAppState
 import com.example.tayapp.presentation.states.rememberTayAppState
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
@@ -30,28 +33,7 @@ fun TayApp() {
                 }
             },
         ) { innerPadding ->
-            NavHost(
-                navController = appState.navController,
-                startDestination = MainDestination.HOME,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                tayNavGraph()
-            }
+            NavGraph(appState, innerPadding)
         }
     }
-}
-
-private fun NavGraphBuilder.tayNavGraph() {
-
-    /** nested Navigation */
-    navigation(
-        route = MainDestination.HOME,
-        startDestination = BottomBarTabs.Feed.route
-    ) {
-        addHomeGraph()
-    }
-
-    composable(
-        route = MainDestination.DETAIL
-    ) {}
 }
