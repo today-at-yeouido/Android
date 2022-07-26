@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.ui.theme.*
@@ -22,80 +22,113 @@ import com.example.tayapp.presentation.utils.TayEmoji
 import com.example.tayapp.presentation.utils.TayIcons
 import com.google.accompanist.pager.*
 
+
+private object MostViewedValues {
+    val Section_Title_Padding = 7.dp
+    val KeyLine = 11.dp
+    val Card_Height = 280.dp
+    val Padding = 14.dp
+    val Card_Gap = 14.dp
+    val Indicator_Gap = 10.dp
+    val Indicator_Size = 6.dp
+    val Card_Top_Padding = 40.dp
+    val Card_Between_Height = 12.dp
+    val Content_Height = 118.dp
+    val News_Height = 110.dp
+
+}
+
+@Composable
+fun CardMostViewed(items: List<Int>) {
+    MostViewedTitle()
+    MostViewedRow(items = items)
+}
+
+@Composable
+private fun MostViewedTitle() {
+    Text(
+        "최근 이슈 법안", style = TayTypography.h3,
+        modifier = Modifier.padding(
+            horizontal = KeyLine,
+            vertical = MostViewedValues.Section_Title_Padding
+        )
+    )
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CardNewsRow(
-    pagerState: PagerState,
+fun MostViewedRow(
     modifier: Modifier = Modifier,
-    items: List<Int>,
-    cardIndex: Int
+    items: List<Int>
 ) {
+    val pagerState = rememberPagerState()
+
     Box() {
         HorizontalPagerIndicator(
             pagerState = pagerState,
             modifier = Modifier
                 .zIndex(0.5f)
                 .align(Alignment.TopCenter)
-                .padding(top = 14.dp),
-            spacing = CardNews_Indicator_Spacing,
-            indicatorHeight = 6.dp,
-            indicatorWidth = 6.dp,
+                .padding(top = MostViewedValues.Padding),
+            spacing = MostViewedValues.Indicator_Gap,
+            indicatorHeight = MostViewedValues.Indicator_Size,
+            indicatorWidth = MostViewedValues.Indicator_Size,
             indicatorShape = CircleShape,
             activeColor = lm_gray000,
         )
         HorizontalPager(
             count = items.size,
             state = pagerState,
-            contentPadding = PaddingValues(horizontal = CardNews_KeyLine)
+            contentPadding = PaddingValues(horizontal = MostViewedValues.KeyLine)
         ) {
-            CardNewsItem()
+            MostViewedRowCard()
         }
     }
 }
 
 @Composable
-private fun CardNewsItem(modifier: Modifier = Modifier) {
+private fun MostViewedRowCard(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .padding(horizontal = 6.dp)
-            .size(MainActivity.displayWidth - KeyLine.twice(), 280.dp)
+            .padding(horizontal = MostViewedValues.Card_Gap)
+            .size(MainActivity.displayWidth - KeyLine.twice(), MostViewedValues.Card_Height)
             .background(color = lm_card_yellow, shape = CardNewsShape.large)
     ) {
-        Spacer(Modifier.height(45.dp))
-        NewsTopLayout(modifier)
-        Spacer(Modifier.height(17.dp))
-        NewsBottomLayout()
+        Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
+        CardContentLayout()
+        Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
+        CardNewsLayout()
     }
 }
 
 @Composable
-private fun NewsTopLayout(modifier: Modifier = Modifier) {
+private fun CardContentLayout(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(118.dp)
-            .padding(horizontal = 14.dp)
+            .height(MostViewedValues.Content_Height)
+            .padding(horizontal = MostViewedValues.Padding)
     ) {
-        NewsTopContent()
+        CardContent()
     }
 }
 
 @Composable
-private fun NewsBottomLayout(modifier: Modifier = Modifier) {
+private fun CardNewsLayout(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .height(110.dp)
+            .height(MostViewedValues.News_Height)
             .background(color = lm_gray700, shape = CardNewsShape.large)
-            .padding(14.dp)
+            .padding(MostViewedValues.Padding)
     ) {
-        NewsCap(Modifier.padding(bottom = 5.dp))
+        NewsSub(Modifier.padding(bottom = 5.dp))
         NewsHeaderItem()
         NewsHeaderItem()
     }
 }
 
 @Composable
-private fun NewsCap(modifier: Modifier) {
+private fun NewsSub(modifier: Modifier) {
     Row(modifier = modifier) {
         Image(
             imageVector = TayIcons.card_article,
@@ -116,7 +149,7 @@ private fun NewsCap(modifier: Modifier) {
 
 
 @Composable
-private fun NewsTopContent() {
+private fun CardContent() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
