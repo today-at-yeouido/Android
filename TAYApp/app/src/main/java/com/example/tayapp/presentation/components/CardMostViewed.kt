@@ -28,7 +28,7 @@ private object MostViewedValues {
     val KeyLine = 11.dp
     val Card_Height = 280.dp
     val Padding = 14.dp
-    val Card_Gap = 14.dp
+    val Card_Gap = 5.dp
     val Indicator_Gap = 10.dp
     val Indicator_Size = 6.dp
     val Card_Top_Padding = 40.dp
