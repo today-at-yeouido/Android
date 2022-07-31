@@ -1,7 +1,7 @@
-package com.example.tayapp.domain.repository
+package com.example.tayapp.data.repository
 
 import com.example.tayapp.data.pref.LoginPref
-import com.example.tayapp.data.repository.LoginRepository
+import com.example.tayapp.domain.repository.LoginRepository
 import com.example.tayapp.domain.model.User
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first

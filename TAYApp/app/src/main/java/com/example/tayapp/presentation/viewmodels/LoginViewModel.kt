@@ -2,7 +2,7 @@ package com.example.tayapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tayapp.data.repository.LoginRepository
+import com.example.tayapp.domain.repository.LoginRepository
 import com.example.tayapp.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
