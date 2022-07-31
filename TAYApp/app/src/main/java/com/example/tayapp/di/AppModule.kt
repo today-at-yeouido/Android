@@ -3,7 +3,9 @@ package com.example.tayapp.di
 import android.app.Application
 import androidx.room.Room
 import com.example.tayapp.data.local.TayDatabase
+import com.example.tayapp.data.pref.LoginPref
 import com.example.tayapp.data.remote.RegisterApi
+import com.example.tayapp.utils.Constants
 import com.example.tayapp.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -34,12 +36,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesAuthInterceptor(): Interceptor = Interceptor { chain ->
+    fun providesAuthInterceptor(
+        pref : LoginPref
+    ): Interceptor = Interceptor { chain ->
         val newRequest = chain
             .request()
             .newBuilder()
-            .addHeader("client_id", "CLIENT_ID")
+            .addHeader(Constants.AUTHORIZATION, LoginPref.TOKEN)
             .build()
+
+        pref.getLoginUser()
         return@Interceptor chain
             .proceed(newRequest)
     }

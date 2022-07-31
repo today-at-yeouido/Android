@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
+
 
 class LoginPref @Inject constructor(@ApplicationContext val context: Context) {
 
@@ -23,7 +23,12 @@ class LoginPref @Inject constructor(@ApplicationContext val context: Context) {
         val LOGIN_USER_ID = stringPreferencesKey("login_user_id")
         val LOGIN_USER_EMAIL = stringPreferencesKey("login_user_email")
         val LOGIN_USER_NAME = stringPreferencesKey("login_user_name")
+
+        var TOKEN:String = ""
+
     }
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
 
     suspend fun setLoginUser(user: User) {
         context.dataStore.edit { settings ->
@@ -40,6 +45,7 @@ class LoginPref @Inject constructor(@ApplicationContext val context: Context) {
             val id = preference[LOGIN_USER_ID] ?: ""
             val email = preference[LOGIN_USER_EMAIL] ?: ""
             val name = preference[LOGIN_USER_NAME] ?: "GUEST"
+            TOKEN = token
 
             User(token, id, email, name)
         }
