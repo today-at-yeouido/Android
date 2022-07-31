@@ -9,15 +9,19 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
     @Singleton
+    @Provides
     fun provideDatabase(app: Application): TayDatabase {
         return Room.databaseBuilder(
             app,
@@ -28,20 +32,51 @@ object AppModule {
             .build()
     }
 
-    @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    @Provides
+    fun providesAuthInterceptor(): Interceptor = Interceptor { chain ->
+        val newRequest = chain
+            .request()
+            .newBuilder()
+            .addHeader("client_id", "CLIENT_ID")
+            .build()
+        return@Interceptor chain
+            .proceed(newRequest)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+
+    @Singleton
+    @Provides
+    fun providesOkHttpClient(
+        interceptor: Interceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient = OkHttpClient
+        .Builder()
+        .addInterceptor(interceptor)
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-//            .addConverterFactory() 추가예정
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
     }
 
-    @Provides
     @Singleton
+    @Provides
     fun provideRegisterApi(
         retrofit: Retrofit
     ): RegisterApi {
         return retrofit.create(RegisterApi::class.java)
     }
+
 }
