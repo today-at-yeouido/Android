@@ -16,7 +16,6 @@ fun TayApp() {
         TayScaffold(
             modifier = Modifier,
             scaffoldState = appState.scaffoldState,
-            topBar = { TayHomeTopAppBar() },
             bottomBar = {
                 if (appState.shouldShowBottomBar) {
                     TayBottomBar(

@@ -52,10 +52,10 @@ fun NavGraphBuilder.addHomeGraph() {
         Feed()
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
-        Search(Modifier.fillMaxSize())
+        Scrap(Modifier.fillMaxSize())
     }
     composable(BottomBarTabs.SEARCH.route) { from ->
-        Cart(Modifier.fillMaxSize())
+        Search(Modifier.fillMaxSize())
     }
     composable(BottomBarTabs.REPORT.route) {
         Report(Modifier.fillMaxSize())
