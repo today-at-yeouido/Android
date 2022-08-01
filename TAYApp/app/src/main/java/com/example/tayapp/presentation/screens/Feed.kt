@@ -1,16 +1,14 @@
 package com.example.tayapp.presentation.screens
 
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.example.tayapp.presentation.components.CardMostViewed
-import com.example.tayapp.presentation.components.CardUser
-import com.example.tayapp.presentation.components.TayHomeTopAppBar
+import androidx.compose.ui.unit.dp
+import com.example.tayapp.presentation.components.*
 
 
 @Composable
@@ -25,11 +23,17 @@ fun Feed(modifier: Modifier = Modifier) {
         LazyColumn{
             item{
                 CardMostViewed(items = items)
+                Spacer(modifier = Modifier.height(40.dp))
 
-                LazyRow(){
-                    item { CardUser(items = userItems) }
-                    item { CardUser(items = userItems) }
-                    item { CardUser(items = userItems) }
+                Title("사용자 맞춤 추천법안")
+                CardsUser()
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Title("최근 발의 법안")
+                items.forEach {
+                    CardBill(
+                        modifier.padding(horizontal = 16.dp, vertical = 5.dp)
+                    )
                 }
             }
         }
