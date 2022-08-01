@@ -5,8 +5,8 @@ import androidx.room.Room
 import com.example.tayapp.data.local.TayDatabase
 import com.example.tayapp.data.pref.LoginPref
 import com.example.tayapp.data.remote.RegisterApi
-import com.example.tayapp.utils.Constants
-import com.example.tayapp.utils.Constants.BASE_URL
+import com.example.tayapp.data.remote.Constants
+import com.example.tayapp.data.remote.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,7 +54,6 @@ object AppModule {
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
 
     @Singleton
     @Provides
