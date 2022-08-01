@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 object TayIcons {
 
     val bottombar_home = Icons.Outlined.Home
-    val bottombar_bookmark = Icons.Outlined.Bookmark
+    val bottombar_bookmark = Icons.Outlined.BookmarkBorder
     val bottombar_search = Icons.Outlined.Search
     val bottombar_message = Icons.Outlined.Message
     val bottombar_person = Icons.Outlined.Person
@@ -136,7 +136,7 @@ fun BookmarkButton(
         onCheckedChange = { onClick() }
     ) {
         Icon(
-            imageVector = if (isBookmarked) TayIcons.bottombar_bookmark else TayIcons.bottombar_bookmark_click,
+            imageVector = if (isBookmarked) TayIcons.bottombar_bookmark_click else TayIcons.bottombar_bookmark,
             contentDescription = null
         )
     }
