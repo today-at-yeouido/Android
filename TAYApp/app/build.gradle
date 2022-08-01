@@ -109,4 +109,7 @@ dependencies {
     // Pager
     implementation "com.google.accompanist:accompanist-pager:0.24.13-rc"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.24.13-rc"
+
+    // Coil - Image Loading
+    implementation "io.coil-kt:coil-compose:2.1.0"
 }
