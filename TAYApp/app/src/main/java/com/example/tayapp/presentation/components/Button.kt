@@ -36,7 +36,7 @@ fun TayButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: RoundedCornerShape = RoundedCornerShape(12.dp),
+    shape: RoundedCornerShape = RoundedCornerShape(8.dp),
     border: BorderStroke? = null,
     backgroundColor: Color = TayAppTheme.colors.defaultButton,
     contentColor: Color = lm_gray000,
