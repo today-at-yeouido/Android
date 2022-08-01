@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.tayapp.data.local.TayDatabase
 import com.example.tayapp.data.pref.LoginPref
+import com.example.tayapp.data.remote.BillApi
 import com.example.tayapp.data.remote.RegisterApi
 import com.example.tayapp.data.remote.Constants
 import com.example.tayapp.data.remote.Constants.BASE_URL
@@ -16,6 +17,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -78,10 +80,18 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRegisterApi(
+    fun provideRegistrationApi(
         retrofit: Retrofit
     ): RegisterApi {
         return retrofit.create(RegisterApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetBillApi(
+        retrofit: Retrofit
+    ): BillApi{
+        return retrofit.create(BillApi::class.java)
     }
 
 }
