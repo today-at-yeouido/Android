@@ -1,5 +1,7 @@
 package com.example.tayapp.presentation.utils
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.IconToggleButton
@@ -8,6 +10,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.example.tayapp.presentation.ui.theme.Icon_Padding
+import com.example.tayapp.presentation.ui.theme.Icon_Size
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 
 object TayIcons {
@@ -96,11 +103,21 @@ object TayEmoji{
 }
 
 @Composable
-fun NotificationButton(onClick: () -> Unit = {}){
-    IconButton(onClick) {
+fun NotificationButton(
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    tint: Color = TayAppTheme.colors.icon
+){
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(Icon_Padding)
+            .size(Icon_Size)
+    ) {
         Icon(
             imageVector = TayIcons.notification_outlined,
-            contentDescription = null
+            contentDescription = null,
+            tint = tint
         )
     }
 }
@@ -132,12 +149,93 @@ fun BookmarkButton(
     modifier: Modifier = Modifier
 ){
     IconToggleButton(
+        modifier = modifier
+            .padding(Icon_Padding)
+            .size(Icon_Size),
         checked = isBookmarked,
         onCheckedChange = { onClick() }
     ) {
         Icon(
             imageVector = if (isBookmarked) TayIcons.bottombar_bookmark_click else TayIcons.bottombar_bookmark,
             contentDescription = null
+        )
+    }
+}
+
+@Composable
+fun SearchButton(
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    tint: Color = TayAppTheme.colors.icon
+){
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(Icon_Padding)
+            .size(Icon_Size)
+    ) {
+        Icon(
+            imageVector = TayIcons.bottombar_search,
+            contentDescription = null,
+            tint = tint
+        )
+    }
+}
+
+@Composable
+fun BackButton(
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    tint: Color = TayAppTheme.colors.icon
+){
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(Icon_Padding)
+            .size(Icon_Size)
+    ) {
+        Icon(
+            imageVector = TayIcons.arrowback,
+            contentDescription = null,
+            tint = tint
+        )
+    }
+}
+
+@Composable
+fun NavigateNextButton(
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    tint: Color = TayAppTheme.colors.icon
+){
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .size(Icon_Size)
+    ) {
+        Icon(
+            imageVector = TayIcons.navigate_next,
+            contentDescription = null,
+            tint = tint
+        )
+    }
+}
+
+@Composable
+fun CloseButton(
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    tint: Color = TayAppTheme.colors.icon
+){
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .size(Icon_Size)
+    ) {
+        Icon(
+            imageVector = TayIcons.close,
+            contentDescription = null,
+            tint = tint
         )
     }
 }
