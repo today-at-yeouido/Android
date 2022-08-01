@@ -16,7 +16,7 @@ import com.example.tayapp.presentation.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen() {
-    val viewModel = hiltViewModel<LoginViewModel>()
+//    val viewModel = hiltViewModel<LoginViewModel>()
 
     var email by remember { mutableStateOf("") }
     var pas1 by remember { mutableStateOf("") }
