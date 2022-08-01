@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,17 +24,17 @@ fun NavGraph(
         startDestination = MainDestination.HOME,
         modifier = Modifier.padding(innerPadding)
     ) {
-        tayNavGraph()
+        tayNavGraph(appState.navController)
     }
 }
 
-private fun NavGraphBuilder.tayNavGraph() {
+private fun NavGraphBuilder.tayNavGraph( navController: NavController) {
     /** nested Navigation */
     navigation(
         route = MainDestination.HOME,
         startDestination = BottomBarTabs.Feed.route
     ) {
-        addHomeGraph()
+        addHomeGraph(navController)
     }
 
     composable(
@@ -47,15 +48,15 @@ private fun NavGraphBuilder.tayNavGraph() {
     ) {}
 }
 
-fun NavGraphBuilder.addHomeGraph() {
+fun NavGraphBuilder.addHomeGraph(navController: NavController) {
     composable(route = BottomBarTabs.Feed.route) { from ->
-        Feed()
+        Feed(navController = navController)
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
-        Search(Modifier.fillMaxSize())
+        Scrap(Modifier.fillMaxSize())
     }
     composable(BottomBarTabs.SEARCH.route) { from ->
-        Cart(Modifier.fillMaxSize())
+        Search(Modifier.fillMaxSize())
     }
     composable(BottomBarTabs.REPORT.route) {
         Report(Modifier.fillMaxSize())

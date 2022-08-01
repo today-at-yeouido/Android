@@ -7,11 +7,10 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun Search(modifier: Modifier) {
-    Text(text = "Search", modifier = modifier)
 }
 
 @Composable
-fun Cart(modifier: Modifier) {
+fun Scrap(modifier: Modifier) {
     Text(text = "Cart", modifier = modifier)
 }
 

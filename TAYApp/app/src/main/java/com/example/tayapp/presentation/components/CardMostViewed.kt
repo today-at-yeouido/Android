@@ -15,12 +15,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.zIndex
+import com.example.tayapp.data.remote.dto.BillDto
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayEmoji
 import com.example.tayapp.presentation.utils.TayIcons
-import com.google.accompanist.pager.*
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 
 
 private object MostViewedValues {
@@ -39,7 +44,7 @@ private object MostViewedValues {
 }
 
 @Composable
-fun CardMostViewed(items: List<Int>) {
+fun CardMostViewed(items: List<BillDto>) {
     MostViewedTitle()
     MostViewedRow(items = items)
 }
@@ -59,7 +64,7 @@ private fun MostViewedTitle() {
 @Composable
 fun MostViewedRow(
     modifier: Modifier = Modifier,
-    items: List<Int>
+    items: List<BillDto>
 ) {
     val pagerState = rememberPagerState()
 
@@ -80,14 +85,14 @@ fun MostViewedRow(
             count = items.size,
             state = pagerState,
             contentPadding = PaddingValues(horizontal = MostViewedValues.KeyLine)
-        ) {
-            MostViewedRowCard()
+        ) { i ->
+            MostViewedRowCard(bill = items[i])
         }
     }
 }
 
 @Composable
-private fun MostViewedRowCard(modifier: Modifier = Modifier) {
+private fun MostViewedRowCard(modifier: Modifier = Modifier, bill: BillDto) {
     Column(
         modifier = modifier
             .padding(horizontal = MostViewedValues.Card_Gap)
@@ -95,21 +100,21 @@ private fun MostViewedRowCard(modifier: Modifier = Modifier) {
             .background(color = lm_card_yellow, shape = CardNewsShape.large)
     ) {
         Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
-        CardContentLayout()
+        CardContentLayout(bill = bill)
         Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
         CardNewsLayout()
     }
 }
 
 @Composable
-private fun CardContentLayout(modifier: Modifier = Modifier) {
+private fun CardContentLayout(modifier: Modifier = Modifier, bill: BillDto) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .height(MostViewedValues.Content_Height)
             .padding(horizontal = MostViewedValues.Padding)
     ) {
-        CardContent()
+        CardContent(bill)
     }
 }
 
@@ -149,38 +154,35 @@ private fun NewsSub(modifier: Modifier) {
 
 
 @Composable
-private fun CardContent() {
+private fun CardContent(bill : BillDto) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column {
+        Column() {
             NewsLabel()
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                "중대재해처벌법 개정안",
+                bill.billName,
                 color = lm_gray000,
                 fontSize = 18.textDp,
-                fontWeight = FontWeight.Bold
+                lineHeight = 1.3.em,
+                modifier = Modifier.width(190.dp)
             )
+            Spacer(Modifier.height(10.dp))
             Text(
-                "국회 본회의 통과",
-                color = lm_gray000,
-                fontSize = 18.textDp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(Modifier.height(7.dp))
-            Text(
-                "제적의원 2/3이 찬성, 압도적 찬성 속 통과",
+                bill.proposer,
                 fontSize = 13.textDp,
                 fontWeight = FontWeight.Normal,
-                color = lm_gray050
+                color = lm_gray050,
+                lineHeight = 1.2.em
             )
             Spacer(Modifier.height(7.dp))
         }
         Text(
             text = TayEmoji.card_emoji,
-            fontSize = 72.textDp
+            fontSize = 72.textDp,
+            modifier = Modifier.requiredSize(80.dp)
         )
     }
 }
