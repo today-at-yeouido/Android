@@ -2,6 +2,7 @@ package com.example.tayapp.presentation.screens
 
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -18,7 +19,15 @@ fun Feed(modifier: Modifier = Modifier) {
 
     Column() {
         CardMostViewed(items = items)
-        CardUser(items = items)
+
+        /**
+         * 테스트용 수정예정
+         */
+        LazyRow(){
+            item { CardUser(items = userItems) }
+            item { CardUser(items = userItems) }
+            item { CardUser(items = userItems) }
+        }
     }
 }
 

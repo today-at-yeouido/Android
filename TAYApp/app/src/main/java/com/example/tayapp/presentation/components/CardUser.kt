@@ -1,107 +1,117 @@
 package com.example.tayapp.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
-import com.example.tayapp.presentation.ui.theme.KeyLine
-import com.example.tayapp.presentation.ui.theme.Shapes
-import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.Emoij
 
 private object CardUserValue {
-    val CardBorderWidth = 1.dp
-    val CardItemSpace = 12.dp
-    val CardItemHeight = 54.dp
-    val CardItemPadding = 8.dp
-    val CardEmoijPadding = 7.dp
+    val ItemHeight = 72.dp
+    val ItemWidth = 242.dp
+    val SpacerBetween = 10.dp
+    val fontWidth = 50.dp
+    val cardWidth = 270.dp
+    val headerHeight = 40.dp
 }
-
 
 @Composable
 fun CardUser(
-    modifier: Modifier = Modifier,
     items: List<Int>
 ){
-    Card(
-        shape = Shapes.medium,
+
+    TayCard(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(KeyLine),
-        border = BorderStroke(
-            CardUserValue.CardBorderWidth,
-            color = TayAppTheme.colors.border
-        ),
-        backgroundColor = TayAppTheme.colors.background
+            .width(CardUserValue.cardWidth)
     ) {
-        Column(
-            modifier = Modifier.padding(Card_Inner_Padding),
-            verticalArrangement = Arrangement.spacedBy(CardUserValue.CardItemSpace)
-        ) {
+        Column {
+            CardUserHeader()
             CardUserItem()
+            TayDivider()
             CardUserItem()
+            TayDivider()
             CardUserItem()
         }
     }
 }
 
 @Composable
+fun CardUserHeader(title: String = "과학"){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(CardUserValue.headerHeight)
+                .background(lm_gray075)
+        )
+
+        Text(
+            "#$title",
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+
+/**
+ * innerpadding 값 수정
+ */
+@Composable
 fun CardUserItem(
-    taglist: List<String> = listOf("과학","누리호"),
+    bill: String = "제정안",
+    status: String = "가결",
     title: String = "가덕도 신공항 건설을 위한 특별법",
     onClick: () -> Unit = {}
 ){
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(CardUserValue.CardItemHeight)
-            .clickable { onClick }
+            .padding(Card_Inner_Padding)
+            .height(CardUserValue.ItemHeight)
+            .width(CardUserValue.ItemWidth)
+            .clickable(onClick = onClick)
         ,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        EmoijText()
+
+        Spacer(modifier = Modifier.width(CardUserValue.SpacerBetween))
+
         Column(
             modifier = Modifier
-                .fillMaxHeight()
-                .padding(vertical = CardUserValue.CardItemPadding)
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Row() {
-                taglist.forEach{
-                    CardUserTagText(tag = it)
-                }
-            }
-            CardUserTitleText(title = title)
-        }
+            PillList(bill, status)
 
-        EmoijText()
+            Text(
+                text = title,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                maxLines = 2
+            )
+        }
     }
 }
 
-@Composable
-fun CardUserTitleText(title: String){
-    Text(
-        text = title,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.Medium
-    )
-}
-
-
-
-@Composable
-fun CardUserTagText(tag: String){
-    Text(
-        "#$tag",
-        fontSize = 12.sp
-    )
-}
 
 @Composable
 fun EmoijText(
@@ -110,7 +120,7 @@ fun EmoijText(
     Text(
         "$emoij",
         modifier = Modifier
-            .padding(vertical = CardUserValue.CardEmoijPadding),
+            .width(CardUserValue.fontWidth),
         fontSize = 30.sp
     )
 }
@@ -118,7 +128,7 @@ fun EmoijText(
 
 @Composable
 @Preview
-private fun PreviewUserSection(){
+private fun PreviewCardUser(){
     TayAppTheme() {
         CardUser(items = listOf(1,2,3,4))
     }
