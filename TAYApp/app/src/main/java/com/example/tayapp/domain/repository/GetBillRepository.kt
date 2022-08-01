@@ -16,10 +16,10 @@ interface GetBillRepository {
     suspend fun getBillDetail(billId: String): DetailBillDto
     suspend fun getBillTable(billId: String): DetailBillTableDto
 
-    suspend fun getBillRecent(): BillDto
+    suspend fun getBillRecent(): List<BillDto>
     suspend fun getBillMostViewed(): List<BillDto>
-    suspend fun getBillUserRecommended(): BillDto
-    suspend fun getBillUserRecentViewed(): BillDto
+    suspend fun getBillUserRecommended(): List<BillDto>
+    suspend fun getBillUserRecentViewed(): List<BillDto>
 
 }
 
