@@ -19,6 +19,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.presentation.ui.theme.*
 
+/**
+ * font sp -> dp 팔요
+ */
+@Composable
+fun PillList(
+    bill: String = "제정안",
+    status: String = "접수"
+){
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Pill(bill)
+        Pill(status)
+    }
+}
+
 @Composable
 fun Pill(
     text: String,
@@ -124,17 +138,7 @@ fun PreveiwPillLabel(){
                 isPressed = true
             )
 
-            Pill(
-                "부결",
-                isLarge = false,
-                isPressed = false
-            )
-
-            Pill(
-                "제정안",
-                isLarge = true,
-                isPressed = true
-            )
+            PillList("제정안", "가결")
         }
     }
 }
