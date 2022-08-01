@@ -40,7 +40,14 @@ private object MostViewedValues {
 
 @Composable
 fun CardMostViewed(items: List<Int>) {
-    Title("최근 이슈 법안")
+    Title(
+        "최근 이슈 법안",
+        modifier = Modifier
+            .padding(
+                vertical = 7.dp,
+                horizontal = KeyLine
+            )
+    )
     MostViewedRow(items = items)
 }
 

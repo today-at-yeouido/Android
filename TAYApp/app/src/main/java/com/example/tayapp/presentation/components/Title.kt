@@ -9,12 +9,12 @@ import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayTypography
 
 @Composable
-fun Title(string: String) {
+fun Title(
+    string: String,
+    modifier: Modifier = Modifier
+) {
     Text(
         "$string", style = TayTypography.h3,
-        modifier = Modifier.padding(
-            horizontal = KeyLine,
-            vertical = 7.dp
-        )
+        modifier = modifier
     )
 }
