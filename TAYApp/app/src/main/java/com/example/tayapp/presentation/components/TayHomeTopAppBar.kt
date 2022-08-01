@@ -170,8 +170,8 @@ private fun NotExpandedTagBar(
         contentPadding = PaddingValues(start = 16.dp)
     ){
         items(datalist){ it ->
-            if(currentTag == it) HomeTag(it, true, onTagClick)
-            else HomeTag(it,false,onClick = onTagClick)
+            if(currentTag == it) TayTag(it, true, onTagClick)
+            else TayTag(it,false,onClick = onTagClick)
         }
     }
 
@@ -193,8 +193,8 @@ private fun ExpandedTagBar(
 
     ){
         datalist.forEach{ it ->
-            if(currentTag == it) HomeTag(it, true,onTagClick)
-            else HomeTag(it,false,onClick = onTagClick)
+            if(currentTag == it) TayTag(it, true,onTagClick)
+            else TayTag(it,false,onClick = onTagClick)
         }
 
     }
@@ -202,36 +202,5 @@ private fun ExpandedTagBar(
 
 
 
-@Composable
-private fun HomeTag(
-    string: String = "전체",
-    isClicked: Boolean = false,
-    onClick:(String)->Unit = {}
-){
-    Box(
-        modifier = Modifier
-            .background(
-                color = if (isClicked) TayAppTheme.colors.icon
-                else TayAppTheme.colors.background,
-                shape = RoundedCornerShape(100.dp)
-            )
-            .border(
-                width = 1.dp,
-                color = TayAppTheme.colors.border,
-                shape = RoundedCornerShape(100.dp)
-            )
-            .padding(
-                horizontal = 10.dp,
-                vertical = 5.dp
-            )
-            .clickable { onClick(string) }
 
-    ) {
-        Text(
-            text = "$string",
-            color = if (isClicked) TayAppTheme.colors.background
-                    else TayAppTheme.colors.bodyText
-        )
-    }
-}
 
