@@ -40,20 +40,11 @@ private object MostViewedValues {
 
 @Composable
 fun CardMostViewed(items: List<Int>) {
-    MostViewedTitle()
+    Title("최근 이슈 법안")
     MostViewedRow(items = items)
 }
 
-@Composable
-private fun MostViewedTitle() {
-    Text(
-        "최근 이슈 법안", style = TayTypography.h3,
-        modifier = Modifier.padding(
-            horizontal = KeyLine,
-            vertical = MostViewedValues.Section_Title_Padding
-        )
-    )
-}
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
