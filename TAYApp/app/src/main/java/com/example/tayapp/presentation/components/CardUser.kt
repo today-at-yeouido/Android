@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,10 +28,24 @@ private object CardUserValue {
 }
 
 @Composable
-fun CardUser(
-    items: List<Int>
+fun CardsUser(
+    modifier: Modifier = Modifier
 ){
+    LazyRow(
+        contentPadding = PaddingValues(KeyLine),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ){
+        item {
+            CardUser()
+            CardUser()
+            CardUser()
+        }
+    }
+}
 
+
+@Composable
+fun CardUser(){
     TayCard(
         modifier = Modifier
             .width(CardUserValue.cardWidth)
@@ -123,13 +138,4 @@ fun EmoijText(
             .width(CardUserValue.fontWidth),
         fontSize = 30.sp
     )
-}
-
-
-@Composable
-@Preview
-private fun PreviewCardUser(){
-    TayAppTheme() {
-        CardUser(items = listOf(1,2,3,4))
-    }
 }

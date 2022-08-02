@@ -23,9 +23,11 @@ import com.example.tayapp.presentation.utils.BookmarkButton
  * 최근 발의 법안
  */
 @Composable
-fun CardBill(){
+fun CardBill(
+    modifier: Modifier = Modifier
+){
     TayCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         CardBillDefault()
     }

@@ -9,6 +9,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 
 interface GetBillRepository {
 
@@ -16,14 +17,14 @@ interface GetBillRepository {
     suspend fun getBillDetail(billId: String): DetailBillDto
     suspend fun getBillTable(billId: String): DetailBillTableDto
 
-    suspend fun getBillRecent(): BillDto
+    suspend fun getBillRecent(): List<BillDto>
     suspend fun getBillMostViewed(): List<BillDto>
-    suspend fun getBillUserRecommended(): BillDto
-    suspend fun getBillUserRecentViewed(): BillDto
+    suspend fun getBillUserRecommended(): List<BillDto>
+    suspend fun getBillUserRecentViewed(): List<BillDto>
 
 }
 
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class GetBillRepositoryModule {
     @Binds

@@ -53,10 +53,10 @@ fun NavGraphBuilder.addHomeGraph(navController: NavController) {
         Feed(navController = navController)
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
-        Scrap(Modifier.fillMaxSize())
+        Scrap()
     }
     composable(BottomBarTabs.SEARCH.route) { from ->
-        Search(Modifier.fillMaxSize())
+        Search()
     }
     composable(BottomBarTabs.REPORT.route) {
         Report(Modifier.fillMaxSize())
