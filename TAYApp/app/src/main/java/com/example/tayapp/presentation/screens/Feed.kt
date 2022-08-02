@@ -42,7 +42,7 @@ fun Feed(modifier: Modifier = Modifier, navController: NavController) {
         TayHomeTopAppBar(modifier = Modifier)
         LazyColumn{
             item{
-                CardMostViewed(items = items)
+                //CardMostViewed(items = items)
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Title(
@@ -58,10 +58,11 @@ fun Feed(modifier: Modifier = Modifier, navController: NavController) {
                     modifier = Modifier
                         .padding(vertical = 7.dp, horizontal = KeyLine)
                 )
-                items.forEach {
+                userItems.forEach {
                     CardBill(
                         modifier.padding(horizontal = 16.dp, vertical = 5.dp)
                     )
+                    }
                 }
             }
         }

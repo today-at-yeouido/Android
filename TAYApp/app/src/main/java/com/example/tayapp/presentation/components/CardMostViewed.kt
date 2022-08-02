@@ -49,7 +49,7 @@ fun CardMostViewed(items: List<BillDto>) {
         "최근 이슈 법안",
         modifier = Modifier
             .padding(
-                horizontal = KeyLine
+                horizontal = KeyLine,
                 vertical = 7.dp,
             )
     )
@@ -161,7 +161,7 @@ private fun CardContent(bill : BillDto) {
             NewsLabel()
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                bill.billName,
+                bill.billName ?: "",
                 color = lm_gray000,
                 fontSize = 18.textDp,
                 lineHeight = 1.3.em,
@@ -169,7 +169,7 @@ private fun CardContent(bill : BillDto) {
             )
             Spacer(Modifier.height(10.dp))
             Text(
-                bill.proposer,
+                bill.proposer ?: "",
                 fontSize = 13.textDp,
                 fontWeight = FontWeight.Normal,
                 color = lm_gray050,
