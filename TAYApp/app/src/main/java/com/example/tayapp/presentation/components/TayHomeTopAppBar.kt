@@ -70,7 +70,7 @@ fun TayHomeTopAppBar(
 
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .statusBarsPadding()
     ) {
         TopAppBar(

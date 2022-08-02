@@ -9,6 +9,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 
 interface GetBillRepository {
 
@@ -23,7 +24,7 @@ interface GetBillRepository {
 
 }
 
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class GetBillRepositoryModule {
     @Binds
