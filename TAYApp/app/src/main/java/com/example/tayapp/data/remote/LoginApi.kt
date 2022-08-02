@@ -4,7 +4,7 @@ import com.example.tayapp.data.remote.dto.*
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface RegisterApi {
+interface LoginApi {
 
     @POST(Constants.POST_REGISTRATION)
     fun postRegistration(
@@ -18,12 +18,12 @@ interface RegisterApi {
 
     @POST(Constants.POST_LOGOUT)
     fun postLogout(
-        @Body token: RefreshDto
+        @Body token: String
     ): LogoutResponse
 
     @POST(Constants.POST_JWT_REFRESH)
     fun postJwtRefresh(
-        @Body token: RefreshDto
+        @Body token: String
     ): JwtRefreshResponse
 
 }

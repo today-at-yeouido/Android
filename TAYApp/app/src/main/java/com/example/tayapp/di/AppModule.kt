@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.example.tayapp.data.local.TayDatabase
 import com.example.tayapp.data.pref.LoginPref
 import com.example.tayapp.data.remote.BillApi
-import com.example.tayapp.data.remote.RegisterApi
+import com.example.tayapp.data.remote.LoginApi
 import com.example.tayapp.data.remote.Constants
 import com.example.tayapp.data.remote.Constants.BASE_URL
 import dagger.Module
@@ -17,7 +17,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -47,7 +46,7 @@ object AppModule {
             .addHeader(Constants.AUTHORIZATION, LoginPref.TOKEN)
             .build()
 
-        pref.getLoginUser()
+        pref.getUser()
         return@Interceptor chain
             .proceed(newRequest)
     }
@@ -82,8 +81,8 @@ object AppModule {
     @Provides
     fun provideRegistrationApi(
         retrofit: Retrofit
-    ): RegisterApi {
-        return retrofit.create(RegisterApi::class.java)
+    ): LoginApi {
+        return retrofit.create(LoginApi::class.java)
     }
 
     @Singleton

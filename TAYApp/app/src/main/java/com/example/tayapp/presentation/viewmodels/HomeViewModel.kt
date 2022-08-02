@@ -27,19 +27,19 @@ class HomeViewModel @Inject constructor(private val getMostViewedUseCase: GetMos
     }
 
     private fun getMostViewed() {
-        getMostViewedUseCase().onEach { result ->
-            when (result) {
-                is Resource.Success -> {
-                    _state.value = MostViewedUiState(bill = result.data ?: emptyList())
-                }
-                is Resource.Error -> {
-                    _state.value = MostViewedUiState(error = result.message ?:"An unexpected error")
-                }
-                is Resource.Loading -> {
-                    _state.value = MostViewedUiState(isLoading = true)
-                }
-            }
-        }.launchIn(viewModelScope)
+//        getMostViewedUseCase().onEach { result ->
+//            when (result) {
+//                is Resource.Success -> {
+//                    _state.value = MostViewedUiState(bill = result.data ?: emptyList())
+//                }
+//                is Resource.Error -> {
+//                    _state.value = MostViewedUiState(error = result.message ?:"An unexpected error")
+//                }
+//                is Resource.Loading -> {
+//                    _state.value = MostViewedUiState(isLoading = true)
+//                }
+//            }
+//        }.launchIn(viewModelScope)
     }
 
 }
