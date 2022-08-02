@@ -21,7 +21,7 @@ interface LoginRepository {
 }
 
 /** 인터페이스 주입을 위한 모듈 */
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class LoginRepoModule {
 

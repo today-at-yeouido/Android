@@ -16,16 +16,12 @@ class LoginRepositoryImpl @Inject constructor(
     private val loginApi: LoginApi
 ) : LoginRepository {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    override suspend fun getUser(): UserData =
+        pref.getUser().first()
 
-    override suspend fun getUser(): UserData {
-        return withContext(scope.coroutineContext) {
-            pref.getUser().first()
-        }
-    }
 
     override suspend fun setLoginUser(user: UserData) {
-        scope.launch { pref.setUser(user) }
+        pref.setUser(user)
     }
 
     override suspend fun requestRegistration(registrationDto: RegistrationDto) {
