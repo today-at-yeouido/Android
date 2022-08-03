@@ -30,7 +30,7 @@ private val DarkColorPalette = TayColorSystem(
     caution = dm_sementic_yellow,
     information = dm_sementic_blue,
     isDark = false,
-    )
+)
 
 private val LightColorPalette = TayColorSystem(
     primary = lm_primary50,
@@ -55,7 +55,7 @@ private val LightColorPalette = TayColorSystem(
     caution = lm_sementic_yellow,
     information = lm_sementic_blue,
     isDark = true,
-    )
+)
 
 @Composable
 fun TayAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
