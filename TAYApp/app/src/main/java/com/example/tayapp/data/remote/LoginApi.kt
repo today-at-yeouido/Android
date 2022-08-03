@@ -1,29 +1,35 @@
 package com.example.tayapp.data.remote
 
-import com.example.tayapp.data.remote.dto.*
+import com.example.tayapp.data.remote.dto.bill.LoginDto
+import com.example.tayapp.data.remote.dto.bill.LoginResponse
+import com.example.tayapp.data.remote.dto.login.JwtRefreshResponse
+import com.example.tayapp.data.remote.dto.login.LogoutResponse
+import com.example.tayapp.data.remote.dto.login.RefreshTokenDto
+import com.example.tayapp.data.remote.dto.login.RegistrationDto
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface LoginApi {
 
     @POST(Constants.POST_REGISTRATION)
-    fun postRegistration(
+    suspend fun postRegistration(
         @Body registration: RegistrationDto
-    )
+    ): Response<Void>
 
     @POST(Constants.POST_LOGIN)
-    fun postLogin(
+    suspend fun postLogin(
         @Body loginDto: LoginDto
-    ): LoginResponse
+    ): Response<LoginResponse>
 
     @POST(Constants.POST_LOGOUT)
-    fun postLogout(
+    suspend fun postLogout(
         @Body token: String
     ): LogoutResponse
 
     @POST(Constants.POST_JWT_REFRESH)
-    fun postJwtRefresh(
-        @Body token: String
-    ): JwtRefreshResponse
-
+    suspend fun postJwtRefresh(
+        @Body token : RefreshTokenDto
+    ): Response<JwtRefreshResponse>
 }
+
