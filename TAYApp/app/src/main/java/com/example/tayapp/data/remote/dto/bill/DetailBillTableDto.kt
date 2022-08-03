@@ -1,4 +1,4 @@
-package com.example.tayapp.data.remote.dto
+package com.example.tayapp.data.remote.dto.bill
 
 
 data class DetailBillTableDto(

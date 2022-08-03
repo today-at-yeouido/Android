@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.zIndex
-import com.example.tayapp.data.remote.dto.BillDto
+import com.example.tayapp.data.remote.dto.bill.BillDto
+import com.example.tayapp.data.remote.dto.bill.MostViewedBillDto
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayEmoji
@@ -45,7 +46,7 @@ private object MostViewedValues {
 }
 
 @Composable
-fun CardMostViewed(items: List<BillDto>) {
+fun CardMostViewed(items: List<MostViewedBillDto>) {
     Title(
         "최근 이슈 법안",
         modifier = Modifier
@@ -63,7 +64,7 @@ fun CardMostViewed(items: List<BillDto>) {
 @Composable
 fun MostViewedRow(
     modifier: Modifier = Modifier,
-    items: List<BillDto>
+    items: List<MostViewedBillDto>
 ) {
     val pagerState = rememberPagerState()
 
@@ -91,7 +92,7 @@ fun MostViewedRow(
 }
 
 @Composable
-private fun MostViewedRowCard(modifier: Modifier = Modifier, bill: BillDto) {
+private fun MostViewedRowCard(modifier: Modifier = Modifier, bill: MostViewedBillDto) {
     Column(
         modifier = modifier
             .padding(horizontal = MostViewedValues.Card_Gap)
@@ -106,7 +107,7 @@ private fun MostViewedRowCard(modifier: Modifier = Modifier, bill: BillDto) {
 }
 
 @Composable
-private fun CardContentLayout(modifier: Modifier = Modifier, bill: BillDto) {
+private fun CardContentLayout(modifier: Modifier = Modifier, bill: MostViewedBillDto) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -153,7 +154,7 @@ private fun NewsSub(modifier: Modifier) {
 
 
 @Composable
-private fun CardContent(bill : BillDto) {
+private fun CardContent(bill : MostViewedBillDto) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -162,7 +163,7 @@ private fun CardContent(bill : BillDto) {
             NewsLabel()
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                bill.billName ?: "",
+                bill.billSummary.billName,
                 color = lm_gray000,
                 fontSize = 18.textDp,
                 lineHeight = 1.3.em,
@@ -170,7 +171,7 @@ private fun CardContent(bill : BillDto) {
             )
             Spacer(Modifier.height(10.dp))
             Text(
-                bill.proposer ?: "",
+                bill.billSummary.proposer,
                 fontSize = 13.textDp,
                 fontWeight = FontWeight.Normal,
                 color = lm_gray050,

@@ -1,6 +1,6 @@
 package com.example.tayapp.domain.use_case.login
 
-import com.example.tayapp.data.remote.dto.RegistrationDto
+import com.example.tayapp.data.remote.dto.login.RegistrationDto
 import com.example.tayapp.domain.repository.LoginRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
