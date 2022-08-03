@@ -21,14 +21,14 @@ fun NavGraph(
 ) {
     NavHost(
         navController = appState.navController,
-        startDestination = MainDestination.HOME,
+        startDestination = MainDestination.SPLASH,
         modifier = Modifier.padding(innerPadding)
     ) {
         tayNavGraph(appState.navController)
     }
 }
 
-private fun NavGraphBuilder.tayNavGraph( navController: NavController) {
+private fun NavGraphBuilder.tayNavGraph(navController: NavController) {
     /** nested Navigation */
     navigation(
         route = MainDestination.HOME,
@@ -38,14 +38,22 @@ private fun NavGraphBuilder.tayNavGraph( navController: NavController) {
     }
 
     composable(
+        route = MainDestination.SPLASH
+    ) {
+        SplashScreen(navController)
+    }
+
+    composable(
         route = MainDestination.LOGIN
-    ){
+    ) {
         LoginScreen()
     }
 
     composable(
         route = MainDestination.DETAIL
-    ) {}
+    ) {
+
+    }
 }
 
 fun NavGraphBuilder.addHomeGraph(navController: NavController) {

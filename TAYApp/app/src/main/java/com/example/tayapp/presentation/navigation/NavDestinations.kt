@@ -3,6 +3,7 @@ package com.example.tayapp.presentation.navigation
 
 /** Destination 임시로 HOME, DETAIL 설정 */
 object MainDestination {
+    const val SPLASH = "splash"
     const val LOGIN = "login"
     const val HOME = "home"
     const val DETAIL = "detail"

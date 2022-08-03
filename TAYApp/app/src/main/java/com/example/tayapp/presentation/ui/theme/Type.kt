@@ -17,6 +17,14 @@ private fun Int.textDp(density: Density): TextUnit = with(density) {
 val Int.textDp: TextUnit
     @Composable get() =  this.textDp(density = LocalDensity.current)
 
+private fun Double.textDp(density: Density): TextUnit = with(density) {
+    this@textDp.dp.toSp()
+}
+
+val Double.textDp: TextUnit
+    @Composable get() =  this.textDp(density = LocalDensity.current)
+
+
 private val SpoqaHanSansNeo = FontFamily(
     Font(R.font.spoqahansansneo_regular, FontWeight.Normal),
     Font(R.font.spoqahansansneo_bold, FontWeight.Bold),
