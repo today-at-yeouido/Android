@@ -28,10 +28,9 @@ fun Feed(modifier: Modifier = Modifier, navController: NavController) {
     val userItems = listOf<Int>(1, 2, 3)
 
     Column {
-        CardMostViewed(items = mostViewed.bill)
-
         Column() {
             TayHomeTopAppBar(modifier = Modifier)
+            CardMostViewed(items = mostViewed.bill)
             LazyColumn {
                 item {
                     //CardMostViewed(items = items)
