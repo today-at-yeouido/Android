@@ -1,6 +1,5 @@
 package com.example.tayapp.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -11,22 +10,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.tayapp.presentation.navigation.MainDestination
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import com.example.tayapp.utils.getActivity
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController) {
 
     val viewModel = hiltViewModel<LoginViewModel>(getActivity())
 
     var emailState by remember { mutableStateOf("") }
-    var passwordState by remember { mutableStateOf("") }
-
+    var passState1 by remember { mutableStateOf("") }
+    var passState2 by remember { mutableStateOf("") }
 
     Surface(
         color = Color.White,
@@ -38,19 +35,23 @@ fun LoginScreen(navController: NavController) {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Text("이메일")
+            Text(text = "이메일")
             TextField(
-                value = emailState,
-                onValueChange = { emailState = it },
+                value = emailState, onValueChange = { emailState = it },
                 Modifier
                     .fillMaxWidth()
                     .background(Color.Gray)
             )
-            Text("비밀번호")
+            Text(text = "비밀번호")
             TextField(
-                value = passwordState,
-                onValueChange = { passwordState = it },
+                value = passState1, onValueChange = { passState1 = it },
+                Modifier
+                    .fillMaxWidth()
+                    .background(Color.Gray)
+            )
+            Text(text = "비밀번호 확인")
+            TextField(
+                value = passState2, onValueChange = { passState2 = it },
                 Modifier
                     .fillMaxWidth()
                     .background(Color.Gray)
@@ -58,15 +59,13 @@ fun LoginScreen(navController: NavController) {
 
             Row {
                 Button(onClick = {
-                    viewModel.requestLogin(emailState, passwordState)
+                    viewModel.requestRegister(
+                        emailState,
+                        passState1,
+                        passState2
+                    ) { navController.popBackStack() }
                 }) {
                     Text(" 확인", color = Color.Black)
-                }
-                Spacer(modifier = Modifier.width(100.dp))
-                Button(onClick = {
-                    navController.navigate(MainDestination.SIGN_UP)
-                }) {
-                    Text("회원가입", color = Color.Black)
                 }
             }
         }

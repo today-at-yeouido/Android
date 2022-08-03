@@ -1,34 +1,44 @@
 package com.example.tayapp.data.repository
 
+import android.util.Log
 import com.example.tayapp.data.pref.LoginPref
-import com.example.tayapp.data.pref.model.UserData
-import com.example.tayapp.data.pref.model.toUser
+import com.example.tayapp.data.pref.model.UserPref
 import com.example.tayapp.data.remote.LoginApi
 import com.example.tayapp.data.remote.dto.*
 import com.example.tayapp.domain.repository.LoginRepository
-import com.example.tayapp.domain.model.User
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
+import retrofit2.Response
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class LoginRepositoryImpl @Inject constructor(
     private val pref: LoginPref,
     private val loginApi: LoginApi
 ) : LoginRepository {
 
-    override suspend fun getUser(): UserData =
-        pref.getUser().first()
+    override suspend fun getUser(): UserPref {
+        val g = pref.getUser().first()
+        Log.d("##99", "pref ${g.accessToken}")
+       return g
+    }
 
 
-    override suspend fun setLoginUser(user: UserData) {
+    override suspend fun setLoginUser(user: UserPref) {
         pref.setUser(user)
     }
 
-    override suspend fun requestRegistration(registrationDto: RegistrationDto) {
-        loginApi.postRegistration(registrationDto)
+    override suspend fun getRefreshToken(): String {
+        val p = pref.getRefreshToken().first()
+        Log.d("##99", "getRefresh ${p.toString()}")
+        return p
     }
 
-    override suspend fun requestLogin(loginDto: LoginDto): LoginResponse {
+    override suspend fun requestRegistration(registrationDto: RegistrationDto): Response<Void> {
+       return loginApi.postRegistration(registrationDto)
+    }
+
+    override suspend fun requestLogin(loginDto: LoginDto): Response<LoginResponse> {
         return loginApi.postLogin(loginDto)
     }
 
@@ -36,7 +46,7 @@ class LoginRepositoryImpl @Inject constructor(
         return loginApi.postLogout(token)
     }
 
-    override suspend fun requestRefreshToken(token: String): JwtRefreshResponse {
+    override suspend fun requestRefreshToken(token: RefreshTokenDto): Response<JwtRefreshResponse> {
         return loginApi.postJwtRefresh(token)
     }
 }

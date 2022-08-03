@@ -1,20 +1,22 @@
 package com.example.tayapp.data.remote
 
 import com.example.tayapp.data.remote.dto.*
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
+import javax.inject.Named
 
 interface LoginApi {
 
     @POST(Constants.POST_REGISTRATION)
-    fun postRegistration(
+    suspend fun postRegistration(
         @Body registration: RegistrationDto
-    )
+    ): Response<Void>
 
     @POST(Constants.POST_LOGIN)
-    fun postLogin(
+    suspend fun postLogin(
         @Body loginDto: LoginDto
-    ): LoginResponse
+    ): Response<LoginResponse>
 
     @POST(Constants.POST_LOGOUT)
     fun postLogout(
@@ -22,8 +24,8 @@ interface LoginApi {
     ): LogoutResponse
 
     @POST(Constants.POST_JWT_REFRESH)
-    fun postJwtRefresh(
-        @Body token: String
-    ): JwtRefreshResponse
-
+    suspend fun postJwtRefresh(
+        @Body token : RefreshTokenDto
+    ): Response<JwtRefreshResponse>
 }
+

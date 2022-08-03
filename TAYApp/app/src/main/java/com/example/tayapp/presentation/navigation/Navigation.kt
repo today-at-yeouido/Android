@@ -46,8 +46,15 @@ private fun NavGraphBuilder.tayNavGraph(navController: NavController) {
     composable(
         route = MainDestination.LOGIN
     ) {
-        LoginScreen()
+        LoginScreen(navController)
     }
+
+    composable(
+        route = MainDestination.SIGN_UP
+    ){
+        SignUpScreen(navController)
+    }
+
 
     composable(
         route = MainDestination.DETAIL
