@@ -67,7 +67,8 @@ fun NavGraphBuilder.addHomeGraph(navController: NavController) {
         Search()
     }
     composable(BottomBarTabs.REPORT.route) {
-        Report(Modifier.fillMaxSize())
+        //Report(Modifier.fillMaxSize())
+        BillDetail()
     }
     composable(BottomBarTabs.PROFILE.route) {
         Profile(Modifier.fillMaxSize())
