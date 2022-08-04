@@ -1,16 +1,21 @@
 package com.example.tayapp.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -88,7 +93,7 @@ fun MostViewedRow(
             itemSpacing = Card_Gap,
             contentPadding = PaddingValues(horizontal = MostViewedValues.KeyLine)
         ) { i ->
-            MostViewedRowCard(bill = items[i])
+                MostViewedRowCard(bill = items[i])
         }
     }
 }
@@ -103,7 +108,7 @@ private fun MostViewedRowCard(bill: MostViewedBillDto) {
         Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
         CardContentLayout(bill = bill.billSummary)
         Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
-        CardNewsLayout(news = bill.news)
+        CardNewsLayout(newsList = bill.news)
     }
 }
 
@@ -121,7 +126,9 @@ private fun CardContentLayout(bill: BillDto) {
 }
 
 @Composable
-private fun CardNewsLayout(news: List<NewDto>) {
+private fun CardNewsLayout(newsList: List<NewDto>) {
+
+    val mUriHandler = LocalUriHandler.current
     Column(
         modifier = Modifier
             .height(MostViewedValues.News_Height)
@@ -129,8 +136,9 @@ private fun CardNewsLayout(news: List<NewDto>) {
             .padding(MostViewedValues.Padding)
     ) {
         NewsSub()
-        NewsHeaderItem(news[0])
-        NewsHeaderItem(news[1])
+        for (news in newsList) {
+            NewsHeaderItem(news, mUriHandler)
+        }
     }
 }
 
@@ -161,13 +169,15 @@ private fun CardContent(bill: BillDto) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column {
-            NewsLabel()
+            PillList(bill.billType.mapType(), bill.status)
             Spacer(modifier = Modifier.height(13.dp))
             Text(
                 bill.billName,
                 color = lm_gray000,
                 fontSize = 18.textDp,
                 lineHeight = 1.3.em,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.width(190.matchWidth)
             )
             Spacer(Modifier.height(12.dp))
@@ -224,15 +234,17 @@ fun NewsLabelIcon2() {
 
 
 @Composable
-fun NewsHeaderItem(news: NewDto) {
+fun NewsHeaderItem(news: NewDto, mUriHandler: UriHandler) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(30.dp),
+            .height(30.dp)
+            .clickable { mUriHandler.openUri(news.newsLink) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text =  "${news.pubDate} ${news.newsFrom}",
+            text = "${news.pubDate}  ${news.newsFrom}",
             color = lm_gray200,
             fontSize = 12.textDp,
             fontWeight = FontWeight.Normal,
@@ -242,13 +254,15 @@ fun NewsHeaderItem(news: NewDto) {
         )
 
         Text(
-            text = news.newsName,
+            text = news.newsName.removeNewline(),
             overflow = TextOverflow.Ellipsis,
             color = lm_gray050,
             maxLines = 1,
             fontSize = 13.textDp,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier
+                .width(210.dp)
+                .padding(horizontal = 10.dp)
         )
 
         Icon(
@@ -256,10 +270,23 @@ fun NewsHeaderItem(news: NewDto) {
             contentDescription = "",
             tint = Color.White,
             modifier = Modifier
-                .size(20.dp, 20.dp)
-                .weight(0.5f)
         )
     }
 }
 
 private fun Dp.twice(): Dp = (2 * this.value).dp
+
+// 개행문자 제거
+private fun String.removeNewline(): String {
+    return this.replace("\\r\\n|\\r|\\n|\\n\\r".toRegex(), " ")
+}
+
+// bill type 매핑
+private fun Int.mapType():String{
+    return when(this){
+        0 -> "제정안"
+        1 -> "개정안"
+        2 -> "일부개정안"
+        else -> "폐지안"
+    }
+}
