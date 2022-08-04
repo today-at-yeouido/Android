@@ -1,6 +1,5 @@
 package com.example.tayapp.presentation.screens
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -27,37 +26,34 @@ fun Feed(modifier: Modifier = Modifier, navController: NavController) {
     val mostViewed by viewModel.state.collectAsState()
     val userItems = listOf<Int>(1, 2, 3)
 
-    Column {
-        Column() {
-            TayHomeTopAppBar(modifier = Modifier)
-            CardMostViewed(items = mostViewed.bill)
-            LazyColumn {
-                item {
-                    //CardMostViewed(items = items)
-                    Spacer(modifier = Modifier.height(40.dp))
 
-                    Title(
-                        "사용자 맞춤 추천법안",
-                        modifier = Modifier
-                            .padding(vertical = 0.dp, horizontal = KeyLine)
-                    )
-                    CardsUser()
-                    Spacer(modifier = Modifier.height(40.dp))
+    Column() {
+        TayHomeTopAppBar()
+        LazyColumn {
+            item {
+                CardMostViewed(items = mostViewed.bill)
+                Spacer(modifier = Modifier.height(40.dp))
 
-                    Title(
-                        "최근 발의 법안",
-                        modifier = Modifier
-                            .padding(vertical = 7.dp, horizontal = KeyLine)
+                Title(
+                    "사용자 맞춤 추천법안",
+                    modifier = Modifier
+                        .padding(vertical = 0.dp, horizontal = KeyLine)
+                )
+                CardsUser()
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Title(
+                    "최근 발의 법안",
+                    modifier = Modifier
+                        .padding(vertical = 7.dp, horizontal = KeyLine)
+                )
+                userItems.forEach {
+                    CardBill(
+                        modifier.padding(horizontal = 16.dp, vertical = 5.dp)
                     )
-                    userItems.forEach {
-                        CardBill(
-                            modifier.padding(horizontal = 16.dp, vertical = 5.dp)
-                        )
-                    }
                 }
             }
         }
-
     }
 }
 
