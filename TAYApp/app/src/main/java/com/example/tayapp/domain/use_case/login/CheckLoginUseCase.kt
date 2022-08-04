@@ -1,7 +1,7 @@
 package com.example.tayapp.domain.use_case.login
 
 import android.util.Log
-import com.example.tayapp.data.remote.dto.login.RefreshTokenDto
+import com.example.tayapp.data.remote.dto.RefreshTokenDto
 import com.example.tayapp.domain.repository.LoginRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
