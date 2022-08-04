@@ -58,7 +58,11 @@ fun LoginScreen(navController: NavController) {
 
             Row {
                 Button(onClick = {
-                    viewModel.requestLogin(emailState, passwordState)
+                    viewModel.requestLogin(emailState, passwordState) {
+                        navController.navigate(
+                            MainDestination.HOME
+                        )
+                    }
                 }) {
                     Text(" 확인", color = Color.Black)
                 }

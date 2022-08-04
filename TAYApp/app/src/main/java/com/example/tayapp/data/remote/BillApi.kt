@@ -6,11 +6,8 @@ import com.example.tayapp.data.remote.Constants.GET_BILL_MOST_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_RECENT
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECENT_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECOMMENDED
-import com.example.tayapp.data.remote.dto.BillDto
-import com.example.tayapp.data.remote.dto.DetailBillTableDto
-import com.example.tayapp.data.remote.dto.DetailBillDto
-import com.example.tayapp.data.remote.dto.HomeBillDto
-import kotlinx.coroutines.flow.Flow
+import com.example.tayapp.data.remote.dto.bill.*
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -35,7 +32,7 @@ interface BillApi {
     suspend fun getBillRecent() : List<BillDto>
 
     @GET(GET_BILL_MOST_VIEWED)
-    suspend fun getBillMostViewed() : List<BillDto>
+    suspend fun getBillMostViewed() : Response<List<MostViewedBillDto>>
 
     @GET(GET_BILL_USER_RECOMMENDED)
     suspend fun getBillUserRecommended() : List<BillDto>

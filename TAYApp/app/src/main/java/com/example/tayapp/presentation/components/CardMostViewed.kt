@@ -1,27 +1,36 @@
 package com.example.tayapp.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.zIndex
-import com.example.tayapp.data.remote.dto.BillDto
+import com.example.tayapp.data.remote.dto.bill.BillDto
+import com.example.tayapp.data.remote.dto.bill.MostViewedBillDto
+import com.example.tayapp.data.remote.dto.bill.NewDto
 import com.example.tayapp.presentation.MainActivity
+import com.example.tayapp.presentation.components.MostViewedValues.Card_Gap
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayEmoji
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.utils.matchWidth
 import com.example.tayapp.utils.textDp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -31,10 +40,10 @@ import com.google.accompanist.pager.rememberPagerState
 
 private object MostViewedValues {
     val Section_Title_Padding = 7.dp
-    val KeyLine = 11.dp
+    val KeyLine = 16.dp
     val Card_Height = 280.dp
     val Padding = 14.dp
-    val Card_Gap = 5.dp
+    val Card_Gap = 10.dp
     val Indicator_Gap = 10.dp
     val Indicator_Size = 6.dp
     val Card_Top_Padding = 40.dp
@@ -45,7 +54,7 @@ private object MostViewedValues {
 }
 
 @Composable
-fun CardMostViewed(items: List<BillDto>) {
+fun CardMostViewed(items: List<MostViewedBillDto>) {
     Title(
         "최근 이슈 법안",
         modifier = Modifier
@@ -58,12 +67,10 @@ fun CardMostViewed(items: List<BillDto>) {
 }
 
 
-
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MostViewedRow(
-    modifier: Modifier = Modifier,
-    items: List<BillDto>
+    items: List<MostViewedBillDto>
 ) {
     val pagerState = rememberPagerState()
 
@@ -83,62 +90,66 @@ fun MostViewedRow(
         HorizontalPager(
             count = items.size,
             state = pagerState,
+            itemSpacing = Card_Gap,
             contentPadding = PaddingValues(horizontal = MostViewedValues.KeyLine)
         ) { i ->
-            MostViewedRowCard(bill = items[i])
+                MostViewedRowCard(bill = items[i])
         }
     }
 }
 
 @Composable
-private fun MostViewedRowCard(modifier: Modifier = Modifier, bill: BillDto) {
+private fun MostViewedRowCard(bill: MostViewedBillDto) {
     Column(
-        modifier = modifier
-            .padding(horizontal = MostViewedValues.Card_Gap)
+        modifier = Modifier
             .size(MainActivity.displayWidth - KeyLine.twice(), MostViewedValues.Card_Height)
-            .background(color = lm_card_yellow, shape = CardNewsShape.large)
+            .background(color = lm_card_yellow, shape = CardNewsShape.large),
     ) {
         Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
-        CardContentLayout(bill = bill)
+        CardContentLayout(bill = bill.billSummary)
         Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
-        CardNewsLayout()
+        CardNewsLayout(newsList = bill.news)
     }
 }
 
 @Composable
-private fun CardContentLayout(modifier: Modifier = Modifier, bill: BillDto) {
+private fun CardContentLayout(bill: BillDto) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .height(MostViewedValues.Content_Height)
-            .padding(horizontal = MostViewedValues.Padding)
+            .padding(horizontal = 14.matchWidth),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CardContent(bill)
     }
 }
 
 @Composable
-private fun CardNewsLayout(modifier: Modifier = Modifier) {
+private fun CardNewsLayout(newsList: List<NewDto>) {
+
+    val mUriHandler = LocalUriHandler.current
     Column(
-        modifier = modifier
+        modifier = Modifier
             .height(MostViewedValues.News_Height)
             .background(color = lm_gray700, shape = CardNewsShape.large)
             .padding(MostViewedValues.Padding)
     ) {
-        NewsSub(Modifier.padding(bottom = 5.dp))
-        NewsHeaderItem()
-        NewsHeaderItem()
+        NewsSub()
+        for (news in newsList) {
+            NewsHeaderItem(news, mUriHandler)
+        }
     }
 }
 
 @Composable
-private fun NewsSub(modifier: Modifier) {
-    Row(modifier = modifier) {
+private fun NewsSub() {
+    Row(modifier = Modifier.padding(bottom = 5.dp)) {
         Image(
             imageVector = TayIcons.card_article,
             contentDescription = "",
             modifier = Modifier
-                .padding(end = 4.dp)
+                .padding(end = 4.dp, bottom = 5.dp)
                 .size(16.dp),
             colorFilter = ColorFilter.tint(lm_gray000)
         )
@@ -153,24 +164,25 @@ private fun NewsSub(modifier: Modifier) {
 
 
 @Composable
-private fun CardContent(bill : BillDto) {
+private fun CardContent(bill: BillDto) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column() {
-            NewsLabel()
-            Spacer(modifier = Modifier.height(20.dp))
+        Column {
+            PillList(bill.billType.mapType(), bill.status)
+            Spacer(modifier = Modifier.height(13.dp))
             Text(
-                bill.billName ?: "",
+                bill.billName,
                 color = lm_gray000,
                 fontSize = 18.textDp,
                 lineHeight = 1.3.em,
-                modifier = Modifier.width(190.dp)
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.width(190.matchWidth)
             )
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(12.dp))
             Text(
-                bill.proposer ?: "",
+                bill.proposer,
                 fontSize = 13.textDp,
                 fontWeight = FontWeight.Normal,
                 color = lm_gray050,
@@ -178,6 +190,7 @@ private fun CardContent(bill : BillDto) {
             )
             Spacer(Modifier.height(7.dp))
         }
+        Spacer(modifier = Modifier.width(20.matchWidth))
         Text(
             text = TayEmoji.card_emoji,
             fontSize = 72.textDp,
@@ -186,9 +199,10 @@ private fun CardContent(bill : BillDto) {
     }
 }
 
+
 @Composable
 private fun NewsLabel() {
-    Row() {
+    Row {
         NewsLabelIcon()
         NewsLabelIcon2()
     }
@@ -220,29 +234,35 @@ fun NewsLabelIcon2() {
 
 
 @Composable
-fun NewsHeaderItem() {
+fun NewsHeaderItem(news: NewDto, mUriHandler: UriHandler) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(30.dp),
+            .height(30.dp)
+            .clickable { mUriHandler.openUri(news.newsLink) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "8시간 전 [더피알]",
+            text = "${news.pubDate}  ${news.newsFrom}",
             color = lm_gray200,
             fontSize = 12.textDp,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.width(100.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
 
         Text(
-            text = "중대재해처벌법, 두려움을 기회로 중대재해처벌법, 두려움을 기회로 중대재해처벌법, 두려움을 기회로",
+            text = news.newsName.removeNewline(),
             overflow = TextOverflow.Ellipsis,
             color = lm_gray050,
             maxLines = 1,
             fontSize = 13.textDp,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier
+                .width(210.dp)
+                .padding(horizontal = 10.dp)
         )
 
         Icon(
@@ -250,10 +270,23 @@ fun NewsHeaderItem() {
             contentDescription = "",
             tint = Color.White,
             modifier = Modifier
-                .size(20.dp, 20.dp)
-                .weight(0.5f)
         )
     }
 }
 
 private fun Dp.twice(): Dp = (2 * this.value).dp
+
+// 개행문자 제거
+private fun String.removeNewline(): String {
+    return this.replace("\\r\\n|\\r|\\n|\\n\\r".toRegex(), " ")
+}
+
+// bill type 매핑
+private fun Int.mapType():String{
+    return when(this){
+        0 -> "제정안"
+        1 -> "개정안"
+        2 -> "일부개정안"
+        else -> "폐지안"
+    }
+}

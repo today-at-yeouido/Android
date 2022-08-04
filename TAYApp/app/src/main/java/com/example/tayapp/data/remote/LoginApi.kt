@@ -19,7 +19,7 @@ interface LoginApi {
     ): Response<LoginResponse>
 
     @POST(Constants.POST_LOGOUT)
-    fun postLogout(
+    suspend fun postLogout(
         @Body token: String
     ): LogoutResponse
 
