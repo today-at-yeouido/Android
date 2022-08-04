@@ -1,9 +1,5 @@
 package com.example.tayapp.data.remote.dto.bill
 
-
-import com.google.gson.annotations.SerializedName
-
-
 import com.google.gson.annotations.SerializedName
 
 

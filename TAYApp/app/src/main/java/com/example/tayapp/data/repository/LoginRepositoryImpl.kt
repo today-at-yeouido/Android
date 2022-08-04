@@ -54,4 +54,5 @@ class LoginRepositoryImpl @Inject constructor(
     override suspend fun requestRefreshToken(token: RefreshTokenDto): Response<JwtRefreshResponse> {
         return loginApi.postJwtRefresh(token)
     }
+
 }

@@ -1,10 +1,15 @@
 package com.example.tayapp.data.remote
 
-import com.example.tayapp.data.remote.dto.*
+import com.example.tayapp.data.remote.dto.bill.LoginDto
+import com.example.tayapp.data.remote.dto.bill.LoginResponse
+import com.example.tayapp.data.remote.dto.login.JwtRefreshResponse
+import com.example.tayapp.data.remote.dto.login.LogoutResponse
+import com.example.tayapp.data.remote.dto.login.RefreshTokenDto
+import com.example.tayapp.data.remote.dto.login.RegistrationDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
-import javax.inject.Named
+
 
 interface LoginApi {
 
