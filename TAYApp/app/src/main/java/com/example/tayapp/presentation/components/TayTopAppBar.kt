@@ -1,27 +1,34 @@
 package com.example.tayapp.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray050
+import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.utils.BackButton
 import com.example.tayapp.presentation.utils.BookmarkButton
 import com.example.tayapp.presentation.utils.SearchButton
+import com.example.tayapp.utils.textDp
 
 
 object TopAppBarValue {
@@ -31,14 +38,14 @@ object TopAppBarValue {
 }
 
 @Composable
-fun TayTopAppBar(string: String = "스크랩"){
+fun TayTopAppBar(string: String = "스크랩") {
     Box(
         modifier = Modifier
             .statusBarsPadding()
             .fillMaxWidth()
             .height(TopAppBarValue.AppBarHeignt)
 
-    ){
+    ) {
         TopBarTitle(
             string = string,
             modifier = Modifier.align(Alignment.Center)
@@ -47,7 +54,7 @@ fun TayTopAppBar(string: String = "스크랩"){
 }
 
 @Composable
-fun TayTopAppBarWithBack(string: String){
+fun TayTopAppBarWithBack(string: String) {
     Box(
         modifier = Modifier
             .statusBarsPadding()
@@ -58,7 +65,7 @@ fun TayTopAppBarWithBack(string: String){
             .fillMaxWidth()
             .height(TopAppBarValue.AppBarHeignt)
 
-    ){
+    ) {
         BackButton(
             modifier = Modifier.align(Alignment.CenterStart)
         )
@@ -70,7 +77,7 @@ fun TayTopAppBarWithBack(string: String){
 }
 
 @Composable
-fun TayTopAppBarWithScrap(string: String){
+fun TayTopAppBarWithScrap(string: String) {
     Box(
         modifier = Modifier
             .statusBarsPadding()
@@ -81,7 +88,7 @@ fun TayTopAppBarWithScrap(string: String){
             .fillMaxWidth()
             .height(TopAppBarValue.AppBarHeignt)
 
-    ){
+    ) {
         BackButton(
             modifier = Modifier.align(Alignment.CenterStart)
         )
@@ -98,13 +105,10 @@ fun TayTopAppBarWithScrap(string: String){
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TayTopAppBarSearch(
-    query: String = "",
-    onQueryChange: (TextFieldValue) -> Unit,
-    onSearchFocusChange: (Boolean) -> Unit,
-){
+    saveQuery: (String) -> Unit
+) {
     Row(
         modifier = Modifier
             .statusBarsPadding()
@@ -117,25 +121,42 @@ fun TayTopAppBarSearch(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
 
-    ){
-        BackButton()
+    ) {
 
-        val context = LocalContext.current
+        var query by remember { mutableStateOf("") }
         val focusManager = LocalFocusManager.current
-        val keyboardController = LocalSoftwareKeyboardController.current
 
-        Surface(
-            color = lm_gray050,
-            shape = RoundedCornerShape(8.dp),
+        BackButton()
+        TextField(
+            placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
+            value = query,
+            onValueChange = { query = it },
             modifier = Modifier
                 .weight(1f)
-                .height(36.dp)
                 .fillMaxWidth()
-        ) {
+                .background(lm_gray050),
+            textStyle = TextStyle(fontSize = 14.textDp),
+            shape = RoundedCornerShape(8.dp),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    saveQuery(query)
+                    focusManager.clearFocus()
+                    query = ""
+                }
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.None,
+                autoCorrect = true,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            )
+        )
 
-        }
-
-        SearchButton()
+        SearchButton(onClick = {
+            saveQuery(query)
+            focusManager.clearFocus()
+            query = ""
+        })
 
     }
 }
@@ -144,7 +165,7 @@ fun TayTopAppBarSearch(
 private fun TopBarTitle(
     string: String,
     modifier: Modifier = Modifier
-){
+) {
     Text(
         "$string",
         modifier = modifier,
@@ -158,7 +179,7 @@ private fun TopBarTitle(
 
 @Preview
 @Composable
-private fun TopBarPreview(){
+private fun TopBarPreview() {
     TayAppTheme {
         TayTopAppBar()
     }
@@ -166,7 +187,7 @@ private fun TopBarPreview(){
 
 @Preview
 @Composable
-private fun BackTopBarPreview(){
+private fun BackTopBarPreview() {
     TayAppTheme() {
         TayTopAppBarWithBack(string = "스크랩")
     }
@@ -174,7 +195,7 @@ private fun BackTopBarPreview(){
 
 @Preview
 @Composable
-private fun BookmarkTopBarPreview(){
+private fun BookmarkTopBarPreview() {
     TayAppTheme() {
         TayTopAppBarWithScrap(string = "스크랩")
     }
@@ -185,8 +206,7 @@ private fun BookmarkTopBarPreview(){
 private fun SearchTopBarPreview() {
     TayAppTheme() {
         TayTopAppBarSearch(
-            query = "",
-            onQueryChange = {},
-            onSearchFocusChange = {})
+            {}
+        )
     }
 }

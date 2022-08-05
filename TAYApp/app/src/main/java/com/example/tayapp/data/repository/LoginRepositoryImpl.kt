@@ -1,7 +1,7 @@
 package com.example.tayapp.data.repository
 
 import android.util.Log
-import com.example.tayapp.data.pref.LoginPref
+import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.pref.model.UserPref
 import com.example.tayapp.data.remote.LoginApi
 import com.example.tayapp.data.remote.dto.bill.LoginDto
@@ -18,14 +18,12 @@ import javax.inject.Singleton
 
 @Singleton
 class LoginRepositoryImpl @Inject constructor(
-    private val pref: LoginPref,
+    private val pref: PrefDataSource,
     private val loginApi: LoginApi
 ) : LoginRepository {
 
     override suspend fun getUser(): UserPref {
-        val g = pref.getUser().first()
-        Log.d("##99", "pref ${g.accessToken}")
-       return g
+        return pref.getUser().first()
     }
 
 
@@ -34,9 +32,7 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRefreshToken(): String {
-        val p = pref.getRefreshToken().first()
-        Log.d("##99", "getRefresh ${p.toString()}")
-        return p
+        return pref.getRefreshToken().first()
     }
 
     override suspend fun requestRegistration(registrationDto: RegistrationDto): Response<Void> {

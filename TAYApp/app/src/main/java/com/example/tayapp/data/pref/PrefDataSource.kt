@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.tayapp.data.pref.model.UserPref
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,7 +17,7 @@ import javax.inject.Inject
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("settings")
 
 
-class LoginPref @Inject constructor(@ApplicationContext val context: Context) {
+class PrefDataSource @Inject constructor(@ApplicationContext val context: Context) {
 
     companion object {
         val LOGIN_USER_ACCESS_TOKEN = stringPreferencesKey("login_user_access_token")
@@ -24,8 +25,19 @@ class LoginPref @Inject constructor(@ApplicationContext val context: Context) {
         val LOGIN_USER_ID = stringPreferencesKey("login_user_id")
         val LOGIN_USER_EMAIL = stringPreferencesKey("login_user_email")
 
+        val RECENT_SEARCH_TERM = stringPreferencesKey("recent_search_term")
         var TOKEN: String = ""
 
+    }
+
+    suspend fun saveRecentSearchTerm(query: String) {
+        context.dataStore.edit {
+            it[RECENT_SEARCH_TERM] = query
+        }
+    }
+
+    fun getRecentSearchTerm(): Flow<String> = context.dataStore.data.map {
+        it[RECENT_SEARCH_TERM] ?: ""
     }
 
     suspend fun setUser(user: UserPref) {

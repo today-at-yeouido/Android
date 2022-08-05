@@ -6,7 +6,6 @@ import com.example.tayapp.domain.use_case.GetMostViewedUseCase
 import com.example.tayapp.presentation.states.MostViewedUiState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn

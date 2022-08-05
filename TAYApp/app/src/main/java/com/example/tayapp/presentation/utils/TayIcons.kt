@@ -98,7 +98,7 @@ object TayIcons {
     val card_article = Icons.Outlined.Article
 }
 
-object TayEmoji{
+object TayEmoji {
     val card_emoji: String = "🏗"
 }
 
@@ -107,7 +107,7 @@ fun NotificationButton(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     tint: Color = TayAppTheme.colors.icon
-){
+) {
     IconButton(
         onClick = onClick,
         modifier = modifier
@@ -127,7 +127,7 @@ fun ExpandButton(
     isExpanded: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     IconToggleButton(
         checked = isExpanded,
         onCheckedChange = { onClick() }
@@ -147,7 +147,7 @@ fun BookmarkButton(
     isBookmarked: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     IconToggleButton(
         modifier = modifier
             .padding(Icon_Padding)
@@ -164,10 +164,10 @@ fun BookmarkButton(
 
 @Composable
 fun SearchButton(
-    onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
-    tint: Color = TayAppTheme.colors.icon
-){
+    tint: Color = TayAppTheme.colors.icon,
+    onClick: () -> Unit = {}
+) {
     IconButton(
         onClick = onClick,
         modifier = modifier
@@ -187,7 +187,7 @@ fun BackButton(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     tint: Color = TayAppTheme.colors.icon
-){
+) {
     IconButton(
         onClick = onClick,
         modifier = modifier
@@ -207,7 +207,7 @@ fun NavigateNextButton(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     tint: Color = TayAppTheme.colors.icon
-){
+) {
     IconButton(
         onClick = onClick,
         modifier = modifier
@@ -226,7 +226,7 @@ fun CloseButton(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     tint: Color = TayAppTheme.colors.icon
-){
+) {
     IconButton(
         onClick = onClick,
         modifier = modifier
