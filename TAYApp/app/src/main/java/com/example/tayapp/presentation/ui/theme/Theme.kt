@@ -1,290 +1,44 @@
 package com.example.tayapp.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
+import androidx.compose.runtime.Composable
 
-
-private val DarkColorPalette = TayColorSystem(
-    primary = dm_primary50,
-    defaultButton = dm_primary50,
-    background = dm_gray000,
-    layer1 = dm_gray050,
-    layer2 = dm_gray075,
-    layer3 = dm_gray100,
-    border = dm_gray200,
-    fieldBorder = dm_gray300,
-    disableIcon = dm_gray300,
-    disableText = dm_gray400,
-    subduedIcon = dm_gray400,
-    controlBorder = dm_gray600,
-    subduedText = dm_gray600,
-    bodyText = dm_gray700,
-    icon = dm_gray700,
-    headText = dm_gray800,
-    textHighlight = dm_sub20,
-    danger = dm_sementic_red,
-    success = dm_sementic_green,
-    caution = dm_sementic_yellow,
-    information = dm_sementic_blue,
-    isDark = false,
+private val DarkColorPalette = darkColors(
+    primary = Purple200,
+    primaryVariant = Purple700,
+    secondary = Teal200
 )
 
-private val LightColorPalette = TayColorSystem(
-    primary = lm_primary50,
-    defaultButton = lm_primary50,
-    background = lm_gray000,
-    layer1 = lm_gray050,
-    layer2 = lm_gray075,
-    layer3 = lm_gray100,
-    border = lm_gray200,
-    fieldBorder = lm_gray300,
-    disableIcon = lm_gray300,
-    disableText = lm_gray400,
-    subduedIcon = lm_gray400,
-    controlBorder = lm_gray600,
-    subduedText = lm_gray600,
-    bodyText = lm_gray700,
-    icon = lm_gray700,
-    headText = lm_gray800,
-    textHighlight = lm_sub20,
-    danger = lm_sementic_red,
-    success = lm_sementic_green,
-    caution = lm_sementic_yellow,
-    information = lm_sementic_blue,
-    isDark = true,
+private val LightColorPalette = lightColors(
+    primary = Purple500,
+    primaryVariant = Purple700,
+    secondary = Teal200
+
+    /* Other default colors to override
+    background = Color.White,
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.Black,
+    onSurface = Color.Black,
+    */
 )
 
 @Composable
-fun TayAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val tayColorSystem = if (darkTheme) {
+fun TAYAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+    val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
-    val tayTypography = TayTypography
-    val tayTypographySystem = TayTypographySystem(
-        typography = tayTypography
-    )
 
-    val sysUiController = rememberSystemUiController()
-    SideEffect {
-        sysUiController.setSystemBarsColor(
-            color = tayColorSystem.background.copy(alpha = AlphaNearOpaque)
-        )
-    }
-
-    ProvideTaySystem(colors = tayColorSystem, typo = tayTypographySystem) {
-        MaterialTheme(
-            colors = debugColors(darkTheme),
-            shapes = Shapes,
-            content = content,
-            typography = tayTypography
-        )
-    }
-}
-
-/**
- * object TAYAppTheme 없으면
- * TAYAppTheme.colors. 호출불가
- */
-object TayAppTheme {
-    val colors: TayColorSystem
-        @Composable
-        get() = LocalTayColorSystem.current
-
-    val typo: TayTypographySystem
-        @Composable
-        get() = LocalTayTypographySystem.current
-}
-
-/**
- * custom Color Palette
- */
-
-data class TayTypographySystem(
-    val typography: Typography
-)
-
-val LocalTayTypographySystem = staticCompositionLocalOf {
-    TayTypographySystem(
-        typography = TayTypography
-    )
-}
-
-/**
- * custom Color Palette
- */
-@Stable
-class TayColorSystem(
-    primary: Color,
-    defaultButton: Color,
-    background: Color,
-    layer1: Color,
-    layer2: Color,
-    layer3: Color,
-    border: Color,
-    fieldBorder: Color,
-    disableIcon: Color,
-    disableText: Color,
-    subduedIcon: Color,
-    controlBorder: Color,
-    subduedText: Color,
-    bodyText: Color,
-    icon: Color,
-    headText: Color,
-    textHighlight: Color,
-    danger: Color,
-    success: Color,
-    caution: Color,
-    information: Color,
-    isDark: Boolean
-) {
-    var primary by mutableStateOf(primary)
-        private set
-    var defaultButton by mutableStateOf(defaultButton)
-        private set
-    var background by mutableStateOf(background)
-        private set
-    var layer1 by mutableStateOf(layer1)
-        private set
-    var layer2 by mutableStateOf(layer2)
-        private set
-    var layer3 by mutableStateOf(layer3)
-        private set
-    var border by mutableStateOf(border)
-        private set
-    var fieldBorder by mutableStateOf(fieldBorder)
-        private set
-    var disableIcon by mutableStateOf(disableIcon)
-        private set
-    var disableText by mutableStateOf(disableText)
-        private set
-    var subduedIcon by mutableStateOf(subduedIcon)
-        private set
-    var controlBorder by mutableStateOf(controlBorder)
-        private set
-    var subduedText by mutableStateOf(subduedText)
-        private set
-    var bodyText by mutableStateOf(bodyText)
-        private set
-    var icon by mutableStateOf(icon)
-        private set
-    var headText by mutableStateOf(headText)
-        private set
-    var textHighlight by mutableStateOf(textHighlight)
-        private set
-    var danger by mutableStateOf(danger)
-        private set
-    var success by mutableStateOf(success)
-        private set
-    var caution by mutableStateOf(caution)
-        private set
-    var information by mutableStateOf(information)
-        private set
-    var isDark by mutableStateOf(isDark)
-        private set
-
-    /**
-     * set(update) function
-     */
-    fun update(other: TayColorSystem) {
-        primary = other.primary
-        defaultButton = other.defaultButton
-        background = other.background
-        layer1 = other.layer1
-        layer2 = other.layer2
-        layer2 = other.layer3
-        border = other.border
-        fieldBorder = other.fieldBorder
-        disableIcon = other.disableIcon
-        disableText = other.disableText
-        subduedIcon = other.subduedIcon
-        controlBorder = other.controlBorder
-        subduedText = other.subduedText
-        bodyText = other.bodyText
-        icon = other.icon
-        headText = other.headText
-        textHighlight = other.textHighlight
-        danger = other.danger
-        success = other.success
-        caution = other.caution
-        information = other.information
-        isDark = other.isDark
-    }
-
-    /**
-     * return TAYColors( get)
-     */
-    fun copy(): TayColorSystem = TayColorSystem(
-        primary = primary,
-        defaultButton = defaultButton,
-        background = background,
-        layer1 = layer1,
-        layer2 = layer2,
-        layer3 = layer3,
-        border = border,
-        fieldBorder = fieldBorder,
-        disableIcon = disableIcon,
-        disableText = disableText,
-        subduedIcon = subduedIcon,
-        controlBorder = controlBorder,
-        subduedText = subduedText,
-        bodyText = bodyText,
-        icon = icon,
-        headText = headText,
-        textHighlight = textHighlight,
-        danger = danger,
-        success = success,
-        caution = caution,
-        information = information,
-        isDark = isDark,
-    )
-}
-
-@Composable
-fun ProvideTaySystem(
-    colors: TayColorSystem,
-    typo: TayTypographySystem,
-    content: @Composable () -> Unit
-) {
-    val colorPalette = remember {
-        colors.copy()
-    }
-
-    colorPalette.update(colors)
-    CompositionLocalProvider(
-        LocalTayColorSystem provides colorPalette,
-        LocalTayTypographySystem provides typo,
+    MaterialTheme(
+        colors = colors,
+        typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }
-
-private val LocalTayColorSystem = staticCompositionLocalOf<TayColorSystem> {
-    error("No ColorPalette")
-}
-
-/**
- * A Material [Colors] implementation which sets all colors to [debugColor] to discourage usage of
- * [MaterialTheme.colors] in preference to [JetsnackTheme.colors].
- */
-fun debugColors(
-    darkTheme: Boolean,
-    debugColor: Color = lm_primary50
-) = Colors(
-    primary = debugColor,
-    primaryVariant = debugColor,
-    secondary = debugColor,
-    secondaryVariant = debugColor,
-    background = debugColor,
-    surface = debugColor,
-    error = debugColor,
-    onPrimary = debugColor,
-    onSecondary = debugColor,
-    onBackground = debugColor,
-    onSurface = debugColor,
-    onError = debugColor,
-    isLight = !darkTheme
-)

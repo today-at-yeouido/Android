@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'kotlin-parcelize'
 }
 
 
@@ -63,11 +62,6 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
-
-
-    // DataStore
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     // Compose dependencies
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0"
@@ -100,17 +94,4 @@ dependencies {
 
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.4.2"
-
-    //FlowLayout
-    implementation "com.google.accompanist:accompanist-flowlayout:0.17.0"
-
-    // SystemUiController
-    implementation "com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc"
-
-    // Pager
-    implementation "com.google.accompanist:accompanist-pager:0.24.13-rc"
-    implementation "com.google.accompanist:accompanist-pager-indicators:0.24.13-rc"
-
-    // Coil - Image Loading
-    implementation "io.coil-kt:coil-compose:2.1.0"
 }
