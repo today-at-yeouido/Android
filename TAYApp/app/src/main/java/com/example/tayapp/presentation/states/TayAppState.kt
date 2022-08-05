@@ -54,18 +54,18 @@ class TayAppState(
             navController.navigate(route) {
                 launchSingleTop = true
                 restoreState = true
-                popUpTo(findStartDestination(navController.graph).id) {
+                popUpTo(BottomBarTabs.Feed.route) {
                     saveState = true
                 }
             }
         }
     }
 }
-
-/** popUpTo 구현 확장함수 */
-private val NavGraph.startDestination: NavDestination?
-    get() = findNode(startDestinationId)
-
-private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
-    return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
-}
+//
+///** popUpTo 구현 확장함수 */
+//private val NavGraph.startDestination: NavDestination?
+//    get() = findNode(startDestinationId)
+//
+//private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
+//    return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
+//}
