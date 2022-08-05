@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.tayapp">
 
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
-        android:name=".TAYApplication"
+        android:name=".TayApplication"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

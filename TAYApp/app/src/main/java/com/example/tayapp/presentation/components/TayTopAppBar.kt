@@ -1,0 +1,212 @@
+package com.example.tayapp.presentation.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.ui.theme.lm_gray050
+import com.example.tayapp.presentation.ui.theme.lm_gray400
+import com.example.tayapp.presentation.utils.BackButton
+import com.example.tayapp.presentation.utils.BookmarkButton
+import com.example.tayapp.presentation.utils.SearchButton
+import com.example.tayapp.utils.textDp
+
+
+object TopAppBarValue {
+    val AppBarHeignt = 50.dp
+    val VerticalPadding = 3.dp
+    val HorizontalPadding = 16.dp
+}
+
+@Composable
+fun TayTopAppBar(string: String = "스크랩") {
+    Box(
+        modifier = Modifier
+            .statusBarsPadding()
+            .fillMaxWidth()
+            .height(TopAppBarValue.AppBarHeignt)
+
+    ) {
+        TopBarTitle(
+            string = string,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun TayTopAppBarWithBack(string: String) {
+    Box(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(
+                vertical = TopAppBarValue.VerticalPadding,
+                horizontal = TopAppBarValue.HorizontalPadding
+            )
+            .fillMaxWidth()
+            .height(TopAppBarValue.AppBarHeignt)
+
+    ) {
+        BackButton(
+            modifier = Modifier.align(Alignment.CenterStart)
+        )
+        TopBarTitle(
+            string = string,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun TayTopAppBarWithScrap(string: String) {
+    Box(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(
+                vertical = TopAppBarValue.VerticalPadding,
+                horizontal = TopAppBarValue.HorizontalPadding
+            )
+            .fillMaxWidth()
+            .height(TopAppBarValue.AppBarHeignt)
+
+    ) {
+        BackButton(
+            modifier = Modifier.align(Alignment.CenterStart)
+        )
+        TopBarTitle(
+            string = string,
+            modifier = Modifier.align(Alignment.Center)
+        )
+        BookmarkButton(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            isBookmarked = false,
+            onClick = { /*TODO*/ }
+        )
+
+    }
+}
+
+@Composable
+fun TayTopAppBarSearch(
+    saveQuery: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(
+                vertical = TopAppBarValue.VerticalPadding,
+                horizontal = TopAppBarValue.HorizontalPadding
+            )
+            .fillMaxWidth()
+            .height(TopAppBarValue.AppBarHeignt),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+
+    ) {
+
+        var query by remember { mutableStateOf("") }
+        val focusManager = LocalFocusManager.current
+
+        BackButton()
+        TextField(
+            placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
+            value = query,
+            onValueChange = { query = it },
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .background(lm_gray050),
+            textStyle = TextStyle(fontSize = 14.textDp),
+            shape = RoundedCornerShape(8.dp),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    saveQuery(query)
+                    focusManager.clearFocus()
+                    query = ""
+                }
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.None,
+                autoCorrect = true,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            )
+        )
+
+        SearchButton(onClick = {
+            saveQuery(query)
+            focusManager.clearFocus()
+            query = ""
+        })
+
+    }
+}
+
+@Composable
+private fun TopBarTitle(
+    string: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        "$string",
+        modifier = modifier,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        textAlign = TextAlign.Center
+    )
+
+}
+
+
+@Preview
+@Composable
+private fun TopBarPreview() {
+    TayAppTheme {
+        TayTopAppBar()
+    }
+}
+
+@Preview
+@Composable
+private fun BackTopBarPreview() {
+    TayAppTheme() {
+        TayTopAppBarWithBack(string = "스크랩")
+    }
+}
+
+@Preview
+@Composable
+private fun BookmarkTopBarPreview() {
+    TayAppTheme() {
+        TayTopAppBarWithScrap(string = "스크랩")
+    }
+}
+
+@Preview
+@Composable
+private fun SearchTopBarPreview() {
+    TayAppTheme() {
+        TayTopAppBarSearch(
+            {}
+        )
+    }
+}
