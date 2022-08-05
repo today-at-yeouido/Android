@@ -3,36 +3,48 @@ package com.example.tayapp.presentation.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.CloseButton
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.presentation.viewmodels.SearchViewModel
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun Search() {
+
+    val viewModel = hiltViewModel<SearchViewModel>()
+    val searchTerm by viewModel.recentTerm.collectAsState(initial = "")
+
     Column() {
-        TayTopAppBarSearch(onQueryChange = {}, onSearchFocusChange = {})
+        TayTopAppBarSearch(saveQuery = viewModel::saveRecentTerm)
         LazyColumn(
             modifier = Modifier.padding(vertical = 20.dp, horizontal = KeyLine),
             verticalArrangement = Arrangement.spacedBy(60.dp)
-        ){
+        ) {
             item {
                 Title(
                     string = "최근 검색어",
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
-                SearchHistory(string = "테스트용")
-                SearchHistory(string = "입니다요")
+                if (searchTerm.isNotEmpty()) {
+                    searchTerm.split(" ").forEachIndexed { index, item ->
+                        SearchHistory(string = item) { viewModel.removeRecentTerm(index) }
+                    }
+                }
             }
             item {
                 Title(
@@ -55,7 +67,7 @@ fun Search() {
                     CardBillWithEmoij()
                     CardBillWithEmoij()
                 }
-                
+
                 Spacer(modifier = Modifier.height(20.dp))
                 TayButton(
                     onClick = { /*TODO*/ },
@@ -74,12 +86,12 @@ fun Search() {
 }
 
 @Composable
-fun SearchHistory(string: String){
-    Row (
+fun SearchHistory(string: String, removeHistory: () -> Unit) {
+    Row(
         modifier = Modifier.padding(vertical = 5.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         Icon(
             modifier = Modifier.size(26.dp),
             imageVector = TayIcons.history,
@@ -95,6 +107,7 @@ fun SearchHistory(string: String){
             modifier = Modifier.weight(1f)
         )
         CloseButton(
+            onClick = removeHistory,
             tint = lm_gray300
         )
     }
@@ -105,14 +118,14 @@ fun SearchTopic(
     list: List<String>,
     modifier: Modifier = Modifier,
     onTagClick: (String) -> Unit
-){
+) {
     FlowRow(
         modifier = Modifier,
         mainAxisSpacing = 7.dp,
         crossAxisSpacing = 7.dp
-    ){
-        list.forEach{ it ->
-            TayTag(it,false,onClick = onTagClick)
+    ) {
+        list.forEach { it ->
+            TayTag(it, false, onClick = onTagClick)
         }
 
     }
