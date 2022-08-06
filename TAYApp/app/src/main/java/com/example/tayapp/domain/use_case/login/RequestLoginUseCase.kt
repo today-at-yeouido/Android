@@ -13,13 +13,12 @@ class RequestLoginUseCase @Inject constructor(
     private val repository: LoginRepository
 ) {
 
-    suspend operator fun invoke(user: LoginDto) =
-        withContext(Dispatchers.Default) {
+    suspend operator fun invoke(user: LoginDto): Boolean {
             val r = repository.requestLogin(user)
-            when (r.code()) {
+            return when (r.code()) {
                 200 -> {
                     setUser(r.body()!!)
-                    return@withContext true
+                     true
                 }
                 400 -> false
                 else -> false

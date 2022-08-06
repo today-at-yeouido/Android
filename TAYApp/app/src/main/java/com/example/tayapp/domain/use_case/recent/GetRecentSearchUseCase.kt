@@ -9,7 +9,5 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GetRecentSearchUseCase @Inject constructor(private val repository: RecentSearchRepository) {
-
-//    suspend operator fun invoke() = withContext(Dispatchers.Default) { repository.recentSearchTerm() }
     operator fun invoke() = repository.recentSearchTerm
 }

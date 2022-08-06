@@ -25,6 +25,7 @@ interface LoginRepository {
     suspend fun requestLogin(loginDto: LoginDto): Response<LoginResponse>
     suspend fun requestLogout(token: String): LogoutResponse
     suspend fun requestRefreshToken(token: RefreshTokenDto): Response<JwtRefreshResponse>
+    suspend fun updateAccessToken(accesToken: String)
 }
 
 /** 인터페이스 주입을 위한 모듈 */
