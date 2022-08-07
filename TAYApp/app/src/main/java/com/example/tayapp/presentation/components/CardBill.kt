@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray075
@@ -24,12 +25,19 @@ import com.example.tayapp.presentation.utils.BookmarkButton
  */
 @Composable
 fun CardBill(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bill: BillDto
 ){
     TayCard(
         modifier = modifier.fillMaxWidth()
     ) {
-        CardBillDefault()
+        CardBillDefault(
+            title = bill.billName,
+            bill = bill.committee,
+            status = bill.status,
+            date = bill.proposeDt,
+            people = bill.proposer,
+        )
     }
 }
 
@@ -148,7 +156,7 @@ fun CardEmoij(){
 @Composable
 private fun CardPreview(){
     TayAppTheme() {
-        CardBill()
+        //CardBill()
     }
 }
 
