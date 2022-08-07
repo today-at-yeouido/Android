@@ -73,6 +73,7 @@ object TayIcons {
     val navigate_before = Icons.Filled.NavigateBefore
     val expand_more = Icons.Outlined.ExpandMore
     val expand_less = Icons.Outlined.ExpandLess
+    val north_east = Icons.Outlined.NorthEast
 
     val close = Icons.Outlined.Close
     val more_horiz = Icons.Filled.MoreHoriz
