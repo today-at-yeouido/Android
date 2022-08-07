@@ -2,7 +2,9 @@ package com.example.tayapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.tayapp.domain.use_case.GetMostViewedUseCase
+import com.example.tayapp.domain.use_case.GetRecentBillUseCase
 import com.example.tayapp.presentation.states.MostViewedUiState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,11 +15,17 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val getMostViewedUseCase: GetMostViewedUseCase) :
+class HomeViewModel @Inject
+constructor(
+    private val getMostViewedUseCase: GetMostViewedUseCase,
+    private val getRecentBillUseCase: GetRecentBillUseCase
+    ) :
     ViewModel() {
 
     private val _state = MutableStateFlow(MostViewedUiState())
     val state: StateFlow<MostViewedUiState> get() = _state
+
+    val recentBill = getRecentBillUseCase().cachedIn(viewModelScope)
 
     init {
         getMostViewed()
@@ -39,4 +47,6 @@ class HomeViewModel @Inject constructor(private val getMostViewedUseCase: GetMos
             }
         }.launchIn(viewModelScope)
     }
+
+
 }

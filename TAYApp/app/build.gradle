@@ -113,4 +113,7 @@ dependencies {
 
     // Coil - Image Loading
     implementation "io.coil-kt:coil-compose:2.1.0"
+
+    //Pagination
+    implementation("androidx.paging:paging-compose:1.0.0-alpha15")
 }
