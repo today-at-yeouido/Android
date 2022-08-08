@@ -14,7 +14,3 @@ fun Report(modifier: Modifier) {
     Text(text = "Report", modifier = modifier)
 }
 
-@Composable
-fun Profile(modifier: Modifier) {
-    Text(text = "Profile", modifier = modifier)
-}

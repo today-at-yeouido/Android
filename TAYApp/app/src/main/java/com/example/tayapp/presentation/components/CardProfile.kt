@@ -1,7 +1,9 @@
 package com.example.tayapp.presentation.components
 
 import android.media.Image
+import android.util.Size
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,9 +11,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -19,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.presentation.ui.theme.*
+import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.NavigateNextButton
 import com.example.tayapp.presentation.utils.TayIcons
 
@@ -49,6 +54,19 @@ fun CardUserProfile(){
                     Text("프로필 수정", style = TayAppTheme.typo.typography.button)
                 }
             }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 3.dp)
+                ,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Badge( title = "출석")
+                Badge( title = "법안", emoij = "\uD83C\uDF31")
+                Badge( title = "뉴스", emoij = "\uD83D\uDDDE️")
+            }
+
             TayButton(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
@@ -226,6 +244,51 @@ fun CardProfileListItemWithOutIcon(
         subtext = subtext,
         endComponent = endComponent
     )
+}
+
+@Composable
+fun Badge(
+    modifier: Modifier = Modifier,
+    emoij: String? = "\uD83D\uDC40",
+    title: String = "출석"
+){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Box() {
+            Spacer(
+                modifier = Modifier
+                    .height(60.dp)
+                    .width(90.dp)
+                    .background(
+                        brush = Brush.verticalGradient(listOf(lm_sub10, lm_primary20)),
+                        shape = RoundedCornerShape(topEnd = 60.dp, topStart = 60.dp)
+                    )
+            )
+            Column(
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .align(Alignment.Center),
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "$emoij",
+                    fontSize = 24.sp
+                )
+                BadgePill(text = "Lv.1")
+            }
+        }
+        Text(text = "$title 뱃지", fontWeight = FontWeight.Normal, color = lm_gray600, fontSize = 12.sp)
+    }
+}
+@Preview
+@Composable
+fun BadgePreview(){
+    TayAppTheme() {
+        Badge()
+    }
 }
 
 @Composable

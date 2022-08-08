@@ -87,6 +87,19 @@ fun Pill(
     }
 }
 
+@Composable
+fun BadgePill(
+    text: String,
+    color: Color = lm_primary30
+){
+    Pill(
+        textColor = lm_gray800,
+        backgroundColor = color,
+        shape = RoundedCornerShape(5.dp)
+    ) {
+        Text("$text", fontSize = 12.sp, fontWeight = FontWeight.Normal)
+    }
+}
 
 @Composable
 private fun Pill(
