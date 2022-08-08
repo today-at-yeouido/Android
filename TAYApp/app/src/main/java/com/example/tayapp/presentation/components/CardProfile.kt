@@ -5,12 +5,14 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,8 +49,6 @@ fun CardUserProfile(){
                     Text("프로필 수정", style = TayAppTheme.typo.typography.button)
                 }
             }
-
-
             TayButton(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
@@ -64,6 +64,7 @@ fun CardUserProfile(){
                     imageVector = TayIcons.navigate_next,
                     contentDescription = null
                 )
+
             }
         }
     }
@@ -144,18 +145,17 @@ fun CardProfilSection(
 }
 
 @Composable
-fun CardProfileListItemWithNext(
+fun CardProfileListItem(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
-    subtext: String = ""
+    subtext: String = "",
+    endComponent: @Composable RowScope. () -> Unit = {}
 ){
     Row(
         modifier = Modifier
             .height(44.dp)
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-        ,
-
+            .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -173,11 +173,7 @@ fun CardProfileListItemWithNext(
             fontSize = 12.sp,
             color = lm_gray600
         )
-        Icon(
-            imageVector = TayIcons.navigate_next,
-            contentDescription = null,
-            tint = lm_gray300
-        )
+        Row(content = endComponent)
     }
 }
 
@@ -187,30 +183,11 @@ fun CardProfileListItemWithLink(
     text: String = "입력",
     subtext: String = "asdfjn"
 ){
-    Row(
-        modifier = Modifier
-            .height(44.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-        ,
-
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = ""
-        )
-        Text("$text",
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            modifier = Modifier.weight(1f)
-        )
-        Text("$subtext",
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp,
-            color = lm_gray600
-        )
+    CardProfileListItem(
+        icon = icon,
+        text = text,
+        subtext = subtext
+    ){
         Icon(
             imageVector = TayIcons.north_east,
             contentDescription = null,
@@ -219,13 +196,50 @@ fun CardProfileListItemWithLink(
     }
 }
 
+@Composable
+fun CardProfileListItemWithNext(
+    icon: ImageVector = TayIcons.visibility_outlined,
+    text: String = "입력",
+    subtext: String = "asdfjn",
+){
+    CardProfileListItem(
+        icon = icon,
+        text = text,
+        subtext = subtext
+    ){
+        Icon(
+            imageVector = TayIcons.navigate_next,
+            contentDescription = null,
+            tint = lm_gray300
+        )
+    }
+}
+
+@Composable
+fun CardProfileListItemWithOutIcon(
+    text: String = "입력",
+    subtext: String = "asdfjn",
+    endComponent: @Composable RowScope. () -> Unit
+) {
+    CardProfileListItem(
+        text = text,
+        subtext = subtext,
+        endComponent = endComponent
+    )
+}
 
 @Composable
 @Preview
 private fun CardIserPreview(){
     TayAppTheme {
-        //CardUserProfile()
+        CardUserProfile()
         //CardProfilSection()
-        CardProfileListItemWithLink()
+//        CardProfileListItem(){
+//            Icon(
+//                imageVector = TayIcons.north_east,
+//                contentDescription = null,
+//                tint = lm_gray300
+//            )
+//        }
     }
 }
