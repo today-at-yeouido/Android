@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.screens.*
+import com.example.tayapp.presentation.screens.Profile.*
 import com.example.tayapp.presentation.states.TayAppState
 
 @Composable
@@ -77,7 +78,58 @@ fun NavGraphBuilder.addHomeGraph(navController: NavController) {
         //Report(Modifier.fillMaxSize())
         BillDetail()
     }
-    composable(BottomBarTabs.PROFILE.route) {
-        Profile(Modifier.fillMaxSize())
+    navigation(
+        route = AppGraph.PROFILE_GRAPH,
+        startDestination = BottomBarTabs.PROFILE.route
+    ) {
+        addProfileGraph(navController)
     }
 }
+
+fun NavGraphBuilder.addProfileGraph(navController: NavController){
+    composable(route = BottomBarTabs.PROFILE.route) { from ->
+        Profile(navController)
+    }
+    navigation(
+        route = AppGraph.PROFILE_ACCOUNT_GRAPH,
+        startDestination = ProfileDestination.ACCOUNT
+    ) {
+        addProfileAccountGraph(navController)
+    }
+    navigation(
+        route = AppGraph.PROFILE_APPSETTING_GRAPH,
+        startDestination = ProfileDestination.APPSETTING
+    ) {
+        addProfileAppSettingGraph(navController)
+    }
+    composable(ProfileDestination.INQUIRE) {
+        //Report(Modifier.fillMaxSize())
+        ProfileInquire()
+    }
+    composable(ProfileDestination.APPINFO) {
+        ProfileAppInfo()
+    }
+}
+
+fun NavGraphBuilder.addProfileAccountGraph(navController: NavController){
+    composable(route = ProfileDestination.ACCOUNT) { from ->
+        ProfileAccount(navController = navController)
+    }
+    composable(ProfileDestination.FAVORITE) { from ->
+        ProfileFavoriteSetting()
+    }
+}
+
+
+fun NavGraphBuilder.addProfileAppSettingGraph(navController: NavController){
+    composable(route = ProfileDestination.APPSETTING) { from ->
+        ProfileAppSetting(navController = navController)
+    }
+    composable(ProfileDestination.VISIBILITY) { from ->
+        ProfileVisibility()
+    }
+    composable(ProfileDestination.ALARM) { from ->
+        ProfileAlarm()
+    }
+}
+

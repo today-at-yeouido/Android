@@ -5,6 +5,7 @@ import android.util.Size
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -112,12 +113,14 @@ private fun CardUserProfileText(
 fun CardProfilSection(
     icon: ImageVector = TayIcons.setting_outlined,
     title: String = "설정",
-    subTitle: String = "보기, 알람"
+    subTitle: String = "보기, 알람",
+    onClick: () -> Unit = {}
 ){
     TayCard(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .height(64.dp),
+        onClick = onClick
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -167,13 +170,15 @@ fun CardProfileListItem(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
     subtext: String = "",
+    onClick: () -> Unit = {},
     endComponent: @Composable RowScope. () -> Unit = {}
 ){
     Row(
         modifier = Modifier
             .height(44.dp)
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -219,11 +224,13 @@ fun CardProfileListItemWithNext(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
     subtext: String = "",
+    onClick: () -> Unit = {}
 ){
     CardProfileListItem(
         icon = icon,
         text = text,
-        subtext = subtext
+        subtext = subtext,
+        onClick = onClick
     ){
         Icon(
             imageVector = TayIcons.navigate_next,
@@ -237,12 +244,14 @@ fun CardProfileListItemWithNext(
 fun CardProfileListItemWithOutIcon(
     text: String = "입력",
     subtext: String = "asdfjn",
+    onClick: () -> Unit = {},
     endComponent: @Composable RowScope. () -> Unit
 ) {
     CardProfileListItem(
         text = text,
         subtext = subtext,
-        endComponent = endComponent
+        endComponent = endComponent,
+        onClick = onClick
     )
 }
 

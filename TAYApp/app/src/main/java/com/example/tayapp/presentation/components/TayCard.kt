@@ -1,6 +1,7 @@
 package com.example.tayapp.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -17,10 +18,11 @@ fun TayCard(
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
     color: Color = TayAppTheme.colors.background,
     borderStroke: BorderStroke = BorderStroke(1.dp, TayAppTheme.colors.border),
+    onClick: () -> Unit = {},
     content: @Composable () -> Unit
 ){
     Surface(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick),
         color = color,
         shape = shape,
         border = borderStroke,
