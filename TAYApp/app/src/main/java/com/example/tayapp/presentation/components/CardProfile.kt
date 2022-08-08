@@ -199,7 +199,7 @@ fun CardProfileListItem(
 fun CardProfileListItemWithLink(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
-    subtext: String = "asdfjn"
+    subtext: String = ""
 ){
     CardProfileListItem(
         icon = icon,
@@ -218,7 +218,7 @@ fun CardProfileListItemWithLink(
 fun CardProfileListItemWithNext(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
-    subtext: String = "asdfjn",
+    subtext: String = "",
 ){
     CardProfileListItem(
         icon = icon,
