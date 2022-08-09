@@ -15,7 +15,7 @@ interface GetBillRepository {
     suspend fun getBillDetail(billId: String): DetailBillDto
     suspend fun getBillTable(billId: String): DetailBillTableDto
 
-    suspend fun getBillRecent(): List<BillDto>
+    suspend fun getBillRecent(page: Int): List<BillDto>
     suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
     suspend fun getBillUserRecommended(): List<BillDto>
     suspend fun getBillUserRecentViewed(): List<BillDto>

@@ -22,7 +22,7 @@ fun CardSearch(
     title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
     list: List<String> = listOf<String>("1", "2","3","4"),
 ){
-    if(list.count()==1) CardBill()
+    if(list.count()==1) //CardBill()
     else CardSearchMultiple(title, list)
 }
 

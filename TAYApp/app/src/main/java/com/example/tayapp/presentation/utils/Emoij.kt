@@ -19,5 +19,9 @@ val Emoij = mapOf(
     "외교통일" to "\uD83C\uDF0F",
     "여성가족" to "\uD83E\uDEC2",
     "국방" to "\uD83E\uDE96",
-    "국회운영" to "\uD83D\uDCE3"
+    "국회운영" to "\uD83D\uDCE3",
+    "환경노동" to "\uD83C\uDF33\uD83D\uDC77\uD83C\uDFFB",
+    "농림식품해양" to "\uD83C\uDF3E\uD83C\uDF0A",
+    "기타" to "➕",
+    "과학기술통신" to "\uD83D\uDD2C"
 )

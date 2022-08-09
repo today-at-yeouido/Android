@@ -27,7 +27,7 @@ fun BillDetail(){
     val scrollState = rememberScrollState()
 
     Column {
-        TayTopAppBarWithBack("의안 상세")
+        TayTopAppBarWithBack("의안 상세", {})
         Column(
             modifier = Modifier.verticalScroll(scrollState)
         ) {

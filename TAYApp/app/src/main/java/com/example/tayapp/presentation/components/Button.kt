@@ -19,10 +19,10 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray800
 
-val ButtonSmallWidth = 140.dp
+val ButtonSmallWidth = 100.dp
 val ButtonSmallHeight = 40.dp
 
-val ButtonMediumWidth = 160.dp
+val ButtonMediumWidth = 128.dp
 val ButtonMediumHeight = 40.dp
 
 val ButtonLargeWidth = 328.dp
