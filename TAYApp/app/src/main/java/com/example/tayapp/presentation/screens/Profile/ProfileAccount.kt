@@ -20,12 +20,13 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
 fun ProfileAccount(
-    navController: NavController
+    navController: NavController,
+    upPress: () -> Unit
 ){
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TayTopAppBarWithBack(string = "계정")
+        TayTopAppBarWithBack(string = "계정", upPress)
         Column(
             modifier = Modifier.padding(KeyLine)
         ) {

@@ -49,11 +49,13 @@ var favoritedatalist = listOf<String>(
 
 
 @Composable
-fun ProfileFavoriteSetting(){
+fun ProfileFavoriteSetting(
+    upPress: () -> Unit
+){
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TayTopAppBarWithBack(string = "관심분야 설정")
+        TayTopAppBarWithBack(string = "관심분야 설정", upPress)
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -140,13 +142,4 @@ fun ProfileFavoriteCard(
 }
 
 
-
-
-@Preview
-@Composable
-fun PreviewFavorit(){
-    TayAppTheme {
-        ProfileFavoriteSetting()
-    }
-}
 

@@ -24,11 +24,13 @@ import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 
 @Composable
-fun ProfileAlarm(){
+fun ProfileAlarm(
+    upPress: () -> Unit
+){
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TayTopAppBarWithBack(string = "알람")
+        TayTopAppBarWithBack(string = "알람", upPress)
         Column(
             modifier = Modifier.padding(KeyLine)
         ) {
@@ -83,13 +85,5 @@ fun CardProfileToggle(
             )
         )
 
-    }
-}
-
-@Preview
-@Composable
-fun PreviewProfliAlarm(){
-    TayAppTheme {
-        ProfileAlarm()
     }
 }

@@ -17,11 +17,13 @@ import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
-fun ProfileAppInfo(){
+fun ProfileAppInfo(
+    upPress: () -> Unit
+){
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TayTopAppBarWithBack(string = "앱 정보")
+        TayTopAppBarWithBack(string = "앱 정보", upPress)
         Column(
             modifier = Modifier.padding(KeyLine)
         ) {
@@ -41,10 +43,3 @@ fun ProfileAppInfo(){
     }
 }
 
-@Composable
-@Preview
-fun PreviewProfileAppInfo(){
-    TayAppTheme {
-        ProfileAppInfo()
-    }
-}

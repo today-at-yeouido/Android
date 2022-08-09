@@ -54,7 +54,10 @@ fun TayTopAppBar(string: String = "스크랩") {
 }
 
 @Composable
-fun TayTopAppBarWithBack(string: String) {
+fun TayTopAppBarWithBack(
+    string: String,
+    upPress: () -> Unit
+) {
     Box(
         modifier = Modifier
             .statusBarsPadding()
@@ -67,7 +70,8 @@ fun TayTopAppBarWithBack(string: String) {
 
     ) {
         BackButton(
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.CenterStart),
+            onClick = upPress
         )
         TopBarTitle(
             string = string,
@@ -77,7 +81,10 @@ fun TayTopAppBarWithBack(string: String) {
 }
 
 @Composable
-fun TayTopAppBarWithScrap(string: String) {
+fun TayTopAppBarWithScrap(
+    string: String,
+    upPress: () -> Unit
+) {
     Box(
         modifier = Modifier
             .statusBarsPadding()
@@ -90,7 +97,8 @@ fun TayTopAppBarWithScrap(string: String) {
 
     ) {
         BackButton(
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.CenterStart),
+            onClick = upPress
         )
         TopBarTitle(
             string = string,
@@ -107,7 +115,8 @@ fun TayTopAppBarWithScrap(string: String) {
 
 @Composable
 fun TayTopAppBarSearch(
-    saveQuery: (String) -> Unit
+    saveQuery: (String) -> Unit,
+    upPress: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -126,7 +135,7 @@ fun TayTopAppBarSearch(
         var query by remember { mutableStateOf("") }
         val focusManager = LocalFocusManager.current
 
-        BackButton()
+        BackButton(onClick = upPress)
         TextField(
             placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
             value = query,
@@ -189,7 +198,7 @@ private fun TopBarPreview() {
 @Composable
 private fun BackTopBarPreview() {
     TayAppTheme() {
-        TayTopAppBarWithBack(string = "스크랩")
+        //TayTopAppBarWithBack(string = "스크랩")
     }
 }
 
@@ -197,7 +206,7 @@ private fun BackTopBarPreview() {
 @Composable
 private fun BookmarkTopBarPreview() {
     TayAppTheme() {
-        TayTopAppBarWithScrap(string = "스크랩")
+        //TayTopAppBarWithScrap(string = "스크랩")
     }
 }
 

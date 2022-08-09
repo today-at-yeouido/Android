@@ -25,17 +25,26 @@ fun NavGraph(
         startDestination = MainDestination.SPLASH,
         modifier = Modifier.padding(innerPadding)
     ) {
-        tayNavGraph(appState.navController)
+        tayNavGraph(
+            navController = appState.navController,
+            upPress = appState::upPress
+        )
     }
 }
 
-private fun NavGraphBuilder.tayNavGraph(navController: NavController) {
+private fun NavGraphBuilder.tayNavGraph(
+    navController: NavController,
+    upPress: () -> Unit
+) {
     /** nested Navigation */
     navigation(
         route = MainDestination.HOME,
         startDestination = BottomBarTabs.Feed.route
     ) {
-        addHomeGraph(navController)
+        addHomeGraph(
+            navController,
+            upPress = upPress
+        )
     }
 
     composable(
@@ -64,7 +73,10 @@ private fun NavGraphBuilder.tayNavGraph(navController: NavController) {
     }
 }
 
-fun NavGraphBuilder.addHomeGraph(navController: NavController) {
+fun NavGraphBuilder.addHomeGraph(
+        navController: NavController,
+        upPress: () -> Unit
+) {
     composable(route = BottomBarTabs.Feed.route) { from ->
         Feed(navController = navController)
     }
@@ -82,11 +94,14 @@ fun NavGraphBuilder.addHomeGraph(navController: NavController) {
         route = AppGraph.PROFILE_GRAPH,
         startDestination = BottomBarTabs.PROFILE.route
     ) {
-        addProfileGraph(navController)
+        addProfileGraph(navController, upPress)
     }
 }
 
-fun NavGraphBuilder.addProfileGraph(navController: NavController){
+fun NavGraphBuilder.addProfileGraph(
+        navController: NavController,
+        upPress: () -> Unit
+){
     composable(route = BottomBarTabs.PROFILE.route) { from ->
         Profile(navController)
     }
@@ -94,42 +109,48 @@ fun NavGraphBuilder.addProfileGraph(navController: NavController){
         route = AppGraph.PROFILE_ACCOUNT_GRAPH,
         startDestination = ProfileDestination.ACCOUNT
     ) {
-        addProfileAccountGraph(navController)
+        addProfileAccountGraph(navController, upPress)
     }
     navigation(
         route = AppGraph.PROFILE_APPSETTING_GRAPH,
         startDestination = ProfileDestination.APPSETTING
     ) {
-        addProfileAppSettingGraph(navController)
+        addProfileAppSettingGraph(navController,upPress)
     }
     composable(ProfileDestination.INQUIRE) {
         //Report(Modifier.fillMaxSize())
-        ProfileInquire()
+        ProfileInquire(upPress)
     }
     composable(ProfileDestination.APPINFO) {
-        ProfileAppInfo()
+        ProfileAppInfo(upPress)
     }
 }
 
-fun NavGraphBuilder.addProfileAccountGraph(navController: NavController){
+fun NavGraphBuilder.addProfileAccountGraph(
+        navController: NavController,
+        upPress: () -> Unit
+){
     composable(route = ProfileDestination.ACCOUNT) { from ->
-        ProfileAccount(navController = navController)
+        ProfileAccount(navController = navController, upPress)
     }
     composable(ProfileDestination.FAVORITE) { from ->
-        ProfileFavoriteSetting()
+        ProfileFavoriteSetting(upPress)
     }
 }
 
 
-fun NavGraphBuilder.addProfileAppSettingGraph(navController: NavController){
+fun NavGraphBuilder.addProfileAppSettingGraph(
+        navController: NavController,
+        upPress: () -> Unit
+){
     composable(route = ProfileDestination.APPSETTING) { from ->
-        ProfileAppSetting(navController = navController)
+        ProfileAppSetting(navController = navController, upPress)
     }
     composable(ProfileDestination.VISIBILITY) { from ->
-        ProfileVisibility()
+        ProfileVisibility(upPress)
     }
     composable(ProfileDestination.ALARM) { from ->
-        ProfileAlarm()
+        ProfileAlarm(upPress)
     }
 }
 

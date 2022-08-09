@@ -60,6 +60,10 @@ class TayAppState(
             }
         }
     }
+
+    fun upPress() {
+        navController.navigateUp()
+    }
 }
 //
 ///** popUpTo 구현 확장함수 */
