@@ -18,11 +18,13 @@ import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
-fun ProfileInquire(){
+fun ProfileInquire(
+    upPress: () -> Unit
+){
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TayTopAppBarWithBack(string = "문의하기")
+        TayTopAppBarWithBack(string = "문의하기", upPress)
         Column(
             modifier = Modifier.padding(KeyLine)
         ) {
@@ -38,10 +40,3 @@ fun ProfileInquire(){
     }
 }
 
-@Composable
-@Preview
-fun PreviewInquire(){
-    TayAppTheme {
-        ProfileInquire()
-    }
-}
