@@ -8,10 +8,9 @@ import javax.inject.Inject
 
 class RequestRegisterUseCase @Inject constructor(private val repository: LoginRepository) {
 
-    suspend operator fun invoke(requestRegistrationDto: RegistrationDto) =
-        withContext(Dispatchers.Default) {
+    suspend operator fun invoke(requestRegistrationDto: RegistrationDto):Boolean {
             val response = repository.requestRegistration(requestRegistrationDto)
-            when (response.code()) {
+            return when (response.code()) {
                 201 -> true
                 else -> false
             }

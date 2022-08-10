@@ -26,13 +26,16 @@ class LoginRepositoryImpl @Inject constructor(
         return pref.getUser().first()
     }
 
-
     override suspend fun setLoginUser(user: UserPref) {
         pref.setUser(user)
     }
 
     override suspend fun getRefreshToken(): String {
         return pref.getRefreshToken().first()
+    }
+
+    override suspend fun updateAccessToken(accesToken: String){
+        pref.updateAccessToken(accesToken)
     }
 
     override suspend fun requestRegistration(registrationDto: RegistrationDto): Response<Void> {

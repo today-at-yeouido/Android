@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 class GetMostViewedUseCase @Inject
 constructor(private val repository: GetBillRepository) {
-
     operator fun invoke(): Flow<Resource<List<MostViewedBillDto>>> = flow {
         val response = repository.getBillMostViewed()
         when (response.code()) {
@@ -26,7 +25,7 @@ constructor(private val repository: GetBillRepository) {
             )
             else -> emit(Resource.Error("Couldn't reach server"))
         }
-    }.flowOn(Dispatchers.Default)
+    }
 
 }
 

@@ -40,6 +40,7 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         it[RECENT_SEARCH_TERM] ?: ""
     }
 
+
     suspend fun setUser(user: UserPref) {
         context.dataStore.edit { settings ->
             settings[LOGIN_USER_ACCESS_TOKEN] = user.accessToken
@@ -52,6 +53,12 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
     fun getRefreshToken(): Flow<String> {
         return context.dataStore.data.map {
             it[LOGIN_USER_REFRESH_TOKEN] ?: ""
+        }
+    }
+
+    suspend fun updateAccessToken(accessToken : String){
+        context.dataStore.edit { settings ->
+            settings[LOGIN_USER_ACCESS_TOKEN] = accessToken
         }
     }
 
