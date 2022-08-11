@@ -29,7 +29,7 @@ import com.example.tayapp.presentation.utils.NavigateNextButton
 import com.example.tayapp.presentation.utils.TayIcons
 
 @Composable
-fun CardUserProfile(){
+fun CardUserProfile() {
     TayCard() {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -41,7 +41,7 @@ fun CardUserProfile(){
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
-            ){
+            ) {
                 CardUserProfileText()
                 TayButton(
                     onClick = { /*TODO*/ },
@@ -59,13 +59,12 @@ fun CardUserProfile(){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 3.dp)
-                ,
+                    .padding(horizontal = 3.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Badge( title = "출석")
-                Badge( title = "법안", emoij = "\uD83C\uDF31")
-                Badge( title = "뉴스", emoij = "\uD83D\uDDDE️")
+                Badge(title = "출석")
+                Badge(title = "법안", emoij = "\uD83C\uDF31")
+                Badge(title = "뉴스", emoij = "\uD83D\uDDDE️")
             }
 
             TayButton(
@@ -93,12 +92,13 @@ fun CardUserProfile(){
 private fun CardUserProfileText(
     name: String = "사용자",
     email: String = "happy@gmail.com"
-){
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text("${name} 님", style = TayAppTheme.typo.typography.h2)
-        Text("$email",
+        Text(
+            "$email",
             fontWeight = FontWeight.Light,
             color = lm_gray800,
             fontSize = 14.sp
@@ -115,7 +115,7 @@ fun CardProfilSection(
     title: String = "설정",
     subTitle: String = "보기, 알람",
     onClick: () -> Unit = {}
-){
+) {
     TayCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,13 +126,13 @@ fun CardProfilSection(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 10.dp)
-        ){
+        ) {
             Box() {
                 Surface(
                     color = lm_gray075,
                     shape = RoundedCornerShape(4.dp),
                     modifier = Modifier.size(38.dp)
-                ){}
+                ) {}
                 Icon(
                     imageVector = icon,
                     contentDescription = "",
@@ -145,11 +145,13 @@ fun CardProfilSection(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("$title",
+                Text(
+                    "$title",
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp
                 )
-                Text("$subTitle",
+                Text(
+                    "$subTitle",
                     fontWeight = FontWeight.Normal,
                     color = lm_gray600,
                     fontSize = 12.sp
@@ -172,7 +174,7 @@ fun CardProfileListItem(
     subtext: String = "",
     onClick: () -> Unit = {},
     endComponent: @Composable RowScope. () -> Unit = {}
-){
+) {
     Row(
         modifier = Modifier
             .height(44.dp)
@@ -186,12 +188,14 @@ fun CardProfileListItem(
             imageVector = icon,
             contentDescription = ""
         )
-        Text("$text",
+        Text(
+            "$text",
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
             modifier = Modifier.weight(1f)
         )
-        Text("$subtext",
+        Text(
+            "$subtext",
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
             color = lm_gray600
@@ -205,12 +209,12 @@ fun CardProfileListItemWithLink(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
     subtext: String = ""
-){
+) {
     CardProfileListItem(
         icon = icon,
         text = text,
         subtext = subtext
-    ){
+    ) {
         Icon(
             imageVector = TayIcons.north_east,
             contentDescription = null,
@@ -225,13 +229,13 @@ fun CardProfileListItemWithNext(
     text: String = "입력",
     subtext: String = "",
     onClick: () -> Unit = {}
-){
+) {
     CardProfileListItem(
         icon = icon,
         text = text,
         subtext = subtext,
         onClick = onClick
-    ){
+    ) {
         Icon(
             imageVector = TayIcons.navigate_next,
             contentDescription = null,
@@ -260,7 +264,7 @@ fun Badge(
     modifier: Modifier = Modifier,
     emoij: String? = "\uD83D\uDC40",
     title: String = "출석"
-){
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -289,12 +293,18 @@ fun Badge(
                 BadgePill(text = "Lv.1")
             }
         }
-        Text(text = "$title 뱃지", fontWeight = FontWeight.Normal, color = lm_gray600, fontSize = 12.sp)
+        Text(
+            text = "$title 뱃지",
+            fontWeight = FontWeight.Normal,
+            color = lm_gray600,
+            fontSize = 12.sp
+        )
     }
 }
+
 @Preview
 @Composable
-fun BadgePreview(){
+fun BadgePreview() {
     TayAppTheme() {
         Badge()
     }
@@ -302,7 +312,7 @@ fun BadgePreview(){
 
 @Composable
 @Preview
-private fun CardIserPreview(){
+private fun CardIserPreview() {
     TayAppTheme {
         CardUserProfile()
         //CardProfilSection()
