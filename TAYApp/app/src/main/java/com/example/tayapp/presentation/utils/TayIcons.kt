@@ -97,6 +97,8 @@ object TayIcons {
     val sort = Icons.Outlined.Sort
 
     val card_article = Icons.Outlined.Article
+    val event = Icons.Filled.Event
+    val expand = Icons.Filled.ExpandMore
 }
 
 object TayEmoji {

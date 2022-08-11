@@ -1,9 +1,7 @@
 package com.example.tayapp.presentation.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -264,7 +261,7 @@ private fun BillDetailNews(){
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(vertical = 24.dp)
     ) {
-        Title(string = "관련 뉴스,")
+        NewsHeader()
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
@@ -274,6 +271,18 @@ private fun BillDetailNews(){
             CardNews()
             CardNews()
         }
+    }
+}
+
+@Composable
+private fun NewsHeader() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Title(string = "관련 뉴스")
+        Spinner()
     }
 }
 
