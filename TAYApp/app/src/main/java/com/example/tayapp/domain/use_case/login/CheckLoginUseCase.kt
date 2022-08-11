@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 class CheckLoginUseCase @Inject constructor(private val repository: LoginRepository) {
 
-    suspend operator fun invoke(): Boolean  {
-            val refreshToken = repository.getRefreshToken()
+    suspend operator fun invoke(): Boolean {
+        val refreshToken = repository.getRefreshToken()
         return if (refreshToken.isNotBlank()) {
             val r = repository.requestRefreshToken(RefreshTokenDto(refreshToken))
             when (r.code()) {
@@ -23,5 +23,5 @@ class CheckLoginUseCase @Inject constructor(private val repository: LoginReposit
         } else {
             false
         }
-        }
+    }
 }

@@ -1,25 +1,31 @@
 package com.example.tayapp.presentation.screens.Profile
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Slider
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.tayapp.presentation.components.CardProfileListItemWithLink
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.example.tayapp.presentation.components.CardProfileListItemWithNext
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.ui.theme.KeyLine
-import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.utils.mutableSize
+import com.example.tayapp.utils.textSize
 
 @Composable
 fun ProfileVisibility(
     upPress: () -> Unit
-){
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var value by remember { mutableStateOf(1f) }
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -32,11 +38,34 @@ fun ProfileVisibility(
                 text = "모드",
                 subtext = "시스템(라이트)"
             )
+
+
             CardProfileListItemWithNext(
                 icon = Icons.Outlined.FormatSize,
                 text = "글자 크기",
-                subtext = "보통"
+                subtext = "보통",
+                onClick = {
+                    expanded = !expanded
+                }
             )
+            AnimatedVisibility(visible = expanded) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Slider(
+                        value = value,
+                        onValueChange = {
+                           textSize.value = it.toDouble()
+                            value = it
+                        },
+                        valueRange = 0.5f..2f,
+                        steps = 3,
+                        modifier = Modifier.background(
+                            Color.LightGray
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = "aaAA가가나나다다", fontSize = 14.mutableSize)
+                }
+            }
         }
     }
 }
