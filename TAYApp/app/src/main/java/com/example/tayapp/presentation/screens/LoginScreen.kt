@@ -1,6 +1,5 @@
 package com.example.tayapp.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -14,7 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.tayapp.presentation.navigation.MainDestination
+import com.example.tayapp.presentation.navigation.AppGraph
+import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import com.example.tayapp.utils.getActivity
@@ -60,7 +60,7 @@ fun LoginScreen(navController: NavController) {
                 Button(onClick = {
                     viewModel.requestLogin(emailState, passwordState) {
                         navController.navigate(
-                            MainDestination.HOME
+                            AppGraph.HOME_GRAPH
                         )
                     }
                 }) {
@@ -68,7 +68,7 @@ fun LoginScreen(navController: NavController) {
                 }
                 Spacer(modifier = Modifier.width(100.dp))
                 Button(onClick = {
-                    navController.navigate(MainDestination.SIGN_UP)
+                    navController.navigate(Destinations.SIGN_UP)
                 }) {
                     Text("회원가입", color = Color.Black)
                 }

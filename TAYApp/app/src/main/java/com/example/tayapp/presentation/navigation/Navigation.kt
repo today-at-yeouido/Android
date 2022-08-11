@@ -40,16 +40,16 @@ private fun NavGraphBuilder.tayNavGraph(
 
     initialNavigation(navController)
 
-    detailNavigation(upPress)z
+    detailNavigation(upPress)
 }
 
 private fun NavGraphBuilder.detailNavigation(upPress: () -> Unit) {
     composable(
-        "${MainDestination.DETAIL}/{${MainDestination.BILL_ID}}",
-        arguments = listOf(navArgument(MainDestination.BILL_ID) { type = NavType.IntType })
+        "${Destinations.DETAIL}/{${Destinations.BILL_ID}}",
+        arguments = listOf(navArgument(Destinations.BILL_ID) { type = NavType.IntType })
     ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
-        val billId = arguments.getInt(MainDestination.BILL_ID)
+        val billId = arguments.getInt(Destinations.BILL_ID)
         BillDetail(billId = billId, upPress)
     }
 }
@@ -57,7 +57,7 @@ private fun NavGraphBuilder.detailNavigation(upPress: () -> Unit) {
 private fun NavGraphBuilder.initialNavigation(navController: NavController) {
     navigation(
         route = AppGraph.INITIAL_GRAPH,
-        startDestination = MainDestination.SPLASH
+        startDestination = Destinations.SPLASH
     ) {
         initialGraph(navController)
     }
@@ -69,7 +69,7 @@ private fun NavGraphBuilder.homeNavigation(
     onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     navigation(
-        route = MainDestination.HOME,
+        route = AppGraph.HOME_GRAPH,
         startDestination = BottomBarTabs.Feed.route
     ) {
         homeGraph(
@@ -82,19 +82,19 @@ private fun NavGraphBuilder.homeNavigation(
 
 private fun NavGraphBuilder.initialGraph(navController: NavController) {
     composable(
-        route = MainDestination.SPLASH
+        route = Destinations.SPLASH
     ) {
         SplashScreen(navController)
     }
 
     composable(
-        route = MainDestination.LOGIN
+        route = Destinations.LOGIN
     ) {
         LoginScreen(navController)
     }
 
     composable(
-        route = MainDestination.SIGN_UP
+        route = Destinations.SIGN_UP
     ) {
         SignUpScreen(navController)
     }
@@ -120,7 +120,7 @@ fun NavGraphBuilder.homeGraph(
     }
     navigation(
         route = AppGraph.PROFILE_GRAPH,
-        startDestination = BottomBarTabs.PROFILE.route
+        startDestination = BottomBarDestination.PROFILE
     ) {
         addProfileGraph(navController, upPress)
     }
@@ -130,7 +130,7 @@ fun NavGraphBuilder.addProfileGraph(
     navController: NavController,
     upPress: () -> Unit
 ) {
-    composable(route = BottomBarTabs.PROFILE.route) { from ->
+    composable(route = BottomBarDestination.PROFILE) { from ->
         Profile(navController)
     }
     navigation(

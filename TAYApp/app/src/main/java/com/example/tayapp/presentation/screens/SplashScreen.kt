@@ -15,7 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.tayapp.presentation.navigation.MainDestination
+import com.example.tayapp.presentation.navigation.AppGraph
+import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray700
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
@@ -59,8 +60,8 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(key1 = true) {
         delay(2000L)
         if (viewModel.isLogin) {
-            navController.navigate(MainDestination.HOME)
-        } else navController.navigate(MainDestination.LOGIN)
+            navController.navigate(AppGraph.HOME_GRAPH)
+        } else navController.navigate(Destinations.LOGIN)
     }
 }
 
