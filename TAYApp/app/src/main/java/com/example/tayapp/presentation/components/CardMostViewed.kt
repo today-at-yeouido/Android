@@ -1,6 +1,5 @@
 package com.example.tayapp.presentation.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,7 +8,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,9 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.zIndex
-import com.example.tayapp.data.remote.dto.bill.BillDto
-import com.example.tayapp.data.remote.dto.bill.MostViewedBillDto
-import com.example.tayapp.data.remote.dto.bill.NewDto
+import com.example.tayapp.domain.model.MostViewedBill
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.components.MostViewedValues.Card_Gap
 import com.example.tayapp.presentation.ui.theme.*
@@ -54,7 +50,7 @@ private object MostViewedValues {
 }
 
 @Composable
-fun CardMostViewed(items: List<MostViewedBillDto>) {
+fun CardMostViewed(items: List<MostViewedBill>) {
     Title(
         "최근 이슈 법안",
         modifier = Modifier
@@ -70,7 +66,7 @@ fun CardMostViewed(items: List<MostViewedBillDto>) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MostViewedRow(
-    items: List<MostViewedBillDto>
+    items: List<MostViewedBill>
 ) {
     val pagerState = rememberPagerState()
 
@@ -93,27 +89,27 @@ fun MostViewedRow(
             itemSpacing = Card_Gap,
             contentPadding = PaddingValues(horizontal = MostViewedValues.KeyLine)
         ) { i ->
-                MostViewedRowCard(bill = items[i])
+                MostViewedRowCard(billItem = items[i])
         }
     }
 }
 
 @Composable
-private fun MostViewedRowCard(bill: MostViewedBillDto) {
+private fun MostViewedRowCard(billItem: MostViewedBill) {
     Column(
         modifier = Modifier
             .size(MainActivity.displayWidth - KeyLine.twice(), MostViewedValues.Card_Height)
             .background(color = lm_card_yellow, shape = CardNewsShape.large),
     ) {
         Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
-        CardContentLayout(bill = bill.billSummary)
+        CardContentLayout(bill = billItem.bill)
         Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
-        CardNewsLayout(newsList = bill.news)
+        CardNewsLayout(newsList = billItem.news)
     }
 }
 
 @Composable
-private fun CardContentLayout(bill: BillDto) {
+private fun CardContentLayout(bill: MostViewedBill.Bill) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,7 +122,7 @@ private fun CardContentLayout(bill: BillDto) {
 }
 
 @Composable
-private fun CardNewsLayout(newsList: List<NewDto>) {
+private fun CardNewsLayout(newsList: List<MostViewedBill.New>) {
 
     val mUriHandler = LocalUriHandler.current
     Column(
@@ -164,7 +160,7 @@ private fun NewsSub() {
 
 
 @Composable
-private fun CardContent(bill: BillDto) {
+private fun CardContent(bill: MostViewedBill.Bill) {
     Row(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -234,7 +230,7 @@ fun NewsLabelIcon2() {
 
 
 @Composable
-fun NewsHeaderItem(news: NewDto, mUriHandler: UriHandler) {
+fun NewsHeaderItem(news: MostViewedBill.New, mUriHandler: UriHandler) {
 
     Row(
         modifier = Modifier
