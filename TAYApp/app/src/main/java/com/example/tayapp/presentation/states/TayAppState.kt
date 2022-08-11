@@ -14,7 +14,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.presentation.components.BottomBarTabs
-import com.example.tayapp.presentation.navigation.MainDestination
+import com.example.tayapp.presentation.navigation.AppGraph
+import com.example.tayapp.presentation.navigation.Destinations
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -57,7 +58,7 @@ class TayAppState(
             navController.navigate(route) {
                 launchSingleTop = true
                 restoreState = true
-                popUpTo(BottomBarTabs.Feed.route) {
+                popUpTo(AppGraph.HOME_GRAPH) {
                     saveState = true
                 }
             }
@@ -67,7 +68,7 @@ class TayAppState(
     fun navigateToBillDetail(billId: Int, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         if (from.lifecycleIsResumed()) {
-            navController.navigate("${MainDestination.DETAIL}/$billId")
+            navController.navigate("${Destinations.DETAIL}/$billId")
         }
     }
 

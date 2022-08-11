@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.tayapp.R
+import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.BottomBarDestination
 import com.example.tayapp.presentation.screens.*
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
@@ -41,12 +42,14 @@ fun TayBottomBar(
 
     BottomNavigation(
         backgroundColor = lm_gray000,
-        modifier = Modifier.navigationBarsPadding().height(56.dp)
+        modifier = Modifier
+            .navigationBarsPadding()
+            .height(56.dp)
     ) {
         tabs.forEach { section ->
             BottomNavigationItem(
                 selected = section == currentSection,
-                onClick = { navigateToRoute(section.route) },
+                onClick = bottomNavigate(section, navigateToRoute),
                 label = {
                     Text(
                         text = stringResource(id = section.title),
@@ -57,7 +60,9 @@ fun TayBottomBar(
                 icon = {
                     Icon(
                         imageVector = section.icon,
-                        modifier = Modifier.padding(3.dp).size(26.dp),
+                        modifier = Modifier
+                            .padding(3.dp)
+                            .size(26.dp),
                         contentDescription = null,
                     )
                 },
@@ -66,6 +71,16 @@ fun TayBottomBar(
             )
         }
     }
+}
+
+@Composable
+private fun bottomNavigate(
+    section: BottomBarTabs,
+    navigateToRoute: (String) -> Unit
+) = if (section == BottomBarTabs.PROFILE) {
+    { navigateToRoute(AppGraph.PROFILE_GRAPH) }
+} else {
+    { navigateToRoute(section.route) }
 }
 
 
