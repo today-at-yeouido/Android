@@ -5,11 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.screens.*
 import com.example.tayapp.presentation.screens.Profile.*
@@ -27,14 +25,16 @@ fun NavGraph(
     ) {
         tayNavGraph(
             navController = appState.navController,
-            upPress = appState::upPress
+            upPress = appState::upPress,
+            onBillSelected = appState::navigateToBillDetail
         )
     }
 }
 
 private fun NavGraphBuilder.tayNavGraph(
     navController: NavController,
-    upPress: () -> Unit
+    upPress: () -> Unit,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     /** nested Navigation */
     navigation(
@@ -43,7 +43,8 @@ private fun NavGraphBuilder.tayNavGraph(
     ) {
         addHomeGraph(
             navController,
-            upPress = upPress
+            upPress = upPress,
+            onBillSelected = onBillSelected
         )
     }
 
@@ -67,28 +68,32 @@ private fun NavGraphBuilder.tayNavGraph(
 
 
     composable(
-        route = MainDestination.DETAIL
-    ) {
-
+        "${MainDestination.DETAIL}/{${MainDestination.BILL_ID}}",
+        arguments = listOf(navArgument(MainDestination.BILL_ID) { type = NavType.IntType })
+    ) { backStackEntry ->
+        val arguments = requireNotNull(backStackEntry.arguments)
+        val billId = arguments.getInt(MainDestination.BILL_ID)
+        BillDetail(billId = billId, upPress)
     }
 }
 
 fun NavGraphBuilder.addHomeGraph(
         navController: NavController,
-        upPress: () -> Unit
+        upPress: () -> Unit,
+        onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     composable(route = BottomBarTabs.Feed.route) { from ->
-        Feed(navController = navController)
+        Feed(navController = navController, onBillSelected = { id -> onBillSelected(id, from) })
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
-        Scrap()
+        Scrap(onBillSelected = { id -> onBillSelected(id, from) })
     }
     composable(BottomBarTabs.SEARCH.route) { from ->
-        Search()
+        Search(onBillSelected = { id -> onBillSelected(id, from) })
     }
     composable(BottomBarTabs.REPORT.route) {
         //Report(Modifier.fillMaxSize())
-        BillDetail()
+        //BillDetail()
     }
     navigation(
         route = AppGraph.PROFILE_GRAPH,

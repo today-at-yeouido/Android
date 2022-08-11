@@ -10,6 +10,7 @@ object MainDestination {
     const val HOME = "home"
     const val DETAIL = "detail"
     const val SIGN_UP = "signup"
+    const val BILL_ID = "billId"
 }
 
 object BottomBarDestination {

@@ -14,7 +14,8 @@ import com.example.tayapp.presentation.ui.theme.KeyLine
 
 @Composable
 fun Scrap(
-    list: List<String> = listOf("1", "2", "3")
+    list: List<String> = listOf("1", "2", "3"),
+    onBillSelected: (Int) -> Unit
 ) {
     Column() {
         TayTopAppBar("스크랩")

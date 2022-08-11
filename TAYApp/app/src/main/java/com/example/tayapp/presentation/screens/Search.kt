@@ -24,7 +24,9 @@ import com.example.tayapp.presentation.viewmodels.SearchViewModel
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun Search() {
+fun Search(
+    onBillSelected: (Int) -> Unit
+) {
 
     val viewModel = hiltViewModel<SearchViewModel>()
     val searchTerm by viewModel.recentTerm.collectAsState(initial = "")
@@ -63,9 +65,9 @@ fun Search() {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    CardBillWithEmoij()
-                    CardBillWithEmoij()
-                    CardBillWithEmoij()
+                    CardBillWithEmoij(onClick = onBillSelected)
+                    CardBillWithEmoij(onClick = onBillSelected)
+                    CardBillWithEmoij(onClick = onBillSelected)
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))

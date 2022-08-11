@@ -1,8 +1,11 @@
 package com.example.tayapp.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,10 +29,12 @@ import com.example.tayapp.presentation.utils.BookmarkButton
 @Composable
 fun CardBill(
     modifier: Modifier = Modifier,
-    bill: BillDto
+    bill: BillDto,
+    onClick: (Int) -> Unit ={}
 ){
     TayCard(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
+        onClick = {onClick(bill.id)}
     ) {
         CardBillDefault(
             title = bill.billName,
@@ -66,10 +71,12 @@ fun CardBillWithScrap(){
 fun CardBillWithEmoij(
     title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
     bill: String = "제정안",
-    status: String = "가결"
+    status: String = "가결",
+    onClick: (Int) -> Unit ={}
 ){
     TayCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {onClick(1234)}
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),

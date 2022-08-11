@@ -6,12 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.presentation.components.BottomBarTabs
+import com.example.tayapp.presentation.navigation.MainDestination
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -61,15 +64,20 @@ class TayAppState(
         }
     }
 
+    fun navigateToBillDetail(billId: Int, from: NavBackStackEntry) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        if (from.lifecycleIsResumed()) {
+            navController.navigate("${MainDestination.DETAIL}/$billId")
+        }
+    }
+
     fun upPress() {
         navController.navigateUp()
     }
 }
-//
-///** popUpTo 구현 확장함수 */
-//private val NavGraph.startDestination: NavDestination?
-//    get() = findNode(startDestinationId)
-//
-//private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
-//    return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
-//}
+
+private fun NavBackStackEntry.lifecycleIsResumed() =
+    this.lifecycle.currentState == Lifecycle.State.RESUMED
+
+private val NavGraph.startDestination: NavDestination?
+    get() = findNode(startDestinationId)

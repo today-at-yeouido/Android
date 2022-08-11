@@ -23,11 +23,11 @@ import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 
 @Composable
-fun BillDetail(){
+fun BillDetail(billId: Int, upPress: () -> Unit){
     val scrollState = rememberScrollState()
 
     Column {
-        TayTopAppBarWithBack("의안 상세", {})
+        TayTopAppBarWithBack("$billId", upPress)
         Column(
             modifier = Modifier.verticalScroll(scrollState)
         ) {
@@ -364,7 +364,7 @@ private fun BillArrow(){
 @Composable
 fun BillDetailPreview(){
     TayAppTheme {
-        BillDetail()
+        //BillDetail()
         //BillProgressItem()
         //CardBillProgress()
     }
