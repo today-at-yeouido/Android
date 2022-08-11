@@ -32,6 +32,7 @@ object ProfileDestination {
 }
 
 object AppGraph {
+    const val INITIAL_GRAPH = "initial_graph"
     const val PROFILE_GRAPH = "profile_graph"
     const val PROFILE_ACCOUNT_GRAPH = "profile_account_graph"
     const val PROFILE_APPSETTING_GRAPH = "profile_appsetting_graph"

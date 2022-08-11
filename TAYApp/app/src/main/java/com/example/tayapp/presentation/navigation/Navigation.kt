@@ -1,7 +1,6 @@
 package com.example.tayapp.presentation.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,7 +19,7 @@ fun NavGraph(
 ) {
     NavHost(
         navController = appState.navController,
-        startDestination = MainDestination.SPLASH,
+        startDestination = AppGraph.INITIAL_GRAPH,
         modifier = Modifier.padding(innerPadding)
     ) {
         tayNavGraph(
@@ -37,17 +36,51 @@ private fun NavGraphBuilder.tayNavGraph(
     onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     /** nested Navigation */
+    homeNavigation(navController, upPress, onBillSelected)
+
+    initialNavigation(navController)
+
+    detailNavigation(upPress)z
+}
+
+private fun NavGraphBuilder.detailNavigation(upPress: () -> Unit) {
+    composable(
+        "${MainDestination.DETAIL}/{${MainDestination.BILL_ID}}",
+        arguments = listOf(navArgument(MainDestination.BILL_ID) { type = NavType.IntType })
+    ) { backStackEntry ->
+        val arguments = requireNotNull(backStackEntry.arguments)
+        val billId = arguments.getInt(MainDestination.BILL_ID)
+        BillDetail(billId = billId, upPress)
+    }
+}
+
+private fun NavGraphBuilder.initialNavigation(navController: NavController) {
+    navigation(
+        route = AppGraph.INITIAL_GRAPH,
+        startDestination = MainDestination.SPLASH
+    ) {
+        initialGraph(navController)
+    }
+}
+
+private fun NavGraphBuilder.homeNavigation(
+    navController: NavController,
+    upPress: () -> Unit,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit
+) {
     navigation(
         route = MainDestination.HOME,
         startDestination = BottomBarTabs.Feed.route
     ) {
-        addHomeGraph(
+        homeGraph(
             navController,
             upPress = upPress,
             onBillSelected = onBillSelected
         )
     }
+}
 
+private fun NavGraphBuilder.initialGraph(navController: NavController) {
     composable(
         route = MainDestination.SPLASH
     ) {
@@ -62,25 +95,15 @@ private fun NavGraphBuilder.tayNavGraph(
 
     composable(
         route = MainDestination.SIGN_UP
-    ){
+    ) {
         SignUpScreen(navController)
-    }
-
-
-    composable(
-        "${MainDestination.DETAIL}/{${MainDestination.BILL_ID}}",
-        arguments = listOf(navArgument(MainDestination.BILL_ID) { type = NavType.IntType })
-    ) { backStackEntry ->
-        val arguments = requireNotNull(backStackEntry.arguments)
-        val billId = arguments.getInt(MainDestination.BILL_ID)
-        BillDetail(billId = billId, upPress)
     }
 }
 
-fun NavGraphBuilder.addHomeGraph(
-        navController: NavController,
-        upPress: () -> Unit,
-        onBillSelected: (Int, NavBackStackEntry) -> Unit
+fun NavGraphBuilder.homeGraph(
+    navController: NavController,
+    upPress: () -> Unit,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     composable(route = BottomBarTabs.Feed.route) { from ->
         Feed(navController = navController, onBillSelected = { id -> onBillSelected(id, from) })
@@ -104,9 +127,9 @@ fun NavGraphBuilder.addHomeGraph(
 }
 
 fun NavGraphBuilder.addProfileGraph(
-        navController: NavController,
-        upPress: () -> Unit
-){
+    navController: NavController,
+    upPress: () -> Unit
+) {
     composable(route = BottomBarTabs.PROFILE.route) { from ->
         Profile(navController)
     }
@@ -120,7 +143,7 @@ fun NavGraphBuilder.addProfileGraph(
         route = AppGraph.PROFILE_APPSETTING_GRAPH,
         startDestination = ProfileDestination.APPSETTING
     ) {
-        addProfileAppSettingGraph(navController,upPress)
+        addProfileAppSettingGraph(navController, upPress)
     }
     composable(ProfileDestination.INQUIRE) {
         //Report(Modifier.fillMaxSize())
@@ -132,9 +155,9 @@ fun NavGraphBuilder.addProfileGraph(
 }
 
 fun NavGraphBuilder.addProfileAccountGraph(
-        navController: NavController,
-        upPress: () -> Unit
-){
+    navController: NavController,
+    upPress: () -> Unit
+) {
     composable(route = ProfileDestination.ACCOUNT) { from ->
         ProfileAccount(navController = navController, upPress)
     }
@@ -145,9 +168,9 @@ fun NavGraphBuilder.addProfileAccountGraph(
 
 
 fun NavGraphBuilder.addProfileAppSettingGraph(
-        navController: NavController,
-        upPress: () -> Unit
-){
+    navController: NavController,
+    upPress: () -> Unit
+) {
     composable(route = ProfileDestination.APPSETTING) { from ->
         ProfileAppSetting(navController = navController, upPress)
     }
