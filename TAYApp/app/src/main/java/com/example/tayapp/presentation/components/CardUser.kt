@@ -29,34 +29,37 @@ private object CardUserValue {
 
 @Composable
 fun CardsUser(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (Int) -> Unit ={}
 ){
     LazyRow(
         contentPadding = PaddingValues(KeyLine),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ){
         item {
-            CardUser()
-            CardUser()
-            CardUser()
+            CardUser(onClick = onClick)
+            CardUser(onClick = onClick)
+            CardUser(onClick = onClick)
         }
     }
 }
 
 
 @Composable
-fun CardUser(){
+fun CardUser(
+    onClick: (Int) -> Unit ={}
+){
     TayCard(
         modifier = Modifier
             .width(CardUserValue.cardWidth)
     ) {
         Column {
             CardUserHeader()
-            CardUserItem()
+            CardUserItem(onClick = onClick )
             TayDivider()
-            CardUserItem()
+            CardUserItem(onClick = onClick)
             TayDivider()
-            CardUserItem()
+            CardUserItem(onClick = onClick)
         }
     }
 }
@@ -94,14 +97,14 @@ fun CardUserItem(
     bill: String = "제정안",
     status: String = "가결",
     title: String = "가덕도 신공항 건설을 위한 특별법",
-    onClick: () -> Unit = {}
+    onClick: (Int) -> Unit ={}
 ){
     Row(
         modifier = Modifier
             .padding(Card_Inner_Padding)
             .height(CardUserValue.ItemHeight)
             .width(CardUserValue.ItemWidth)
-            .clickable(onClick = onClick)
+            .clickable(onClick = {onClick(1234)})
         ,
         verticalAlignment = Alignment.CenterVertically
     ) {
