@@ -35,10 +35,10 @@ private fun NavGraphBuilder.tayNavGraph(
     upPress: () -> Unit,
     onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
+    initialNavigation(navController)
+
     /** nested Navigation */
     homeNavigation(navController, upPress, onBillSelected)
-
-    initialNavigation(navController)
 
     detailNavigation(upPress)
 }

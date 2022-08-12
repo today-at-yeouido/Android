@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
     var isLogin by mutableStateOf(false)
         private set
 
-    fun requestLogin(e: String, p1: String, nav: () -> Unit) {
+    fun requestLogin(e: String, p1: String) {
         viewModelScope.launch {
             user = LoginUserUiState(e, p1)
             val response = loginUseCases.requestLoginUseCase(
@@ -37,7 +37,7 @@ class LoginViewModel @Inject constructor(
                     user.password1
                 )
             )
-            if (response) nav()
+//            if (response) nav()
         }
     }
 
