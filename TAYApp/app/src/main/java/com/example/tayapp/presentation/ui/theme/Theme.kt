@@ -25,10 +25,10 @@ private val DarkColorPalette = TayColorSystem(
     icon = dm_gray700,
     headText = dm_gray800,
     textHighlight = dm_sub20,
-    danger = dm_sementic_red,
-    success = dm_sementic_green,
-    caution = dm_sementic_yellow,
-    information = dm_sementic_blue,
+    danger = dm_sementic_red2,
+    success = dm_sementic_green2,
+    caution = dm_sementic_yellow2,
+    information = dm_sementic_blue2,
     isDark = false,
 )
 
@@ -50,10 +50,10 @@ private val LightColorPalette = TayColorSystem(
     icon = lm_gray700,
     headText = lm_gray800,
     textHighlight = lm_sub20,
-    danger = lm_sementic_red,
-    success = lm_sementic_green,
-    caution = lm_sementic_yellow,
-    information = lm_sementic_blue,
+    danger = lm_sementic_red2,
+    success = lm_sementic_green2,
+    caution = lm_sementic_yellow2,
+    information = lm_sementic_blue2,
     isDark = true,
 )
 
