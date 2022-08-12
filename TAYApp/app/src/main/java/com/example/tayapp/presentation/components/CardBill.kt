@@ -31,7 +31,8 @@ fun CardBill(
 ){
     TayCard(
         modifier = modifier.fillMaxWidth(),
-        onClick = {onClick(bill.id)}
+        onClick = {onClick(bill.id)},
+        enable = true
     ) {
         CardBillDefault(
             title = bill.billName,
@@ -46,7 +47,8 @@ fun CardBill(
 @Composable
 fun CardBillWithScrap(){
     TayCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        enable = true
     ) {
         Row(
             modifier = Modifier.padding(5.dp)
@@ -73,7 +75,8 @@ fun CardBillWithEmoij(
 ){
     TayCard(
         modifier = Modifier.fillMaxWidth(),
-        onClick = {onClick(1234)}
+        onClick = {onClick(1234)},
+        enable = true
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),

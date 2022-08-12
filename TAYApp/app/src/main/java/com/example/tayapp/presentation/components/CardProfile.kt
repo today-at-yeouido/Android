@@ -120,7 +120,8 @@ fun CardProfilSection(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp),
-        onClick = onClick
+        onClick = onClick,
+        enable = true
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),

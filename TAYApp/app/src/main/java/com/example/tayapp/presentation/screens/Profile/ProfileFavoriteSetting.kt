@@ -96,6 +96,7 @@ fun ProfileFavoriteCard(
 
     TayCard(
         modifier = Modifier.fillMaxWidth(),
+        enable = true,
         borderStroke = BorderStroke(1.dp, if(checkedState.value)lm_primary50 else TayAppTheme.colors.border)
     ) {
         Box(
