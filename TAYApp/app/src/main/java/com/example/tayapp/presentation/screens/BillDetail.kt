@@ -20,7 +20,7 @@ import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 
 @Composable
-fun BillDetail(billId: Int, upPress: () -> Unit){
+fun BillDetail(billId: Int, upPress: () -> Unit) {
     val scrollState = rememberScrollState()
 
     Column {
@@ -38,6 +38,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit){
                     ),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                CardPieGraph()
                 CardBillLine()
                 BillPointText()
                 BillRevisionText()
@@ -48,13 +49,12 @@ fun BillDetail(billId: Int, upPress: () -> Unit){
 }
 
 @Composable
-fun DetailHeader(){
+fun DetailHeader() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(lm_card_yellow, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
-            .padding(bottom = 20.dp)
-        ,
+            .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Column(
@@ -63,7 +63,7 @@ fun DetailHeader(){
                 .fillMaxWidth()
                 .padding(horizontal = KeyLine),
 
-        ) {
+            ) {
             Spacer(modifier = Modifier.height(20.dp))
             PillList("일부개정안", "정부이송")
 
@@ -104,7 +104,7 @@ fun DetailHeader(){
 
         LazyRow(
             contentPadding = PaddingValues(horizontal = KeyLine)
-        ){
+        ) {
             item {
                 CardBillProgress()
 
@@ -116,7 +116,7 @@ fun DetailHeader(){
 }
 
 @Composable
-private fun CardCommittee(){
+private fun CardCommittee() {
     TayCard(
         modifier = Modifier.padding(horizontal = KeyLine)
     ) {
@@ -155,12 +155,12 @@ private fun CardCommittee(){
 }
 
 @Composable
-private fun CardBillProgress(){
+private fun CardBillProgress() {
     TayCard() {
         Row(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier.padding(Card_Inner_Padding),
-        ){
+        ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
@@ -204,7 +204,34 @@ private fun CardBillProgress(){
 }
 
 @Composable
-private fun CardBillLine(){
+private fun CardPieGraph() {
+    TayCard {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 18.dp, horizontal = 11.dp)
+        ) {
+            Text(
+                text = "본 회의 투표 결과",
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+                color = lm_gray700,
+                modifier = Modifier.padding(horizontal = 3.dp),
+                maxLines = 1
+            )
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                PieGraph()
+            }
+        }
+    }
+}
+
+@Composable
+private fun CardBillLine() {
     TayCard(
     ) {
         Column(
@@ -238,7 +265,7 @@ private fun CardBillLine(){
 }
 
 @Composable
-private fun BillPointText(){
+private fun BillPointText() {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(vertical = 24.dp)
@@ -256,7 +283,7 @@ private fun BillPointText(){
 }
 
 @Composable
-private fun BillDetailNews(){
+private fun BillDetailNews() {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(vertical = 24.dp)
@@ -290,13 +317,13 @@ private fun NewsHeader() {
  * pill수정 필요
  */
 @Composable
-private fun BillRevisionText(){
+private fun BillRevisionText() {
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.padding(vertical = 24.dp)
     ) {
         Title(string = "개정 내용 확인하기")
-        
+
         TayCard(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -331,7 +358,7 @@ private fun BillRevisionText(){
 }
 
 @Composable
-private fun BillRevisionItem(){
+private fun BillRevisionItem() {
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
@@ -346,7 +373,7 @@ private fun BillRevisionItem(){
 @Composable
 private fun BillProgressItem(
     string: String
-){
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(9.dp)
@@ -362,7 +389,7 @@ private fun BillProgressItem(
 }
 
 @Composable
-private fun BillArrow(){
+private fun BillArrow() {
     Icon(
         imageVector = TayIcons.navigate_next,
         contentDescription = ""
@@ -371,7 +398,7 @@ private fun BillArrow(){
 
 @Preview
 @Composable
-fun BillDetailPreview(){
+fun BillDetailPreview() {
     TayAppTheme {
         //BillDetail()
         //BillProgressItem()
