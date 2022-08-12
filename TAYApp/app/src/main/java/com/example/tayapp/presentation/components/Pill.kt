@@ -136,7 +136,6 @@ fun DashPill(
 @Composable
 fun DashPill(
     shape: RoundedCornerShape = RoundedCornerShape(50),
-    onClick: () -> Unit = {},
     textColor: Color = TayAppTheme.colors.bodyText,
     dashedColor: Color = TayAppTheme.colors.background,
     border: BorderStroke? = null,
@@ -151,9 +150,6 @@ fun DashPill(
         modifier = Modifier
             .clip(shape)
             .dashedBorder(1.5.dp, dashedColor, shape, 3.dp, 3.dp)
-            .clickable {
-                onClick()
-            }
     ) {
         Row(
             modifier = Modifier
@@ -182,7 +178,6 @@ fun BadgePill(
 @Composable
 private fun Pill(
     shape: RoundedCornerShape = RoundedCornerShape(50),
-    onClick: () -> Unit = {},
     textColor: Color = TayAppTheme.colors.bodyText,
     backgroundColor: Color = TayAppTheme.colors.background,
     animationColor: Color = Color.Red,
@@ -201,9 +196,6 @@ private fun Pill(
         border = border,
         modifier = Modifier
             .clip(shape)
-            .clickable {
-                onClick()
-            }
     ) {
         Row(
             modifier = Modifier
