@@ -36,9 +36,7 @@ fun CardsUser(
         contentPadding = PaddingValues(KeyLine),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ){
-        item {
-            CardUser(onClick = onClick)
-            CardUser(onClick = onClick)
+        items(3) {
             CardUser(onClick = onClick)
         }
     }
