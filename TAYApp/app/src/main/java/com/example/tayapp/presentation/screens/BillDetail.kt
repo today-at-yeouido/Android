@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -102,15 +103,7 @@ fun DetailHeader() {
         }
         CardCommittee()
 
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = KeyLine)
-        ) {
-            item {
-                CardBillProgress()
-
-            }
-        }
-
+        CardBillProgress()
 
     }
 }
@@ -138,7 +131,7 @@ private fun CardCommittee() {
                 Icon(
                     imageVector = TayIcons.help,
                     contentDescription = "null",
-                    tint = lm_sementic_blue,
+                    tint = lm_sementic_blue2,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -156,7 +149,9 @@ private fun CardCommittee() {
 
 @Composable
 private fun CardBillProgress() {
-    TayCard() {
+    TayCard(
+        modifier = Modifier.padding(horizontal = KeyLine)
+    ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier.padding(Card_Inner_Padding),
@@ -164,7 +159,9 @@ private fun CardBillProgress() {
             Column(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Row() {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
                         text = "진행현황",
                         fontSize = 16.sp,
@@ -174,7 +171,7 @@ private fun CardBillProgress() {
                     Icon(
                         imageVector = TayIcons.help,
                         contentDescription = "null",
-                        tint = lm_sementic_blue,
+                        tint = lm_sementic_blue2,
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
@@ -184,18 +181,20 @@ private fun CardBillProgress() {
                         fontWeight = FontWeight.Normal
                     )
                 }
-                Row {
-                    BillProgressItem("접수")
-                    BillArrow()
-                    BillProgressItem("심사")
-                    BillArrow()
-                    BillProgressItem("심의")
-                    BillArrow()
-                    BillProgressItem("부결")
-                    BillArrow()
-                    BillProgressItem("정부이송")
-                    BillArrow()
-                    BillProgressItem("공포")
+                LazyRow {
+                    item{
+                        BillProgressItem("접수")
+                        BillArrow()
+                        BillProgressItem("심사")
+                        BillArrow()
+                        BillProgressItem("심의")
+                        BillArrow()
+                        BillProgressItem("부결")
+                        BillArrow()
+                        BillProgressItem("정부이송")
+                        BillArrow()
+                        BillProgressItem("공포")
+                    }
                 }
             }
 
@@ -378,7 +377,7 @@ private fun BillProgressItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(9.dp)
     ) {
-        Pill("$string")
+        DashPill("$string")
         Text(
             text = "22.07.20",
             fontSize = 9.sp,
