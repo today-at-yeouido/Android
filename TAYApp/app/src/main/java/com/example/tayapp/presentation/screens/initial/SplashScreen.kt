@@ -1,4 +1,4 @@
-package com.example.tayapp.presentation.screens
+package com.example.tayapp.presentation.screens.initial
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -1,4 +1,4 @@
-package com.example.tayapp.presentation.screens
+package com.example.tayapp.presentation.screens.initial
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.tayapp.presentation.components.ButtonLargeHeight
+import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.*
@@ -68,17 +70,43 @@ private fun InputField(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        TayTextField(value = email) { email = it }
+        TayTextField(
+            placeholder = {
+                Text(
+                    "이메일",
+                    fontSize = 16.textDp,
+                    color = lm_gray300
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = lm_gray000,
+                focusedBorderColor = lm_gray100,
+                unfocusedBorderColor = lm_gray100
+            ),
+            value = email,
+        ) { email = it }
         TayTextField(
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            placeholder = {
+                Text(
+                    "비밀번호",
+                    fontSize = 16.textDp,
+                    color = lm_gray300
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = lm_gray000,
+                focusedBorderColor = lm_gray100,
+                unfocusedBorderColor = lm_gray100
+            ),
             value = password,
         ) { password = it }
 
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(44.dp),
+                .height(ButtonLargeHeight),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = lm_gray100
             ),
@@ -145,38 +173,6 @@ private fun RegisterField(navController: NavController) {
         }
         Divider(color = lm_gray100)
     }
-}
-
-@Composable
-private fun TayTextField(
-    value: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    onValueChange: (String) -> Unit,
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        singleLine = true,
-        placeholder = {
-            Text(
-                "비밀번호",
-                fontSize = 16.textDp,
-                color = lm_gray300
-            )
-        },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            backgroundColor = lm_gray000,
-            focusedBorderColor = lm_gray100,
-            unfocusedBorderColor = lm_gray100
-        ),
-        shape = RoundedCornerShape(8.dp),
-        visualTransformation = visualTransformation,
-        keyboardOptions = keyboardOptions,
-        textStyle = TextStyle(fontSize = 16.textDp),
-        modifier = Modifier
-            .fillMaxWidth()
-    )
 }
 
 

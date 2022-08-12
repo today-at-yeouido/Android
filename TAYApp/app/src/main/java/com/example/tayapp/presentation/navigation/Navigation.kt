@@ -10,6 +10,9 @@ import androidx.navigation.compose.composable
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.screens.*
 import com.example.tayapp.presentation.screens.Profile.*
+import com.example.tayapp.presentation.screens.initial.LoginScreen
+import com.example.tayapp.presentation.screens.initial.RegisterScreen
+import com.example.tayapp.presentation.screens.initial.SplashScreen
 import com.example.tayapp.presentation.states.TayAppState
 
 @Composable
@@ -96,7 +99,7 @@ private fun NavGraphBuilder.initialGraph(navController: NavController) {
     composable(
         route = Destinations.SIGN_UP
     ) {
-        SignUpScreen(navController)
+        RegisterScreen(navController)
     }
 }
 
