@@ -18,11 +18,12 @@ fun TayCard(
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
     color: Color = TayAppTheme.colors.background,
     borderStroke: BorderStroke = BorderStroke(1.dp, TayAppTheme.colors.border),
+    enable: Boolean = false,
     onClick: () -> Unit = {},
     content: @Composable () -> Unit
 ){
     Surface(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier.clickable(onClick = onClick, enabled = enable),
         color = color,
         shape = shape,
         border = borderStroke,
