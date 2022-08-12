@@ -1,15 +1,13 @@
 package com.example.tayapp.presentation.screens
 
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -19,44 +17,69 @@ import androidx.compose.ui.unit.sp
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BillDetail(billId: Int, upPress: () -> Unit) {
     val scrollState = rememberScrollState()
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+    )
+    val coroutineScope = rememberCoroutineScope()
 
-    Column {
-        TayTopAppBarWithBack("$billId", upPress)
-        Column(
-            modifier = Modifier.verticalScroll(scrollState)
-        ) {
-            DetailHeader()
-            Spacer(modifier = Modifier.size(16.dp))
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        sheetContent = { BillProgressDetail() },
+        sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+        sheetPeekHeight = 10.dp,
+        backgroundColor = lm_gray000,
+        sheetBackgroundColor = lm_gray050
+    ) {
+        Column {
+            TayTopAppBarWithBack("$billId", upPress)
             Column(
-                modifier = Modifier
-                    .padding(
-                        horizontal = KeyLine,
-                        vertical = 24.dp
-                    ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.verticalScroll(scrollState)
             ) {
-                CardPieGraph()
-                CardBillLine()
-                BillPointText()
-                BillRevisionText()
-                BillDetailNews()
+                DetailHeader(onProgressClick = {
+                    coroutineScope.launch {
+
+                        if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                            bottomSheetScaffoldState.bottomSheetState.expand()
+                        } else {
+                            bottomSheetScaffoldState.bottomSheetState.collapse()
+                        }
+                    }
+                })
+                Spacer(modifier = Modifier.size(16.dp))
+                Column(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = KeyLine,
+                            vertical = 24.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    CardPieGraph()
+                    CardBillLine()
+                    BillPointText()
+                    BillRevisionText()
+                    BillDetailNews()
+                }
             }
         }
     }
+
 }
 
 @Composable
-fun DetailHeader() {
+fun DetailHeader(onProgressClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(lm_card_yellow, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
             .padding(bottom = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -103,7 +126,7 @@ fun DetailHeader() {
         }
         CardCommittee()
 
-        CardBillProgress()
+        CardBillProgress(onProgressClick)
 
     }
 }
@@ -148,9 +171,10 @@ private fun CardCommittee() {
 }
 
 @Composable
-private fun CardBillProgress() {
+private fun CardBillProgress(onProgressClick: () -> Unit) {
     TayCard(
-        modifier = Modifier.padding(horizontal = KeyLine)
+        modifier = Modifier.padding(horizontal = KeyLine),
+        enable = false
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -172,7 +196,7 @@ private fun CardBillProgress() {
                         imageVector = TayIcons.help,
                         contentDescription = "null",
                         tint = lm_sementic_blue2,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp).clickable (onClick = onProgressClick)
                     )
                     Text(
                         text = "D+452",

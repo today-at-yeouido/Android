@@ -1,6 +1,7 @@
 package com.example.tayapp.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -9,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,13 +36,16 @@ val ProgressList: List<Progress> = listOf(
 @Composable
 fun BillProgressDetail(){
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        modifier = Modifier.padding(horizontal = KeyLine, vertical = 34.dp).navigationBarsPadding()
     ){
         item{
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.background(color = lm_gray075).fillMaxWidth()
+                modifier = Modifier
+                    .background(color = lm_gray075)
+                    .fillMaxWidth()
             ) {
                 Icon(
                     imageVector = TayIcons.help,
@@ -57,12 +62,14 @@ fun BillProgressDetail(){
             }
         }
         itemsIndexed(ProgressList){index, item ->
-            if(index != 0){ TayDivider() }
-            Spacer(modifier = Modifier.size(20.dp))
+            if(index != 0){
+                TayDivider()
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+
             BillProgressDetailItem(progress = item)
-
-
         }
+
     }
 }
 
