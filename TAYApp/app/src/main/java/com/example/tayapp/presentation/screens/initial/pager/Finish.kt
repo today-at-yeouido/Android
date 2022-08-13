@@ -25,7 +25,8 @@ fun BoxScope.Finish(
     Column {
         Spacer(Modifier.height(10.dp))
         Text(
-            "축하합니다. 가입이 완료되었습니다.",
+            "이메일로 확인 메일을 보냈습니다 \n" +
+                    "가입을 완료해주세요.",
             color = lm_gray800,
             style = TayAppTheme.typo.typography.h3
         )

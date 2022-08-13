@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.components.ButtonLargeHeight
 import com.example.tayapp.presentation.components.TayButton
@@ -53,7 +54,7 @@ private fun Login(navController: NavController, viewModel: LoginViewModel) {
         Spacer(Modifier.height(50.dp))
         SocialField()
         Spacer(Modifier.height(80.dp))
-        RegisterField { navController.navigate(Destinations.SIGN_UP) }
+        RegisterField { navController.navigate(it) }
     }
 }
 
@@ -154,7 +155,7 @@ private fun SocialField() {
 }
 
 @Composable
-private fun RegisterField(navigate: () -> Unit) {
+private fun RegisterField(navigate: (String) -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(13.dp)
@@ -168,7 +169,7 @@ private fun RegisterField(navigate: () -> Unit) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    navigate()
+                    navigate(Destinations.SIGN_UP)
                 }
             ) {
                 Text("이메일로 가입하기", color = lm_sementic_blue2)
@@ -176,5 +177,9 @@ private fun RegisterField(navigate: () -> Unit) {
             }
         }
         Divider(color = lm_gray100)
+        Text(
+            "로그인 없이 이용하기",
+            fontSize = 18.sp,
+            modifier = Modifier.clickable { navigate(AppGraph.HOME_GRAPH) })
     }
 }

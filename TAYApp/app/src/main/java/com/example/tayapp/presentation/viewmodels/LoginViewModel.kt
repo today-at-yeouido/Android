@@ -41,14 +41,11 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun requestRegister(e: String, p1: String, p2: String, nav: () -> Unit) {
+    fun requestRegister(e: String, p1: String, p2: String) {
         viewModelScope.launch {
             val res = loginUseCases.requestRegisterUseCase(
                 RegistrationDto(email = e, password1 = p1, password2 = p2)
             )
-            if (res) {
-                nav()
-            }
         }
     }
 
