@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens.initial
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,14 +21,11 @@ import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray700
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
-import com.example.tayapp.utils.getActivity
 import com.example.tayapp.utils.textDp
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController) {
-
-    val viewModel = hiltViewModel<LoginViewModel>(getActivity())
+fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),

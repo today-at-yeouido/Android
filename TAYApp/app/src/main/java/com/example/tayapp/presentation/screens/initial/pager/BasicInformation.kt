@@ -19,7 +19,9 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun BoxScope.BasicInformation(toNext: suspend () -> Unit, animation: suspend () -> Unit) {
+fun BoxScope.BasicInformation(
+    onClick: ()-> Unit
+) {
     val scope = rememberCoroutineScope()
     Column {
         Spacer(Modifier.height(10.dp))
@@ -61,10 +63,7 @@ fun BoxScope.BasicInformation(toNext: suspend () -> Unit, animation: suspend () 
 
     TayButton(
         onClick = {
-            scope.launch {
-                launch { animation() }
-                toNext()
-            }
+            onClick()
         },
         modifier = Modifier
             .fillMaxWidth()

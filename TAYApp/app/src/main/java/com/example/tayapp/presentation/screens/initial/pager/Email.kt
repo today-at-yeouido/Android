@@ -2,6 +2,7 @@ package com.example.tayapp.presentation.screens.initial.pager
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +16,7 @@ import com.example.tayapp.utils.textDp
 import kotlinx.coroutines.launch
 
 @Composable
-fun BoxScope.Email(toNext: suspend () -> Unit, animation: suspend () -> Unit) {
+fun BoxScope.Email(onClick: ()-> Unit) {
     val scope = rememberCoroutineScope()
     Column {
         var email by remember { mutableStateOf("") }
@@ -27,10 +28,7 @@ fun BoxScope.Email(toNext: suspend () -> Unit, animation: suspend () -> Unit) {
     }
     TayButton(
         onClick = {
-            scope.launch {
-                launch { animation() }
-                toNext()
-            }
+            onClick()
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -52,11 +50,18 @@ private fun EmailField(value: String, onValueChange: (String) -> Unit) {
     ) {
         Text("이메일", color = lm_gray600, fontWeight = FontWeight.Normal)
         TayTextField(
-            value = value, placeholder = {
+            value = value,
+            placeholder = {
                 Text(
                     "Tay@gmail.com", fontSize = 16.textDp, color = lm_gray300
                 )
-            }, onValueChange = onValueChange
+            },
+            onValueChange = onValueChange,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = lm_gray000,
+                focusedBorderColor = lm_primary50,
+                unfocusedBorderColor = lm_gray100
+            )
         )
     }
 }

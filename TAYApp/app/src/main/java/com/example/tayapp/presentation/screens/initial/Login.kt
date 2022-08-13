@@ -10,56 +10,56 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.presentation.components.ButtonLargeHeight
 import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
+import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
-import com.example.tayapp.utils.getActivity
 import com.example.tayapp.utils.textDp
 
 @Composable
-fun LoginScreen(navController: NavController, upPress: () -> Unit = {}) {
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel,
+    upPress: () -> Unit = {}
+) {
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         TayTopAppBarWithBack(string = "로그인", upPress)
-        Login(navController)
+        Login(navController, viewModel)
     }
 }
 
 @Composable
-private fun Login(navController: NavController) {
+private fun Login(navController: NavController, viewModel: LoginViewModel) {
 
-    val viewModel = hiltViewModel<LoginViewModel>(getActivity())
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(horizontal = KeyLine)
     ) {
         Spacer(Modifier.height(40.dp))
-        InputField(viewModel::requestLogin)
+        InputField(viewModel::requestLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
         Spacer(Modifier.height(50.dp))
         SocialField()
         Spacer(Modifier.height(80.dp))
-        RegisterField(navController)
+        RegisterField{navController.navigate(Destinations.SIGN_UP)}
     }
 }
 
 @Composable
 private fun InputField(
-    requestLogin: (String, String) -> Unit
+    requestLogin: (String, String, () -> Unit) -> Unit,
+    navigate: () -> Unit
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -111,8 +111,7 @@ private fun InputField(
             ),
             shape = RoundedCornerShape(8.dp),
             onClick = {
-                requestLogin(email, password)
-
+                requestLogin(email, password, navigate)
             }
         ) {
             Text("로그인")
@@ -149,7 +148,7 @@ private fun SocialField() {
 }
 
 @Composable
-private fun RegisterField(navController: NavController) {
+private fun RegisterField(navigate: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(13.dp)
@@ -163,7 +162,7 @@ private fun RegisterField(navController: NavController) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    navController.navigate(Destinations.SIGN_UP)
+                    navigate()
                 }
             ) {
                 Text("이메일로 가입하기", color = lm_sementic_blue2)
@@ -172,11 +171,4 @@ private fun RegisterField(navController: NavController) {
         }
         Divider(color = lm_gray100)
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewLogin() {
-    LoginScreen(navController = rememberNavController()) {}
 }

@@ -16,7 +16,7 @@ import com.example.tayapp.presentation.ui.theme.lm_gray800
 import kotlinx.coroutines.launch
 
 @Composable
-fun BoxScope.Finish(animation: suspend () -> Unit, toNext: suspend () -> Unit) {
+fun BoxScope.Finish(onClick: ()-> Unit) {
 
     val scope = rememberCoroutineScope()
     Column {
@@ -29,10 +29,7 @@ fun BoxScope.Finish(animation: suspend () -> Unit, toNext: suspend () -> Unit) {
     }
     TayButton(
         onClick = {
-            scope.launch {
-                launch { animation() }
-                toNext()
-            }
+            onClick()
         },
         modifier = Modifier
             .fillMaxWidth()
