@@ -47,7 +47,6 @@ private fun Login(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(horizontal = KeyLine)
-            .width(328.dp)
     ) {
         Spacer(Modifier.height(40.dp))
         InputField(viewModel::requestLogin)
