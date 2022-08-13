@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
     navController: NavController,
     viewModel: LoginViewModel,
-    upPress: () -> Unit = {}
 ) {
     val pagerState = rememberPagerState()
     val float = remember { Animatable(270f) }
@@ -50,7 +49,7 @@ fun RegisterScreen(
         HorizontalPager(
             state = pagerState, count = 4, userScrollEnabled = false
         ) { index ->
-            RegisterItems(index) {
+            RegisterItems(index, viewModel) {
                 currentFloat += 270f
                 current += 1
             }
@@ -74,6 +73,7 @@ fun RegisterScreen(
 @Composable
 fun RegisterItems(
     index: Int,
+    viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
     Box(
@@ -83,10 +83,10 @@ fun RegisterItems(
             .padding(horizontal = KeyLine, vertical = 30.dp)
     ) {
         when (index) {
-            0 -> Email(onClick = onClick)
-            1 -> TermsOfService(onClick = onClick)
-            2 -> BasicInformation(onClick = onClick)
-            3 -> Finish(onClick = onClick)
+            0 -> Email(viewModel= viewModel,onClick = onClick)
+            1 -> TermsOfService(viewModel = viewModel, onClick = onClick)
+            2 -> BasicInformation(viewModel = viewModel, onClick = onClick)
+            3 -> Finish(viewModel = viewModel, onClick = onClick)
         }
     }
 }

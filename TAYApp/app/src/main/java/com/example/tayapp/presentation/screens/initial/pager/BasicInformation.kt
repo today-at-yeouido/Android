@@ -3,8 +3,8 @@ package com.example.tayapp.presentation.screens.initial.pager
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,15 +14,24 @@ import com.example.tayapp.presentation.components.TayButton
 import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import com.example.tayapp.utils.textDp
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun BoxScope.BasicInformation(
-    onClick: ()-> Unit
+    viewModel: LoginViewModel,
+    onClick: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
+
+    var email by remember { mutableStateOf("") }
+    var pass1 by remember { mutableStateOf("") }
+    var pass2 by remember { mutableStateOf("") }
+
+    val regex = Regex(pattern = "[a-zA-Z\\d._+-]+@[a-zA-Z\\d]+\\.[a-zA-Z\\d.]+")
+    val bool1 = regex.matches(email)
+
     Column {
         Spacer(Modifier.height(10.dp))
         Text(
@@ -36,10 +45,18 @@ fun BoxScope.BasicInformation(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text("이메일")
-                TayTextField(value = "", onValueChange = {})
+                TayTextField(
+                    value = email, onValueChange = { email = it },
+                    colors =
+                        TextFieldDefaults.outlinedTextFieldColors(
+                            backgroundColor = lm_gray000,
+                            focusedBorderColor =if(bool1) lm_sementic_green2 else lm_gray100,
+                            unfocusedBorderColor =if(bool1) lm_sementic_green2 else lm_gray100
+                        )
+                )
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    IconText(text = "사용가능")
-                    IconText(text = "이메일 인증")
+                    IconText(text = "사용가능", color = if(bool1) lm_sementic_green2 else lm_gray400)
+                    IconText(text = "이메일 인증", color = if(bool1) lm_sementic_green2 else lm_gray400)
                 }
             }
             Spacer(modifier = Modifier.height(31.dp))

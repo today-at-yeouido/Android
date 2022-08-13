@@ -12,12 +12,15 @@ import com.example.tayapp.presentation.components.ButtonLargeHeight
 import com.example.tayapp.presentation.components.TayButton
 import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.ui.theme.*
+import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import com.example.tayapp.utils.textDp
 import kotlinx.coroutines.launch
 
 @Composable
-fun BoxScope.Email(onClick: ()-> Unit) {
-    val scope = rememberCoroutineScope()
+fun BoxScope.Email(
+    viewModel: LoginViewModel,
+    onClick: () -> Unit
+) {
     Column {
         var email by remember { mutableStateOf("") }
 

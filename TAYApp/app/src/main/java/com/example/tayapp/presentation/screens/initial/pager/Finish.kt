@@ -13,12 +13,15 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray100
 import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.ui.theme.lm_gray800
+import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun BoxScope.Finish(onClick: ()-> Unit) {
+fun BoxScope.Finish(
+    viewModel: LoginViewModel,
+    onClick: () -> Unit
+) {
 
-    val scope = rememberCoroutineScope()
     Column {
         Spacer(Modifier.height(10.dp))
         Text(

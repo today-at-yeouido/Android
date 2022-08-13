@@ -14,24 +14,24 @@ import com.example.tayapp.presentation.components.TayButton
 import com.example.tayapp.presentation.components.TayCheckbox
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import com.example.tayapp.utils.matchWidth
 import com.example.tayapp.utils.textDp
-import kotlinx.coroutines.launch
 
 
 @Composable
 fun BoxScope.TermsOfService(
-    onClick: ()-> Unit
+    viewModel: LoginViewModel,
+    onClick: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
+    var bool1 by remember { mutableStateOf(false) }
+    var bool2 by remember { mutableStateOf(false) }
+    var bool3 by remember { mutableStateOf(false) }
+    var bool4 by remember { mutableStateOf(false) }
+    var bool5 by remember { mutableStateOf(false) }
+    var buttonEnable = bool2 && bool3
+
     Column {
-
-        var bool1 by remember { mutableStateOf(false) }
-        var bool2 by remember { mutableStateOf(false) }
-        var bool3 by remember { mutableStateOf(false) }
-        var bool4 by remember { mutableStateOf(false) }
-        var bool5 by remember { mutableStateOf(false) }
-
 
         Spacer(Modifier.height(10.dp))
         Text(
@@ -54,6 +54,7 @@ fun BoxScope.TermsOfService(
                         bool3 = true
                         bool4 = true
                         bool5 = true
+                        buttonEnable = true
                     } else bool1 = false
                 }
             )
@@ -133,6 +134,9 @@ fun BoxScope.TermsOfService(
             Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
         }
     }
+
+
+
     TayButton(
         onClick = {
             onClick()
@@ -141,8 +145,9 @@ fun BoxScope.TermsOfService(
             .fillMaxWidth()
             .height(ButtonLargeHeight)
             .align(Alignment.BottomCenter),
-        contentColor = lm_gray400,
-        backgroundColor = lm_gray100,
+        contentColor = if (buttonEnable) lm_gray000 else lm_gray400,
+        backgroundColor = if (buttonEnable) lm_gray800 else lm_gray100,
+        enabled = buttonEnable
     ) {
         Text("이메일 인증하기", style = TayAppTheme.typo.typography.button)
     }

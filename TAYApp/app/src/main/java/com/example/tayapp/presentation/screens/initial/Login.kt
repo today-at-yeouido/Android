@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.components.ButtonLargeHeight
+import com.example.tayapp.presentation.components.TayButton
 import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.navigation.AppGraph
@@ -52,7 +53,7 @@ private fun Login(navController: NavController, viewModel: LoginViewModel) {
         Spacer(Modifier.height(50.dp))
         SocialField()
         Spacer(Modifier.height(80.dp))
-        RegisterField{navController.navigate(Destinations.SIGN_UP)}
+        RegisterField { navController.navigate(Destinations.SIGN_UP) }
     }
 }
 
@@ -64,6 +65,13 @@ private fun InputField(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val regex1 = Regex(pattern = "[a-zA-Z\\d._+-]+@[a-zA-Z\\d]+\\.[a-zA-Z\\d.]+")
+    val regex2 = Regex(pattern = "(?=.*\\d)(?=.*[a-z]).{8,}")
+    val bool1 = regex1.matches(email)
+    val bool2 = regex2.matches(password)
+    val bool3 = bool1 && bool2
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,11 +87,12 @@ private fun InputField(
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = lm_gray000,
-                focusedBorderColor = lm_gray100,
-                unfocusedBorderColor = lm_gray100
+                focusedBorderColor = if (bool1) lm_sementic_green2 else lm_gray100,
+                unfocusedBorderColor = if (bool1) lm_sementic_green2 else lm_gray100
             ),
             value = email,
         ) { email = it }
+
         TayTextField(
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -96,25 +105,22 @@ private fun InputField(
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = lm_gray000,
-                focusedBorderColor = lm_gray100,
-                unfocusedBorderColor = lm_gray100
+                focusedBorderColor = if (bool2) lm_sementic_green2 else lm_gray100,
+                unfocusedBorderColor = if (bool2) lm_sementic_green2 else lm_gray100
             ),
             value = password,
         ) { password = it }
 
-        Button(
+        TayButton(
+            onClick = { requestLogin(email, password, navigate) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(ButtonLargeHeight),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = lm_gray100
-            ),
-            shape = RoundedCornerShape(8.dp),
-            onClick = {
-                requestLogin(email, password, navigate)
-            }
+            backgroundColor = if (bool3) lm_gray800 else lm_gray100,
+            contentColor = if (bool3) lm_gray100 else lm_gray400,
+            enabled = bool3
         ) {
-            Text("로그인")
+            Text("로그인", style = TayAppTheme.typo.typography.button)
         }
 
         Row(
