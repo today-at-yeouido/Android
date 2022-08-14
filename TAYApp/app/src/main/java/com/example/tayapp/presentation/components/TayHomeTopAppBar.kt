@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.ExpandButton
@@ -57,16 +58,16 @@ var datalist = listOf<String>(
 fun TayHomeTopAppBar(
     elevation: Dp = 0.dp,
     modifier: Modifier = Modifier,
-//    onTagClick: (String) -> Unit = {},
-//    currentTag: String,
+    onTagClick: (String) -> Unit,
+    currentTag: String,
 //    listState: LazyListState,
 //    scope: CoroutineScope,
-//    isExpanded: Boolean
+    isExpanded: Boolean,
+    onArrowClick: (Boolean) -> Unit
 ) {
-    var currentTag by remember{ mutableStateOf("전체") }
+
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
-    var isExpanded by remember{ mutableStateOf(false)}
 
 
     Column(
@@ -91,16 +92,11 @@ fun TayHomeTopAppBar(
         HomeTabBar(
             modifier = modifier,
             currentTag = currentTag,
-            onTagClick = { it ->
-                currentTag = it
-                isExpanded = false
-                         },
+            onTagClick = onTagClick,
             listState = listState,
             scope = scope,
             isExpanded = isExpanded,
-            onArrowClick = {
-                isExpanded = !isExpanded;
-            }
+            onArrowClick = onArrowClick
         )
     }
 }
@@ -116,7 +112,7 @@ fun HomeTabBar(
     listState: LazyListState,
     scope: CoroutineScope,
     isExpanded: Boolean,
-    onArrowClick: () -> Unit
+    onArrowClick: (Boolean) -> Unit
 ){
 
 
@@ -130,7 +126,8 @@ fun HomeTabBar(
                     Spacer(modifier = Modifier.width(16.dp))
                     ExpandedTagBar(
                         currentTag = currentTag,
-                        onTagClick = onTagClick
+                        onTagClick = onTagClick,
+                        onArrowClick = onArrowClick
                     )
                 }
             else
@@ -145,7 +142,7 @@ fun HomeTabBar(
 
         ExpandButton(
             isExpanded = isExpanded,
-            onClick = onArrowClick )
+            onClick = {onArrowClick(!isExpanded)} )
     }
 
 
@@ -170,8 +167,8 @@ private fun NotExpandedTagBar(
         contentPadding = PaddingValues(start = 16.dp)
     ){
         items(datalist){ it ->
-            if(currentTag == it) TayTag(it, true, onTagClick)
-            else TayTag(it,false,onClick = onTagClick)
+            if(currentTag == it) TayTag(it, true, onClick = {onTagClick(it)})
+            else TayTag(it,false,onClick = {onTagClick(it)})
         }
     }
 
@@ -184,7 +181,8 @@ private fun NotExpandedTagBar(
 private fun ExpandedTagBar(
     modifier: Modifier = Modifier,
     currentTag: String,
-    onTagClick: (String) -> Unit
+    onTagClick: (String) -> Unit,
+    onArrowClick: (Boolean) -> Unit
 ){
     FlowRow(
         mainAxisSpacing = 7.dp,
@@ -193,8 +191,8 @@ private fun ExpandedTagBar(
 
     ){
         datalist.forEach{ it ->
-            if(currentTag == it) TayTag(it, true,onTagClick)
-            else TayTag(it,false,onClick = onTagClick)
+            if(currentTag == it) TayTag(it, true,onClick = {onTagClick(it);onArrowClick(false)})
+            else TayTag(it,false,onClick = {onTagClick(it); onArrowClick(false)})
         }
 
     }
