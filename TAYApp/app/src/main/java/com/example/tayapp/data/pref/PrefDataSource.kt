@@ -26,8 +26,6 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         val LOGIN_USER_EMAIL = stringPreferencesKey("login_user_email")
 
         val RECENT_SEARCH_TERM = stringPreferencesKey("recent_search_term")
-        var TOKEN: String = ""
-
     }
 
     suspend fun saveRecentSearchTerm(query: String) {
@@ -56,6 +54,12 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         }
     }
 
+    fun getAccessToken(): Flow<String?> {
+        return context.dataStore.data.map {
+            it[LOGIN_USER_ACCESS_TOKEN]
+        }
+    }
+
     suspend fun updateAccessToken(accessToken : String){
         context.dataStore.edit { settings ->
             settings[LOGIN_USER_ACCESS_TOKEN] = accessToken
@@ -68,7 +72,6 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
             val refreshToken = preference[LOGIN_USER_REFRESH_TOKEN] ?: ""
             val id = preference[LOGIN_USER_ID] ?: ""
             val email = preference[LOGIN_USER_EMAIL] ?: ""
-            TOKEN = accessToken
 
             UserPref(accessToken, refreshToken, id, email)
         }
