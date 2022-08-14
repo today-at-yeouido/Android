@@ -1,11 +1,9 @@
 package com.example.tayapp.presentation.states
 
+import android.util.Log
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination

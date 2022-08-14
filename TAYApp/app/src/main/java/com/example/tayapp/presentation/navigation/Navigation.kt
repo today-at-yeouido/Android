@@ -30,6 +30,7 @@ fun NavGraph(
         tayNavGraph(
             navController = appState.navController,
             upPress = appState::upPress,
+            appState = appState,
             onBillSelected = appState::navigateToBillDetail
         )
     }
@@ -38,9 +39,10 @@ fun NavGraph(
 private fun NavGraphBuilder.tayNavGraph(
     navController: NavController,
     upPress: () -> Unit,
+    appState: TayAppState,
     onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
-    initialNavigation(navController)
+    initialNavigation(appState)
 
     /** nested Navigation */
     homeNavigation(navController, upPress, onBillSelected)
@@ -59,18 +61,18 @@ private fun NavGraphBuilder.detailNavigation(upPress: () -> Unit) {
     }
 }
 
-private fun NavGraphBuilder.initialNavigation(navController: NavController) {
+private fun NavGraphBuilder.initialNavigation(appState: TayAppState) {
     navigation(
         route = AppGraph.INITIAL_GRAPH, startDestination = Destinations.SPLASH
     ) {
-        initialGraph(navController)
+        initialGraph(appState.navController)
     }
 }
 
 private fun NavGraphBuilder.homeNavigation(
     navController: NavController,
     upPress: () -> Unit,
-    onBillSelected: (Int, NavBackStackEntry) -> Unit
+    onBillSelected: (Int, NavBackStackEntry) -> Unit,
 ) {
     navigation(
         route = AppGraph.HOME_GRAPH, startDestination = BottomBarTabs.Feed.route

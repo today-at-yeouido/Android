@@ -3,7 +3,6 @@ package com.example.tayapp.presentation.screens.initial
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -21,6 +20,7 @@ import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
+import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
@@ -113,7 +113,10 @@ private fun InputField(
         ) { password = it }
 
         TayButton(
-            onClick = { requestLogin(email, password, navigate) },
+            onClick = {
+                requestLogin(email, password, navigate)
+                LoginState.changeState()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(ButtonLargeHeight),

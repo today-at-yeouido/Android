@@ -8,24 +8,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.KeyLine
+import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.viewmodels.HomeViewModel
 
 
 @Composable
 fun Feed(
-    modifier: Modifier = Modifier,
     navController: NavController,
-    onBillSelected: (Int) -> Unit
+    onBillSelected: (Int) -> Unit,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -73,7 +71,7 @@ fun Feed(
 
             }
 
-
+            Log.d("##88", "loginState ${LoginState.loginState}")
         }
     }
 }
