@@ -1,9 +1,6 @@
 package com.example.tayapp.presentation.screens.search
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
@@ -17,19 +14,22 @@ import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.presentation.components.CardSearch
 import com.example.tayapp.presentation.components.Title
+import com.example.tayapp.presentation.ui.theme.KeyLine
 
 @Composable
 fun SearchResults(
     searchResult: List<BillDto>,
     onBillClick: (Int) -> Unit
 ){
-    Column() {
+    Column(modifier = Modifier.fillMaxSize().padding(KeyLine)) {
         Title(
             string = "검색 결과",
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        LazyColumn(){
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ){
             items(searchResult){ it->
                 CardSearch(
                     bill = it.toDomain(),
