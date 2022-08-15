@@ -21,7 +21,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillTable(billId)
     }
 
-    override suspend fun getBillRecent(page: Int): List<BillDto> {
+    override suspend fun getBillRecent(page: Int): Response<List<BillDto>> {
         return billApi.getBillRecent(page)
     }
 
