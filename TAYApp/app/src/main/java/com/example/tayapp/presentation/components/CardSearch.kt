@@ -13,23 +13,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
 import com.example.tayapp.presentation.utils.NavigateNextButton
 
 @Composable
 fun CardSearch(
-    title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
-    list: List<String> = listOf<String>("1", "2","3","4"),
+    bill: Bill,
+    onBillSelected: (Int) -> Unit
 ){
-    if(list.count()==1) //CardBill()
-    else CardSearchMultiple(title, list)
+    CardBill(bill = bill, onClick = onBillSelected)
 }
 
 
 
 @Composable
-fun CardSearchMultiple(
+private fun CardSearchMultiple(
     title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
     list: List<String> = listOf<String>("1", "2","3","4"),
 ){
@@ -132,21 +132,5 @@ fun LineSearchedBill(
 private fun SearchBillPreview(){
     TayAppTheme {
         LineSearchedBill()
-    }
-}
-
-@Preview
-@Composable
-private fun SearchCardPreview(){
-    TayAppTheme {
-        CardSearch()
-    }
-}
-
-@Preview
-@Composable
-private fun SearchCardPreview2(){
-    TayAppTheme {
-        CardSearch(list = listOf("1"))
     }
 }

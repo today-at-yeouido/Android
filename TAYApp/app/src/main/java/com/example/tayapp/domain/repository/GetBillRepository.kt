@@ -19,6 +19,7 @@ interface GetBillRepository {
     suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
     suspend fun getBillUserRecommended(): List<BillDto>
     suspend fun getBillUserRecentViewed(): List<BillDto>
+    suspend fun getBillSearch(query: String): Response<List<BillDto>>
 
 }
 

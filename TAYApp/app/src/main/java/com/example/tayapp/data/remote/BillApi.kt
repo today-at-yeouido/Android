@@ -4,6 +4,7 @@ import com.example.tayapp.data.remote.Constants.GET_BILL_DETAIL
 import com.example.tayapp.data.remote.Constants.GET_BILL_HOME
 import com.example.tayapp.data.remote.Constants.GET_BILL_MOST_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_RECENT
+import com.example.tayapp.data.remote.Constants.GET_BILL_SEARCH
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECENT_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECOMMENDED
 import com.example.tayapp.data.remote.dto.bill.*
@@ -31,6 +32,11 @@ interface BillApi {
     @GET(GET_BILL_RECENT)
     suspend fun getBillRecent(
         @Query("page") page: Int = 0
+    ) : Response<List<BillDto>>
+
+    @GET(GET_BILL_SEARCH)
+    suspend fun getBillSearch(
+        @Query("query") query: String
     ) : Response<List<BillDto>>
 
     @GET(GET_BILL_MOST_VIEWED)

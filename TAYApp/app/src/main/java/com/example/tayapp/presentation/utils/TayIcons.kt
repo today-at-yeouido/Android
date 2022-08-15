@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tayapp.presentation.ui.theme.Icon_Padding
 import com.example.tayapp.presentation.ui.theme.Icon_Size
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.ui.theme.lm_gray200
 
 
 object TayIcons {
@@ -237,6 +238,25 @@ fun CloseButton(
     ) {
         Icon(
             imageVector = TayIcons.close,
+            contentDescription = null,
+            tint = tint
+        )
+    }
+}
+
+@Composable
+fun CancelButton(
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    tint: Color = lm_gray200
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .size(Icon_Size)
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Cancel,
             contentDescription = null,
             tint = tint
         )

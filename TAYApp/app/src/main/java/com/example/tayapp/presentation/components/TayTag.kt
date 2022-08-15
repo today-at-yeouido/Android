@@ -16,7 +16,8 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 fun TayTag(
     string: String = "전체",
     isClicked: Boolean = false,
-    onClick:(String)->Unit = {}
+    onStringClick:(String)->Unit = {},
+    onClick: () -> Unit ={}
 ){
     Box(
         modifier = Modifier
@@ -34,7 +35,7 @@ fun TayTag(
                 horizontal = 10.dp,
                 vertical = 5.dp
             )
-            .clickable { onClick(string) }
+            .clickable { onStringClick(string); onClick() }
 
     ) {
         Text(
