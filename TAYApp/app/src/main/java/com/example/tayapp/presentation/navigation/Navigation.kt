@@ -31,7 +31,7 @@ fun NavGraph(
             navController = appState.navController,
             upPress = appState::upPress,
             appState = appState,
-            onBillSelected = appState::navigateToBillDetail
+            onBillSelected = appState::navigateToBillDetail,
         )
     }
 }
@@ -40,7 +40,7 @@ private fun NavGraphBuilder.tayNavGraph(
     navController: NavController,
     upPress: () -> Unit,
     appState: TayAppState,
-    onBillSelected: (Int, NavBackStackEntry) -> Unit
+    onBillSelected: (Int, NavBackStackEntry) -> Unit,
 ) {
     initialNavigation(appState)
 

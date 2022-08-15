@@ -30,7 +30,7 @@ import com.example.tayapp.utils.textDp
 fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel,
-    upPress: () -> Unit = {}
+    upPress: ()->Unit = {}
 ) {
 
     Column(
@@ -52,7 +52,7 @@ private fun Login(navController: NavController, viewModel: LoginViewModel) {
         Spacer(Modifier.height(40.dp))
         InputField(viewModel::requestLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
         Spacer(Modifier.height(50.dp))
-        SocialField()
+        SocialField(viewModel::kakaoLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
         Spacer(Modifier.height(80.dp))
         RegisterField { navController.navigate(it) }
     }
@@ -138,7 +138,10 @@ private fun InputField(
 }
 
 @Composable
-private fun SocialField() {
+private fun SocialField(
+    kakaoLogin: (() -> Unit) -> Unit,
+    nav: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -147,7 +150,11 @@ private fun SocialField() {
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Canvas(modifier = Modifier.size(50.dp)) {
+            Canvas(modifier = Modifier
+                .size(50.dp)
+                .clickable {
+                    kakaoLogin{nav()}
+                }) {
                 drawCircle(Color.Yellow)
             }
             Canvas(modifier = Modifier.size(50.dp)) {

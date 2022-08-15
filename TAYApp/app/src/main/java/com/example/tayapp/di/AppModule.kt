@@ -1,25 +1,26 @@
 package com.example.tayapp.di
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.room.Room
+import com.example.tayapp.TayApplication
 import com.example.tayapp.data.local.TayDatabase
 import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.remote.BillApi
-import com.example.tayapp.data.remote.LoginApi
 import com.example.tayapp.data.remote.Constants
 import com.example.tayapp.data.remote.Constants.BASE_URL
+import com.example.tayapp.data.remote.LoginApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.internal.addHeaderLenient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -108,5 +109,4 @@ object AppModule {
     ): BillApi {
         return retrofit.create(BillApi::class.java)
     }
-
 }
