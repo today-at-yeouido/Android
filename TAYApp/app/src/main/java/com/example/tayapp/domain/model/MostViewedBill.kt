@@ -9,7 +9,7 @@ data class MostViewedBill(
     data class Bill(
         val billName: String,
         val billType: Int,
-        val committee: String,
+        val committee: List<Committee?>,
         val id: Int,
         val proposer: String,
         val status: String,
@@ -27,7 +27,9 @@ fun MostViewedBillDto.toDomain(): MostViewedBill = MostViewedBill(
     bill = MostViewedBill.Bill(
         billName = this.billSummary.billName,
         billType = this.billSummary.billType,
-        committee = this.billSummary.committee,
+        committee =  listOf(Committee(
+            "a","b","c","d"
+        )),
         id = this.billSummary.id,
         proposer = this.billSummary.proposer,
         status = this.billSummary.status

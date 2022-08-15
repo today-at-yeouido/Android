@@ -36,7 +36,7 @@ fun CardBill(
     ) {
         CardBillDefault(
             title = bill.billName,
-            bill = bill.committee,
+            bill = bill.committeeInfo.size.toString(),
             status = bill.status,
             date = bill.proposeDt,
             people = bill.proposer,
