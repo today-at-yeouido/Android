@@ -13,6 +13,7 @@ class CheckLoginUseCase @Inject constructor(private val repository: LoginReposit
         val refreshToken = repository.getRefreshToken()
         return if (refreshToken.isNotBlank()) {
             val r = repository.requestRefreshToken(RefreshTokenDto(refreshToken))
+            Log.d("##88", "refresh code ${r.code()}")
             when (r.code()) {
                 200 -> {
                     r.body()?.let { repository.updateAccessToken(it.access) }

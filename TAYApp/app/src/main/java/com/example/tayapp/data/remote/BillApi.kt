@@ -31,7 +31,7 @@ interface BillApi {
     @GET(GET_BILL_RECENT)
     suspend fun getBillRecent(
         @Query("page") page: Int = 0
-    ) : List<BillDto>
+    ) : Response<List<BillDto>>
 
     @GET(GET_BILL_MOST_VIEWED)
     suspend fun getBillMostViewed() : Response<List<MostViewedBillDto>>

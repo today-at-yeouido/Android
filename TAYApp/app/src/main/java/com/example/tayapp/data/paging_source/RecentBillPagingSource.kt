@@ -1,27 +1,52 @@
 package com.example.tayapp.data.paging_source
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.domain.repository.GetBillRepository
+import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
+import javax.inject.Inject
 
-class RecentBillPagingResource(
-    private val getBillRepository: GetBillRepository
+class RecentBillPagingResource @Inject constructor(
+    private val getBillRepository: GetBillRepository,
+    private val checkLoginUseCase: CheckLoginUseCase
 ) : PagingSource<Int, Bill>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Bill> {
-        return try {
-            val nextPage = params.key ?: 1
-            val billListResponse = getBillRepository.getBillRecent(nextPage).map { it.toDomain() }
-            LoadResult.Page(
-                data = billListResponse,
-                prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = nextPage.plus(1)
-            )
-        } catch (e: Exception) {
-            LoadResult.Error(e)
+
+        val nextPage = params.key ?: 1
+        val billList = suspend {
+            val r = getBillRepository.getBillRecent(nextPage)
+            val bills = r.body()!!.map { it.toDomain() }
+            bills
+        }
+
+        val billListResponse = getBillRepository.getBillRecent(nextPage)
+
+        return when (billListResponse.code()) {
+            200 -> {
+                val billList = billListResponse.body()!!.map{ it.toDomain()}
+                LoadResult.Page(
+                    data = billList,
+                    prevKey = if (nextPage == 1) null else nextPage - 1,
+                    nextKey = nextPage.plus(1)
+                )
+            }
+            401 -> {
+                checkLoginUseCase()
+                val billList = billList()
+                Log.d("##88", "에러에러")
+                LoadResult.Page(
+                    data = billList,
+                    prevKey = if (nextPage == 1) null else nextPage - 1,
+                    nextKey = nextPage.plus(1)
+                )
+            }
+            else -> {
+                LoadResult.Error(Throwable(billListResponse.errorBody().toString()))
+            }
         }
     }
 
