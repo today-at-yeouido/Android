@@ -1,4 +1,4 @@
-package com.example.tayapp.data.remote.dto.bill
+package com.example.tayapp.data.remote.dto.login
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,6 +6,11 @@ import com.google.gson.annotations.SerializedName
 data class LoginDto(
     val email: String,
     val password: String
+)
+
+data class SnsLoginDto(
+    @SerializedName("access_token")
+    val access: String
 )
 
 data class LoginResponse(

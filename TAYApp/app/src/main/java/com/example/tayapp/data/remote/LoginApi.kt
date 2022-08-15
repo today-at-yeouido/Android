@@ -1,11 +1,6 @@
 package com.example.tayapp.data.remote
 
-import com.example.tayapp.data.remote.dto.bill.LoginDto
-import com.example.tayapp.data.remote.dto.bill.LoginResponse
-import com.example.tayapp.data.remote.dto.login.JwtRefreshResponse
-import com.example.tayapp.data.remote.dto.login.LogoutResponse
-import com.example.tayapp.data.remote.dto.login.RefreshTokenDto
-import com.example.tayapp.data.remote.dto.login.RegistrationDto
+import com.example.tayapp.data.remote.dto.login.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -32,5 +27,10 @@ interface LoginApi {
     suspend fun postJwtRefresh(
         @Body token : RefreshTokenDto
     ): Response<JwtRefreshResponse>
+
+    @POST(Constants.POST_SOCIAL_LOGIN)
+    suspend fun postSocialLogin(
+        @Body snsLogin: SnsLoginDto
+    ): Response<LoginResponse>
 }
 

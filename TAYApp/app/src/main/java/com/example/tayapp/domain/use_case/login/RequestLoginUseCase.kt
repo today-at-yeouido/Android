@@ -1,8 +1,8 @@
 package com.example.tayapp.domain.use_case.login
 
 import com.example.tayapp.data.pref.model.UserPref
-import com.example.tayapp.data.remote.dto.bill.LoginDto
-import com.example.tayapp.data.remote.dto.bill.LoginResponse
+import com.example.tayapp.data.remote.dto.login.LoginDto
+import com.example.tayapp.data.remote.dto.login.LoginResponse
 import com.example.tayapp.domain.repository.LoginRepository
 import javax.inject.Inject
 
