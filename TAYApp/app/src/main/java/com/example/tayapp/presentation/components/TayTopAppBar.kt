@@ -27,6 +27,7 @@ import com.example.tayapp.presentation.ui.theme.lm_gray050
 import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.utils.BackButton
 import com.example.tayapp.presentation.utils.BookmarkButton
+import com.example.tayapp.presentation.utils.CancelButton
 import com.example.tayapp.presentation.utils.SearchButton
 import com.example.tayapp.utils.textDp
 
@@ -116,6 +117,8 @@ fun TayTopAppBarWithScrap(
 @Composable
 fun TayTopAppBarSearch(
     saveQuery: (String) -> Unit,
+    onSearchClick: (String) -> Unit,
+    onCloseClick:() -> Unit,
     upPress: () -> Unit = {}
 ) {
     Row(
@@ -136,37 +139,48 @@ fun TayTopAppBarSearch(
         val focusManager = LocalFocusManager.current
 
         BackButton(onClick = upPress)
-        TextField(
-            placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
-            value = query,
-            onValueChange = { query = it },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .background(lm_gray050),
-            textStyle = TextStyle(fontSize = 14.textDp),
-            shape = RoundedCornerShape(8.dp),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    saveQuery(query)
-                    focusManager.clearFocus()
-                    query = ""
-                }
-            ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrect = true,
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+        Box(
+            modifier = Modifier.weight(1f)
+        ) {
+            TextField(
+                placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
+                value = query,
+                onValueChange = { query = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(lm_gray050),
+                textStyle = TextStyle(fontSize = 14.textDp),
+                shape = RoundedCornerShape(8.dp),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onSearchClick(query)
+                        saveQuery(query)
+                        focusManager.clearFocus()
+                    }
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.None,
+                    autoCorrect = true,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done )
             )
-        )
+
+            if(query!=""){
+                CancelButton(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    onClick = {
+                        query = ""
+                        onCloseClick()
+                    }
+                )
+            }
+        }
 
         SearchButton(onClick = {
+            onSearchClick(query)
             saveQuery(query)
             focusManager.clearFocus()
-            query = ""
         })
-
     }
 }
 
@@ -207,15 +221,5 @@ private fun BackTopBarPreview() {
 private fun BookmarkTopBarPreview() {
     TayAppTheme() {
         //TayTopAppBarWithScrap(string = "스크랩")
-    }
-}
-
-@Preview
-@Composable
-private fun SearchTopBarPreview() {
-    TayAppTheme() {
-        TayTopAppBarSearch(
-            {}
-        )
     }
 }

@@ -15,6 +15,7 @@ import com.example.tayapp.presentation.screens.Profile.*
 import com.example.tayapp.presentation.screens.initial.LoginScreen
 import com.example.tayapp.presentation.screens.initial.RegisterScreen
 import com.example.tayapp.presentation.screens.initial.SplashScreen
+import com.example.tayapp.presentation.screens.search.Search
 import com.example.tayapp.presentation.states.TayAppState
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
 

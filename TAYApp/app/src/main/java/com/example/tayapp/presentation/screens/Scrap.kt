@@ -28,10 +28,10 @@ fun Scrap(
                 item { CardBillWithScrap() }
                 item { CardBillWithScrap() }
             } else {
-                item { CardSearch() }
-                item { CardSearch(list = listOf("as")) }
-                item { CardSearch(list = listOf("as","afsd")) }
-                item { CardSearch() }
+//                item { CardSearch() }
+//                item { CardSearch(list = listOf("as")) }
+//                item { CardSearch(list = listOf("as","afsd")) }
+//                item { CardSearch() }
 
             }
         }
