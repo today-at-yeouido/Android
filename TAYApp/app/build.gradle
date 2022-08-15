@@ -65,6 +65,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
+    implementation 'androidx.activity:activity-ktx:1.5.1'
 
     // DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
@@ -116,4 +117,7 @@ dependencies {
 
     //Pagination
     implementation("androidx.paging:paging-compose:1.0.0-alpha15")
+
+    // 카카오 로그인
+    implementation "com.kakao.sdk:v2-user:2.11.0"
 }

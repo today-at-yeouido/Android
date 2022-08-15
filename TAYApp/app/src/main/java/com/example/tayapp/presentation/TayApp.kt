@@ -3,7 +3,6 @@ package com.example.tayapp.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.tayapp.presentation.components.TayBottomBar
-import com.example.tayapp.presentation.components.TayHomeTopAppBar
 import com.example.tayapp.presentation.components.TayScaffold
 import com.example.tayapp.presentation.navigation.NavGraph
 import com.example.tayapp.presentation.states.rememberTayAppState

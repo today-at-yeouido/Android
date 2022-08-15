@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.navigation.ProfileDestination
+import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 
@@ -58,8 +59,10 @@ fun Profile(
                     .height(50.dp)
             )
             CardUserProfile()
-            ProfileSettings(navController)
-            TayDivider()
+            if(LoginState.loginState) {
+                ProfileSettings(navController)
+                TayDivider()
+            }
             ProfileLineItems()
             ProfileBottomButtons()
         }

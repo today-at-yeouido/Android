@@ -1,17 +1,24 @@
 package com.example.tayapp.di
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.room.Room
+import com.example.tayapp.TayApplication
 import com.example.tayapp.data.local.TayDatabase
 import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.remote.BillApi
-import com.example.tayapp.data.remote.LoginApi
 import com.example.tayapp.data.remote.Constants
 import com.example.tayapp.data.remote.Constants.BASE_URL
+import com.example.tayapp.data.remote.LoginApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -38,15 +45,23 @@ object AppModule {
     @Singleton
     @Provides
     fun providesAuthInterceptor(
-        pref : PrefDataSource
+        pref: PrefDataSource
     ): Interceptor = Interceptor { chain ->
+
+        val token = runBlocking(Dispatchers.IO) {
+            pref.getAccessToken().first()?.let {
+                "Bearer $it"
+            } ?: ""
+        }
+
         val newRequest = chain
             .request()
             .newBuilder()
-            .addHeader(Constants.AUTHORIZATION, PrefDataSource.TOKEN)
+            .apply {
+                if(token.isNotBlank())addHeader(Constants.AUTHORIZATION, token)
+            }
             .build()
 
-        pref.getUser()
         return@Interceptor chain
             .proceed(newRequest)
     }
@@ -54,7 +69,9 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        HttpLoggingInterceptor {
+            Log.d("Loggin", "Logging $it")
+        }.setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
     @Singleton
     @Provides
@@ -89,8 +106,7 @@ object AppModule {
     @Provides
     fun provideGetBillApi(
         retrofit: Retrofit
-    ): BillApi{
+    ): BillApi {
         return retrofit.create(BillApi::class.java)
     }
-
 }

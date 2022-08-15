@@ -3,19 +3,24 @@ package com.example.tayapp.presentation.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.screens.*
 import com.example.tayapp.presentation.screens.Profile.*
+import com.example.tayapp.presentation.screens.initial.LoginScreen
+import com.example.tayapp.presentation.screens.initial.RegisterScreen
+import com.example.tayapp.presentation.screens.initial.SplashScreen
 import com.example.tayapp.presentation.states.TayAppState
+import com.example.tayapp.presentation.viewmodels.LoginViewModel
 
 @Composable
 fun NavGraph(
-    appState: TayAppState,
-    innerPadding: PaddingValues
+    appState: TayAppState, innerPadding: PaddingValues
 ) {
     NavHost(
         navController = appState.navController,
@@ -25,7 +30,8 @@ fun NavGraph(
         tayNavGraph(
             navController = appState.navController,
             upPress = appState::upPress,
-            onBillSelected = appState::navigateToBillDetail
+            appState = appState,
+            onBillSelected = appState::navigateToBillDetail,
         )
     }
 }
@@ -33,12 +39,13 @@ fun NavGraph(
 private fun NavGraphBuilder.tayNavGraph(
     navController: NavController,
     upPress: () -> Unit,
-    onBillSelected: (Int, NavBackStackEntry) -> Unit
+    appState: TayAppState,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit,
 ) {
+    initialNavigation(appState)
+
     /** nested Navigation */
     homeNavigation(navController, upPress, onBillSelected)
-
-    initialNavigation(navController)
 
     detailNavigation(upPress)
 }
@@ -54,28 +61,24 @@ private fun NavGraphBuilder.detailNavigation(upPress: () -> Unit) {
     }
 }
 
-private fun NavGraphBuilder.initialNavigation(navController: NavController) {
+private fun NavGraphBuilder.initialNavigation(appState: TayAppState) {
     navigation(
-        route = AppGraph.INITIAL_GRAPH,
-        startDestination = Destinations.SPLASH
+        route = AppGraph.INITIAL_GRAPH, startDestination = Destinations.SPLASH
     ) {
-        initialGraph(navController)
+        initialGraph(appState.navController)
     }
 }
 
 private fun NavGraphBuilder.homeNavigation(
     navController: NavController,
     upPress: () -> Unit,
-    onBillSelected: (Int, NavBackStackEntry) -> Unit
+    onBillSelected: (Int, NavBackStackEntry) -> Unit,
 ) {
     navigation(
-        route = AppGraph.HOME_GRAPH,
-        startDestination = BottomBarTabs.Feed.route
+        route = AppGraph.HOME_GRAPH, startDestination = BottomBarTabs.Feed.route
     ) {
         homeGraph(
-            navController,
-            upPress = upPress,
-            onBillSelected = onBillSelected
+            navController, upPress = upPress, onBillSelected = onBillSelected
         )
     }
 }
@@ -83,20 +86,32 @@ private fun NavGraphBuilder.homeNavigation(
 private fun NavGraphBuilder.initialGraph(navController: NavController) {
     composable(
         route = Destinations.SPLASH
-    ) {
-        SplashScreen(navController)
+    ) { backStackEntry ->
+        val parentEntry = remember(backStackEntry) {
+            navController.getBackStackEntry(AppGraph.INITIAL_GRAPH)
+        }
+        val viewModel = hiltViewModel<LoginViewModel>(parentEntry)
+        SplashScreen(navController, viewModel)
     }
 
     composable(
         route = Destinations.LOGIN
-    ) {
-        LoginScreen(navController)
+    ) { backStackEntry ->
+        val parentEntry = remember(backStackEntry) {
+            navController.getBackStackEntry(AppGraph.INITIAL_GRAPH)
+        }
+        val viewModel = hiltViewModel<LoginViewModel>(parentEntry)
+        LoginScreen(navController, viewModel)
     }
 
     composable(
         route = Destinations.SIGN_UP
-    ) {
-        SignUpScreen(navController)
+    ) { backStackEntry ->
+        val parentEntry = remember(backStackEntry) {
+            navController.getBackStackEntry(AppGraph.INITIAL_GRAPH)
+        }
+        val viewModel = hiltViewModel<LoginViewModel>(parentEntry)
+        RegisterScreen(navController, viewModel)
     }
 }
 
@@ -119,29 +134,25 @@ fun NavGraphBuilder.homeGraph(
         //BillDetail()
     }
     navigation(
-        route = AppGraph.PROFILE_GRAPH,
-        startDestination = BottomBarDestination.PROFILE
+        route = AppGraph.PROFILE_GRAPH, startDestination = BottomBarDestination.PROFILE
     ) {
         addProfileGraph(navController, upPress)
     }
 }
 
 fun NavGraphBuilder.addProfileGraph(
-    navController: NavController,
-    upPress: () -> Unit
+    navController: NavController, upPress: () -> Unit
 ) {
     composable(route = BottomBarDestination.PROFILE) { from ->
         Profile(navController)
     }
     navigation(
-        route = AppGraph.PROFILE_ACCOUNT_GRAPH,
-        startDestination = ProfileDestination.ACCOUNT
+        route = AppGraph.PROFILE_ACCOUNT_GRAPH, startDestination = ProfileDestination.ACCOUNT
     ) {
         addProfileAccountGraph(navController, upPress)
     }
     navigation(
-        route = AppGraph.PROFILE_APPSETTING_GRAPH,
-        startDestination = ProfileDestination.APPSETTING
+        route = AppGraph.PROFILE_APPSETTING_GRAPH, startDestination = ProfileDestination.APPSETTING
     ) {
         addProfileAppSettingGraph(navController, upPress)
     }
@@ -155,8 +166,7 @@ fun NavGraphBuilder.addProfileGraph(
 }
 
 fun NavGraphBuilder.addProfileAccountGraph(
-    navController: NavController,
-    upPress: () -> Unit
+    navController: NavController, upPress: () -> Unit
 ) {
     composable(route = ProfileDestination.ACCOUNT) { from ->
         ProfileAccount(navController = navController, upPress)
@@ -168,8 +178,7 @@ fun NavGraphBuilder.addProfileAccountGraph(
 
 
 fun NavGraphBuilder.addProfileAppSettingGraph(
-    navController: NavController,
-    upPress: () -> Unit
+    navController: NavController, upPress: () -> Unit
 ) {
     composable(route = ProfileDestination.APPSETTING) { from ->
         ProfileAppSetting(navController = navController, upPress)

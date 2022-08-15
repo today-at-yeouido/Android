@@ -1,4 +1,4 @@
-package com.example.tayapp.presentation.screens
+package com.example.tayapp.presentation.screens.initial
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,21 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray700
+import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
-import com.example.tayapp.utils.getActivity
 import com.example.tayapp.utils.textDp
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController) {
-
-    val viewModel = hiltViewModel<LoginViewModel>(getActivity())
+fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -61,6 +58,7 @@ fun SplashScreen(navController: NavController) {
         delay(2000L)
         if (viewModel.isLogin) {
             navController.navigate(AppGraph.HOME_GRAPH)
+            LoginState.changeState()
         } else navController.navigate(Destinations.LOGIN)
     }
 }
