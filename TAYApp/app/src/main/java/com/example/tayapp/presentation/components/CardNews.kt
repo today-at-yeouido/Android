@@ -26,7 +26,8 @@ fun CardNews(
     TayCard(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(100.dp),
+        enable = true
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),

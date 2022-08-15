@@ -34,7 +34,8 @@ fun CardSearchMultiple(
     list: List<String> = listOf<String>("1", "2","3","4"),
 ){
     TayCard(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        enable = true
     ) {
         Column(
             modifier = Modifier.padding(Card_Inner_Padding),
