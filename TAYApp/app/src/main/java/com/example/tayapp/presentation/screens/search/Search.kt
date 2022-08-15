@@ -21,14 +21,19 @@ fun Search(
         TayTopAppBarSearch(
             saveQuery = viewModel::saveRecentTerm,
             onSearchClick = viewModel::getSearchResult,
-            onCloseClick = viewModel::onClearQuery
+            onCloseClick = viewModel::onClearQuery,
+            onChangeQuery = viewModel::onChangeQuery,
+            queryValue = searchState.query
         )
 
         if(!searchState.searching){
             SearchDefault(
                 onBillSelected = onBillSelected,
                 searchTerm = searchState.recentTerm,
-                removeRecentTerm = viewModel::removeRecentTerm
+                removeRecentTerm = viewModel::removeRecentTerm,
+                onChangeQuery = viewModel::onChangeQuery,
+                onSearchClick = viewModel::getSearchResult,
+                saveQuery = viewModel::saveRecentTerm
             )
         }else if(searchState.searching && searchState.bill.size == 0){
             NoResult()

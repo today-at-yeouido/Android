@@ -116,9 +116,11 @@ fun TayTopAppBarWithScrap(
 
 @Composable
 fun TayTopAppBarSearch(
-    saveQuery: (String) -> Unit,
-    onSearchClick: (String) -> Unit,
+    saveQuery: () -> Unit,
+    onSearchClick: () -> Unit,
     onCloseClick:() -> Unit,
+    onChangeQuery:(String) -> Unit,
+    queryValue: String,
     upPress: () -> Unit = {}
 ) {
     Row(
@@ -135,7 +137,6 @@ fun TayTopAppBarSearch(
 
     ) {
 
-        var query by remember { mutableStateOf("") }
         val focusManager = LocalFocusManager.current
 
         BackButton(onClick = upPress)
@@ -144,8 +145,8 @@ fun TayTopAppBarSearch(
         ) {
             TextField(
                 placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
-                value = query,
-                onValueChange = { query = it },
+                value = queryValue,
+                onValueChange = {onChangeQuery(it)},
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(lm_gray050),
@@ -153,8 +154,8 @@ fun TayTopAppBarSearch(
                 shape = RoundedCornerShape(8.dp),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        onSearchClick(query)
-                        saveQuery(query)
+                        onSearchClick()
+                        saveQuery()
                         focusManager.clearFocus()
                     }
                 ),
@@ -165,20 +166,17 @@ fun TayTopAppBarSearch(
                     imeAction = ImeAction.Done )
             )
 
-            if(query!=""){
+            if(queryValue!=""){
                 CancelButton(
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    onClick = {
-                        query = ""
-                        onCloseClick()
-                    }
+                    onClick = { onCloseClick() }
                 )
             }
         }
 
         SearchButton(onClick = {
-            onSearchClick(query)
-            saveQuery(query)
+            onSearchClick()
+            saveQuery()
             focusManager.clearFocus()
         })
     }

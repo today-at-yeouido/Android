@@ -1,6 +1,7 @@
 package com.example.tayapp.presentation.screens.search
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
@@ -21,7 +22,10 @@ import com.google.accompanist.flowlayout.FlowRow
 fun SearchDefault(
     onBillSelected: (Int) -> Unit,
     searchTerm: String,
-    removeRecentTerm: (Int) -> Unit
+    removeRecentTerm: (Int) -> Unit,
+    onChangeQuery: (String) -> Unit,
+    onSearchClick: () -> Unit,
+    saveQuery: () -> Unit
 ){
     LazyColumn(
         modifier = Modifier.padding(vertical = 20.dp, horizontal = KeyLine),
@@ -34,7 +38,11 @@ fun SearchDefault(
             )
             if (searchTerm.isNotEmpty()) {
                 searchTerm.split(" ").forEachIndexed { index, item ->
-                    SearchHistory(string = item, removeHistory = {removeRecentTerm(index)})
+                    SearchHistory(
+                        string = item,
+                        removeHistory = {removeRecentTerm(index)},
+                        onHistoryClick = {onChangeQuery(item); onSearchClick(); saveQuery()}
+                    )
                 }
             }
         }
@@ -43,8 +51,18 @@ fun SearchDefault(
                 string = "추천 검색어",
                 modifier = Modifier.padding(bottom = 10.dp)
             )
-            SearchTopic(list = datalist, onTagClick = {})
-
+            FlowRow(
+                modifier = Modifier,
+                mainAxisSpacing = 7.dp,
+                crossAxisSpacing = 7.dp
+            ) {
+                datalist.forEach { item ->
+                    TayTag(
+                        item,
+                        false,
+                        onClick = { onChangeQuery(item); onSearchClick(); saveQuery() })
+                }
+            }
         }
 
         item {
@@ -77,10 +95,13 @@ fun SearchDefault(
 }
 
 @Composable
-fun SearchHistory(string: String, removeHistory: () -> Unit) {
+fun SearchHistory(
+    string: String,
+    removeHistory: () -> Unit,
+    onHistoryClick: () -> Unit
+) {
     Row(
-        modifier = Modifier.padding(vertical = 5.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier.padding(vertical = 5.dp).clickable(onClick = onHistoryClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -101,23 +122,5 @@ fun SearchHistory(string: String, removeHistory: () -> Unit) {
             onClick = removeHistory,
             tint = lm_gray300
         )
-    }
-}
-
-@Composable
-fun SearchTopic(
-    list: List<String>,
-    modifier: Modifier = Modifier,
-    onTagClick: (String) -> Unit
-) {
-    FlowRow(
-        modifier = Modifier,
-        mainAxisSpacing = 7.dp,
-        crossAxisSpacing = 7.dp
-    ) {
-        list.forEach { it ->
-            TayTag(it, false, onClick = onTagClick)
-        }
-
     }
 }

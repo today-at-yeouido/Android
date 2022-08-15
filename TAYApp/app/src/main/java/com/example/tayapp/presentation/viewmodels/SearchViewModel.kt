@@ -28,8 +28,8 @@ class SearchViewModel @Inject constructor(
         getRecentTerm()
     }
 
-    fun getSearchResult(query: String){
-        getSearchUseCase(query).onEach { result ->
+    fun getSearchResult(){
+        getSearchUseCase(searchState.value.query).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     searchState.update {
@@ -55,7 +55,15 @@ class SearchViewModel @Inject constructor(
     fun onClearQuery(){
         viewModelScope.launch {
             searchState.update {
-                it.copy(bill = emptyList(), searching = false)
+                it.copy(bill = emptyList(), searching = false, query = "")
+            }
+        }
+    }
+
+    fun onChangeQuery(query: String){
+        viewModelScope.launch {
+            searchState.update {
+                it.copy(query = query)
             }
         }
     }
@@ -72,10 +80,10 @@ class SearchViewModel @Inject constructor(
 
 
 
-    fun saveRecentTerm(query: String) {
+    fun saveRecentTerm() {
         viewModelScope.launch {
             val result = searchState.value.recentTerm
-            getRecentSearchTermUseCase.saveRecentSearchUseCase("$query $result".trim())
+            getRecentSearchTermUseCase.saveRecentSearchUseCase("${searchState.value.query} $result".trim())
             searchState.update {
                 it.copy(recentTerm = getRecentSearchTermUseCase.getRecentSearchUseCase().first(), isLoading = false )
             }
