@@ -15,8 +15,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.KeyLine
-import com.example.tayapp.presentation.states.LoginState
-import com.example.tayapp.presentation.viewmodels.HomeViewModel
 import com.example.tayapp.presentation.viewmodels.FeedViewModel
 
 
