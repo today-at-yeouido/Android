@@ -9,21 +9,21 @@ import androidx.compose.material.IconToggleButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Circle
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.presentation.components.CardProfileListItemWithNext
 import com.example.tayapp.presentation.components.TayCard
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.presentation.viewmodels.FavoritCategoryViewModel
 
 var favoritedatalist = listOf<String>(
     "행정안전",
@@ -52,6 +52,9 @@ var favoritedatalist = listOf<String>(
 fun ProfileFavoriteSetting(
     upPress: () -> Unit
 ){
+    val viewModel = hiltViewModel<FavoritCategoryViewModel>()
+    val favoritCategory by viewModel.favoritCategoryState.collectAsState()
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -80,7 +83,7 @@ fun ProfileFavoriteSetting(
                 }
             }
             items(favoritedatalist){ item ->
-                ProfileFavoriteCard(title = item, isClicked = true)
+                ProfileFavoriteCard(title = item, isClicked = favoritCategory.favoritCategory.contains(item), onCardClick = viewModel::clickCategory)
             }
         }
     }
@@ -90,31 +93,25 @@ fun ProfileFavoriteSetting(
 fun ProfileFavoriteCard(
     title: String,
     subtitle: String = "국회운영 / 위원회 소관",
-    isClicked: Boolean
+    isClicked: Boolean,
+    onCardClick: (String) -> Unit
 ){
-    val checkedState = remember { mutableStateOf(true) }
 
     TayCard(
         modifier = Modifier.fillMaxWidth(),
         enable = true,
-        borderStroke = BorderStroke(1.dp, if(checkedState.value)lm_primary50 else TayAppTheme.colors.border)
+        borderStroke = BorderStroke(1.dp, if(isClicked)lm_primary50 else TayAppTheme.colors.border),
+        onClick = {onCardClick(title)}
     ) {
         Box(
             modifier = Modifier.padding(10.dp)
         ){
-            IconToggleButton(
-                modifier = Modifier
-                    .padding(0.dp)
-                    .size(Icon_Size),
-                checked = checkedState.value,
-                onCheckedChange = { checkedState.value = !checkedState.value }
-            ) {
-                Icon(
-                    imageVector = if (checkedState.value) TayIcons.check_circle else Icons.Outlined.Circle,
-                    contentDescription = null,
-                    tint = if (checkedState.value) lm_primary50 else lm_gray200,
-                )
-            }
+
+            Icon(
+                imageVector = if (isClicked) TayIcons.check_circle else Icons.Outlined.Circle,
+                contentDescription = null,
+                tint = if (isClicked) lm_primary50 else lm_gray200,
+            )
 
             Column(
                 modifier = Modifier
