@@ -81,7 +81,7 @@ val lm_sementic_yellow2 = Color(0xFFFAD729)
 val lm_sementic_blue1 = Color(0xFFB3D9FF)
 val lm_sementic_blue2 = Color(0xFF52A8FF)
 
-val dm_semantic_red1 = Color(0xFFFF7685)
+val dm_sementic_red1 = Color(0xFFFF7685)
 val dm_sementic_red2 = Color(0xFFE6283F)
 val dm_sementic_green1 = Color(0xFFB1FFAD)
 val dm_sementic_green2 = Color(0xFF6DE66B)
