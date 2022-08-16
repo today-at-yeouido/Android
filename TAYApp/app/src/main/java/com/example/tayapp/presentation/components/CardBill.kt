@@ -1,5 +1,10 @@
 package com.example.tayapp.presentation.components
 
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.util.Log
+import androidx.annotation.ColorInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,15 +13,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.domain.model.Bill
-import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
-import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.ui.theme.lm_gray075
-import com.example.tayapp.presentation.ui.theme.lm_gray600
+import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
 
 
@@ -27,7 +35,8 @@ import com.example.tayapp.presentation.utils.BookmarkButton
 fun CardBill(
     modifier: Modifier = Modifier,
     bill: Bill,
-    onClick: (Int) -> Unit ={}
+    onClick: (Int) -> Unit ={},
+    keyword: String = ""
 ){
     TayCard(
         modifier = modifier.fillMaxWidth(),
@@ -40,6 +49,7 @@ fun CardBill(
             status = bill.status,
             date = bill.proposeDt,
             people = bill.proposer,
+            keyword = keyword
         )
     }
 }
@@ -108,21 +118,52 @@ private fun CardBillDefault(
     bill: String = "제정안",
     status: String = "가결",
     date: String = "2022.06.17",
-    people: String = "박대출 등 10인"
+    people: String = "박대출 등 10인",
+    keyword: String = ""
 ){
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         PillList(bill, status)
-        Text(
-            text = title,
-            modifier = Modifier
-                .height(54.dp),
-            fontWeight = FontWeight.Medium,
-            fontSize = 16.sp,
-            maxLines = 2
-        )
+        val startIndex = title.indexOf(keyword)
+        if(keyword != "" && startIndex != -1){
+
+                Text(
+                text =  buildAnnotatedString {
+
+                    if(startIndex == 0){
+                        withStyle(style = SpanStyle(color = lm_primary50)) {
+                            append(keyword)
+                        }
+                        append(title.substring(keyword.length, title.length))
+                    }else{
+                        append(title.substring(0, startIndex))
+
+                        withStyle(style = SpanStyle(color = lm_primary50)) {
+                            append(keyword)
+                        }
+                        append(title.substring(startIndex + keyword.length, title.length))
+                    }
+                },
+
+                modifier = Modifier
+                    .height(54.dp),
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+                maxLines = 2
+            )
+        }else{
+            Text(
+                text = title,
+                modifier = Modifier
+                    .height(54.dp),
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+                maxLines = 2
+            )
+        }
         Row(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {

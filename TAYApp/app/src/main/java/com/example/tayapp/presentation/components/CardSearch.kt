@@ -21,9 +21,10 @@ import com.example.tayapp.presentation.utils.NavigateNextButton
 @Composable
 fun CardSearch(
     bill: Bill,
-    onBillSelected: (Int) -> Unit
+    onBillSelected: (Int) -> Unit,
+    keyword: String = ""
 ){
-    CardBill(bill = bill, onClick = onBillSelected)
+    CardBill(bill = bill, onClick = onBillSelected, keyword = keyword)
 }
 
 

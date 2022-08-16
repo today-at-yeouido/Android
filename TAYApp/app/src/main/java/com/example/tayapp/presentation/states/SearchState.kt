@@ -8,5 +8,6 @@ data class SearchState(
     val bill: List<BillDto> = emptyList(),
     val error: String = "",
     val recentTerm: String = "",
-    val query: String = ""
+    val query: String = "",
+    val keyword: String = ""
 )

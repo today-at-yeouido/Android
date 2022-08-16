@@ -19,7 +19,8 @@ import com.example.tayapp.presentation.ui.theme.KeyLine
 @Composable
 fun SearchResults(
     searchResult: List<BillDto>,
-    onBillClick: (Int) -> Unit
+    onBillClick: (Int) -> Unit,
+    keyword: String
 ){
     Column(modifier = Modifier.fillMaxSize().padding(KeyLine)) {
         Title(
@@ -33,7 +34,8 @@ fun SearchResults(
             items(searchResult){ it->
                 CardSearch(
                     bill = it.toDomain(),
-                    onBillSelected = onBillClick
+                    onBillSelected = onBillClick,
+                    keyword = keyword
                 )
             }
         }

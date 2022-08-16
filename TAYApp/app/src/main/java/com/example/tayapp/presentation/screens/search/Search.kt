@@ -38,7 +38,7 @@ fun Search(
         }else if(searchState.searching && searchState.bill.size == 0){
             NoResult()
         }else{
-            SearchResults(searchResult = searchState.bill, onBillClick = onBillSelected)
+            SearchResults(searchResult = searchState.bill, onBillClick = onBillSelected, keyword = searchState.keyword)
         }
     }
 }
