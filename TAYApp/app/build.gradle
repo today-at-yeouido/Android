@@ -120,4 +120,7 @@ dependencies {
 
     // 카카오 로그인
     implementation "com.kakao.sdk:v2-user:2.11.0"
+
+    //swipe refresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.19.0"
 }

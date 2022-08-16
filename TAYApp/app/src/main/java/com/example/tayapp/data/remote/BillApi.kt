@@ -11,10 +11,7 @@ import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECOMMENDED
 import com.example.tayapp.data.remote.Constants.POST_ADD_SCRAP
 import com.example.tayapp.data.remote.Constants.POST_DELETE_SCRAP
 import com.example.tayapp.data.remote.dto.bill.*
-import com.example.tayapp.data.remote.dto.scrap.AddScrapRequestDto
-import com.example.tayapp.data.remote.dto.scrap.AddScrapResponseDto
-import com.example.tayapp.data.remote.dto.scrap.DeleteScrapRequestDto
-import com.example.tayapp.data.remote.dto.scrap.DeleteScrapResponseDto
+import com.example.tayapp.data.remote.dto.scrap.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -64,5 +61,5 @@ interface BillApi {
     ) : Response<DeleteScrapResponseDto>
 
     @GET(GET_BILL_SCRAP)
-    suspend fun getBillScrap() : Response<List<BillDto>>
+    suspend fun getBillScrap() : Response<ScrapBillDto>
 }

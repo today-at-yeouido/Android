@@ -1,7 +1,9 @@
 package com.example.tayapp.domain.use_case.scrap
 
+import android.util.Log
 import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.scrap.AddScrapResponseDto
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.domain.repository.GetBillRepository
@@ -15,18 +17,18 @@ class GetScrapUseCase @Inject constructor(
     val repository: GetBillRepository,
     private val checkLoginUseCase: CheckLoginUseCase
 ) {
-    operator fun invoke(bill: Int): Flow<Resource<List<Bill>>> = flow {
+    operator fun invoke(): Flow<Resource<List<Bill>>> = flow {
         val response = repository.getBillScrap()
         emit(Resource.Loading())
         when (response.code()) {
-            202 -> {
-                val bill = response.body()!!.map { it.toDomain() }
+            200 -> {
+                val bill = response.body()!!.bill.map { it.toDomain() }
                 emit(Resource.Success(bill))
             }
             401 -> {
                 checkLoginUseCase()
                 val response = repository.getBillScrap()
-                val bill = response.body()!!.map { it.toDomain() }
+                val bill = response.body()!!.bill.map { it.toDomain() }
                 emit(Resource.Success(bill))
             }
             400 -> emit(

@@ -2,10 +2,7 @@ package com.example.tayapp.data.repository
 
 import com.example.tayapp.data.remote.BillApi
 import com.example.tayapp.data.remote.dto.bill.*
-import com.example.tayapp.data.remote.dto.scrap.AddScrapRequestDto
-import com.example.tayapp.data.remote.dto.scrap.AddScrapResponseDto
-import com.example.tayapp.data.remote.dto.scrap.DeleteScrapRequestDto
-import com.example.tayapp.data.remote.dto.scrap.DeleteScrapResponseDto
+import com.example.tayapp.data.remote.dto.scrap.*
 import com.example.tayapp.domain.repository.GetBillRepository
 import retrofit2.Response
 import javax.inject.Inject
@@ -53,7 +50,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.postDeleteScrap(DeleteScrapRequestDto(bill))
     }
 
-    override suspend fun getBillScrap(): Response<List<BillDto>> {
+    override suspend fun getBillScrap(): Response<ScrapBillDto> {
         return billApi.getBillScrap()
     }
 }
