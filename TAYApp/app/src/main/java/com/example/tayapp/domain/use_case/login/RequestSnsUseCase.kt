@@ -13,18 +13,18 @@ import javax.inject.Inject
 class RequestSnsUseCase @Inject constructor(
     private val repository: LoginRepository,
 ) {
-    suspend operator fun invoke(access: String): Boolean {
-        val r = repository.requestSnsLogin(SnsLoginDto(access))
+    suspend operator fun invoke(sns:String, access: String): Boolean {
+        val r = repository.requestSnsLogin(sns, SnsLoginDto(access))
         return when (r.code()) {
             200 -> {
-                Log.d("##99","sns success ${r.code()}")
+                Log.d("##99", "sns success ${r.code()}")
                 val user = r.body()!!.toPref()
                 repository.setLoginUser(user)
                 LoginState.user = user.toState()
                 true
             }
             else -> {
-                Log.d("##99","sns fali ${r.code()}")
+                Log.d("##99", "sns fali ${r.code()}")
                 false
             }
         }

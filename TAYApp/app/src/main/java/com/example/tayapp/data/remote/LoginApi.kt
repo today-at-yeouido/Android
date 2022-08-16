@@ -4,7 +4,7 @@ import com.example.tayapp.data.remote.dto.login.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
-
+import retrofit2.http.Path
 
 interface LoginApi {
 
@@ -28,8 +28,9 @@ interface LoginApi {
         @Body token: RefreshTokenDto
     ): Response<JwtRefreshResponse>
 
-    @POST(Constants.POST_SOCIAL_LOGIN)
+    @POST("user/{sns}/login/manage/")
     suspend fun postSocialLogin(
+        @Path("sns") sns: String,
         @Body snsLogin: SnsLoginDto
     ): Response<LoginResponse>
 }

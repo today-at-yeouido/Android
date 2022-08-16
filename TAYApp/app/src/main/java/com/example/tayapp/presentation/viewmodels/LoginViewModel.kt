@@ -25,6 +25,7 @@ import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -69,67 +70,72 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun kakaoLogin(nav: () -> Unit) {
-        viewModelScope.launch {
-            if (handleKakaoLogin()) {
-                nav()
-            }
-        }
-    }
-
-    private suspend fun handleKakaoLogin(): Boolean = suspendCoroutine<Boolean> { continuation ->
-        val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-            if (error != null) {
-                Log.e("##77", "카카오계정으로 로그인 실패99", error)
-                continuation.resume(false)
-            } else if (token != null) {
-                Log.i("##77", "카카오계정으로 로그인 성공 ${token.accessToken}")
-                continuation.resume(true)
-            }
-        }
-
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-            UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-                if (error != null) {
-                    Log.e("##77", "카카오톡으로 로그인 실패55", error)
-
-                    // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
-                    // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
-                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                        return@loginWithKakaoTalk
-                    }
-
-                    // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
-                    UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
-                } else if (token != null) {
-                    Log.i("##77", "카카오톡으로 로그인 성공 ${token.accessToken}")
-                }
-            }
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
-        }
-    }
-
-
     private fun checkLogin() =
         viewModelScope.launch {
             isLogin = loginUseCases.checkLoginUseCase()
-            if(isLogin){
+            if (isLogin) {
                 loginUseCases.getUserUseCase()
             }
         }
 
+    fun kakaoLogin(nav: () -> Unit) {
+        viewModelScope.launch {
+            val s = handleKakaoLogin()
+            val a = loginUseCases.requestSnsUseCase("kakao", s!!)
+            Log.d("##99", "viewModel token $s")
+            if (a) {
+                nav()
+            }
+        }
+    }
 
     fun naverLogin(nav: () -> Unit) {
         viewModelScope.launch {
             val s = startNaverLogin()
             Log.d("##99", "viewModel token $s")
-            val a = loginUseCases.requestSnsUseCase(s)
-            if (a){
+            val a = loginUseCases.requestSnsUseCase("naver", s)
+            if (a) {
                 nav()
             }
         }
     }
+
+    private suspend fun handleKakaoLogin(): String? =
+        suspendCancellableCoroutine { continuation ->
+            // 카카오계정으로 로그인 공통 callback 구성
+// 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
+            val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+                if (error != null) {
+                    Log.e("##88", "카카오계정으로 로그인 실패", error)
+
+                } else if (token != null) {
+                    Log.i("##88", "카카오계정으로 로그인 성공 ${token.accessToken}")
+                    continuation.resume(token.accessToken)
+                }
+            }
+
+// 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+                UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                    if (error != null) {
+                        Log.e("##88", "카카오톡으로 로그인 실패", error)
+
+                        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+                        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                            return@loginWithKakaoTalk
+                        }
+
+                        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+                        UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+                    } else if (token != null) {
+                        Log.i("##88", "카카오톡으로 로그인 성공 ${token.accessToken}")
+                    }
+                }
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+            }
+        }
 
     /**
      * 로그인

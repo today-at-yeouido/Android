@@ -19,7 +19,7 @@ interface LoginRepository {
     suspend fun requestLogout(token: RefreshTokenDto): Response<LogoutResponse>
     suspend fun requestRefreshToken(token: RefreshTokenDto): Response<JwtRefreshResponse>
     suspend fun updateAccessToken(accessToken: String)
-    suspend fun requestSnsLogin(snsLoginDto: SnsLoginDto): Response<LoginResponse>
+    suspend fun requestSnsLogin(sns: String, snsLoginDto: SnsLoginDto): Response<LoginResponse>
     suspend fun prefLogout()
 }
 

@@ -48,8 +48,8 @@ class LoginRepositoryImpl @Inject constructor(
         return loginApi.postJwtRefresh(token)
     }
 
-    override suspend fun requestSnsLogin(snsLoginDto: SnsLoginDto): Response<LoginResponse> {
-        return loginApi.postSocialLogin(snsLoginDto)
+    override suspend fun requestSnsLogin(sns:String, snsLoginDto: SnsLoginDto): Response<LoginResponse> {
+        return loginApi.postSocialLogin(sns, snsLoginDto)
     }
 
     override suspend fun prefLogout() {

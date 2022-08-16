@@ -27,6 +27,6 @@ class TayApplication:Application(){
 
         NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret , naverClientName)
         // Kakao SDK 초기화
-        KakaoSdk.init(this, "46348017a67389ced8975f0a92251cdd")
+        KakaoSdk.init(this, "c323d5d48d4d822eaa2a0fbd6e3ca567")
     }
 }
