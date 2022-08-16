@@ -57,31 +57,31 @@ fun Pill(
         "접수" -> {
             Pill(
                 textColor = lm_gray700,
-                backgroundColor = if (isPressed) lm_gray700 else lm_gray600
+                backgroundColor = lm_gray100
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
-        "심사", "심의" -> {
+        "심사", "심의", "정부이송" -> {
             Pill(
                 textColor = lm_gray700,
-                backgroundColor = if (isPressed) dm_sementic_yellow2 else lm_sementic_yellow2
+                backgroundColor = lm_semantic_yellow1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
-        "가결", "정부이송", "공포", "대안" -> {
+        "가결", "공포" -> {
             Pill(
                 textColor = lm_gray700,
-                backgroundColor = if (isPressed) dm_sementic_green2 else dm_sementic_green2
+                backgroundColor = lm_sememtic_green1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
-        "부결", "철회", "폐기" -> {
+        "대안", "부결", "철회", "폐기" -> {
             Pill(
                 textColor = lm_gray000,
-                backgroundColor = if (isPressed) dm_sementic_red2 else lm_sementic_red2
+                backgroundColor = lm_sementic_red1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }

@@ -207,13 +207,13 @@ private fun CardBillProgress(onProgressClick: () -> Unit) {
                 }
                 LazyRow {
                     item{
-                        BillProgressItem("접수")
+                        BillProgressItem("접수", "22.07.16")
                         BillArrow()
-                        BillProgressItem("심사")
+                        BillProgressItem("심사", "22.07.16")
                         BillArrow()
                         BillProgressItem("심의")
                         BillArrow()
-                        BillProgressItem("부결")
+                        BillProgressItem("가결")
                         BillArrow()
                         BillProgressItem("정부이송")
                         BillArrow()
@@ -395,19 +395,23 @@ private fun BillRevisionItem() {
 
 @Composable
 private fun BillProgressItem(
-    string: String
+    string: String,
+    date: String? = null
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(9.dp)
     ) {
-        DashPill("$string")
-        Text(
-            text = "22.07.20",
-            fontSize = 9.sp,
-            color = lm_gray600,
-            fontWeight = FontWeight.Light
-        )
+        if(date.isNullOrBlank()) DashPill(string)
+        else {
+            Pill(string)
+            Text(
+                text = "22.07.20",
+                fontSize = 9.sp,
+                color = lm_gray600,
+                fontWeight = FontWeight.Light
+            )
+        }
     }
 }
 
