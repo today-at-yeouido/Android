@@ -49,22 +49,22 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+
+        searchState.update {
+            it.copy(keyword = searchState.value.query)
+        }
     }
 
 
     fun onClearQuery(){
-        viewModelScope.launch {
-            searchState.update {
-                it.copy(bill = emptyList(), searching = false, query = "")
-            }
+        searchState.update {
+            it.copy(bill = emptyList(), searching = false, query = "", keyword = "")
         }
     }
 
     fun onChangeQuery(query: String){
-        viewModelScope.launch {
-            searchState.update {
-                it.copy(query = query)
-            }
+        searchState.update {
+            it.copy(query = query)
         }
     }
 
