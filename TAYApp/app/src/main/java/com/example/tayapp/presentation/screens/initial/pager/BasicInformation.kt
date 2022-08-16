@@ -23,7 +23,7 @@ import com.example.tayapp.utils.textDp
 
 @Composable
 fun BoxScope.BasicInformation(
-    viewModel: LoginViewModel,
+    requestRegister: (String, String, String) -> Unit,
     onClick: () -> Unit
 ) {
 
@@ -115,7 +115,7 @@ fun BoxScope.BasicInformation(
 
     TayButton(
         onClick = {
-            viewModel.requestRegister(email, pass1, pass2)
+            requestRegister(email, pass1, pass2)
             onClick()
         },
         modifier = Modifier

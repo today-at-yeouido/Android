@@ -13,7 +13,7 @@ import javax.inject.Inject
 class RequestSnsUseCase @Inject constructor(
     private val repository: LoginRepository,
 ) {
-    suspend operator fun invoke(sns:String, access: String): Boolean {
+    suspend operator fun invoke(sns: String, access: String): Boolean {
         val r = repository.requestSnsLogin(sns, SnsLoginDto(access))
         return when (r.code()) {
             200 -> {

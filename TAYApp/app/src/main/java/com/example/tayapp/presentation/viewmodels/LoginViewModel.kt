@@ -9,13 +9,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.R
 import com.example.tayapp.TayApplication
+import com.example.tayapp.data.pref.model.toState
 import com.example.tayapp.data.remote.dto.login.LoginDto
 import com.example.tayapp.data.remote.dto.login.RegistrationDto
 import com.example.tayapp.domain.use_case.AuthGoogleUseCase
 import com.example.tayapp.domain.use_case.LoginUseCases
 import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.states.LoginUserUiState
-import com.example.tayapp.presentation.states.UserInfo
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -32,12 +32,12 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.math.log
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -46,19 +46,19 @@ class LoginViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
+    var user by mutableStateOf(LoginUserUiState())
+        private set
+
+    var isLogin = MutableStateFlow(false)
+        private set
+
     init {
         checkLogin()
     }
 
-    var user by mutableStateOf(LoginUserUiState())
-        private set
-
-    var isLogin by mutableStateOf(false)
-        private set
-
     private val context = TayApplication.cxt()
 
-    fun requestLogin(e: String, p1: String, nav: () -> Unit) {
+    fun requestLogin(e: String, p1: String) {
         viewModelScope.launch {
             user = LoginUserUiState(e, p1)
             val response = loginUseCases.requestLoginUseCase(
@@ -67,7 +67,7 @@ class LoginViewModel @Inject constructor(
                     user.password
                 )
             )
-            if (response) nav()
+            if (response) isLogin.value = true
         }
     }
 
@@ -81,51 +81,48 @@ class LoginViewModel @Inject constructor(
 
     private fun checkLogin() =
         viewModelScope.launch {
-            isLogin = loginUseCases.checkLoginUseCase()
-            if (isLogin) {
-                loginUseCases.getUserUseCase()
+            isLogin.value = loginUseCases.checkLoginUseCase()
+            if (isLogin.value) {
+                val user = loginUseCases.getUserUseCase()
+                LoginState.user = user.toState()
             }
         }
 
-    fun kakaoLogin(nav: () -> Unit) {
+    fun kakaoLogin() {
         viewModelScope.launch {
-            val s = handleKakaoLogin()
-            val a = loginUseCases.requestSnsUseCase("kakao", s!!)
-            Log.d("##99", "viewModel token $s")
-            if (a) {
-                nav()
-            }
-        }
-    }
-
-    fun naverLogin(nav: () -> Unit) {
-        viewModelScope.launch {
-            val s = startNaverLogin()
-            Log.d("##99", "viewModel token $s")
-            val a = loginUseCases.requestSnsUseCase("naver", s)
-            if (a) {
-                nav()
-            }
+            val accessToken = handleKakaoLogin()
+            val res = loginUseCases.requestSnsUseCase("kakao", accessToken!!)
+            Log.d("##12", "카카오 $res, 로그인스테이트 ${isLogin.value}")
+            if (res) isLogin.value = true
+            Log.d("##12", "카카오 $res, 로그인스테이트 ${isLogin.value}")
         }
     }
 
-
-
-    fun googleLogin(account: GoogleSignInAccount, nav: () -> Unit){
+    fun naverLogin() {
         viewModelScope.launch {
-            val user = account.serverAuthCode
-            val a = authGoogleUseCase(
-                authCode = user!!,
+            val accessToken = handleNaverLogin()
+            val res = loginUseCases.requestSnsUseCase("naver", accessToken)
+            Log.d("##12", "네이버 $res , 로그인스테이트 ${isLogin.value}")
+            if (res) isLogin.value = true
+            Log.d("##12", "네이버 $res , 로그인스테이트 ${isLogin.value}")
+        }
+    }
+
+
+    fun googleLogin(account: GoogleSignInAccount) {
+        viewModelScope.launch {
+            val serverAuthCode = account.serverAuthCode
+            val accessToken = authGoogleUseCase(
+                authCode = serverAuthCode!!,
                 clientId = context.getString(R.string.google_client_ID),
                 clientSecret = context.getString(R.string.google_client_secret)
             )
 
-
-            Log.d("##88", "구글 로그인 실패 $user")
-            val b = loginUseCases.requestSnsUseCase("google", a)
-            if (b) {
-                nav()
-            }
+            Log.d("##88", "구글 로그인  $serverAuthCode")
+            val res = loginUseCases.requestSnsUseCase("google", accessToken)
+            Log.d("##12", "구글 $res, 로그인스테이트 ${isLogin.value}")
+            if (res) isLogin.value = true
+            Log.d("##12", "구글 $res, 로그인스테이트 ${isLogin.value}")
         }
     }
 
@@ -136,9 +133,6 @@ class LoginViewModel @Inject constructor(
             .requestEmail()
             .requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
             .requestServerAuthCode(clientId)
-            .requestIdToken(clientId)
-            .requestId()
-            .requestProfile()
             .build()
 
         return GoogleSignIn.getClient(context, gso)
@@ -147,7 +141,7 @@ class LoginViewModel @Inject constructor(
     private suspend fun handleKakaoLogin(): String? =
         suspendCancellableCoroutine { continuation ->
             // 카카오계정으로 로그인 공통 callback 구성
-// 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
+            // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
                     Log.e("##88", "카카오계정으로 로그인 실패 $error")
@@ -158,7 +152,7 @@ class LoginViewModel @Inject constructor(
                 }
             }
 
-// 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+            // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
                 UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
                     if (error != null) {
@@ -184,7 +178,7 @@ class LoginViewModel @Inject constructor(
     /**
      * 로그인
      * authenticate() 메서드를 이용한 로그인 */
-    suspend fun startNaverLogin(): String = suspendCoroutine<String> { continuation ->
+    suspend fun handleNaverLogin(): String = suspendCoroutine<String> { continuation ->
 
         var naverToken: String? = ""
 
@@ -225,7 +219,6 @@ class LoginViewModel @Inject constructor(
                 onFailure(errorCode, message)
             }
         }
-
         NaverIdLoginSDK.authenticate(context, oauthLoginCallback)
     }
 

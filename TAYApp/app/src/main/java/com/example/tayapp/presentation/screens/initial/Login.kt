@@ -40,28 +40,35 @@ fun LoginScreen(
     viewModel: LoginViewModel,
     upPress: () -> Unit = {}
 ) {
-    val resultLauncher = activityLauncher(
-        onSuccess = { intent ->
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
-            viewModel.googleLogin(task.result) { navController.navigate(AppGraph.HOME_GRAPH) }
-//            navController.popBackStack()
-        },
-        onError = { Log.d("##99", "오류 발생") }
-    )
+    val loginState by viewModel.isLogin.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         TayTopAppBarWithBack(string = "로그인", upPress)
-        Login(navController, viewModel, resultLauncher)
+        Login(
+            viewModel::requestLogin,
+            viewModel::kakaoLogin,
+            viewModel::naverLogin,
+            viewModel::googleLogin,
+            viewModel::getGoogleLoginAuth
+        ) { navController.navigate(it) }
+    }
+
+    LaunchedEffect(key1 = loginState) {
+        Log.d("##88", "런치드 이펙트 $loginState")
+        if (loginState) navController.navigate(AppGraph.HOME_GRAPH)
     }
 }
 
 @Composable
 private fun Login(
-    navController: NavController,
-    viewModel: LoginViewModel,
-    resultLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
+    requestLogin: (String, String) -> Unit,
+    kakaoLogin: () -> Unit,
+    naverLogin: () -> Unit,
+    googleLogin: (GoogleSignInAccount) -> Unit,
+    googleAuth: () -> GoogleSignInClient,
+    navigate: (String) -> Unit
 ) {
 
     Column(
@@ -70,23 +77,22 @@ private fun Login(
             .padding(horizontal = KeyLine)
     ) {
         Spacer(Modifier.height(40.dp))
-        InputField(viewModel::requestLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
+        InputField(requestLogin)
         Spacer(Modifier.height(50.dp))
         SocialField(
-            viewModel::kakaoLogin,
-            viewModel::naverLogin,
-            resultLauncher,
-            viewModel::getGoogleLoginAuth,
-        ) { navController.navigate(AppGraph.HOME_GRAPH) }
+            kakaoLogin,
+            naverLogin,
+            googleLogin,
+            googleAuth
+        )
         Spacer(Modifier.height(80.dp))
-        RegisterField { navController.navigate(it) }
+        RegisterField { navigate(Destinations.SIGN_UP) }
     }
 }
 
 @Composable
 private fun InputField(
-    requestLogin: (String, String, () -> Unit) -> Unit,
-    navigate: () -> Unit
+    requestLogin: (String, String) -> Unit
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -139,7 +145,7 @@ private fun InputField(
 
         TayButton(
             onClick = {
-                requestLogin(email, password, navigate)
+                requestLogin(email, password)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,12 +169,18 @@ private fun InputField(
 
 @Composable
 private fun SocialField(
-    kakaoLogin: (() -> Unit) -> Unit,
-    naverLogin: (() -> Unit) -> Unit,
-    resultLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-    aa: () -> GoogleSignInClient,
-    nav: () -> Unit
+    kakaoLogin: () -> Unit,
+    naverLogin: () -> Unit,
+    googleLogin: (GoogleSignInAccount) -> Unit,
+    googleAuth: () -> GoogleSignInClient,
 ) {
+    val resultLauncher = activityLauncher(
+        onSuccess = { intent ->
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
+            googleLogin(task.result)
+        },
+        onError = { Log.d("##99", "오류 발생") }
+    )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -178,27 +190,37 @@ private fun SocialField(
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             Canvas(modifier = Modifier
                 .size(50.dp)
                 .clickable {
-                    val client = aa()
-                    resultLauncher.launch(client.signInIntent)
+                    kakaoLogin()
                 }) {
                 drawCircle(Color.Yellow)
             }
+
             Canvas(modifier = Modifier
                 .size(50.dp)
                 .clickable {
-                    naverLogin { nav() }
+                    naverLogin()
                 }) {
                 drawCircle(Color.Green)
+            }
+
+            Canvas(modifier = Modifier
+                .size(50.dp)
+                .clickable {
+                    val client = googleAuth()
+                    resultLauncher.launch(client.signInIntent)
+                }) {
+                drawCircle(Color.Black)
             }
         }
     }
 }
 
 @Composable
-private fun RegisterField(navigate: (String) -> Unit) {
+private fun RegisterField(navigate: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(13.dp)
@@ -212,7 +234,7 @@ private fun RegisterField(navigate: (String) -> Unit) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    navigate(Destinations.SIGN_UP)
+                    navigate()
                 }
             ) {
                 Text("이메일로 가입하기", color = lm_sementic_blue2)
@@ -223,6 +245,6 @@ private fun RegisterField(navigate: (String) -> Unit) {
         Text(
             "로그인 없이 이용하기",
             fontSize = 18.sp,
-            modifier = Modifier.clickable { navigate(AppGraph.HOME_GRAPH) })
+            modifier = Modifier.clickable { navigate() })
     }
 }

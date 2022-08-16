@@ -21,7 +21,6 @@ import com.example.tayapp.utils.textDp
 
 @Composable
 fun BoxScope.TermsOfService(
-    viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
     var bool1 by remember { mutableStateOf(false) }

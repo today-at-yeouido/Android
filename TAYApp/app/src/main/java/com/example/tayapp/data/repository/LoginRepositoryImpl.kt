@@ -53,7 +53,7 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestSnsLogin(sns:String, snsLoginDto: SnsLoginDto): Response<LoginResponse> {
-        return loginApi.postSocialLogin(snsLoginDto)
+        return loginApi.postSocialLogin(sns, snsLoginDto)
     }
 
     override suspend fun prefLogout() {

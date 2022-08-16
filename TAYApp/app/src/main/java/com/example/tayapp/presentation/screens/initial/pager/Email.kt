@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BoxScope.Email(
-    viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
     Column {
