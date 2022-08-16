@@ -1,5 +1,6 @@
 package com.example.tayapp.domain.use_case.scrap
 
+import android.util.Log
 import com.example.tayapp.data.remote.dto.scrap.AddScrapResponseDto
 import com.example.tayapp.domain.repository.GetBillRepository
 import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
@@ -15,6 +16,7 @@ class PostAddScrapUseCase @Inject constructor(
     operator fun invoke(bill: Int): Flow<Resource<AddScrapResponseDto>> = flow {
         val response = repository.postAddScrap(bill)
         emit(Resource.Loading())
+        Log.d("스크랩", response.code().toString())
         when (response.code()) {
             202 -> {
                 emit(Resource.Success(response.body()!!))
