@@ -2,6 +2,7 @@ package com.example.tayapp.data.remote
 
 object Constants {
     const val BASE_URL = "http://todayeouido.co.kr/yeouido/v0/"
+    const val GOOGLE_URL = "https://www.googleapis.com/"
     const val AUTHORIZATION = "Authorization"
 
     const val POST_REGISTRATION = "account/registration/"

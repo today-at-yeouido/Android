@@ -10,6 +10,8 @@ import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.remote.BillApi
 import com.example.tayapp.data.remote.Constants
 import com.example.tayapp.data.remote.Constants.BASE_URL
+import com.example.tayapp.data.remote.Constants.GOOGLE_URL
+import com.example.tayapp.data.remote.GoogleApi
 import com.example.tayapp.data.remote.LoginApi
 import dagger.Module
 import dagger.Provides
@@ -24,6 +26,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -89,6 +93,7 @@ object AppModule {
 
     @Singleton
     @Provides
+    @Named("normal")
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -99,8 +104,27 @@ object AppModule {
 
     @Singleton
     @Provides
+    @Named("google")
+    fun provideGoogleRetrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(GOOGLE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideGoogleApi(
+        @Named("google") retrofit: Retrofit
+    ): GoogleApi {
+        return retrofit.create(GoogleApi::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun provideRegistrationApi(
-        retrofit: Retrofit
+        @Named("normal") retrofit: Retrofit
     ): LoginApi {
         return retrofit.create(LoginApi::class.java)
     }
@@ -108,7 +132,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideGetBillApi(
-        retrofit: Retrofit
+        @Named("normal") retrofit: Retrofit
     ): BillApi {
         return retrofit.create(BillApi::class.java)
     }

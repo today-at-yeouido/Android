@@ -25,6 +25,8 @@ class RequestSnsUseCase @Inject constructor(
             }
             else -> {
                 Log.d("##99", "sns fali ${r.code()}")
+                Log.d("##99", "sns message ${r.body()}")
+                Log.d("##99", "sns error message ${r.errorBody()}")
                 false
             }
         }

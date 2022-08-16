@@ -2,6 +2,8 @@ package com.example.tayapp.domain.repository
 
 
 import com.example.tayapp.data.pref.model.UserPref
+import com.example.tayapp.data.remote.dto.LoginGoogleRequest
+import com.example.tayapp.data.remote.dto.LoginGoogleResponse
 import com.example.tayapp.data.remote.dto.login.*
 import com.example.tayapp.data.repository.LoginRepositoryImpl
 import dagger.Binds
@@ -21,6 +23,7 @@ interface LoginRepository {
     suspend fun updateAccessToken(accessToken: String)
     suspend fun requestSnsLogin(sns: String, snsLoginDto: SnsLoginDto): Response<LoginResponse>
     suspend fun prefLogout()
+    suspend fun googleAuth(request: LoginGoogleRequest): Response<LoginGoogleResponse>?
 }
 
 /** 인터페이스 주입을 위한 모듈 */

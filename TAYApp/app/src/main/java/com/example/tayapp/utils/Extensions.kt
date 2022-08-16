@@ -1,6 +1,12 @@
 package com.example.tayapp.utils
 
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -245,3 +251,21 @@ fun Modifier.dashedBorder(width: Dp, brush: Brush, shape: Shape, on: Dp, off: Dp
         properties["shape"] = shape
     }
     )
+
+/** 다른 액티비티를 실행하는 런처를 반환한다. */
+@Composable
+fun activityLauncher(
+    onError: () -> Unit = {},
+    onSuccess: (Intent) -> Unit = {}
+) = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    if (result.resultCode == Activity.RESULT_OK) {
+        val intent = result.data
+
+        if (result.data != null) onSuccess(intent!!)
+        else Log.d("##99","ActivityResult: 전달받은 데이터가 없습니다.")
+    } else {
+        Log.d("##99","result code ${result.resultCode}")
+        Log.d("##99","result data ${result.data}")
+        onError()
+    }
+}

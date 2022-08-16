@@ -7,13 +7,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tayapp.R
 import com.example.tayapp.TayApplication
 import com.example.tayapp.data.remote.dto.login.LoginDto
 import com.example.tayapp.data.remote.dto.login.RegistrationDto
+import com.example.tayapp.domain.use_case.AuthGoogleUseCase
 import com.example.tayapp.domain.use_case.LoginUseCases
 import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.states.LoginUserUiState
 import com.example.tayapp.presentation.states.UserInfo
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -34,6 +42,7 @@ import kotlin.math.log
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
+    private val authGoogleUseCase: AuthGoogleUseCase,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -100,13 +109,48 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+
+
+    fun googleLogin(account: GoogleSignInAccount, nav: () -> Unit){
+        viewModelScope.launch {
+            val user = account.serverAuthCode
+            val a = authGoogleUseCase(
+                authCode = user!!,
+                clientId = context.getString(R.string.google_client_ID),
+                clientSecret = context.getString(R.string.google_client_secret)
+            )
+
+
+            Log.d("##88", "구글 로그인 실패 $user")
+            val b = loginUseCases.requestSnsUseCase("google", a)
+            if (b) {
+                nav()
+            }
+        }
+    }
+
+    fun getGoogleLoginAuth(): GoogleSignInClient {
+        val clientId = context.getString(R.string.google_client_ID)
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
+            .requestServerAuthCode(clientId)
+            .requestIdToken(clientId)
+            .requestId()
+            .requestProfile()
+            .build()
+
+        return GoogleSignIn.getClient(context, gso)
+    }
+
     private suspend fun handleKakaoLogin(): String? =
         suspendCancellableCoroutine { continuation ->
             // 카카오계정으로 로그인 공통 callback 구성
 // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    Log.e("##88", "카카오계정으로 로그인 실패", error)
+                    Log.e("##88", "카카오계정으로 로그인 실패 $error")
 
                 } else if (token != null) {
                     Log.i("##88", "카카오계정으로 로그인 성공 ${token.accessToken}")

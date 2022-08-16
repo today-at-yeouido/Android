@@ -28,9 +28,9 @@ interface LoginApi {
         @Body token: RefreshTokenDto
     ): Response<JwtRefreshResponse>
 
-    @POST("user/{sns}/login/manage/")
+    @POST("user/google/login/manage/")
     suspend fun postSocialLogin(
-        @Path("sns") sns: String,
+//        @Path("sns") sns: String,
         @Body snsLogin: SnsLoginDto
     ): Response<LoginResponse>
 }

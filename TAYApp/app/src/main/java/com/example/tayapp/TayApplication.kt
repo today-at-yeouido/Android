@@ -20,6 +20,7 @@ class TayApplication:Application(){
         super.onCreate()
         // 다른 초기화 코드들
 
+
         val naverClientId = getString(R.string.social_login_info_naver_client_id)
         val naverClientSecret = getString(R.string.social_login_info_naver_client_secret)
         val naverClientName = getString(R.string.social_login_info_naver_client_name)

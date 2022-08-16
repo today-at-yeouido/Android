@@ -2,7 +2,10 @@ package com.example.tayapp.data.repository
 
 import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.pref.model.UserPref
+import com.example.tayapp.data.remote.GoogleApi
 import com.example.tayapp.data.remote.LoginApi
+import com.example.tayapp.data.remote.dto.LoginGoogleRequest
+import com.example.tayapp.data.remote.dto.LoginGoogleResponse
 import com.example.tayapp.data.remote.dto.login.*
 import com.example.tayapp.domain.repository.LoginRepository
 import kotlinx.coroutines.flow.first
@@ -13,7 +16,8 @@ import javax.inject.Singleton
 @Singleton
 class LoginRepositoryImpl @Inject constructor(
     private val pref: PrefDataSource,
-    private val loginApi: LoginApi
+    private val loginApi: LoginApi,
+    private val google: GoogleApi
 ) : LoginRepository {
 
     override suspend fun getUser(): UserPref {
@@ -49,10 +53,14 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override suspend fun requestSnsLogin(sns:String, snsLoginDto: SnsLoginDto): Response<LoginResponse> {
-        return loginApi.postSocialLogin(sns, snsLoginDto)
+        return loginApi.postSocialLogin(snsLoginDto)
     }
 
     override suspend fun prefLogout() {
         pref.logoutUser()
+    }
+
+    override suspend fun googleAuth(request: LoginGoogleRequest): Response<LoginGoogleResponse>? {
+       return google.fetchGoogleAuthInfo(request)
     }
 }

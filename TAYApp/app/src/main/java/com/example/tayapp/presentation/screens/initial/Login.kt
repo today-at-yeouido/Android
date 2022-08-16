@@ -1,5 +1,9 @@
 package com.example.tayapp.presentation.screens.initial
 
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.ActivityResult
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,11 +24,15 @@ import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
-import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
+import com.example.tayapp.utils.activityLauncher
 import com.example.tayapp.utils.textDp
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.tasks.Task
 
 @Composable
 fun LoginScreen(
@@ -32,17 +40,29 @@ fun LoginScreen(
     viewModel: LoginViewModel,
     upPress: () -> Unit = {}
 ) {
+    val resultLauncher = activityLauncher(
+        onSuccess = { intent ->
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
+            viewModel.googleLogin(task.result) { navController.navigate(AppGraph.HOME_GRAPH) }
+//            navController.popBackStack()
+        },
+        onError = { Log.d("##99", "오류 발생") }
+    )
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         TayTopAppBarWithBack(string = "로그인", upPress)
-        Login(navController, viewModel)
+        Login(navController, viewModel, resultLauncher)
     }
 }
 
 @Composable
-private fun Login(navController: NavController, viewModel: LoginViewModel) {
+private fun Login(
+    navController: NavController,
+    viewModel: LoginViewModel,
+    resultLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
+) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,7 +74,9 @@ private fun Login(navController: NavController, viewModel: LoginViewModel) {
         Spacer(Modifier.height(50.dp))
         SocialField(
             viewModel::kakaoLogin,
-            viewModel::naverLogin
+            viewModel::naverLogin,
+            resultLauncher,
+            viewModel::getGoogleLoginAuth,
         ) { navController.navigate(AppGraph.HOME_GRAPH) }
         Spacer(Modifier.height(80.dp))
         RegisterField { navController.navigate(it) }
@@ -143,8 +165,11 @@ private fun InputField(
 private fun SocialField(
     kakaoLogin: (() -> Unit) -> Unit,
     naverLogin: (() -> Unit) -> Unit,
+    resultLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+    aa: () -> GoogleSignInClient,
     nav: () -> Unit
 ) {
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -156,7 +181,8 @@ private fun SocialField(
             Canvas(modifier = Modifier
                 .size(50.dp)
                 .clickable {
-                    kakaoLogin { nav() }
+                    val client = aa()
+                    resultLauncher.launch(client.signInIntent)
                 }) {
                 drawCircle(Color.Yellow)
             }

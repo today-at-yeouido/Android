@@ -120,5 +120,6 @@ dependencies {
 
     // 카카오 로그인
     implementation "com.kakao.sdk:v2-user:2.11.0"
-    implementation("com.navercorp.nid:oauth:5.1.1")
+    implementation "com.navercorp.nid:oauth:5.1.1"
+    implementation "com.google.android.gms:play-services-auth:20.2.0"
 }
