@@ -45,15 +45,15 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillSearch(query)
     }
 
-    override suspend fun postAddScrap(bill: Int): AddScrapResponseDto{
+    override suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>{
         return billApi.postAddScrap(AddScrapRequestDto(bill))
     }
 
-    override suspend fun postDeleteScrap(bill: Int): DeleteScrapResponseDto {
+    override suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto> {
         return billApi.postDeleteScrap(DeleteScrapRequestDto(bill))
     }
 
-    override suspend fun getBillScrap(): List<BillDto> {
+    override suspend fun getBillScrap(): Response<List<BillDto>> {
         return billApi.getBillScrap()
     }
 }

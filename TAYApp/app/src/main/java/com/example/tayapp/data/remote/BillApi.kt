@@ -56,13 +56,13 @@ interface BillApi {
     @POST(POST_ADD_SCRAP)
     suspend fun postAddScrap(
         @Body bill: AddScrapRequestDto
-    ) : AddScrapResponseDto
+    ) : Response<AddScrapResponseDto>
 
     @POST(POST_DELETE_SCRAP)
     suspend fun postDeleteScrap(
         @Body bill: DeleteScrapRequestDto
-    ) : DeleteScrapResponseDto
+    ) : Response<DeleteScrapResponseDto>
 
     @GET(GET_BILL_SCRAP)
-    suspend fun getBillScrap() : List<BillDto>
+    suspend fun getBillScrap() : Response<List<BillDto>>
 }

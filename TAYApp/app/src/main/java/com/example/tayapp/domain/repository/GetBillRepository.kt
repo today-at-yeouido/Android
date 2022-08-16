@@ -23,9 +23,9 @@ interface GetBillRepository {
     suspend fun getBillUserRecentViewed(): List<BillDto>
     suspend fun getBillSearch(query: String): Response<List<BillDto>>
 
-    suspend fun postAddScrap(bill: Int): AddScrapResponseDto
-    suspend fun postDeleteScrap(bill: Int): DeleteScrapResponseDto
-    suspend fun getBillScrap(): List<BillDto>
+    suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>
+    suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto>
+    suspend fun getBillScrap(): Response<List<BillDto>>
 
 }
 
