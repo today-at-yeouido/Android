@@ -13,16 +13,24 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tayapp.R
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.ExpandButton
 import com.example.tayapp.presentation.utils.NotificationButton
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.utils.textSize
 import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -76,12 +84,20 @@ fun TayHomeTopAppBar(
     ) {
         TopAppBar(
             title = {
-                Spacer(
-                    modifier = Modifier
-                        .background(TayAppTheme.colors.primary)
-                        .width(100.dp)
-                        .height(26.dp)
-                )
+               Row(
+                   horizontalArrangement = Arrangement.spacedBy(8.dp),
+                   verticalAlignment = Alignment.CenterVertically
+               ){
+                   Image(
+                       modifier = Modifier
+                           .size(26.dp)
+                           .clip(RoundedCornerShape(8.dp)),
+                       painter = painterResource(id = R.drawable.ic_tay_logo_app),
+                       contentDescription = "main_title_image"
+                   )
+
+                   Text(text = "오늘, 여의도", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+               }
             },
             elevation = elevation,
             backgroundColor = TayAppTheme.colors.background,
