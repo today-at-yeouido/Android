@@ -49,16 +49,19 @@ object AppModule {
     ): Interceptor = Interceptor { chain ->
 
         val token = runBlocking(Dispatchers.IO) {
-            pref.getAccessToken().first()?.let {
-                "Bearer $it"
-            } ?: ""
+            pref.getAccessToken().first().let {
+                if (it.isNotEmpty()) "Bearer $it" else ""
+            }
         }
 
         val newRequest = chain
             .request()
             .newBuilder()
             .apply {
-                if(token.isNotBlank())addHeader(Constants.AUTHORIZATION, token)
+                if (token.isNotBlank()) {
+                    addHeader(Constants.AUTHORIZATION, token)
+                    Log.d("##99", "di 토큰 ${token}")
+                }
             }
             .build()
 

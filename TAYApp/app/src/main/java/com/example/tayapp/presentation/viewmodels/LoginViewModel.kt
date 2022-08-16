@@ -11,7 +11,9 @@ import com.example.tayapp.TayApplication
 import com.example.tayapp.data.remote.dto.login.LoginDto
 import com.example.tayapp.data.remote.dto.login.RegistrationDto
 import com.example.tayapp.domain.use_case.LoginUseCases
+import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.states.LoginUserUiState
+import com.example.tayapp.presentation.states.UserInfo
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -109,26 +111,30 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun getUser() {
-        viewModelScope.launch {
-            loginUseCases.getUserUseCase()
-        }
-    }
-
     private fun checkLogin() =
         viewModelScope.launch {
             isLogin = loginUseCases.checkLoginUseCase()
+            if(isLogin){
+                loginUseCases.getUserUseCase()
+            }
         }
 
 
-    fun naverLogin() {
-        startNaverLogin()
+    fun naverLogin(nav: () -> Unit) {
+        viewModelScope.launch {
+            val s = startNaverLogin()
+            Log.d("##99", "viewModel token $s")
+            val a = loginUseCases.requestSnsUseCase(s)
+            if (a){
+                nav()
+            }
+        }
     }
 
     /**
      * 로그인
      * authenticate() 메서드를 이용한 로그인 */
-    fun startNaverLogin() {
+    suspend fun startNaverLogin(): String = suspendCoroutine<String> { continuation ->
 
         var naverToken: String? = ""
 
@@ -152,17 +158,11 @@ class LoginViewModel @Inject constructor(
             override fun onSuccess() {
                 // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
                 naverToken = NaverIdLoginSDK.getAccessToken()
-                Log.d("##99","token $naverToken")
-//                viewModelScope.launch{
-//                    loginUseCases.requestSnsUseCase(naverToken ?: "")
-//                }
-//                var naverRefreshToken = NaverIdLoginSDK.getRefreshToken()
-//                var naverExpiresAt = NaverIdLoginSDK.getExpiresAt().toString()
-//                var naverTokenType = NaverIdLoginSDK.getTokenType()
-//                var naverState = NaverIdLoginSDK.getState().toString()
 
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
+                continuation.resume(naverToken ?: "")
+
             }
 
             override fun onFailure(httpStatus: Int, message: String) {
@@ -179,37 +179,4 @@ class LoginViewModel @Inject constructor(
         NaverIdLoginSDK.authenticate(context, oauthLoginCallback)
     }
 
-    /**
-     * 로그아웃
-     * 애플리케이션에서 로그아웃할 때는 다음과 같이 NaverIdLoginSDK.logout() 메서드를 호출합니다. */
-    private fun startNaverLogout() {
-        NaverIdLoginSDK.logout()
-    }
-
-    /**
-     * 연동해제
-     * 네이버 아이디와 애플리케이션의 연동을 해제하는 기능은 다음과 같이 NidOAuthLogin().callDeleteTokenApi() 메서드로 구현합니다.
-    연동을 해제하면 클라이언트에 저장된 토큰과 서버에 저장된 토큰이 모두 삭제됩니다.
-     */
-    private fun startNaverDeleteToken() {
-        NidOAuthLogin().callDeleteTokenApi(context, object : OAuthLoginCallback {
-            override fun onSuccess() {
-                //서버에서 토큰 삭제에 성공한 상태입니다.
-
-            }
-
-            override fun onFailure(httpStatus: Int, message: String) {
-                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
-                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
-                Log.d("naver", "errorCode: ${NaverIdLoginSDK.getLastErrorCode().code}")
-                Log.d("naver", "errorDesc: ${NaverIdLoginSDK.getLastErrorDescription()}")
-            }
-
-            override fun onError(errorCode: Int, message: String) {
-                // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
-                // 클라이언트에 토큰 정보가 없기 때문에 추가로 처리할 수 있는 작업은 없습니다.
-                onFailure(errorCode, message)
-            }
-        })
-    }
 }

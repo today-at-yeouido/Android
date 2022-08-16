@@ -5,10 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 object LoginState {
-    var loginState by mutableStateOf(false)
-        private set
+    var user by mutableStateOf(UserInfo())
 
-    fun changeState() {
-        loginState = !loginState
+    fun isLogin(): Boolean {
+        return user.id != ""
     }
 }
+
+data class UserInfo(
+    val id: String = "",
+    val email: String = "",
+    val refreshToken: String = ""
+)

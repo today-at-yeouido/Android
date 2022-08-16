@@ -20,12 +20,12 @@ interface LoginApi {
 
     @POST(Constants.POST_LOGOUT)
     suspend fun postLogout(
-        @Body token: String
-    ): LogoutResponse
+        @Body token: RefreshTokenDto
+    ): Response<LogoutResponse>
 
     @POST(Constants.POST_JWT_REFRESH)
     suspend fun postJwtRefresh(
-        @Body token : RefreshTokenDto
+        @Body token: RefreshTokenDto
     ): Response<JwtRefreshResponse>
 
     @POST(Constants.POST_SOCIAL_LOGIN)

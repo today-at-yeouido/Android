@@ -40,7 +40,7 @@ class LoginRepositoryImpl @Inject constructor(
         return loginApi.postLogin(loginDto)
     }
 
-    override suspend fun requestLogout(token: String): LogoutResponse {
+    override suspend fun requestLogout(token: RefreshTokenDto): Response<LogoutResponse> {
         return loginApi.postLogout(token)
     }
 
@@ -50,5 +50,9 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun requestSnsLogin(snsLoginDto: SnsLoginDto): Response<LoginResponse> {
         return loginApi.postSocialLogin(snsLoginDto)
+    }
+
+    override suspend fun prefLogout() {
+        pref.logoutUser()
     }
 }

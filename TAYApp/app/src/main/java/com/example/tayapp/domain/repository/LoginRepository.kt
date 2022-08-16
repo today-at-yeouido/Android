@@ -16,10 +16,11 @@ interface LoginRepository {
     suspend fun setLoginUser(user: UserPref)
     suspend fun requestRegistration(registrationDto: RegistrationDto): Response<Void>
     suspend fun requestLogin(loginDto: LoginDto): Response<LoginResponse>
-    suspend fun requestLogout(token: String): LogoutResponse
+    suspend fun requestLogout(token: RefreshTokenDto): Response<LogoutResponse>
     suspend fun requestRefreshToken(token: RefreshTokenDto): Response<JwtRefreshResponse>
     suspend fun updateAccessToken(accessToken: String)
     suspend fun requestSnsLogin(snsLoginDto: SnsLoginDto): Response<LoginResponse>
+    suspend fun prefLogout()
 }
 
 /** 인터페이스 주입을 위한 모듈 */

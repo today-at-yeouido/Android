@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.NavigateNextButton
@@ -96,9 +97,9 @@ private fun CardUserProfileText(
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        Text("${name} 님", style = TayAppTheme.typo.typography.h2)
+        Text("${LoginState.user.id} 님", style = TayAppTheme.typo.typography.h2)
         Text(
-            "$email",
+            LoginState.user.email,
             fontWeight = FontWeight.Light,
             color = lm_gray800,
             fontSize = 14.sp

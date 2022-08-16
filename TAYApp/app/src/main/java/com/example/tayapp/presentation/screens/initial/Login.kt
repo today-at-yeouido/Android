@@ -52,7 +52,10 @@ private fun Login(navController: NavController, viewModel: LoginViewModel) {
         Spacer(Modifier.height(40.dp))
         InputField(viewModel::requestLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
         Spacer(Modifier.height(50.dp))
-        SocialField(viewModel::kakaoLogin, viewModel::naverLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
+        SocialField(
+            viewModel::kakaoLogin,
+            viewModel::naverLogin
+        ) { navController.navigate(AppGraph.HOME_GRAPH) }
         Spacer(Modifier.height(80.dp))
         RegisterField { navController.navigate(it) }
     }
@@ -115,7 +118,6 @@ private fun InputField(
         TayButton(
             onClick = {
                 requestLogin(email, password, navigate)
-                LoginState.changeState()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -140,7 +142,7 @@ private fun InputField(
 @Composable
 private fun SocialField(
     kakaoLogin: (() -> Unit) -> Unit,
-    naverLogin: () -> Unit,
+    naverLogin: (() -> Unit) -> Unit,
     nav: () -> Unit
 ) {
     Column(
@@ -158,9 +160,11 @@ private fun SocialField(
                 }) {
                 drawCircle(Color.Yellow)
             }
-            Canvas(modifier = Modifier.size(50.dp).clickable {
-                naverLogin()
-            }) {
+            Canvas(modifier = Modifier
+                .size(50.dp)
+                .clickable {
+                    naverLogin { nav() }
+                }) {
                 drawCircle(Color.Green)
             }
         }

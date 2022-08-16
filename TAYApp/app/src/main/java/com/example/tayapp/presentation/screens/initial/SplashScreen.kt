@@ -58,7 +58,6 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
         delay(2000L)
         if (viewModel.isLogin) {
             navController.navigate(AppGraph.HOME_GRAPH)
-            LoginState.changeState()
         } else navController.navigate(Destinations.LOGIN)
     }
 }

@@ -39,6 +39,15 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         it[RECENT_SEARCH_TERM] ?: ""
     }
 
+    suspend fun logoutUser(){
+        context.dataStore.edit {settings ->
+            settings[LOGIN_USER_ACCESS_TOKEN] = ""
+            settings[LOGIN_USER_REFRESH_TOKEN] = ""
+            settings[LOGIN_USER_ID] = ""
+            settings[LOGIN_USER_EMAIL] = ""
+        }
+    }
+
     suspend fun saveFavoritCategory(favoritCategorySet: Set<String>) {
         context.dataStore.edit {
             it[FAVORIT_CATEGORY] = favoritCategorySet
@@ -64,9 +73,9 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         }
     }
 
-    fun getAccessToken(): Flow<String?> {
+    fun getAccessToken(): Flow<String> {
         return context.dataStore.data.map {
-            it[LOGIN_USER_ACCESS_TOKEN]
+            it[LOGIN_USER_ACCESS_TOKEN] ?: ""
         }
     }
 

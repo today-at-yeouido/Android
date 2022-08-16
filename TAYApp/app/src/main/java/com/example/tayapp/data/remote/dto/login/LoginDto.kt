@@ -1,5 +1,6 @@
 package com.example.tayapp.data.remote.dto.login
 
+import com.example.tayapp.data.pref.model.UserPref
 import com.google.gson.annotations.SerializedName
 
 
@@ -19,9 +20,16 @@ data class LoginResponse(
     @SerializedName("refresh_token")
     val refreshToken: String,
     val user: User
-){
+) {
     data class User(
         val pk: String,
         val email: String
     )
 }
+
+fun LoginResponse.toPref(): UserPref = UserPref(
+    accessToken = this.accessToken,
+    refreshToken = this.refreshToken,
+    id = this.user.pk,
+    email = this.user.email,
+)
