@@ -19,13 +19,25 @@ class DetailViewModel @Inject constructor(
     private val postDeleteScrapUseCase: PostDeleteScrapUseCase
 ) : ViewModel()  {
 
-    fun AddScrap(bill: Int){
+    fun addScrap(bill: Int){
         viewModelScope.launch {
             postAddScrapUseCase(bill).collect() { it ->
                 when (it) {
                     is Resource.Success -> Log.d("스크랩", "스크랩 성공")
                     is Resource.Error -> Log.d("스크랩", "스크랩 실패")
                     is Resource.Loading -> Log.d("스크랩", "스크랩 올리는중")
+                }
+            }
+        }
+    }
+
+    fun deleteScrap(bill: Int){
+        viewModelScope.launch {
+            postDeleteScrapUseCase(bill).collect() { it ->
+                when (it) {
+                    is Resource.Success -> Log.d("스크랩", "스크랩 취소 성공")
+                    is Resource.Error -> Log.d("스크랩", "스크랩 취소 실패")
+                    is Resource.Loading -> Log.d("스크랩", "스크랩 취소 올리는중")
                 }
             }
         }
