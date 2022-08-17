@@ -99,7 +99,7 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
 
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
-                PillList("일부개정안", bill.status)
+                PillList(bill.billType, bill.status)
 
                 Text(
                     text = bill.billName,

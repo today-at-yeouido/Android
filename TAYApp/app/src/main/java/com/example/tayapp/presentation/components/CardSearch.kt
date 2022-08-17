@@ -92,7 +92,7 @@ private fun CardSearchMultiple(
 fun LineSearchedBill(
     date: String = "2022.06.17",
     people: String = "박태출 등 10인",
-    bill: String = "개정안",
+    bill: Int = 1,
     status: String = "접수"
 ){
     Surface(
