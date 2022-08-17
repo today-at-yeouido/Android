@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.bill.DetailBillDto
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.*
@@ -136,7 +137,7 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
             }
 
         CardCommittee("상임위")
-        CardBillProgress(onProgressClick)
+        CardBillProgress(onProgressClick, bill)
 
     }
 }
@@ -183,7 +184,10 @@ private fun CardCommittee(
 }
 
 @Composable
-private fun CardBillProgress(onProgressClick: () -> Unit) {
+private fun CardBillProgress(
+    onProgressClick: () -> Unit,
+    bill: DetailBillDto
+) {
     TayCard(
         modifier = Modifier.padding(horizontal = KeyLine),
         enable = false
@@ -221,17 +225,17 @@ private fun CardBillProgress(onProgressClick: () -> Unit) {
                 }
                 LazyRow {
                     item{
-                        BillProgressItem("접수", "22.07.16")
+                        BillProgressItem("접수", bill.proposeDt)
                         BillArrow()
-                        BillProgressItem("심사", "22.07.16")
+                        BillProgressItem("심사", bill.committeeInfo.firstOrNull()?.procDt)
                         BillArrow()
-                        BillProgressItem("심의")
+                        BillProgressItem("심의", bill.jurisdictionInfo.firstOrNull()?.procDt)
                         BillArrow()
-                        BillProgressItem("가결")
+                        BillProgressItem("가결", bill.plenaryInfo.firstOrNull()?.procDt)
                         BillArrow()
-                        BillProgressItem("정부이송")
+                        BillProgressItem("정부이송", bill.transferInfo.firstOrNull()?.transDt)
                         BillArrow()
-                        BillProgressItem("공포")
+                        BillProgressItem("공포", bill.announceInfo.firstOrNull()?.announceDt)
                     }
                 }
             }
@@ -303,7 +307,7 @@ private fun CardBillLine() {
 
 @Composable
 private fun BillPointText(
-    summary: String
+    summary: String? = ""
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -315,7 +319,7 @@ private fun BillPointText(
             style = TayAppTheme.typo.typography.body1
         )
         Text(
-            text = summary,
+            text = if(summary.isNullOrBlank()) "" else summary,
             style = TayAppTheme.typo.typography.body2
         )
     }
