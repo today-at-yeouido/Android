@@ -45,7 +45,7 @@ fun CardBill(
     ) {
         CardBillDefault(
             title = bill.billName,
-            bill = bill.committeeInfo.size.toString(),
+            bill = bill.billType,
             status = bill.status,
             date = bill.proposeDt,
             people = bill.proposer,
@@ -79,7 +79,7 @@ fun CardBillWithScrap() {
 @Composable
 fun CardBillWithEmoij(
     title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
-    bill: String = "제정안",
+    bill: Int = 1,
     status: String = "가결",
     onClick: (Int) -> Unit = {}
 ) {
@@ -116,7 +116,7 @@ fun CardBillWithEmoij(
 private fun CardBillDefault(
     modifier: Modifier = Modifier.padding(Card_Inner_Padding),
     title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
-    bill: String = "제정안",
+    bill: Int = 1,
     status: String = "가결",
     date: String = "2022.06.17",
     people: String = "박대출 등 10인",

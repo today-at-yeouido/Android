@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tayapp.data.remote.dto.bill.BillDto
+import com.example.tayapp.data.remote.dto.bill.DetailBillDto
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
@@ -26,11 +29,13 @@ import kotlinx.coroutines.launch
 fun BillDetail(billId: Int, upPress: () -> Unit) {
 
     val viewModel = hiltViewModel<DetailViewModel>()
+    val detailState = viewModel.detailState.collectAsState()
     val scrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
-    val coroutineScope = rememberCoroutineScope()
+
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -54,8 +59,10 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                             bottomSheetScaffoldState.bottomSheetState.collapse()
                         }
                     }
-                })
+                }, bill = detailState.value.billDetail!!)
+
                 Spacer(modifier = Modifier.size(16.dp))
+
                 Column(
                     modifier = Modifier
                         .padding(
@@ -66,18 +73,18 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                 ) {
                     CardPieGraph()
                     CardBillLine()
-                    BillPointText()
+                    BillPointText(detailState.value.billDetail.summary)
                     BillRevisionText()
                     BillDetailNews()
                 }
             }
         }
     }
-
 }
 
+
 @Composable
-fun DetailHeader(onProgressClick: () -> Unit) {
+fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,51 +99,64 @@ fun DetailHeader(onProgressClick: () -> Unit) {
                 .padding(horizontal = KeyLine),
 
             ) {
-            Spacer(modifier = Modifier.height(20.dp))
-            PillList("일부개정안", "정부이송")
+                Spacer(modifier = Modifier.height(20.dp))
+                PillList(bill.billType, bill.status)
 
-            Text(
-                text = "중대재해 처벌 등에 관한 법률",
-                style = TayAppTheme.typo.typography.h1
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
                 Text(
-                    text = "김삼순의원 등 10명",
                     fontSize = 12.sp,
                     color = TayAppTheme.colors.subduedText,
                     fontWeight = FontWeight.Normal
+                    text = bill.billName,
+                    style = TayAppTheme.typo.typography.h1
                 )
+
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+
                     Icon(
                         imageVector = TayIcons.visibility_outlined,
                         contentDescription = "null",
                         tint = TayAppTheme.colors.controlBorder,
                         modifier = Modifier.size(20.dp)
                     )
+
                     Text(
-                        text = "19.3만",
+                        text = bill.proposer,
                         fontSize = 12.sp,
                         color = TayAppTheme.colors.subduedText,
                         fontWeight = FontWeight.Normal
                     )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = TayIcons.visibility_outlined,
+                            contentDescription = "null",
+                            tint = lm_gray600,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = "${bill.views}",
+                            fontSize = 12.sp,
+                            color = lm_gray600,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
             }
-        }
-        CardCommittee()
 
-        CardBillProgress(onProgressClick)
+        CardCommittee("상임위")
+        CardBillProgress(onProgressClick, bill)
 
     }
 }
 
 @Composable
-private fun CardCommittee() {
+private fun CardCommittee(
+    committee: String? = null
+) {
     TayCard(
         modifier = Modifier.padding(horizontal = KeyLine)
     ) {
@@ -163,7 +183,7 @@ private fun CardCommittee() {
                 )
             }
             Text(
-                text = "미정",
+                text = if(committee.isNullOrBlank()) "미정" else committee,
                 fontSize = 16.sp,
                 color = TayAppTheme.colors.subduedText,
                 fontWeight = FontWeight.Normal
@@ -175,7 +195,10 @@ private fun CardCommittee() {
 }
 
 @Composable
-private fun CardBillProgress(onProgressClick: () -> Unit) {
+private fun CardBillProgress(
+    onProgressClick: () -> Unit,
+    bill: DetailBillDto
+) {
     TayCard(
         modifier = Modifier.padding(horizontal = KeyLine),
         enable = false
@@ -213,17 +236,17 @@ private fun CardBillProgress(onProgressClick: () -> Unit) {
                 }
                 LazyRow {
                     item{
-                        BillProgressItem("접수", "22.07.16")
+                        BillProgressItem("접수", bill.proposeDt)
                         BillArrow()
-                        BillProgressItem("심사", "22.07.16")
+                        BillProgressItem("심사", bill.committeeInfo.firstOrNull()?.procDt)
                         BillArrow()
-                        BillProgressItem("심의")
+                        BillProgressItem("심의", bill.jurisdictionInfo.firstOrNull()?.procDt)
                         BillArrow()
-                        BillProgressItem("가결")
+                        BillProgressItem("가결", bill.plenaryInfo.firstOrNull()?.procDt)
                         BillArrow()
-                        BillProgressItem("정부이송")
+                        BillProgressItem("정부이송", bill.transferInfo.firstOrNull()?.transDt)
                         BillArrow()
-                        BillProgressItem("공포")
+                        BillProgressItem("공포", bill.announceInfo.firstOrNull()?.announceDt)
                     }
                 }
             }
@@ -294,7 +317,9 @@ private fun CardBillLine() {
 }
 
 @Composable
-private fun BillPointText() {
+private fun BillPointText(
+    summary: String? = ""
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(vertical = 24.dp)
@@ -305,7 +330,7 @@ private fun BillPointText() {
             style = TayAppTheme.typo.typography.body1
         )
         Text(
-            text = "현행법은 사업 또는 사업장, 공중이용시설 및 공중교통수단을 운영하거나 인체에 해로운 원료나 제조물을 취급하면서 안전ㆍ보건조치의무를 위반하여 인명피해를 발생케 한 사업주, 경영책임자, 공무원 및 법인에 대한 처벌 등을 규정함으로써 중대재해를 예방하고자 제정되었음. 동 법률의 입법 취지가 사업주와 경영책임자 등에 대한 처벌을 강화하는 것이나 이들의 처벌에 대한 규정만으로 모든 재해를 예방하는 데에는 한계가 있으며, 사업주와 경영책임자 등이 안전 및 보건 확보를 위한 충분한 조치를 하였음에도 재해가 발생한 경우 법률 적용의 다툼이 있을 수 있고 과도한 처벌로 인한 선량한 자의 억울한 피해도 발생할 수 있음. 이에 법무부장관은 중대재해 발생을 예방하기 위하여 관계 부처의 장과 협의하여 중대재해 예방에 관한 기준을 고시하고, 사업주와 경영책임자 등에게 이를 권고할 수 있도록 하고자 함. 또한 고시에 따라 작업환경에 관한 표준 적용, 중대재해 예방 감지 및 조치 지능화 등을 하기 위한 정보통신 시설의 설치 등을 이행하고, 이를 인증 받은 경우에는 사업주와 경영책임자 등에게 적용하는 처벌 형량을 감경할 수 있도록 하여, 사업주와 경영책임자 등이 보다 적극적으로 중대재해 예방을 위한 노력과 조치를 취하도록 함으로써 시민과 종사자의 생명과 신체를 폭넓게 보호하고자 함(안 제5조의2, 제5조의3 및 제17조 신설).",
+            text = if(summary.isNullOrBlank()) "" else summary,
             style = TayAppTheme.typo.typography.body2
         )
     }

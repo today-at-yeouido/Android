@@ -93,7 +93,7 @@ fun CardUserHeader(title: String = "과학"){
  */
 @Composable
 fun CardUserItem(
-    bill: String = "제정안",
+    bill: Int = 1,
     status: String = "가결",
     title: String = "가덕도 신공항 건설을 위한 특별법",
     onClick: (Int) -> Unit ={}

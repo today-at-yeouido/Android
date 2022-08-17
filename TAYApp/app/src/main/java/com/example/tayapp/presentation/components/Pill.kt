@@ -27,11 +27,17 @@ import com.example.tayapp.utils.dashedBorder
  */
 @Composable
 fun PillList(
-    bill: String = "제정안",
+    bill: Int = 1,
     status: String = "접수"
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        Pill(bill)
+        when(bill){
+            1 -> Pill("개정안")
+            2 -> Pill("일부개정안")
+            3 -> Pill("제정안")
+            4 -> Pill("폐지안")
+            5 -> Pill("기타")
+        }
         Pill(status)
     }
 }
@@ -82,6 +88,15 @@ fun Pill(
             Pill(
                 textColor = TayAppTheme.colors.background,
                 backgroundColor = TayAppTheme.colors.danger1
+            ) {
+                Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
+            }
+        }
+        else -> {
+            Pill(
+                textColor = lm_gray600,
+                backgroundColor = lm_gray000,
+                border = BorderStroke(1.dp, lm_gray100)
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
@@ -225,7 +240,7 @@ fun PreveiwPillLabel() {
                 isPressed = true
             )
 
-            PillList("제정안", "가결")
+            PillList(1, "가결")
         }
     }
 }
