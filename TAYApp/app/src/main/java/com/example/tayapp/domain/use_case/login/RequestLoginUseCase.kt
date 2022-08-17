@@ -2,10 +2,9 @@ package com.example.tayapp.domain.use_case.login
 
 import android.util.Log
 import com.example.tayapp.data.pref.model.UserPref
-import com.example.tayapp.data.pref.model.toState
 import com.example.tayapp.data.remote.dto.login.LoginDto
 import com.example.tayapp.data.remote.dto.login.LoginResponse
-import com.example.tayapp.data.remote.dto.login.toPref
+import com.example.tayapp.data.remote.dto.login.toState
 import com.example.tayapp.domain.repository.LoginRepository
 import com.example.tayapp.presentation.states.LoginState
 import javax.inject.Inject
@@ -14,19 +13,19 @@ class RequestLoginUseCase @Inject constructor(
     private val repository: LoginRepository
 ) {
 
-    suspend operator fun invoke(user: LoginDto): Boolean {
-            val r = repository.requestLogin(user)
-            return when (r.code()) {
-                200 -> {
-                    setUser(r.body()!!)
-                    LoginState.user = r.body()!!.toPref().toState()
-                    Log.d("##99", "로그인 유즈케이스${LoginState.user}")
-                     true
-                }
-                400 -> false
-                else -> false
+    suspend operator fun invoke(email: String, pass: String): Boolean {
+        val r = repository.requestLogin(LoginDto(email = email, password = pass))
+        return when (r.code()) {
+            200 -> {
+                setUser(r.body()!!)
+                LoginState.user = r.body()!!.toState()
+                Log.d("##99", "로그인 유즈케이스${LoginState.user}")
+                true
             }
+            400 -> false
+            else -> false
         }
+    }
 
     private suspend fun setUser(user: LoginResponse) {
         repository.setLoginUser(

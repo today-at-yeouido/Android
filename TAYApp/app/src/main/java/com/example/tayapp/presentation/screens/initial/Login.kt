@@ -40,7 +40,7 @@ fun LoginScreen(
     viewModel: LoginViewModel,
     upPress: () -> Unit = {}
 ) {
-    val loginState by viewModel.isLogin.collectAsState()
+    val loginState by viewModel.isLogin
 
     Column(
         modifier = Modifier.fillMaxSize()

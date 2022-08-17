@@ -2,7 +2,6 @@ package com.example.tayapp.presentation.screens.initial
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +10,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,7 +20,6 @@ import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray700
-import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import com.example.tayapp.utils.textDp
 import kotlinx.coroutines.delay
@@ -30,7 +27,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
-    val loginState by viewModel.isLogin.collectAsState()
+    val isLogin by viewModel.isLogin.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -68,7 +65,7 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
     LaunchedEffect(key1 = true) {
         delay(2000L)
-        if (loginState) {
+        if (isLogin) {
             navController.navigate(AppGraph.HOME_GRAPH)
         } else navController.navigate(Destinations.LOGIN)
     }
