@@ -1,12 +1,14 @@
 package com.example.tayapp.presentation.viewmodels
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
 import com.example.tayapp.domain.use_case.scrap.PostAddScrapUseCase
 import com.example.tayapp.domain.use_case.scrap.PostDeleteScrapUseCase
 import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
+import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -16,8 +18,13 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val postAddScrapUseCase: PostAddScrapUseCase,
-    private val postDeleteScrapUseCase: PostDeleteScrapUseCase
+    private val postDeleteScrapUseCase: PostDeleteScrapUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel()  {
+
+    val billId: Int = savedStateHandle.get<Int>(Destinations.BILL_ID)!!
+
+
 
     fun addScrap(bill: Int){
         viewModelScope.launch {

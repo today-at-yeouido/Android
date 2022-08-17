@@ -1,16 +1,24 @@
 package com.example.tayapp.data.remote.dto.bill
 
 data class DetailBillDto(
-    val billName: String,
     val billNum: String,
+    val billName: String,
     val billType: Int,
-    val committeeID: Int,
-    val hwpurl: String,
-    val pdfurl: String,
+    val isReflect: Boolean,
     val proposeDt: String,
-    val proposer: String,
     val proposerKind: String,
+    val proposer: String,
+    val committeeID: Int,
     val status: String,
     val summary: String,
-    val views: Int
+    val hwpurl: String,
+    val pdfurl: String,
+    val views: Int,
+    val committeeInfo: List<CommitteeDto?>,
+    val jurisdictionInfo: List<JurisdictionInfoDto>,
+    val plenaryInfo: List<PlenaryInfoDto>,
+    val transferInfo: List<TransferInfoDto>,
+    val announceInfo: List<AnnounceInfoDto>,
+    val reflect_info: List<ReflectInfoDto>
+    
 )
