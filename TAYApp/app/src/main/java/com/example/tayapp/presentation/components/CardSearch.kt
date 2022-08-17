@@ -55,7 +55,7 @@ private fun CardSearchMultiple(
                 text = "총 ${list.count()}건 ",
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -69,8 +69,8 @@ private fun CardSearchMultiple(
             if(list.count() > 3){
                 TayButton(
                     onClick = { /*TODO*/ },
-                    backgroundColor = lm_gray000,
-                    contentColor = lm_gray800,
+                    backgroundColor = TayAppTheme.colors.background,
+                    contentColor = TayAppTheme.colors.headText,
                     modifier = Modifier.fillMaxWidth(),
                     border = BorderStroke(1.dp, TayAppTheme.colors.border)
                 ) {
@@ -97,7 +97,7 @@ fun LineSearchedBill(
 ){
     Surface(
         modifier = Modifier.height(34.dp),
-        color = lm_gray050,
+        color = TayAppTheme.colors.layer1,
         shape = RoundedCornerShape(10.dp)
     ) {
         Row(
@@ -113,13 +113,13 @@ fun LineSearchedBill(
                 text = date,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = lm_gray600
+                color = TayAppTheme.colors.subduedText
             )
             Text(
                 text = people,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 modifier = Modifier.weight(1f)
             )
             PillList(bill, status)

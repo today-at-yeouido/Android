@@ -8,7 +8,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.ui.theme.lm_gray050
-import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.utils.BackButton
 import com.example.tayapp.presentation.utils.BookmarkButton
 import com.example.tayapp.presentation.utils.CancelButton
@@ -156,12 +154,18 @@ fun TayTopAppBarSearch(
             modifier = Modifier.weight(1f)
         ) {
             TextField(
-                placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
+                placeholder = {
+                    Text(
+                        text = "법안 검색",
+                        fontSize = 14.textDp,
+                        color = TayAppTheme.colors.subduedIcon
+                    )
+                },
                 value = queryValue,
                 onValueChange = { onChangeQuery(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(lm_gray050),
+                    .background(TayAppTheme.colors.layer1),
                 textStyle = TextStyle(fontSize = 14.textDp),
                 shape = RoundedCornerShape(8.dp),
                 keyboardActions = KeyboardActions(
@@ -204,6 +208,7 @@ private fun TopBarTitle(
         "$string",
         modifier = modifier,
         fontWeight = FontWeight.Medium,
+        color = TayAppTheme.colors.headText,
         fontSize = 14.sp,
         textAlign = TextAlign.Center
     )

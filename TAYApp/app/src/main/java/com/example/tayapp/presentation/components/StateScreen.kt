@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
 fun LoadingView(
@@ -49,7 +50,7 @@ fun ErrorItem(
             maxLines = 1,
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.h6,
-            color = Color.Red
+            color = TayAppTheme.colors.caution2
         )
         OutlinedButton(onClick = onClickRetry) {
             Text(text = "Try again")

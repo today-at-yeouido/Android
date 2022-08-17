@@ -74,12 +74,13 @@ fun CardUserHeader(title: String = "과학"){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(CardUserValue.headerHeight)
-                .background(lm_gray075)
+                .background(TayAppTheme.colors.layer1)
         )
 
         Text(
             "#$title",
             fontWeight = FontWeight.Medium,
+            color = TayAppTheme.colors.bodyText,
             fontSize = 16.sp,
             textAlign = TextAlign.Center
         )
@@ -121,6 +122,7 @@ fun CardUserItem(
             Text(
                 text = title,
                 fontWeight = FontWeight.Normal,
+                color = TayAppTheme.colors.headText,
                 fontSize = 16.sp,
                 maxLines = 2
             )
@@ -137,6 +139,7 @@ fun EmoijText(
         "$emoij",
         modifier = Modifier
             .width(CardUserValue.fontWidth),
-        fontSize = 30.sp
+        fontSize = 30.sp,
+        color = TayAppTheme.colors.headText
     )
 }

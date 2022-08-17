@@ -35,7 +35,7 @@ fun BoxScope.TermsOfService(
         Spacer(Modifier.height(10.dp))
         Text(
             "오늘, 여의도 서비스 이용약관에 \n동의하여 주세요",
-            color = lm_gray800,
+            color = TayAppTheme.colors.headText,
             style = TayAppTheme.typo.typography.h3
         )
         Spacer(modifier = Modifier.height(26.dp))
@@ -60,12 +60,12 @@ fun BoxScope.TermsOfService(
             Text(
                 "아래 약관에 모두 동의합니다",
                 fontWeight = FontWeight.Medium,
-                color = lm_gray700,
+                color = TayAppTheme.colors.bodyText,
                 fontSize = 16.textDp,
                 modifier = Modifier.width(260.matchWidth)
             )
         }
-        Divider(color = lm_gray100)
+        Divider(color = TayAppTheme.colors.layer3)
         Row(
             modifier = Modifier.height(44.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -76,7 +76,7 @@ fun BoxScope.TermsOfService(
                 onCheckedChange = { bool2 = !bool2 },
             )
             Text(
-                "[필수] 서비스 이용약관", fontWeight = FontWeight.Normal, color = lm_gray600,
+                "[필수] 서비스 이용약관", fontWeight = FontWeight.Normal, color = TayAppTheme.colors.subduedText,
                 modifier = Modifier.width(260.matchWidth)
             )
             Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
@@ -93,7 +93,7 @@ fun BoxScope.TermsOfService(
             Text(
                 "[필수] 개인정보 처리방침",
                 fontWeight = FontWeight.Normal,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 modifier = Modifier.width(260.matchWidth)
             )
             Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
@@ -110,7 +110,7 @@ fun BoxScope.TermsOfService(
             Text(
                 "[선택] 마케팅 정보 수신 동의",
                 fontWeight = FontWeight.Normal,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 modifier = Modifier.width(260.matchWidth)
             )
             Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
@@ -127,7 +127,7 @@ fun BoxScope.TermsOfService(
             Text(
                 "[선택] 개인정보 수집 이용 동의",
                 fontWeight = FontWeight.Normal,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 modifier = Modifier.width(260.matchWidth)
             )
             Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
@@ -144,8 +144,8 @@ fun BoxScope.TermsOfService(
             .fillMaxWidth()
             .height(ButtonLargeHeight)
             .align(Alignment.BottomCenter),
-        contentColor = if (buttonEnable) lm_gray000 else lm_gray400,
-        backgroundColor = if (buttonEnable) lm_gray800 else lm_gray100,
+        contentColor = if (buttonEnable) TayAppTheme.colors.background else TayAppTheme.colors.disableText,
+        backgroundColor = if (buttonEnable) TayAppTheme.colors.headText else TayAppTheme.colors.layer3,
         enabled = buttonEnable
     ) {
         Text("이메일 인증하기", style = TayAppTheme.typo.typography.button)

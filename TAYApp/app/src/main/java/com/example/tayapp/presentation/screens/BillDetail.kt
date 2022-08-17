@@ -42,8 +42,8 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         sheetContent = { BillProgressDetail() },
         sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         sheetPeekHeight = 10.dp,
-        backgroundColor = lm_gray000,
-        sheetBackgroundColor = lm_gray050
+        backgroundColor = TayAppTheme.colors.background,
+        sheetBackgroundColor = TayAppTheme.colors.layer1
     ) {
         Column {
             TayTopAppBarWithScrap(billId, upPress, viewModel::addScrap)
@@ -88,7 +88,7 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(lm_card_yellow, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
+            .background(TayAppTheme.colors.caution1, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
             .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
@@ -103,6 +103,9 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
                 PillList(bill.billType, bill.status)
 
                 Text(
+                    fontSize = 12.sp,
+                    color = TayAppTheme.colors.subduedText,
+                    fontWeight = FontWeight.Normal
                     text = bill.billName,
                     style = TayAppTheme.typo.typography.h1
                 )
@@ -111,10 +114,18 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+
+                    Icon(
+                        imageVector = TayIcons.visibility_outlined,
+                        contentDescription = "null",
+                        tint = TayAppTheme.colors.controlBorder,
+                        modifier = Modifier.size(20.dp)
+                    )
+
                     Text(
                         text = bill.proposer,
                         fontSize = 12.sp,
-                        color = lm_gray600,
+                        color = TayAppTheme.colors.subduedText,
                         fontWeight = FontWeight.Normal
                     )
                     Row(
@@ -161,20 +172,20 @@ private fun CardCommittee(
                 Text(
                     text = "상임위원회",
                     fontSize = 16.sp,
-                    color = lm_gray700,
+                    color = TayAppTheme.colors.bodyText,
                     fontWeight = FontWeight.Medium
                 )
                 Icon(
                     imageVector = TayIcons.help,
                     contentDescription = "null",
-                    tint = lm_sementic_blue2,
+                    tint = TayAppTheme.colors.information2,
                     modifier = Modifier.size(20.dp)
                 )
             }
             Text(
                 text = if(committee.isNullOrBlank()) "미정" else committee,
                 fontSize = 16.sp,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 fontWeight = FontWeight.Normal
             )
 
@@ -205,13 +216,13 @@ private fun CardBillProgress(
                     Text(
                         text = "진행현황",
                         fontSize = 16.sp,
-                        color = lm_gray700,
+                        color = TayAppTheme.colors.bodyText,
                         fontWeight = FontWeight.Medium
                     )
                     Icon(
                         imageVector = TayIcons.help,
                         contentDescription = "null",
-                        tint = lm_sementic_blue2,
+                        tint = TayAppTheme.colors.information2,
                         modifier = Modifier
                             .size(20.dp)
                             .clickable(onClick = onProgressClick)
@@ -219,7 +230,7 @@ private fun CardBillProgress(
                     Text(
                         text = "D+452",
                         fontSize = 16.sp,
-                        color = lm_gray600,
+                        color = TayAppTheme.colors.subduedText,
                         fontWeight = FontWeight.Normal
                     )
                 }
@@ -257,7 +268,7 @@ private fun CardPieGraph() {
                 text = "본 회의 투표 결과",
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                color = lm_gray700,
+                color = TayAppTheme.colors.bodyText,
                 modifier = Modifier.padding(horizontal = 3.dp),
                 maxLines = 1
             )
@@ -284,7 +295,7 @@ private fun CardBillLine() {
                 text = "이 법에 접수된 의안이 또 있어요!",
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                color = lm_gray700,
+                color = TayAppTheme.colors.bodyText,
                 modifier = Modifier.padding(horizontal = 3.dp),
                 maxLines = 1
             )
@@ -428,7 +439,7 @@ private fun BillProgressItem(
             Text(
                 text = "22.07.20",
                 fontSize = 9.sp,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 fontWeight = FontWeight.Light
             )
         }

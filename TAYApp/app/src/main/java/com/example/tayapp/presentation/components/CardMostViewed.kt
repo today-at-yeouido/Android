@@ -81,7 +81,7 @@ fun MostViewedRow(
             indicatorHeight = MostViewedValues.Indicator_Size,
             indicatorWidth = MostViewedValues.Indicator_Size,
             indicatorShape = CircleShape,
-            activeColor = lm_gray000,
+            activeColor = TayAppTheme.colors.background,
         )
         HorizontalPager(
             count = items.size,
@@ -128,7 +128,7 @@ private fun CardNewsLayout(newsList: List<MostViewedBill.New>) {
     Column(
         modifier = Modifier
             .height(MostViewedValues.News_Height)
-            .background(color = lm_gray700, shape = CardNewsShape.large)
+            .background(color = TayAppTheme.colors.bodyText, shape = CardNewsShape.large)
             .padding(MostViewedValues.Padding)
     ) {
         NewsSub()
@@ -147,12 +147,12 @@ private fun NewsSub() {
             modifier = Modifier
                 .padding(end = 4.dp, bottom = 5.dp)
                 .size(16.dp),
-            colorFilter = ColorFilter.tint(lm_gray000)
+            colorFilter = ColorFilter.tint(TayAppTheme.colors.background)
         )
         Text(
             text = "관련 뉴스",
             fontWeight = FontWeight.Medium,
-            color = lm_gray000,
+            color = TayAppTheme.colors.background,
             fontSize = 12.textDp
         )
     }
@@ -169,7 +169,7 @@ private fun CardContent(bill: MostViewedBill.Bill) {
             Spacer(modifier = Modifier.height(13.dp))
             Text(
                 bill.billName,
-                color = lm_gray000,
+                color = TayAppTheme.colors.background,
                 fontSize = 18.textDp,
                 lineHeight = 1.3.em,
                 maxLines = 2,
@@ -181,7 +181,7 @@ private fun CardContent(bill: MostViewedBill.Bill) {
                 bill.proposer,
                 fontSize = 13.textDp,
                 fontWeight = FontWeight.Normal,
-                color = lm_gray050,
+                color = TayAppTheme.colors.layer1,
                 lineHeight = 1.2.em
             )
             Spacer(Modifier.height(7.dp))
@@ -209,10 +209,10 @@ fun NewsLabelIcon() {
     Box(
         modifier = Modifier
             .padding(end = 4.dp)
-            .background(color = lm_gray700, shape = CardNewsShape.medium)
+            .background(color = TayAppTheme.colors.bodyText, shape = CardNewsShape.medium)
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
-        Text(text = "개정안", color = lm_gray000, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
+        Text(text = "개정안", color = TayAppTheme.colors.background, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
     }
 }
 
@@ -221,10 +221,10 @@ fun NewsLabelIcon2() {
     Box(
         modifier = Modifier
             .padding(end = 4.dp)
-            .background(color = lm_gray000, shape = CardNewsShape.medium)
+            .background(color = TayAppTheme.colors.background, shape = CardNewsShape.medium)
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
-        Text(text = "접수", color = lm_gray700, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
+        Text(text = "접수", color = TayAppTheme.colors.bodyText, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
     }
 }
 
@@ -241,7 +241,7 @@ fun NewsHeaderItem(news: MostViewedBill.New, mUriHandler: UriHandler) {
     ) {
         Text(
             text = "${news.pubDate}  ${news.newsFrom}",
-            color = lm_gray200,
+            color = TayAppTheme.colors.border,
             fontSize = 12.textDp,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.width(100.dp),
@@ -252,7 +252,7 @@ fun NewsHeaderItem(news: MostViewedBill.New, mUriHandler: UriHandler) {
         Text(
             text = news.newsName.removeNewline(),
             overflow = TextOverflow.Ellipsis,
-            color = lm_gray050,
+            color = TayAppTheme.colors.layer1,
             maxLines = 1,
             fontSize = 13.textDp,
             fontWeight = FontWeight.Normal,

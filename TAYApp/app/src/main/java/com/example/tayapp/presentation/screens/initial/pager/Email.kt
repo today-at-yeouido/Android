@@ -24,7 +24,7 @@ fun BoxScope.Email(
         var email by remember { mutableStateOf("") }
 
         Spacer(Modifier.height(10.dp))
-        Text("아이디로 사용할 이메일을 적어주세요", color = lm_gray800, style = TayAppTheme.typo.typography.h3)
+        Text("아이디로 사용할 이메일을 적어주세요", color = TayAppTheme.colors.headText, style = TayAppTheme.typo.typography.h3)
         Spacer(Modifier.height(33.dp))
         EmailField(email) { email = it }
     }
@@ -36,8 +36,8 @@ fun BoxScope.Email(
             .fillMaxWidth()
             .height(ButtonLargeHeight)
             .align(Alignment.BottomCenter),
-        contentColor = lm_gray400,
-        backgroundColor = lm_gray100,
+        contentColor = TayAppTheme.colors.disableText,
+        backgroundColor = TayAppTheme.colors.layer3,
     ) {
         Text("이메일 인증하기", style = TayAppTheme.typo.typography.button)
     }
@@ -50,19 +50,19 @@ private fun EmailField(value: String, onValueChange: (String) -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text("이메일", color = lm_gray600, fontWeight = FontWeight.Normal)
+        Text("이메일", color = TayAppTheme.colors.subduedText, fontWeight = FontWeight.Normal)
         TayTextField(
             value = value,
             placeholder = {
                 Text(
-                    "Tay@gmail.com", fontSize = 16.textDp, color = lm_gray300
+                    "Tay@gmail.com", fontSize = 16.textDp, color = TayAppTheme.colors.disableIcon
                 )
             },
             onValueChange = onValueChange,
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = lm_gray000,
-                focusedBorderColor = lm_primary50,
-                unfocusedBorderColor = lm_gray100
+                backgroundColor = TayAppTheme.colors.background,
+                focusedBorderColor = TayAppTheme.colors.primary,
+                unfocusedBorderColor = TayAppTheme.colors.layer3
             )
         )
     }

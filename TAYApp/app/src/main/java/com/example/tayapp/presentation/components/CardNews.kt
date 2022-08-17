@@ -60,14 +60,14 @@ fun CardNews(
                         text = date,
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.sp,
-                        color = lm_gray600,
+                        color = TayAppTheme.colors.subduedText,
                         maxLines = 2
                     )
                     Text(
                         text = press,
                         fontWeight = FontWeight.Normal,
                         fontSize = 12.sp,
-                        color = lm_gray600,
+                        color = TayAppTheme.colors.subduedText,
                         modifier = Modifier.weight(1f)
                     )
                 }

@@ -41,7 +41,7 @@ fun BoxScope.BasicInformation(
         Spacer(Modifier.height(10.dp))
         Text(
             "기본정보를 입력해주세요.",
-            color = lm_gray800,
+            color = TayAppTheme.colors.headText,
             style = TayAppTheme.typo.typography.h3
         )
         Spacer(modifier = Modifier.height(33.dp))
@@ -49,34 +49,34 @@ fun BoxScope.BasicInformation(
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text("이메일")
+                Text("이메일", color = TayAppTheme.colors.bodyText)
                 TayTextField(
                     value = email, onValueChange = { email = it },
                     colors =
                     TextFieldDefaults.outlinedTextFieldColors(
-                        backgroundColor = lm_gray000,
-                        focusedBorderColor = if (bool1) lm_sementic_green2 else lm_gray100,
-                        unfocusedBorderColor = if (bool1) lm_sementic_green2 else lm_gray100
+                        backgroundColor = TayAppTheme.colors.background,
+                        focusedBorderColor = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
+                        unfocusedBorderColor = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
                     )
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    IconText(text = "사용가능", color = if (bool1) lm_sementic_green2 else lm_gray400)
-                    IconText(text = "이메일 인증", color = if (bool1) lm_sementic_green2 else lm_gray400)
+                    IconText(text = "사용가능", color = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.disableText)
+                    IconText(text = "이메일 인증", color = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.disableText)
                 }
             }
             Spacer(modifier = Modifier.height(31.dp))
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text("비밀번호")
+                Text("비밀번호", color = TayAppTheme.colors.bodyText)
                 TayTextField(
                     value = pass1,
                     onValueChange = { pass1 = it },
                     colors =
                     TextFieldDefaults.outlinedTextFieldColors(
-                        backgroundColor = lm_gray000,
-                        focusedBorderColor = if (bool2) lm_sementic_green2 else lm_gray100,
-                        unfocusedBorderColor = if (bool2) lm_sementic_green2 else lm_gray100
+                        backgroundColor = TayAppTheme.colors.background,
+                        focusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
+                        unfocusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
                     ),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -84,19 +84,19 @@ fun BoxScope.BasicInformation(
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     IconText(
                         text = "8~20자 이내",
-                        color = if (bool2) lm_sementic_green2 else lm_gray400
+                        color = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.subduedIcon
                     )
-                    IconText(text = "영문 포함", color = if (bool2) lm_sementic_green2 else lm_gray400)
-                    IconText(text = "숫자 포함", color = if (bool2) lm_sementic_green2 else lm_gray400)
+                    IconText(text = "영문 포함", color = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.subduedIcon)
+                    IconText(text = "숫자 포함", color = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.subduedIcon)
                 }
                 TayTextField(
                     value = pass2,
                     onValueChange = { pass2 = it },
                     colors =
                     TextFieldDefaults.outlinedTextFieldColors(
-                        backgroundColor = lm_gray000,
-                        focusedBorderColor = if (bool3) lm_sementic_green2 else lm_gray100,
-                        unfocusedBorderColor = if (bool3) lm_sementic_green2 else lm_gray100
+                        backgroundColor = TayAppTheme.colors.background,
+                        focusedBorderColor = if (bool3) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
+                        unfocusedBorderColor = if (bool3) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
                     ),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -104,7 +104,7 @@ fun BoxScope.BasicInformation(
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     IconText(
                         text = "비밀번호 일치",
-                        color = if (bool3) lm_sementic_green2 else lm_gray400
+                        color = if (bool3) TayAppTheme.colors.success2 else TayAppTheme.colors.subduedIcon
                     )
                 }
             }
@@ -123,15 +123,15 @@ fun BoxScope.BasicInformation(
             .height(ButtonLargeHeight)
             .align(Alignment.BottomCenter),
         enabled = bool4,
-        contentColor = if (bool4) lm_gray000 else lm_gray400,
-        backgroundColor = if (bool4) lm_gray800 else lm_gray100,
+        contentColor = if (bool4) TayAppTheme.colors.background else TayAppTheme.colors.subduedIcon,
+        backgroundColor = if (bool4) TayAppTheme.colors.headText else TayAppTheme.colors.layer3,
     ) {
         Text("확인", style = TayAppTheme.typo.typography.button)
     }
 }
 
 @Composable
-private fun IconText(color: Color = lm_sementic_green2, text: String) {
+private fun IconText(color: Color = TayAppTheme.colors.success2, text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {

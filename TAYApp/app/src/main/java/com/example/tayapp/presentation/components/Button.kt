@@ -39,7 +39,7 @@ fun TayButton(
     shape: RoundedCornerShape = RoundedCornerShape(8.dp),
     border: BorderStroke? = null,
     backgroundColor: Color = TayAppTheme.colors.defaultButton,
-    contentColor: Color = lm_gray000,
+    contentColor: Color = TayAppTheme.colors.background,
     contentPadding: PaddingValues = PaddingValues(vertical = 6.dp, horizontal = 8.dp),
     content: @Composable RowScope. () -> Unit
 ){
@@ -103,7 +103,7 @@ fun PreviewTayButton(){
 
             TayButton(
                 onClick = { /*TODO*/ },
-                backgroundColor = lm_gray800
+                backgroundColor = TayAppTheme.colors.headText
             ) {
                 Text("버튼", style = TayAppTheme.typo.typography.button)
             }

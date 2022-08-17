@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray075
 import com.example.tayapp.presentation.ui.theme.lm_gray400
 import com.example.tayapp.presentation.ui.theme.lm_gray600
@@ -22,7 +23,7 @@ fun Spinner(){
     var isDropDownMenuExpanded by  remember { mutableStateOf(false) }
     Column {
         Button(onClick = { isDropDownMenuExpanded = true }, modifier = Modifier.background(
-            lm_gray075, RoundedCornerShape(8.dp)
+            TayAppTheme.colors.layer2, RoundedCornerShape(8.dp)
         )) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -30,24 +31,24 @@ fun Spinner(){
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
                 Icon( imageVector = TayIcons.event, contentDescription = null, modifier = Modifier.size(20.dp),
-                    tint = lm_gray600
+                    tint = TayAppTheme.colors.subduedText
                 )
-                Text("정확도순", color = lm_gray600, fontSize = 14.textDp)
+                Text("정확도순", color = TayAppTheme.colors.subduedText, fontSize = 14.textDp)
                 Icon( imageVector = TayIcons.expand_more, contentDescription = null, modifier = Modifier.size(26.dp),
-                    tint = lm_gray400
+                    tint = TayAppTheme.colors.subduedIcon
                 )
             }
         }
         DropdownMenu(expanded = isDropDownMenuExpanded, onDismissRequest = { isDropDownMenuExpanded = false },
             modifier = Modifier.wrapContentSize()) {
             DropdownMenuItem(onClick = { Log.d("##88", "Hi") }) {
-                Text(text = "Hi", color = Color.Black)
+                Text(text = "Hi", color = TayAppTheme.colors.bodyText)
             }
             DropdownMenuItem(onClick = { Log.d("##88", "Bye") }) {
-                Text(text = "Bye", color = Color.Black)
+                Text(text = "Bye", color = TayAppTheme.colors.bodyText)
             }
             DropdownMenuItem(onClick = { Log.d("##88", "Good") }) {
-                Text(text = "Good", color = Color.Black)
+                Text(text = "Good", color = TayAppTheme.colors.bodyText)
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
@@ -17,6 +18,8 @@ import com.example.tayapp.presentation.screens.initial.pager.Email
 import com.example.tayapp.presentation.screens.initial.pager.Finish
 import com.example.tayapp.presentation.screens.initial.pager.TermsOfService
 import com.example.tayapp.presentation.ui.theme.KeyLine
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.ui.theme.dm_primary50
 import com.example.tayapp.presentation.ui.theme.lm_primary50
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -43,7 +46,11 @@ fun RegisterScreen(
             }
         })
         Canvas(modifier = Modifier.fillMaxWidth()) {
-            drawLine(color = lm_primary50, start = Offset(0f, 0f), end = Offset(float.value, 0f))
+            drawLine(
+                color = if (TayAppTheme.isDark) lm_primary50 else dm_primary50,
+                start = Offset(0f, 0f),
+                end = Offset(float.value, 0f)
+            )
         }
 
         HorizontalPager(
@@ -84,7 +91,7 @@ fun RegisterItems(
     ) {
         when (index) {
             0 -> Email(onClick = onClick)
-            1 -> TermsOfService( onClick = onClick)
+            1 -> TermsOfService(onClick = onClick)
             2 -> BasicInformation(viewModel::requestRegister, onClick = onClick)
             3 -> Finish(onClick = onClick)
         }

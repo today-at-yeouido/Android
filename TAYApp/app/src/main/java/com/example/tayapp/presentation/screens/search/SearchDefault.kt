@@ -81,8 +81,8 @@ fun SearchDefault(
             Spacer(modifier = Modifier.height(20.dp))
             TayButton(
                 onClick = { /*TODO*/ },
-                backgroundColor = lm_gray000,
-                contentColor = lm_gray800,
+                backgroundColor = TayAppTheme.colors.background,
+                contentColor = TayAppTheme.colors.headText,
                 modifier = Modifier.fillMaxWidth(),
                 border = BorderStroke(1.dp, TayAppTheme.colors.border)
             ) {
@@ -108,19 +108,19 @@ fun SearchHistory(
             modifier = Modifier.size(26.dp),
             imageVector = TayIcons.history,
             contentDescription = null,
-            tint = lm_gray300
+            tint = TayAppTheme.colors.disableIcon
         )
         Text(
             text = "$string",
             maxLines = 1,
             fontWeight = FontWeight.Normal,
-            color = lm_gray700,
+            color = TayAppTheme.colors.bodyText,
             fontSize = 14.sp,
             modifier = Modifier.weight(1f)
         )
         CloseButton(
             onClick = removeHistory,
-            tint = lm_gray300
+            tint = TayAppTheme.colors.disableIcon
         )
     }
 }

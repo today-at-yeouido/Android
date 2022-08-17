@@ -24,7 +24,7 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 fun ProfileAppSetting(
     navController: NavController,
     upPress: () -> Unit
-){
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -35,12 +35,12 @@ fun ProfileAppSetting(
             CardProfileListItemWithNext(
                 icon = Icons.Outlined.Visibility,
                 text = "보기",
-                onClick = {navController.navigate(ProfileDestination.VISIBILITY)}
+                onClick = { navController.navigate(ProfileDestination.VISIBILITY) }
             )
             CardProfileListItemWithNext(
                 icon = Icons.Outlined.NotificationsNone,
                 text = "알람",
-                onClick = {navController.navigate(ProfileDestination.ALARM)}
+                onClick = { navController.navigate(ProfileDestination.ALARM) }
             )
         }
     }

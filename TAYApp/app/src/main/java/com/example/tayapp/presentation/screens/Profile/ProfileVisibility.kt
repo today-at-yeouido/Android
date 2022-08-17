@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.tayapp.presentation.components.CardProfileListItemWithNext
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.ui.theme.KeyLine
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.utils.mutableSize
 import com.example.tayapp.utils.textSize
 
@@ -59,7 +60,7 @@ fun ProfileVisibility(
                         valueRange = 0.5f..2f,
                         steps = 3,
                         modifier = Modifier.background(
-                            Color.LightGray
+                            TayAppTheme.colors.bodyText
                         )
                     )
                     Spacer(modifier = Modifier.height(20.dp))
