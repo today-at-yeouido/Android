@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tayapp.data.remote.dto.bill.DetailBillDto
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
@@ -26,11 +28,14 @@ import kotlinx.coroutines.launch
 fun BillDetail(billId: Int, upPress: () -> Unit) {
 
     val viewModel = hiltViewModel<DetailViewModel>()
+    val detailState = viewModel.detailState.collectAsState()
     val scrollState = rememberScrollState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val coroutineScope = rememberCoroutineScope()
+
+
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -54,7 +59,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                             bottomSheetScaffoldState.bottomSheetState.collapse()
                         }
                     }
-                })
+                }, bill = detailState.value.billDetail!!)
                 Spacer(modifier = Modifier.size(16.dp))
                 Column(
                     modifier = Modifier
@@ -77,7 +82,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
 }
 
 @Composable
-fun DetailHeader(onProgressClick: () -> Unit) {
+fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,7 +101,7 @@ fun DetailHeader(onProgressClick: () -> Unit) {
             PillList("일부개정안", "정부이송")
 
             Text(
-                text = "중대재해 처벌 등에 관한 법률",
+                text = bill.billName,
                 style = TayAppTheme.typo.typography.h1
             )
 

@@ -29,12 +29,12 @@ class DetailViewModel @Inject constructor(
 ) : ViewModel()  {
 
     val billId: Int = savedStateHandle.get<Int>(Destinations.BILL_ID)!!
-
     var detailState = MutableStateFlow(BillDetailUiState(isLoading = true))
         private set
 
     init {
         getBillDetail(billId)
+
     }
 
     fun getBillDetail(billId: Int){
@@ -43,8 +43,9 @@ class DetailViewModel @Inject constructor(
                 when(result){
                     is Resource.Success -> {
                         detailState.update {
-                            it.copy(billDetail = result.data, isLoading = false)
+                            it.copy(billDetail = result.data!!, isLoading = false)
                         }
+
                     }
                     is Resource.Error -> {
                         detailState.update {

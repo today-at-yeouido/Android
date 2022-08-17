@@ -21,7 +21,7 @@ interface BillApi {
         @Query("page") page: Int = 0
     ) : HomeBillDto
 
-    @GET("$GET_BILL_DETAIL/{id}")
+    @GET("$GET_BILL_DETAIL{id}/")
     suspend fun getBillDetail(
         @Path("id") billId: Int
     ) : Response<DetailBillDto>
