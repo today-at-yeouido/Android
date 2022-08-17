@@ -88,7 +88,10 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(TayAppTheme.colors.caution1, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
+            .background(
+                TayAppTheme.colors.caution1,
+                RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
+            )
             .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
@@ -99,53 +102,53 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
                 .padding(horizontal = KeyLine),
 
             ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                PillList(bill.billType, bill.status)
+            Spacer(modifier = Modifier.height(20.dp))
+            PillList(bill.billType, bill.status)
+
+            Text(
+                fontSize = 12.sp,
+                color = TayAppTheme.colors.subduedText,
+                fontWeight = FontWeight.Normal,
+                text = bill.billName,
+                style = TayAppTheme.typo.typography.h1
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Icon(
+                    imageVector = TayIcons.visibility_outlined,
+                    contentDescription = "null",
+                    tint = TayAppTheme.colors.controlBorder,
+                    modifier = Modifier.size(20.dp)
+                )
 
                 Text(
+                    text = bill.proposer,
                     fontSize = 12.sp,
                     color = TayAppTheme.colors.subduedText,
                     fontWeight = FontWeight.Normal
-                    text = bill.billName,
-                    style = TayAppTheme.typo.typography.h1
                 )
-
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-
                     Icon(
                         imageVector = TayIcons.visibility_outlined,
                         contentDescription = "null",
-                        tint = TayAppTheme.colors.controlBorder,
+                        tint = lm_gray600,
                         modifier = Modifier.size(20.dp)
                     )
-
                     Text(
-                        text = bill.proposer,
+                        text = "${bill.views}",
                         fontSize = 12.sp,
-                        color = TayAppTheme.colors.subduedText,
+                        color = lm_gray600,
                         fontWeight = FontWeight.Normal
                     )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            imageVector = TayIcons.visibility_outlined,
-                            contentDescription = "null",
-                            tint = lm_gray600,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = "${bill.views}",
-                            fontSize = 12.sp,
-                            color = lm_gray600,
-                            fontWeight = FontWeight.Normal
-                        )
-                    }
                 }
             }
+        }
 
         CardCommittee("상임위")
         CardBillProgress(onProgressClick, bill)
@@ -183,7 +186,7 @@ private fun CardCommittee(
                 )
             }
             Text(
-                text = if(committee.isNullOrBlank()) "미정" else committee,
+                text = if (committee.isNullOrBlank()) "미정" else committee,
                 fontSize = 16.sp,
                 color = TayAppTheme.colors.subduedText,
                 fontWeight = FontWeight.Normal
@@ -235,7 +238,7 @@ private fun CardBillProgress(
                     )
                 }
                 LazyRow {
-                    item{
+                    item {
                         BillProgressItem("접수", bill.proposeDt)
                         BillArrow()
                         BillProgressItem("심사", bill.committeeInfo.firstOrNull()?.procDt)
@@ -330,7 +333,7 @@ private fun BillPointText(
             style = TayAppTheme.typo.typography.body1
         )
         Text(
-            text = if(summary.isNullOrBlank()) "" else summary,
+            text = if (summary.isNullOrBlank()) "" else summary,
             style = TayAppTheme.typo.typography.body2
         )
     }
@@ -433,7 +436,7 @@ private fun BillProgressItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(9.dp)
     ) {
-        if(date.isNullOrBlank()) DashPill(string)
+        if (date.isNullOrBlank()) DashPill(string)
         else {
             Pill(string)
             Text(

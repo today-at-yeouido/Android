@@ -42,7 +42,9 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
                 lineHeight = 1.em,
                 fontWeight = FontWeight.Normal,
                 letterSpacing = (-0.2).textDp,
-                modifier = Modifier.padding(top = 170.dp).align(Alignment.TopCenter)
+                modifier = Modifier
+                    .padding(top = 170.dp)
+                    .align(Alignment.TopCenter)
             )
             Text(
                 text = "오늘 여의도",
@@ -51,7 +53,9 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
                 fontWeight = FontWeight.Bold,
                 lineHeight = 1.em,
                 letterSpacing = (-0.2).textDp,
-                modifier = Modifier.padding(top = 196.dp).align(Alignment.TopCenter)
+                modifier = Modifier
+                    .padding(top = 196.dp)
+                    .align(Alignment.TopCenter)
             )
 
             Image(
@@ -66,6 +70,7 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
     LaunchedEffect(key1 = true) {
         delay(2000L)
+        navController.popBackStack()
         if (isLogin) {
             navController.navigate(AppGraph.HOME_GRAPH)
         } else navController.navigate(Destinations.LOGIN)

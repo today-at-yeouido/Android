@@ -42,6 +42,11 @@ fun LoginScreen(
 ) {
     val loginState by viewModel.isLogin
 
+    val navigate = { route: String ->
+        navController.popBackStack()
+        navController.navigate(route)
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -52,12 +57,14 @@ fun LoginScreen(
             viewModel::naverLogin,
             viewModel::googleLogin,
             viewModel::getGoogleLoginAuth
-        ) { navController.navigate(it) }
+        ) { navigate(it) }
     }
 
     LaunchedEffect(key1 = loginState) {
         Log.d("##88", "런치드 이펙트 $loginState")
-        if (loginState) navController.navigate(AppGraph.HOME_GRAPH)
+        if (loginState) {
+            navigate(AppGraph.HOME_GRAPH)
+        }
     }
 }
 

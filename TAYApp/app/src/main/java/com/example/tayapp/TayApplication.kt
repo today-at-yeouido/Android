@@ -7,7 +7,11 @@ import com.navercorp.nid.NaverIdLoginSDK
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class TayApplication:Application(){
+class TayApplication : Application() {
+
+    init {
+        instance = this
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -18,8 +22,13 @@ class TayApplication:Application(){
         val naverClientName = getString(R.string.social_login_info_naver_client_name)
 
 
-        NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret , naverClientName)
+        NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret, naverClientName)
         // Kakao SDK 초기화
         KakaoSdk.init(this, "c323d5d48d4d822eaa2a0fbd6e3ca567")
+    }
+
+    companion object {
+        lateinit var instance: Application
+        fun getApplication() = instance
     }
 }

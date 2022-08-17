@@ -13,6 +13,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.navigation.AppGraph
+import com.example.tayapp.presentation.navigation.BottomBarDestination
 import com.example.tayapp.presentation.navigation.Destinations
 import kotlinx.coroutines.CoroutineScope
 
@@ -56,7 +57,7 @@ class TayAppState(
             navController.navigate(route) {
                 launchSingleTop = true
                 restoreState = true
-                popUpTo(AppGraph.HOME_GRAPH) {
+                popUpTo(BottomBarDestination.FEED) {
                     saveState = true
                 }
             }
