@@ -25,10 +25,14 @@ private val DarkColorPalette = TayColorSystem(
     icon = dm_gray700,
     headText = dm_gray800,
     textHighlight = dm_sub20,
-    danger = dm_sementic_red2,
-    success = dm_sementic_green2,
-    caution = dm_sementic_yellow2,
-    information = dm_sementic_blue2,
+    danger1 = dm_semantic_red1,
+    danger2 = dm_semantic_red2,
+    success1 = dm_semantic_green1,
+    success2 = dm_semantic_green2,
+    caution1 = dm_semantic_yellow1,
+    caution2 = dm_semantic_yellow2,
+    information1 = dm_semantic_blue1,
+    information2 = dm_semantic_blue2,
     isDark = false,
 )
 
@@ -50,10 +54,14 @@ private val LightColorPalette = TayColorSystem(
     icon = lm_gray700,
     headText = lm_gray800,
     textHighlight = lm_sub20,
-    danger = lm_sementic_red2,
-    success = lm_sementic_green2,
-    caution = lm_sementic_yellow2,
-    information = lm_sementic_blue2,
+    danger1 = lm_semantic_red1,
+    danger2 = lm_semantic_red2,
+    success1 = lm_semantic_green1,
+    success2 = lm_semantic_green2,
+    caution1 = lm_semantic_yellow1,
+    caution2 = lm_semantic_yellow2,
+    information1 = lm_semantic_blue1,
+    information2 = lm_semantic_blue2,
     isDark = true,
 )
 
@@ -136,10 +144,14 @@ class TayColorSystem(
     icon: Color,
     headText: Color,
     textHighlight: Color,
-    danger: Color,
-    success: Color,
-    caution: Color,
-    information: Color,
+    danger1: Color,
+    danger2: Color,
+    success1: Color,
+    success2: Color,
+    caution1: Color,
+    caution2: Color,
+    information1: Color,
+    information2: Color,
     isDark: Boolean
 ) {
     var primary by mutableStateOf(primary)
@@ -176,13 +188,21 @@ class TayColorSystem(
         private set
     var textHighlight by mutableStateOf(textHighlight)
         private set
-    var danger by mutableStateOf(danger)
+    var danger1 by mutableStateOf(danger1)
         private set
-    var success by mutableStateOf(success)
+    var danger2 by mutableStateOf(danger2)
         private set
-    var caution by mutableStateOf(caution)
+    var success1 by mutableStateOf(success1)
         private set
-    var information by mutableStateOf(information)
+    var success2 by mutableStateOf(success2)
+        private set
+    var caution1 by mutableStateOf(caution1)
+        private set
+    var caution2 by mutableStateOf(caution2)
+        private set
+    var information1 by mutableStateOf(information1)
+        private set
+    var information2 by mutableStateOf(information2)
         private set
     var isDark by mutableStateOf(isDark)
         private set
@@ -208,10 +228,14 @@ class TayColorSystem(
         icon = other.icon
         headText = other.headText
         textHighlight = other.textHighlight
-        danger = other.danger
-        success = other.success
-        caution = other.caution
-        information = other.information
+        danger1 = other.danger1
+        danger2 = other.danger2
+        success1 = other.success1
+        success2 = other.success2
+        caution1 = other.caution1
+        caution2 = other.caution2
+        information1 = other.information1
+        information2 = other.information2
         isDark = other.isDark
     }
 
@@ -236,10 +260,14 @@ class TayColorSystem(
         icon = icon,
         headText = headText,
         textHighlight = textHighlight,
-        danger = danger,
-        success = success,
-        caution = caution,
-        information = information,
+        danger1 = danger1,
+        danger2 = danger2,
+        success1 = success1,
+        success2 = success2,
+        caution1 = caution1,
+        caution2 = caution2,
+        information1 = information1,
+        information2 = information2,
         isDark = isDark,
     )
 }
