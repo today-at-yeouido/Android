@@ -33,6 +33,7 @@ private val DarkColorPalette = TayColorSystem(
     caution2 = dm_semantic_yellow2,
     information1 = dm_semantic_blue1,
     information2 = dm_semantic_blue2,
+    gray500 = dm_gray500,
     isDark = false,
 )
 
@@ -62,6 +63,7 @@ private val LightColorPalette = TayColorSystem(
     caution2 = lm_semantic_yellow2,
     information1 = lm_semantic_blue1,
     information2 = lm_semantic_blue2,
+    gray500 = lm_gray500,
     isDark = true,
 )
 
@@ -106,6 +108,8 @@ object TayAppTheme {
     val typo: TayTypographySystem
         @Composable
         get() = LocalTayTypographySystem.current
+
+    const val isDark = false
 }
 
 /**

@@ -26,7 +26,7 @@ fun BoxScope.Finish(
         Text(
             "이메일로 확인 메일을 보냈습니다 \n" +
                     "가입을 완료해주세요.",
-            color = lm_gray800,
+            color = TayAppTheme.colors.headText,
             style = TayAppTheme.typo.typography.h3
         )
     }
@@ -38,8 +38,8 @@ fun BoxScope.Finish(
             .fillMaxWidth()
             .height(ButtonLargeHeight)
             .align(Alignment.BottomCenter),
-        contentColor = lm_gray400,
-        backgroundColor = lm_gray100,
+        contentColor = TayAppTheme.colors.disableText,
+        backgroundColor = TayAppTheme.colors.layer1,
     ) {
         Text("완료", style = TayAppTheme.typo.typography.button)
     }

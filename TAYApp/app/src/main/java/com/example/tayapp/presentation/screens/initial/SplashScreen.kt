@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.tayapp.R
 import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray000
 import com.example.tayapp.presentation.ui.theme.lm_gray700
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
@@ -31,12 +32,12 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = lm_gray700
+        color = TayAppTheme.colors.bodyText
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 text = "내 손 안의 작은 국회",
-                color = lm_gray000,
+                color = TayAppTheme.colors.background,
                 fontSize = 16.textDp,
                 lineHeight = 1.em,
                 fontWeight = FontWeight.Normal,
@@ -45,7 +46,7 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
             )
             Text(
                 text = "오늘 여의도",
-                color = lm_gray000,
+                color = TayAppTheme.colors.background,
                 fontSize = 26.textDp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 1.em,
