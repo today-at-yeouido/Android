@@ -72,7 +72,7 @@ fun Pill(
         }
         "가결", "공포" -> {
             Pill(
-                textColor = lm_gray700,
+                textColor = TayAppTheme.colors.bodyText,
                 backgroundColor = TayAppTheme.colors.success1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
@@ -80,7 +80,7 @@ fun Pill(
         }
         "대안", "부결", "철회", "폐기" -> {
             Pill(
-                textColor = lm_gray000,
+                textColor = TayAppTheme.colors.background,
                 backgroundColor = TayAppTheme.colors.danger1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)

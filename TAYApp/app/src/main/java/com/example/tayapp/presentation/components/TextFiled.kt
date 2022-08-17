@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.tayapp.presentation.ui.theme.lm_gray000
-import com.example.tayapp.presentation.ui.theme.lm_gray100
 import com.example.tayapp.utils.textDp
 
 @Composable

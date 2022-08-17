@@ -154,7 +154,11 @@ private fun InputField(
             contentColor = if (bool3) TayAppTheme.colors.layer3 else TayAppTheme.colors.subduedIcon,
             enabled = bool3
         ) {
-            Text("로그인", style = TayAppTheme.typo.typography.button)
+            Text(
+                "로그인",
+                style = TayAppTheme.typo.typography.button,
+                color = TayAppTheme.colors.headText
+            )
         }
 
         Row(
@@ -238,12 +242,17 @@ private fun RegisterField(navigate: (String) -> Unit) {
                 }
             ) {
                 Text("이메일로 가입하기", color = TayAppTheme.colors.information2)
-                Icon(TayIcons.navigate_next, contentDescription = null, tint = TayAppTheme.colors.information2)
+                Icon(
+                    TayIcons.navigate_next,
+                    contentDescription = null,
+                    tint = TayAppTheme.colors.information2
+                )
             }
         }
         Divider(color = TayAppTheme.colors.layer3)
         Text(
             "로그인 없이 이용하기",
+            color = TayAppTheme.colors.headText,
             fontSize = 18.sp,
             modifier = Modifier.clickable { navigate(AppGraph.HOME_GRAPH) })
     }

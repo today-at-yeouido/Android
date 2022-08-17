@@ -245,7 +245,7 @@ private fun CardPieGraph() {
                 text = "본 회의 투표 결과",
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                color = lm_gray700,
+                color = TayAppTheme.colors.bodyText,
                 modifier = Modifier.padding(horizontal = 3.dp),
                 maxLines = 1
             )
@@ -272,7 +272,7 @@ private fun CardBillLine() {
                 text = "이 법에 접수된 의안이 또 있어요!",
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                color = lm_gray700,
+                color = TayAppTheme.colors.bodyText,
                 modifier = Modifier.padding(horizontal = 3.dp),
                 maxLines = 1
             )
@@ -414,7 +414,7 @@ private fun BillProgressItem(
             Text(
                 text = "22.07.20",
                 fontSize = 9.sp,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 fontWeight = FontWeight.Light
             )
         }

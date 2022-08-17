@@ -1,7 +1,10 @@
 package com.example.tayapp.presentation.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -14,16 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import com.example.tayapp.R
 import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.BottomBarDestination
-import com.example.tayapp.presentation.screens.*
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.ui.theme.lm_gray000
-import com.example.tayapp.presentation.ui.theme.lm_gray400
-import com.example.tayapp.presentation.ui.theme.lm_gray700
 import com.example.tayapp.presentation.utils.TayIcons
 
 @Composable

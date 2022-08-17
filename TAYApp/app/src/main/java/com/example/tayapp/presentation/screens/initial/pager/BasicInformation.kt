@@ -49,7 +49,7 @@ fun BoxScope.BasicInformation(
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text("이메일")
+                Text("이메일", color = TayAppTheme.colors.bodyText)
                 TayTextField(
                     value = email, onValueChange = { email = it },
                     colors =
@@ -68,13 +68,13 @@ fun BoxScope.BasicInformation(
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text("비밀번호")
+                Text("비밀번호", color = TayAppTheme.colors.bodyText)
                 TayTextField(
                     value = pass1,
                     onValueChange = { pass1 = it },
                     colors =
                     TextFieldDefaults.outlinedTextFieldColors(
-                        backgroundColor = lm_gray000,
+                        backgroundColor = TayAppTheme.colors.background,
                         focusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
                         unfocusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
                     ),

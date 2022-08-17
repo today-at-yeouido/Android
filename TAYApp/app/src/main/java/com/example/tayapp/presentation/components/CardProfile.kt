@@ -97,7 +97,11 @@ private fun CardUserProfileText(
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        Text("${LoginState.user.id} 님", style = TayAppTheme.typo.typography.h2)
+        Text(
+            "${LoginState.user.id} 님",
+            style = TayAppTheme.typo.typography.h2,
+            color = TayAppTheme.colors.headText
+        )
         Text(
             LoginState.user.email,
             fontWeight = FontWeight.Light,
@@ -138,6 +142,7 @@ fun CardProfilSection(
                 Icon(
                     imageVector = icon,
                     contentDescription = "",
+                    tint = TayAppTheme.colors.headText,
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.Center)
@@ -150,6 +155,7 @@ fun CardProfilSection(
                 Text(
                     "$title",
                     fontWeight = FontWeight.Medium,
+                    color = TayAppTheme.colors.headText,
                     fontSize = 14.sp
                 )
                 Text(
@@ -188,11 +194,13 @@ fun CardProfileListItem(
     ) {
         Icon(
             imageVector = icon,
+            tint = TayAppTheme.colors.bodyText,
             contentDescription = ""
         )
         Text(
             "$text",
             fontWeight = FontWeight.Medium,
+            color = TayAppTheme.colors.headText,
             fontSize = 14.sp,
             modifier = Modifier.weight(1f)
         )
@@ -277,7 +285,12 @@ fun Badge(
                     .height(60.dp)
                     .width(90.dp)
                     .background(
-                        brush = Brush.verticalGradient(listOf(TayAppTheme.colors.sub10, lm_primary20)),
+                        brush = Brush.verticalGradient(
+                            listOf(
+                                TayAppTheme.colors.sub10,
+                                TayAppTheme.colors.primary20
+                            )
+                        ),
                         shape = RoundedCornerShape(topEnd = 60.dp, topStart = 60.dp)
                     )
             )

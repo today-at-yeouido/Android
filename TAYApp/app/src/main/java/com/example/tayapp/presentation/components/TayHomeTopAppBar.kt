@@ -1,39 +1,32 @@
 package com.example.tayapp.presentation.components
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.runtime.*
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tayapp.R
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.ExpandButton
 import com.example.tayapp.presentation.utils.NotificationButton
-import com.example.tayapp.presentation.utils.TayIcons
-import com.example.tayapp.utils.textSize
 import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 /**
@@ -96,7 +89,7 @@ fun TayHomeTopAppBar(
                        contentDescription = "main_title_image"
                    )
 
-                   Text(text = "오늘, 여의도", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                   Text(text = "오늘, 여의도", fontWeight = FontWeight.Bold, color = TayAppTheme.colors.bodyText, fontSize = 18.sp)
                }
             },
             elevation = elevation,

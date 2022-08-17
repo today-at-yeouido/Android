@@ -35,7 +35,7 @@ fun BoxScope.TermsOfService(
         Spacer(Modifier.height(10.dp))
         Text(
             "오늘, 여의도 서비스 이용약관에 \n동의하여 주세요",
-            color = lm_gray800,
+            color = TayAppTheme.colors.headText,
             style = TayAppTheme.typo.typography.h3
         )
         Spacer(modifier = Modifier.height(26.dp))

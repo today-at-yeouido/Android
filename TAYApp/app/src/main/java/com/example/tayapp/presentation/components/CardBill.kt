@@ -35,12 +35,12 @@ import com.example.tayapp.presentation.utils.BookmarkButton
 fun CardBill(
     modifier: Modifier = Modifier,
     bill: Bill,
-    onClick: (Int) -> Unit ={},
+    onClick: (Int) -> Unit = {},
     keyword: String = ""
-){
+) {
     TayCard(
         modifier = modifier.fillMaxWidth(),
-        onClick = {onClick(bill.id)},
+        onClick = { onClick(bill.id) },
         enable = true
     ) {
         CardBillDefault(
@@ -55,7 +55,7 @@ fun CardBill(
 }
 
 @Composable
-fun CardBillWithScrap(){
+fun CardBillWithScrap() {
     TayCard(
         modifier = Modifier.fillMaxWidth(),
         enable = true
@@ -81,11 +81,11 @@ fun CardBillWithEmoij(
     title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
     bill: String = "제정안",
     status: String = "가결",
-    onClick: (Int) -> Unit ={}
-){
+    onClick: (Int) -> Unit = {}
+) {
     TayCard(
         modifier = Modifier.fillMaxWidth(),
-        onClick = {onClick(1234)},
+        onClick = { onClick(1234) },
         enable = true
     ) {
         Row(
@@ -103,6 +103,7 @@ fun CardBillWithEmoij(
                 Text(
                     text = title,
                     fontWeight = FontWeight.Medium,
+                    color = TayAppTheme.colors.bodyText,
                     fontSize = 16.sp
                 )
             }
@@ -120,7 +121,7 @@ private fun CardBillDefault(
     date: String = "2022.06.17",
     people: String = "박대출 등 10인",
     keyword: String = ""
-){
+) {
 
     Column(
         modifier = modifier,
@@ -128,17 +129,17 @@ private fun CardBillDefault(
     ) {
         PillList(bill, status)
         val startIndex = title.indexOf(keyword)
-        if(keyword != "" && startIndex != -1){
+        if (keyword != "" && startIndex != -1) {
 
-                Text(
-                text =  buildAnnotatedString {
+            Text(
+                text = buildAnnotatedString {
 
-                    if(startIndex == 0){
+                    if (startIndex == 0) {
                         withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
                             append(keyword)
                         }
                         append(title.substring(keyword.length, title.length))
-                    }else{
+                    } else {
                         append(title.substring(0, startIndex))
 
                         withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
@@ -147,18 +148,19 @@ private fun CardBillDefault(
                         append(title.substring(startIndex + keyword.length, title.length))
                     }
                 },
-
+                color = TayAppTheme.colors.bodyText,
                 modifier = Modifier
                     .height(54.dp),
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 maxLines = 2
             )
-        }else{
+        } else {
             Text(
                 text = title,
                 modifier = Modifier
                     .height(54.dp),
+                color = TayAppTheme.colors.bodyText,
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 maxLines = 2
@@ -184,7 +186,7 @@ private fun CardBillDefault(
 }
 
 @Composable
-fun CardEmoij(){
+fun CardEmoij() {
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -202,7 +204,7 @@ fun CardEmoij(){
 
 @Preview
 @Composable
-private fun CardPreview(){
+private fun CardPreview() {
     TayAppTheme() {
         //CardBill()
     }
@@ -210,7 +212,7 @@ private fun CardPreview(){
 
 @Preview
 @Composable
-private fun Card2Preview(){
+private fun Card2Preview() {
     TayAppTheme() {
         CardBillWithScrap()
     }
