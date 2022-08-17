@@ -37,8 +37,8 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         sheetContent = { BillProgressDetail() },
         sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         sheetPeekHeight = 10.dp,
-        backgroundColor = lm_gray000,
-        sheetBackgroundColor = lm_gray050
+        backgroundColor = TayAppTheme.colors.background,
+        sheetBackgroundColor = TayAppTheme.colors.layer1
     ) {
         Column {
             TayTopAppBarWithScrap(billId, upPress, viewModel::addScrap)
@@ -81,7 +81,7 @@ fun DetailHeader(onProgressClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(lm_card_yellow, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
+            .background(TayAppTheme.colors.caution1, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
             .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
@@ -107,7 +107,7 @@ fun DetailHeader(onProgressClick: () -> Unit) {
                 Text(
                     text = "김삼순의원 등 10명",
                     fontSize = 12.sp,
-                    color = lm_gray600,
+                    color = TayAppTheme.colors.subduedText,
                     fontWeight = FontWeight.Normal
                 )
                 Row(
@@ -116,13 +116,13 @@ fun DetailHeader(onProgressClick: () -> Unit) {
                     Icon(
                         imageVector = TayIcons.visibility_outlined,
                         contentDescription = "null",
-                        tint = lm_gray600,
+                        tint = TayAppTheme.colors.controlBorder,
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
                         text = "19.3만",
                         fontSize = 12.sp,
-                        color = lm_gray600,
+                        color = TayAppTheme.colors.subduedText,
                         fontWeight = FontWeight.Normal
                     )
                 }
@@ -152,20 +152,20 @@ private fun CardCommittee() {
                 Text(
                     text = "상임위원회",
                     fontSize = 16.sp,
-                    color = lm_gray700,
+                    color = TayAppTheme.colors.bodyText,
                     fontWeight = FontWeight.Medium
                 )
                 Icon(
                     imageVector = TayIcons.help,
                     contentDescription = "null",
-                    tint = lm_sementic_blue2,
+                    tint = TayAppTheme.colors.information2,
                     modifier = Modifier.size(20.dp)
                 )
             }
             Text(
                 text = "미정",
                 fontSize = 16.sp,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 fontWeight = FontWeight.Normal
             )
 
@@ -193,13 +193,13 @@ private fun CardBillProgress(onProgressClick: () -> Unit) {
                     Text(
                         text = "진행현황",
                         fontSize = 16.sp,
-                        color = lm_gray700,
+                        color = TayAppTheme.colors.bodyText,
                         fontWeight = FontWeight.Medium
                     )
                     Icon(
                         imageVector = TayIcons.help,
                         contentDescription = "null",
-                        tint = lm_sementic_blue2,
+                        tint = TayAppTheme.colors.information2,
                         modifier = Modifier
                             .size(20.dp)
                             .clickable(onClick = onProgressClick)
@@ -207,7 +207,7 @@ private fun CardBillProgress(onProgressClick: () -> Unit) {
                     Text(
                         text = "D+452",
                         fontSize = 16.sp,
-                        color = lm_gray600,
+                        color = TayAppTheme.colors.subduedText,
                         fontWeight = FontWeight.Normal
                     )
                 }

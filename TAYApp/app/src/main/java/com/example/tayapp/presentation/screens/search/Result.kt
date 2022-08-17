@@ -20,6 +20,7 @@ import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.presentation.components.CardSearch
 import com.example.tayapp.presentation.components.Title
 import com.example.tayapp.presentation.ui.theme.KeyLine
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray400
 
 @Composable
@@ -70,7 +71,7 @@ fun NoResult(){
                 .padding(top = 258.dp)
                 .align(Alignment.TopCenter),
             textAlign = TextAlign.Center,
-            color = lm_gray400
+            color = TayAppTheme.colors.disableText
         )
     }
 }

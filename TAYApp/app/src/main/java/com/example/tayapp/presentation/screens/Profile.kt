@@ -43,7 +43,7 @@ fun Profile(
                 .fillMaxWidth()
                 .height(150.dp)
                 .background(
-                    lm_primary50,
+                    TayAppTheme.colors.primary,
                     RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
                 ),
 
@@ -112,7 +112,7 @@ private fun ProfileLineItems() {
             Icon(
                 imageVector = TayIcons.navigate_next,
                 contentDescription = null,
-                tint = lm_gray300
+                tint = TayAppTheme.colors.disableIcon
             )
         }
         CardProfileListItemWithOutIcon(
@@ -121,7 +121,7 @@ private fun ProfileLineItems() {
         ) {
             TayButton(
                 onClick = { /*TODO*/ },
-                contentColor = lm_gray800
+                contentColor = TayAppTheme.colors.headText
             ) {
                 Text(
                     text = "업데이트",
@@ -140,8 +140,8 @@ private fun ProfileBottomButtons(logout: () -> Unit) {
     ) {
         TayButton(
             onClick = { logout() },
-            contentColor = lm_gray800,
-            backgroundColor = lm_gray000,
+            contentColor = TayAppTheme.colors.headText,
+            backgroundColor = TayAppTheme.colors.background,
             border = BorderStroke(1.dp, lm_gray200)
         ) {
             Text(
@@ -152,9 +152,9 @@ private fun ProfileBottomButtons(logout: () -> Unit) {
         }
         TayButton(
             onClick = { /*TODO*/ },
-            contentColor = lm_gray800,
-            backgroundColor = lm_gray000,
-            border = BorderStroke(1.dp, lm_gray200)
+            contentColor = TayAppTheme.colors.headText,
+            backgroundColor = TayAppTheme.colors.background,
+            border = BorderStroke(1.dp, TayAppTheme.colors.border)
         ) {
             Text(
                 text = "회원 탈퇴",
