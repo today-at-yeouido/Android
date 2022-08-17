@@ -46,7 +46,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         sheetBackgroundColor = lm_gray050
     ) {
         Column {
-            TayTopAppBarWithScrap("$billId", upPress, {viewModel.deleteScrap(billId)})
+            TayTopAppBarWithScrap(billId, upPress, viewModel::addScrap)
             Column(
                 modifier = Modifier.verticalScroll(scrollState)
             ) {

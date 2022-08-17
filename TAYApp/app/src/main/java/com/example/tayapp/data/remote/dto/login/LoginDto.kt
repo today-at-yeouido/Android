@@ -1,6 +1,7 @@
 package com.example.tayapp.data.remote.dto.login
 
 import com.example.tayapp.data.pref.model.UserPref
+import com.example.tayapp.presentation.states.UserInfo
 import com.google.gson.annotations.SerializedName
 
 
@@ -33,3 +34,6 @@ fun LoginResponse.toPref(): UserPref = UserPref(
     id = this.user.pk,
     email = this.user.email,
 )
+
+fun LoginResponse.toState(): UserInfo =
+    UserInfo(id = this.user.pk, email = this.user.email, refreshToken = this.refreshToken)

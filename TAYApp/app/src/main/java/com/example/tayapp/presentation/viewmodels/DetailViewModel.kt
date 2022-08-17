@@ -74,7 +74,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteScrap(bill: Int){
+    fun deleteScrap(bill: Int) {
         viewModelScope.launch {
             postDeleteScrapUseCase(bill).collect() { it ->
                 when (it) {

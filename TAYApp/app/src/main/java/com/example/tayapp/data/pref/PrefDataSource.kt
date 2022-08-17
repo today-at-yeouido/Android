@@ -24,6 +24,7 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         val LOGIN_USER_REFRESH_TOKEN = stringPreferencesKey("login_user_refresh_token")
         val LOGIN_USER_ID = stringPreferencesKey("login_user_id")
         val LOGIN_USER_EMAIL = stringPreferencesKey("login_user_email")
+        val LOGIN_USER_SNS = stringPreferencesKey("login_user_sns")
 
         val FAVORIT_CATEGORY = stringSetPreferencesKey("favorit_category")
         val RECENT_SEARCH_TERM = stringPreferencesKey("recent_search_term")
@@ -45,6 +46,7 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
             settings[LOGIN_USER_REFRESH_TOKEN] = ""
             settings[LOGIN_USER_ID] = ""
             settings[LOGIN_USER_EMAIL] = ""
+            settings[LOGIN_USER_SNS] = ""
         }
     }
 
@@ -64,6 +66,7 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
             settings[LOGIN_USER_REFRESH_TOKEN] = user.refreshToken
             settings[LOGIN_USER_ID] = user.id
             settings[LOGIN_USER_EMAIL] = user.email
+            settings[LOGIN_USER_EMAIL] = user.sns
         }
     }
 

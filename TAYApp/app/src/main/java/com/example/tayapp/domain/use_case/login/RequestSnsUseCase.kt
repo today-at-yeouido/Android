@@ -18,7 +18,7 @@ class RequestSnsUseCase @Inject constructor(
         return when (r.code()) {
             200 -> {
                 Log.d("##99", "sns success ${r.code()}")
-                val user = r.body()!!.toPref()
+                val user = r.body()!!.toPref().copy(sns = sns)
                 repository.setLoginUser(user)
                 LoginState.user = user.toState()
                 true

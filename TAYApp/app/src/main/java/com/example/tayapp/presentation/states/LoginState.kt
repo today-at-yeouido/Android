@@ -15,5 +15,6 @@ object LoginState {
 data class UserInfo(
     val id: String = "",
     val email: String = "",
-    val refreshToken: String = ""
+    val refreshToken: String = "",
+    val sns: String = ""
 )
