@@ -26,7 +26,7 @@ import com.example.tayapp.presentation.utils.TayIcons
 @Composable
 fun ProfileAlarm(
     upPress: () -> Unit
-){
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -50,38 +50,40 @@ fun ProfileAlarm(
 fun CardProfileToggle(
     title: String = "설정",
     subTitle: String = "보기, 알람"
-){
+) {
     val checkedState = remember { mutableStateOf(true) }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 8.dp)
-    ){
+    ) {
 
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.weight(1f)
         ) {
-            Text("$title",
+            Text(
+                "$title",
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp
             )
-            Text("$subTitle",
+            Text(
+                "$subTitle",
                 fontWeight = FontWeight.Normal,
-                color = lm_gray600,
+                color = TayAppTheme.colors.subduedText,
                 fontSize = 12.sp
             )
         }
         Switch(
             checked = checkedState.value,
-            onCheckedChange = {checkedState.value = it},
+            onCheckedChange = { checkedState.value = it },
             modifier = Modifier.padding(0.dp),
             colors = SwitchDefaults.colors(
-                uncheckedThumbColor = lm_gray000,
-                uncheckedTrackColor = lm_gray075,
-                checkedThumbColor = lm_gray000,
-                checkedTrackColor = lm_primary50
+                uncheckedThumbColor = TayAppTheme.colors.background,
+                uncheckedTrackColor = TayAppTheme.colors.layer2,
+                checkedThumbColor = TayAppTheme.colors.background,
+                checkedTrackColor = TayAppTheme.colors.primary
             )
         )
 

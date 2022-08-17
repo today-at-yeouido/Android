@@ -78,7 +78,7 @@ fun ProfileFavoriteSetting(
                     Text("선택한 상임위의 법안을 추천해드려요",
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
-                        color = lm_gray600
+                        color = TayAppTheme.colors.subduedText
                     )
                 }
             }
@@ -100,7 +100,7 @@ fun ProfileFavoriteCard(
     TayCard(
         modifier = Modifier.fillMaxWidth(),
         enable = true,
-        borderStroke = BorderStroke(1.dp, if(isClicked)lm_primary50 else TayAppTheme.colors.border),
+        borderStroke = BorderStroke(1.dp, if(isClicked)TayAppTheme.colors.primary else TayAppTheme.colors.border),
         onClick = {onCardClick(title)}
     ) {
         Box(
@@ -110,7 +110,7 @@ fun ProfileFavoriteCard(
             Icon(
                 imageVector = if (isClicked) TayIcons.check_circle else Icons.Outlined.Circle,
                 contentDescription = null,
-                tint = if (isClicked) lm_primary50 else lm_gray200,
+                tint = if (isClicked) TayAppTheme.colors.primary else TayAppTheme.colors.border,
             )
 
             Column(
@@ -132,7 +132,7 @@ fun ProfileFavoriteCard(
                 Text("$subtitle",
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
-                    color = lm_gray600
+                    color = TayAppTheme.colors.subduedText
                 )
             }
         }
