@@ -7,6 +7,11 @@ import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.domain.repository.GetBillRepository
 import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
+import com.example.tayapp.utils.UnAuthorizationError
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.retryWhen
 import javax.inject.Inject
 
 class RecentBillPagingResource @Inject constructor(
@@ -16,38 +21,7 @@ class RecentBillPagingResource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Bill> {
 
-        val nextPage = params.key ?: 1
-        val billList = suspend {
-            val r = getBillRepository.getBillRecent(nextPage)
-            val bills = r.body()!!.map { it.toDomain() }
-            bills
-        }
-
-        val billListResponse = getBillRepository.getBillRecent(nextPage)
-
-        return when (billListResponse.code()) {
-            200 -> {
-                val billList = billListResponse.body()!!.map{ it.toDomain()}
-                LoadResult.Page(
-                    data = billList,
-                    prevKey = if (nextPage == 1) null else nextPage - 1,
-                    nextKey = nextPage.plus(1)
-                )
-            }
-            401 -> {
-                checkLoginUseCase()
-                val billList = billList()
-                Log.d("##88", "에러에러")
-                LoadResult.Page(
-                    data = billList,
-                    prevKey = if (nextPage == 1) null else nextPage - 1,
-                    nextKey = nextPage.plus(1)
-                )
-            }
-            else -> {
-                LoadResult.Error(Throwable(billListResponse.errorBody().toString()))
-            }
-        }
+        return flowLoad(params).last()
     }
 
     override fun getRefreshKey(state: PagingState<Int, Bill>): Int? {
@@ -55,5 +29,34 @@ class RecentBillPagingResource @Inject constructor(
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
+    }
+
+    private fun flowLoad(params: LoadParams<Int>): Flow<LoadResult<Int, Bill>> = flow {
+        val nextPage = params.key ?: 1
+
+        val billListResponse = getBillRepository.getBillRecent(nextPage)
+
+        when (billListResponse.code()) {
+            200 -> {
+                val billList = billListResponse.body()!!.map { it.toDomain() }
+                emit(
+                    LoadResult.Page(
+                        data = billList,
+                        prevKey = if (nextPage == 1) null else nextPage - 1,
+                        nextKey = nextPage.plus(1)
+                    )
+                )
+            }
+            401 -> {
+                checkLoginUseCase()
+                throw UnAuthorizationError()
+            }
+            else -> {
+                emit(LoadResult.Error(Throwable(billListResponse.errorBody().toString())))
+            }
+        }
+    }.retryWhen { cause, attempt ->
+        Log.d("##88", "404 Error, unAuthorization token")
+        cause is UnAuthorizationError || attempt < 3
     }
 }

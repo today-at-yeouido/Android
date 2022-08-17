@@ -9,6 +9,8 @@ import com.example.tayapp.presentation.states.UserInfo
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +20,7 @@ class ProfileViewModel @Inject constructor(private val logoutUseCase: RequestLog
 
     fun logout() {
         viewModelScope.launch {
-            if (logoutUseCase(LoginState.user.refreshToken)) {
+            if (logoutUseCase(LoginState.user.refreshToken).last()) {
                 when (LoginState.user.sns) {
                     "naver" -> {
                         NaverIdLoginSDK.logout()

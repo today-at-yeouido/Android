@@ -1,11 +1,6 @@
 package com.example.tayapp.di
 
-import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.room.Room
-import com.example.tayapp.TayApplication
-import com.example.tayapp.data.local.TayDatabase
 import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.remote.BillApi
 import com.example.tayapp.data.remote.Constants
@@ -16,7 +11,6 @@ import com.example.tayapp.data.remote.LoginApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -26,25 +20,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Singleton
-    @Provides
-    fun provideDatabase(app: Application): TayDatabase {
-        return Room.databaseBuilder(
-            app,
-            TayDatabase::class.java,
-            "tay_db"
-        )
-//            .addTypeConverter()// TypeConverter 추가 예정
-            .build()
-    }
 
     @Singleton
     @Provides

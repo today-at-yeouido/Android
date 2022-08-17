@@ -9,8 +9,11 @@ import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.domain.repository.GetBillRepository
 import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
 import com.example.tayapp.utils.Resource
+import com.example.tayapp.utils.UnAuthorizationError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
+import kotlinx.coroutines.flow.retryWhen
 import javax.inject.Inject
 
 class GetScrapUseCase @Inject constructor(
@@ -27,9 +30,7 @@ class GetScrapUseCase @Inject constructor(
             }
             401 -> {
                 checkLoginUseCase()
-                val response = repository.getBillScrap()
-                val bill = response.body()!!.bill.map { it.toDomain() }
-                emit(Resource.Success(bill))
+                throw UnAuthorizationError()
             }
             400 -> emit(
                 Resource.Error(
@@ -38,5 +39,8 @@ class GetScrapUseCase @Inject constructor(
             )
             else -> emit(Resource.Error("Couldn't reach server"))
         }
+    }.retryWhen { cause, attempt ->
+        Log.d("##88", "404 Error, unAuthorization token")
+        cause is UnAuthorizationError || attempt < 3
     }
 }
