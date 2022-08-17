@@ -49,25 +49,23 @@ class LoginViewModel @Inject constructor(
     var user by mutableStateOf(LoginUserUiState())
         private set
 
-    var isLogin = MutableStateFlow(false)
+    var isLogin = mutableStateOf(false)
         private set
-
     init {
         checkLogin()
     }
 
-    private val context = TayApplication.cxt()
+    private val context = application.applicationContext
 
     fun requestLogin(e: String, p1: String) {
         viewModelScope.launch {
             user = LoginUserUiState(e, p1)
             val response = loginUseCases.requestLoginUseCase(
-                LoginDto(
-                    user.email,
-                    user.password
-                )
+                user.email, user.password
             )
-            if (response) isLogin.value = true
+            if (response){
+                isLogin.value = true
+            }
         }
     }
 
