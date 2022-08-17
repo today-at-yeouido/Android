@@ -7,6 +7,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +29,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
+
+    val loginState by viewModel.isLogin.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -64,9 +68,8 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
     LaunchedEffect(key1 = true) {
         delay(2000L)
-        if (viewModel.isLogin) {
+        if (loginState) {
             navController.navigate(AppGraph.HOME_GRAPH)
-            LoginState.changeState()
         } else navController.navigate(Destinations.LOGIN)
     }
 }

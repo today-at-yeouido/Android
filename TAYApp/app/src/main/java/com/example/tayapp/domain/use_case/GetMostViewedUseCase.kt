@@ -7,16 +7,17 @@ import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
 import com.example.tayapp.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 import javax.inject.Inject
 
 class GetMostViewedUseCase @Inject
 constructor(
     private val repository: GetBillRepository,
     private val checkLoginUseCase: CheckLoginUseCase
-    ) {
+) {
     operator fun invoke(): Flow<Resource<List<MostViewedBill>>> = flow {
-        val response = repository.getBillMostViewed()
         emit(Resource.Loading())
+        val response = repository.getBillMostViewed()
         when (response.code()) {
             200 -> {
                 val bill = response.body()!!.map { it.toDomain() }
@@ -36,6 +37,5 @@ constructor(
             else -> emit(Resource.Error("Couldn't reach server"))
         }
     }
-
 }
 

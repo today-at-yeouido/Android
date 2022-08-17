@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BoxScope.Finish(
-    viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
 

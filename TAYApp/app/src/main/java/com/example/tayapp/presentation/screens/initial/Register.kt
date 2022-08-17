@@ -83,10 +83,10 @@ fun RegisterItems(
             .padding(horizontal = KeyLine, vertical = 30.dp)
     ) {
         when (index) {
-            0 -> Email(viewModel= viewModel,onClick = onClick)
-            1 -> TermsOfService(viewModel = viewModel, onClick = onClick)
-            2 -> BasicInformation(viewModel = viewModel, onClick = onClick)
-            3 -> Finish(viewModel = viewModel, onClick = onClick)
+            0 -> Email(onClick = onClick)
+            1 -> TermsOfService( onClick = onClick)
+            2 -> BasicInformation(viewModel::requestRegister, onClick = onClick)
+            3 -> Finish(onClick = onClick)
         }
     }
 }

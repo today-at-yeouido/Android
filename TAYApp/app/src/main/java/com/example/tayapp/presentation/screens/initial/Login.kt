@@ -1,5 +1,9 @@
 package com.example.tayapp.presentation.screens.initial
 
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.result.ActivityResult
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,29 +24,52 @@ import com.example.tayapp.presentation.components.TayTextField
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
-import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
+import com.example.tayapp.utils.activityLauncher
 import com.example.tayapp.utils.textDp
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.tasks.Task
 
 @Composable
 fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel,
-    upPress: ()->Unit = {}
+    upPress: () -> Unit = {}
 ) {
+    val loginState by viewModel.isLogin.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         TayTopAppBarWithBack(string = "로그인", upPress)
-        Login(navController, viewModel)
+        Login(
+            viewModel::requestLogin,
+            viewModel::kakaoLogin,
+            viewModel::naverLogin,
+            viewModel::googleLogin,
+            viewModel::getGoogleLoginAuth
+        ) { navController.navigate(it) }
+    }
+
+    LaunchedEffect(key1 = loginState) {
+        Log.d("##88", "런치드 이펙트 $loginState")
+        if (loginState) navController.navigate(AppGraph.HOME_GRAPH)
     }
 }
 
 @Composable
-private fun Login(navController: NavController, viewModel: LoginViewModel) {
+private fun Login(
+    requestLogin: (String, String) -> Unit,
+    kakaoLogin: () -> Unit,
+    naverLogin: () -> Unit,
+    googleLogin: (GoogleSignInAccount) -> Unit,
+    googleAuth: () -> GoogleSignInClient,
+    navigate: (String) -> Unit
+) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,18 +77,22 @@ private fun Login(navController: NavController, viewModel: LoginViewModel) {
             .padding(horizontal = KeyLine)
     ) {
         Spacer(Modifier.height(40.dp))
-        InputField(viewModel::requestLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
+        InputField(requestLogin)
         Spacer(Modifier.height(50.dp))
-        SocialField(viewModel::kakaoLogin) { navController.navigate(AppGraph.HOME_GRAPH) }
+        SocialField(
+            kakaoLogin,
+            naverLogin,
+            googleLogin,
+            googleAuth
+        )
         Spacer(Modifier.height(80.dp))
-        RegisterField { navController.navigate(it) }
+        RegisterField { navigate(Destinations.SIGN_UP) }
     }
 }
 
 @Composable
 private fun InputField(
-    requestLogin: (String, String, () -> Unit) -> Unit,
-    navigate: () -> Unit
+    requestLogin: (String, String) -> Unit
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -114,8 +145,7 @@ private fun InputField(
 
         TayButton(
             onClick = {
-                requestLogin(email, password, navigate)
-                LoginState.changeState()
+                requestLogin(email, password)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,9 +169,19 @@ private fun InputField(
 
 @Composable
 private fun SocialField(
-    kakaoLogin: (() -> Unit) -> Unit,
-    nav: () -> Unit
+    kakaoLogin: () -> Unit,
+    naverLogin: () -> Unit,
+    googleLogin: (GoogleSignInAccount) -> Unit,
+    googleAuth: () -> GoogleSignInClient,
 ) {
+    val resultLauncher = activityLauncher(
+        onSuccess = { intent ->
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(intent)
+            googleLogin(task.result)
+        },
+        onError = { Log.d("##99", "오류 발생") }
+    )
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -150,22 +190,37 @@ private fun SocialField(
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             Canvas(modifier = Modifier
                 .size(50.dp)
                 .clickable {
-                    kakaoLogin{nav()}
+                    kakaoLogin()
                 }) {
                 drawCircle(Color.Yellow)
             }
-            Canvas(modifier = Modifier.size(50.dp)) {
+
+            Canvas(modifier = Modifier
+                .size(50.dp)
+                .clickable {
+                    naverLogin()
+                }) {
                 drawCircle(Color.Green)
+            }
+
+            Canvas(modifier = Modifier
+                .size(50.dp)
+                .clickable {
+                    val client = googleAuth()
+                    resultLauncher.launch(client.signInIntent)
+                }) {
+                drawCircle(Color.Black)
             }
         }
     }
 }
 
 @Composable
-private fun RegisterField(navigate: (String) -> Unit) {
+private fun RegisterField(navigate: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(13.dp)
@@ -179,7 +234,7 @@ private fun RegisterField(navigate: (String) -> Unit) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    navigate(Destinations.SIGN_UP)
+                    navigate()
                 }
             ) {
                 Text("이메일로 가입하기", color = lm_sementic_blue2)
@@ -190,6 +245,6 @@ private fun RegisterField(navigate: (String) -> Unit) {
         Text(
             "로그인 없이 이용하기",
             fontSize = 18.sp,
-            modifier = Modifier.clickable { navigate(AppGraph.HOME_GRAPH) })
+            modifier = Modifier.clickable { navigate() })
     }
 }

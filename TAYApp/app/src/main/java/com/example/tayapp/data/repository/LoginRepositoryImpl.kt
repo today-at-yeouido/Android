@@ -1,15 +1,12 @@
 package com.example.tayapp.data.repository
 
-import android.util.Log
 import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.pref.model.UserPref
+import com.example.tayapp.data.remote.GoogleApi
 import com.example.tayapp.data.remote.LoginApi
-import com.example.tayapp.data.remote.dto.bill.LoginDto
-import com.example.tayapp.data.remote.dto.bill.LoginResponse
-import com.example.tayapp.data.remote.dto.login.JwtRefreshResponse
-import com.example.tayapp.data.remote.dto.login.LogoutResponse
-import com.example.tayapp.data.remote.dto.login.RefreshTokenDto
-import com.example.tayapp.data.remote.dto.login.RegistrationDto
+import com.example.tayapp.data.remote.dto.LoginGoogleRequest
+import com.example.tayapp.data.remote.dto.LoginGoogleResponse
+import com.example.tayapp.data.remote.dto.login.*
 import com.example.tayapp.domain.repository.LoginRepository
 import kotlinx.coroutines.flow.first
 import retrofit2.Response
@@ -19,7 +16,8 @@ import javax.inject.Singleton
 @Singleton
 class LoginRepositoryImpl @Inject constructor(
     private val pref: PrefDataSource,
-    private val loginApi: LoginApi
+    private val loginApi: LoginApi,
+    private val google: GoogleApi
 ) : LoginRepository {
 
     override suspend fun getUser(): UserPref {
@@ -34,8 +32,8 @@ class LoginRepositoryImpl @Inject constructor(
         return pref.getRefreshToken().first()
     }
 
-    override suspend fun updateAccessToken(accesToken: String){
-        pref.updateAccessToken(accesToken)
+    override suspend fun updateAccessToken(accessToken: String){
+        pref.updateAccessToken(accessToken)
     }
 
     override suspend fun requestRegistration(registrationDto: RegistrationDto): Response<Void> {
@@ -46,7 +44,7 @@ class LoginRepositoryImpl @Inject constructor(
         return loginApi.postLogin(loginDto)
     }
 
-    override suspend fun requestLogout(token: String): LogoutResponse {
+    override suspend fun requestLogout(token: RefreshTokenDto): Response<LogoutResponse> {
         return loginApi.postLogout(token)
     }
 
@@ -54,4 +52,15 @@ class LoginRepositoryImpl @Inject constructor(
         return loginApi.postJwtRefresh(token)
     }
 
+    override suspend fun requestSnsLogin(sns:String, snsLoginDto: SnsLoginDto): Response<LoginResponse> {
+        return loginApi.postSocialLogin(sns, snsLoginDto)
+    }
+
+    override suspend fun prefLogout() {
+        pref.logoutUser()
+    }
+
+    override suspend fun googleAuth(request: LoginGoogleRequest): Response<LoginGoogleResponse>? {
+       return google.fetchGoogleAuthInfo(request)
+    }
 }

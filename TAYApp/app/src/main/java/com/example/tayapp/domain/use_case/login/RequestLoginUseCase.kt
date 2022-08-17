@@ -1,9 +1,13 @@
 package com.example.tayapp.domain.use_case.login
 
+import android.util.Log
 import com.example.tayapp.data.pref.model.UserPref
-import com.example.tayapp.data.remote.dto.bill.LoginDto
-import com.example.tayapp.data.remote.dto.bill.LoginResponse
+import com.example.tayapp.data.pref.model.toState
+import com.example.tayapp.data.remote.dto.login.LoginDto
+import com.example.tayapp.data.remote.dto.login.LoginResponse
+import com.example.tayapp.data.remote.dto.login.toPref
 import com.example.tayapp.domain.repository.LoginRepository
+import com.example.tayapp.presentation.states.LoginState
 import javax.inject.Inject
 
 class RequestLoginUseCase @Inject constructor(
@@ -15,6 +19,8 @@ class RequestLoginUseCase @Inject constructor(
             return when (r.code()) {
                 200 -> {
                     setUser(r.body()!!)
+                    LoginState.user = r.body()!!.toPref().toState()
+                    Log.d("##99", "로그인 유즈케이스${LoginState.user}")
                      true
                 }
                 400 -> false
