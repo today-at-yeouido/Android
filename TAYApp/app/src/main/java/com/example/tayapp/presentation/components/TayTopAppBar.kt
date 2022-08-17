@@ -88,7 +88,8 @@ fun TayTopAppBarWithBack(
 @Composable
 fun TayTopAppBarWithScrap(
     string: String,
-    upPress: () -> Unit
+    upPress: () -> Unit,
+    onClickScrap: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -112,7 +113,7 @@ fun TayTopAppBarWithScrap(
         BookmarkButton(
             modifier = Modifier.align(Alignment.CenterEnd),
             isBookmarked = false,
-            onClick = { /*TODO*/ }
+            onClick = onClickScrap
         )
 
     }

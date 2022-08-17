@@ -4,14 +4,16 @@ import com.example.tayapp.data.remote.Constants.GET_BILL_DETAIL
 import com.example.tayapp.data.remote.Constants.GET_BILL_HOME
 import com.example.tayapp.data.remote.Constants.GET_BILL_MOST_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_RECENT
+import com.example.tayapp.data.remote.Constants.GET_BILL_SCRAP
 import com.example.tayapp.data.remote.Constants.GET_BILL_SEARCH
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECENT_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECOMMENDED
+import com.example.tayapp.data.remote.Constants.POST_ADD_SCRAP
+import com.example.tayapp.data.remote.Constants.POST_DELETE_SCRAP
 import com.example.tayapp.data.remote.dto.bill.*
+import com.example.tayapp.data.remote.dto.scrap.*
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface BillApi {
     @GET(GET_BILL_HOME)
@@ -48,4 +50,16 @@ interface BillApi {
     @GET(GET_BILL_USER_RECENT_VIEWED)
     suspend fun getBillUserRecentViewed() : List<BillDto>
 
+    @POST(POST_ADD_SCRAP)
+    suspend fun postAddScrap(
+        @Body bill: AddScrapRequestDto
+    ) : Response<AddScrapResponseDto>
+
+    @POST(POST_DELETE_SCRAP)
+    suspend fun postDeleteScrap(
+        @Body bill: DeleteScrapRequestDto
+    ) : Response<DeleteScrapResponseDto>
+
+    @GET(GET_BILL_SCRAP)
+    suspend fun getBillScrap() : Response<ScrapBillDto>
 }

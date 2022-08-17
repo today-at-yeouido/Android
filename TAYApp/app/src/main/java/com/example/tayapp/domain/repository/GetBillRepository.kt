@@ -1,6 +1,9 @@
 package com.example.tayapp.domain.repository
 
 import com.example.tayapp.data.remote.dto.bill.*
+import com.example.tayapp.data.remote.dto.scrap.AddScrapResponseDto
+import com.example.tayapp.data.remote.dto.scrap.DeleteScrapResponseDto
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.data.repository.GetBillRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -20,6 +23,10 @@ interface GetBillRepository {
     suspend fun getBillUserRecommended(): List<BillDto>
     suspend fun getBillUserRecentViewed(): List<BillDto>
     suspend fun getBillSearch(query: String): Response<List<BillDto>>
+
+    suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>
+    suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto>
+    suspend fun getBillScrap(): Response<ScrapBillDto>
 
 }
 
