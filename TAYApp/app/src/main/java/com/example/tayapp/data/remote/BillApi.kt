@@ -24,7 +24,7 @@ interface BillApi {
     @GET("$GET_BILL_DETAIL/{id}")
     suspend fun getBillDetail(
         @Path("id") billId: Int
-    ) : DetailBillDto
+    ) : Response<DetailBillDto>
 
     @GET("$GET_BILL_DETAIL/{id}/table")
     suspend fun getBillTable(

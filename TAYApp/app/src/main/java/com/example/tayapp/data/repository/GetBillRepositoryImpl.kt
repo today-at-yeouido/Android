@@ -14,7 +14,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillHome()
     }
 
-    override suspend fun getBillDetail(billId : Int): DetailBillDto {
+    override suspend fun getBillDetail(billId : Int): Response<DetailBillDto> {
         return billApi.getBillDetail(billId)
     }
 

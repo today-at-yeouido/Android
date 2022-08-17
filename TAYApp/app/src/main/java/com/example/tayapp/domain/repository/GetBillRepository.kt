@@ -15,7 +15,7 @@ import retrofit2.Response
 interface GetBillRepository {
 
     suspend fun getBillHome(): HomeBillDto
-    suspend fun getBillDetail(billId: Int): DetailBillDto
+    suspend fun getBillDetail(billId: Int): Response<DetailBillDto>
     suspend fun getBillTable(billId: String): DetailBillTableDto
 
     suspend fun getBillRecent(page: Int): Response<List<BillDto>>
