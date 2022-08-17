@@ -1,9 +1,8 @@
 package com.example.tayapp.presentation.screens.initial
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,10 +11,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
+import com.example.tayapp.R
 import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.ui.theme.lm_gray000
@@ -34,26 +36,32 @@ fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
         modifier = Modifier.fillMaxSize(),
         color = lm_gray700
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(170.dp))
+        Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 text = "내 손 안의 작은 국회",
                 color = lm_gray000,
                 fontSize = 16.textDp,
                 lineHeight = 1.em,
                 fontWeight = FontWeight.Normal,
-                letterSpacing = (-0.2).textDp
+                letterSpacing = (-0.2).textDp,
+                modifier = Modifier.padding(top = 170.dp).align(Alignment.TopCenter)
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "오늘 여의도",
                 color = lm_gray000,
                 fontSize = 26.textDp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 1.em,
-                letterSpacing = (-0.2).textDp
+                letterSpacing = (-0.2).textDp,
+                modifier = Modifier.padding(top = 196.dp).align(Alignment.TopCenter)
+            )
+
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                painter = painterResource(id = R.drawable.ic_tay_ch_default),
+                contentDescription = "main_title_image"
             )
         }
     }

@@ -14,14 +14,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.presentation.viewmodels.DetailViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BillDetail(billId: Int, upPress: () -> Unit) {
+
+    val viewModel = hiltViewModel<DetailViewModel>()
     val scrollState = rememberScrollState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
@@ -37,7 +41,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         sheetBackgroundColor = lm_gray050
     ) {
         Column {
-            TayTopAppBarWithBack("$billId", upPress)
+            TayTopAppBarWithScrap("$billId", upPress, {viewModel.deleteScrap(billId)})
             Column(
                 modifier = Modifier.verticalScroll(scrollState)
             ) {
@@ -196,7 +200,9 @@ private fun CardBillProgress(onProgressClick: () -> Unit) {
                         imageVector = TayIcons.help,
                         contentDescription = "null",
                         tint = lm_sementic_blue2,
-                        modifier = Modifier.size(20.dp).clickable (onClick = onProgressClick)
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable(onClick = onProgressClick)
                     )
                     Text(
                         text = "D+452",
@@ -207,13 +213,13 @@ private fun CardBillProgress(onProgressClick: () -> Unit) {
                 }
                 LazyRow {
                     item{
-                        BillProgressItem("접수")
+                        BillProgressItem("접수", "22.07.16")
                         BillArrow()
-                        BillProgressItem("심사")
+                        BillProgressItem("심사", "22.07.16")
                         BillArrow()
                         BillProgressItem("심의")
                         BillArrow()
-                        BillProgressItem("부결")
+                        BillProgressItem("가결")
                         BillArrow()
                         BillProgressItem("정부이송")
                         BillArrow()
@@ -395,19 +401,23 @@ private fun BillRevisionItem() {
 
 @Composable
 private fun BillProgressItem(
-    string: String
+    string: String,
+    date: String? = null
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(9.dp)
     ) {
-        DashPill("$string")
-        Text(
-            text = "22.07.20",
-            fontSize = 9.sp,
-            color = lm_gray600,
-            fontWeight = FontWeight.Light
-        )
+        if(date.isNullOrBlank()) DashPill(string)
+        else {
+            Pill(string)
+            Text(
+                text = "22.07.20",
+                fontSize = 9.sp,
+                color = lm_gray600,
+                fontWeight = FontWeight.Light
+            )
+        }
     }
 }
 

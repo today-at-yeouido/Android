@@ -122,4 +122,9 @@ dependencies {
     implementation "com.kakao.sdk:v2-user:2.11.0"
     implementation "com.navercorp.nid:oauth:5.1.1"
     implementation "com.google.android.gms:play-services-auth:20.2.0"
+
+
+    //swipe refresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.19.0"
+
 }

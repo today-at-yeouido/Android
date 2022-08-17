@@ -2,6 +2,7 @@ package com.example.tayapp.data.repository
 
 import com.example.tayapp.data.remote.BillApi
 import com.example.tayapp.data.remote.dto.bill.*
+import com.example.tayapp.data.remote.dto.scrap.*
 import com.example.tayapp.domain.repository.GetBillRepository
 import retrofit2.Response
 import javax.inject.Inject
@@ -35,5 +36,21 @@ class GetBillRepositoryImpl @Inject
 
     override suspend fun getBillUserRecentViewed(): List<BillDto> {
         return billApi.getBillUserRecentViewed()
+    }
+
+    override suspend fun getBillSearch(query: String): Response<List<BillDto>> {
+        return billApi.getBillSearch(query)
+    }
+
+    override suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>{
+        return billApi.postAddScrap(AddScrapRequestDto(bill))
+    }
+
+    override suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto> {
+        return billApi.postDeleteScrap(DeleteScrapRequestDto(bill))
+    }
+
+    override suspend fun getBillScrap(): Response<ScrapBillDto> {
+        return billApi.getBillScrap()
     }
 }
