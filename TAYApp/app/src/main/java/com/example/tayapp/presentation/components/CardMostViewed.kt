@@ -165,7 +165,7 @@ private fun CardContent(bill: MostViewedBill.Bill) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column {
-            PillList(bill.billType.mapType(), bill.status)
+            PillList(bill.billType, bill.status)
             Spacer(modifier = Modifier.height(13.dp))
             Text(
                 bill.billName,
