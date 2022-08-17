@@ -41,7 +41,7 @@ fun TayBottomBar(
     }
 
     BottomNavigation(
-        backgroundColor = lm_gray000,
+        backgroundColor = TayAppTheme.colors.background,
         modifier = Modifier
             .navigationBarsPadding()
             .height(56.dp)
@@ -66,8 +66,8 @@ fun TayBottomBar(
                         contentDescription = null,
                     )
                 },
-                selectedContentColor = lm_gray700,
-                unselectedContentColor = lm_gray400
+                selectedContentColor = TayAppTheme.colors.bodyText,
+                unselectedContentColor = TayAppTheme.colors.subduedIcon
             )
         }
     }

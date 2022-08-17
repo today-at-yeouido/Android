@@ -47,25 +47,25 @@ fun Pill(
     when (text) {
         "제정안", "개정안", "일부개정안", "폐지안" -> {
             Pill(
-                textColor = lm_gray600,
-                backgroundColor = lm_gray000,
-                border = BorderStroke(1.dp, lm_gray100)
+                textColor = TayAppTheme.colors.subduedText,
+                backgroundColor = TayAppTheme.colors.background,
+                border = BorderStroke(1.dp, TayAppTheme.colors.layer3)
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
         "접수" -> {
             Pill(
-                textColor = lm_gray700,
-                backgroundColor = lm_gray100
+                textColor = TayAppTheme.colors.bodyText,
+                backgroundColor = TayAppTheme.colors.layer3
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
         "심사", "심의", "정부이송" -> {
             Pill(
-                textColor = lm_gray700,
-                backgroundColor = lm_semantic_yellow1
+                textColor = TayAppTheme.colors.bodyText,
+                backgroundColor = TayAppTheme.colors.caution1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
@@ -73,7 +73,7 @@ fun Pill(
         "가결", "공포" -> {
             Pill(
                 textColor = lm_gray700,
-                backgroundColor = lm_sememtic_green1
+                backgroundColor = TayAppTheme.colors.success1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
@@ -81,7 +81,7 @@ fun Pill(
         "대안", "부결", "철회", "폐기" -> {
             Pill(
                 textColor = lm_gray000,
-                backgroundColor = lm_sementic_red1
+                backgroundColor = TayAppTheme.colors.danger1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
@@ -100,32 +100,32 @@ fun DashPill(
     when (text) {
         "접수" -> {
             DashPill(
-                textColor = lm_gray600,
-                dashedColor = lm_gray100,
+                textColor = TayAppTheme.colors.subduedText,
+                dashedColor = TayAppTheme.colors.layer3,
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
         "심사", "심의", "정부이송" -> {
             DashPill(
-                textColor = lm_gray600,
-                dashedColor = lm_semantic_yellow1,
+                textColor = TayAppTheme.colors.subduedText,
+                dashedColor = TayAppTheme.colors.caution1,
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
         "가결", "공포" -> {
             DashPill(
-                textColor = lm_gray600,
-                dashedColor = lm_sememtic_green1,
+                textColor = TayAppTheme.colors.subduedText,
+                dashedColor = TayAppTheme.colors.success1,
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
         }
         "대안", "부결", "철회", "폐기" -> {
             DashPill(
-                textColor = lm_gray600,
-                dashedColor = lm_sementic_red1,
+                textColor = TayAppTheme.colors.subduedText,
+                dashedColor = TayAppTheme.colors.danger1,
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
@@ -144,7 +144,7 @@ fun DashPill(
 ) {
     Surface(
         shape = shape,
-        color = lm_gray000,
+        color = TayAppTheme.colors.background,
         contentColor = textColor,
         border = border,
         modifier = Modifier
@@ -164,10 +164,10 @@ fun DashPill(
 @Composable
 fun BadgePill(
     text: String,
-    color: Color = lm_primary30
+    color: Color = TayAppTheme.colors.primary30
 ) {
     Pill(
-        textColor = lm_gray800,
+        textColor = TayAppTheme.colors.headText,
         backgroundColor = color,
         shape = RoundedCornerShape(5.dp)
     ) {
@@ -180,7 +180,7 @@ private fun Pill(
     shape: RoundedCornerShape = RoundedCornerShape(50),
     textColor: Color = TayAppTheme.colors.bodyText,
     backgroundColor: Color = TayAppTheme.colors.background,
-    animationColor: Color = Color.Red,
+    animationColor: Color = TayAppTheme.colors.danger2,
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(vertical = 1.dp, horizontal = 6.dp),
     content: @Composable RowScope. () -> Unit,

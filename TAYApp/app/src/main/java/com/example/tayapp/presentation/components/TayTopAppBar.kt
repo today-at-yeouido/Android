@@ -156,12 +156,12 @@ fun TayTopAppBarSearch(
             modifier = Modifier.weight(1f)
         ) {
             TextField(
-                placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
+                placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = TayAppTheme.colors.subduedIcon) },
                 value = queryValue,
                 onValueChange = { onChangeQuery(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(lm_gray050),
+                    .background(TayAppTheme.colors.layer1),
                 textStyle = TextStyle(fontSize = 14.textDp),
                 shape = RoundedCornerShape(8.dp),
                 keyboardActions = KeyboardActions(

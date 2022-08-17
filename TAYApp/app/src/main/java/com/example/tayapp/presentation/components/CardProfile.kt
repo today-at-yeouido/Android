@@ -49,9 +49,9 @@ fun CardUserProfile() {
                     modifier = Modifier
                         .width(ButtonSmallWidth)
                         .height(ButtonSmallHeight),
-                    backgroundColor = lm_gray000,
-                    contentColor = lm_gray800,
-                    border = BorderStroke(1.dp, lm_gray200)
+                    backgroundColor = TayAppTheme.colors.background,
+                    contentColor = TayAppTheme.colors.headText,
+                    border = BorderStroke(1.dp, TayAppTheme.colors.border)
                 ) {
                     Text("프로필 수정", style = TayAppTheme.typo.typography.button)
                 }
@@ -73,9 +73,9 @@ fun CardUserProfile() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(ButtonMediumHeight),
-                backgroundColor = lm_gray000,
-                contentColor = lm_gray800,
-                border = BorderStroke(1.dp, lm_gray200)
+                backgroundColor = TayAppTheme.colors.background,
+                contentColor = TayAppTheme.colors.headText,
+                border = BorderStroke(1.dp, TayAppTheme.colors.border)
 
             ) {
                 Text("뱃지 더보기", style = TayAppTheme.typo.typography.button)
@@ -101,7 +101,7 @@ private fun CardUserProfileText(
         Text(
             LoginState.user.email,
             fontWeight = FontWeight.Light,
-            color = lm_gray800,
+            color = TayAppTheme.colors.headText,
             fontSize = 14.sp
         )
     }
@@ -131,7 +131,7 @@ fun CardProfilSection(
         ) {
             Box() {
                 Surface(
-                    color = lm_gray075,
+                    color = TayAppTheme.colors.layer2,
                     shape = RoundedCornerShape(4.dp),
                     modifier = Modifier.size(38.dp)
                 ) {}
@@ -155,14 +155,14 @@ fun CardProfilSection(
                 Text(
                     "$subTitle",
                     fontWeight = FontWeight.Normal,
-                    color = lm_gray600,
+                    color = TayAppTheme.colors.subduedText,
                     fontSize = 12.sp
                 )
             }
             Icon(
                 imageVector = TayIcons.navigate_next,
                 contentDescription = null,
-                tint = lm_gray300
+                tint = TayAppTheme.colors.disableIcon
             )
 
         }
@@ -200,7 +200,7 @@ fun CardProfileListItem(
             "$subtext",
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
-            color = lm_gray600
+            color = TayAppTheme.colors.subduedText
         )
         Row(content = endComponent)
     }
@@ -220,7 +220,7 @@ fun CardProfileListItemWithLink(
         Icon(
             imageVector = TayIcons.north_east,
             contentDescription = null,
-            tint = lm_gray300
+            tint = TayAppTheme.colors.disableIcon
         )
     }
 }
@@ -241,7 +241,7 @@ fun CardProfileListItemWithNext(
         Icon(
             imageVector = TayIcons.navigate_next,
             contentDescription = null,
-            tint = lm_gray300
+            tint = TayAppTheme.colors.disableIcon
         )
     }
 }
@@ -277,7 +277,7 @@ fun Badge(
                     .height(60.dp)
                     .width(90.dp)
                     .background(
-                        brush = Brush.verticalGradient(listOf(lm_sub10, lm_primary20)),
+                        brush = Brush.verticalGradient(listOf(TayAppTheme.colors.sub10, lm_primary20)),
                         shape = RoundedCornerShape(topEnd = 60.dp, topStart = 60.dp)
                     )
             )
@@ -298,7 +298,7 @@ fun Badge(
         Text(
             text = "$title 뱃지",
             fontWeight = FontWeight.Normal,
-            color = lm_gray600,
+            color = TayAppTheme.colors.subduedText,
             fontSize = 12.sp
         )
     }

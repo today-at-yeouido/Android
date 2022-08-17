@@ -74,7 +74,7 @@ fun CardUserHeader(title: String = "과학"){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(CardUserValue.headerHeight)
-                .background(lm_gray075)
+                .background(TayAppTheme.colors.layer1)
         )
 
         Text(

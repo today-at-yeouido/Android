@@ -13,7 +13,7 @@ import com.example.tayapp.presentation.ui.theme.lm_gray100
 fun TayDivider(modifier: Modifier = Modifier){
     Divider(
         modifier = modifier,
-        color = lm_gray100,
+        color = TayAppTheme.colors.layer3,
         thickness = 1.dp
     )
 }

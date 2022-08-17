@@ -134,14 +134,14 @@ private fun CardBillDefault(
                 text =  buildAnnotatedString {
 
                     if(startIndex == 0){
-                        withStyle(style = SpanStyle(color = lm_primary50)) {
+                        withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
                             append(keyword)
                         }
                         append(title.substring(keyword.length, title.length))
                     }else{
                         append(title.substring(0, startIndex))
 
-                        withStyle(style = SpanStyle(color = lm_primary50)) {
+                        withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
                             append(keyword)
                         }
                         append(title.substring(startIndex + keyword.length, title.length))
@@ -171,13 +171,13 @@ private fun CardBillDefault(
                 text = date,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = lm_gray600
+                color = TayAppTheme.colors.subduedText
             )
             Text(
                 text = people,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = lm_gray600
+                color = TayAppTheme.colors.subduedText
             )
         }
     }
@@ -193,7 +193,7 @@ fun CardEmoij(){
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
                 .size(50.dp)
-                .background(lm_gray075)
+                .background(TayAppTheme.colors.layer2)
         )
         EmoijText()
     }

@@ -44,19 +44,19 @@ fun BillProgressDetail(){
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .background(color = lm_gray075)
+                    .background(color = TayAppTheme.colors.layer2)
                     .fillMaxWidth()
             ) {
                 Icon(
                     imageVector = TayIcons.help,
                     contentDescription = "null",
-                    tint = lm_sementic_blue2,
+                    tint = TayAppTheme.colors.information2,
                     modifier = Modifier.size(20.dp)
                 )
                 Text(
                     text = "진행현황",
                     fontSize = 16.sp,
-                    color = lm_gray800,
+                    color = TayAppTheme.colors.headText,
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -77,7 +77,7 @@ fun BillProgressDetail(){
 private fun BillProgressDetailItem(progress: Progress){
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Pill(progress.tag)
-        Text(text = progress.detail, fontWeight = FontWeight.Normal, fontSize = 16.sp, color = lm_gray600)
+        Text(text = progress.detail, fontWeight = FontWeight.Normal, fontSize = 16.sp, color = TayAppTheme.colors.subduedText)
     }
 }
 
