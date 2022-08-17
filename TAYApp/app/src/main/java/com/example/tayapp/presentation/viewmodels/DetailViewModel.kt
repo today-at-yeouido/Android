@@ -17,9 +17,9 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val postAddScrapUseCase: PostAddScrapUseCase,
     private val postDeleteScrapUseCase: PostDeleteScrapUseCase
-) : ViewModel()  {
+) : ViewModel() {
 
-    fun addScrap(bill: Int){
+    fun addScrap(bill: Int) {
         viewModelScope.launch {
             postAddScrapUseCase(bill).collect() { it ->
                 when (it) {
@@ -31,7 +31,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteScrap(bill: Int){
+    fun deleteScrap(bill: Int) {
         viewModelScope.launch {
             postDeleteScrapUseCase(bill).collect() { it ->
                 when (it) {

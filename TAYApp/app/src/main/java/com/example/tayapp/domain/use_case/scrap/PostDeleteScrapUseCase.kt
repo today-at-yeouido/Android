@@ -7,6 +7,7 @@ import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
 import com.example.tayapp.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import javax.inject.Inject
 
 class PostDeleteScrapUseCase @Inject constructor(
@@ -24,6 +25,7 @@ class PostDeleteScrapUseCase @Inject constructor(
                 emit(Resource.Error("there is no id for bill"))
             }
             401 -> {
+                checkLoginUseCase()
                 emit(Resource.Error("Authentication credentials were not provided"))
             }
             406 -> {

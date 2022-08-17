@@ -27,7 +27,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavController, viewModel: LoginViewModel) {
 
-    val isLogin by viewModel.isLogin.collectAsState()
+    val isLogin by viewModel.isLogin
 
     Surface(
         modifier = Modifier.fillMaxSize(),
