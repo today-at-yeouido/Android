@@ -22,10 +22,11 @@ class PostAddScrapUseCase @Inject constructor(
                 emit(Resource.Success(response.body()!!))
             }
             400 -> {
+//                checkLoginUseCase()
                 emit(Resource.Error("there is no id for bill"))
             }
             401 -> {
-//                checkLoginUseCase()
+                checkLoginUseCase()
 //                val response = repository.postAddScrap(bill)
                 emit(Resource.Error("Authentication credentials were not provided"))
             }

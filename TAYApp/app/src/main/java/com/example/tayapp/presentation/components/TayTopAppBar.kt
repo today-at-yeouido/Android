@@ -10,10 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -87,9 +85,9 @@ fun TayTopAppBarWithBack(
 
 @Composable
 fun TayTopAppBarWithScrap(
-    string: String,
+    billId: Int,
     upPress: () -> Unit,
-    onClickScrap: () -> Unit
+    onClickScrap: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -107,13 +105,13 @@ fun TayTopAppBarWithScrap(
             onClick = upPress
         )
         TopBarTitle(
-            string = string,
+            string = billId.toString(),
             modifier = Modifier.align(Alignment.Center)
         )
         BookmarkButton(
             modifier = Modifier.align(Alignment.CenterEnd),
             isBookmarked = false,
-            onClick = onClickScrap
+            onClick = { onClickScrap(billId) }
         )
 
     }
@@ -123,8 +121,8 @@ fun TayTopAppBarWithScrap(
 fun TayTopAppBarSearch(
     saveQuery: () -> Unit,
     onSearchClick: () -> Unit,
-    onCloseClick:() -> Unit,
-    onChangeQuery:(String) -> Unit,
+    onCloseClick: () -> Unit,
+    onChangeQuery: (String) -> Unit,
     queryValue: String,
     upPress: () -> Unit = {}
 ) {
@@ -146,7 +144,9 @@ fun TayTopAppBarSearch(
 
 
         Image(
-            modifier = Modifier.size(26.dp).clip(RoundedCornerShape(8.dp)),
+            modifier = Modifier
+                .size(26.dp)
+                .clip(RoundedCornerShape(8.dp)),
             painter = painterResource(id = R.drawable.ic_tay_logo_app),
             contentDescription = "main_title_image"
         )
@@ -158,7 +158,7 @@ fun TayTopAppBarSearch(
             TextField(
                 placeholder = { Text(text = "법안 검색", fontSize = 14.textDp, color = lm_gray400) },
                 value = queryValue,
-                onValueChange = {onChangeQuery(it)},
+                onValueChange = { onChangeQuery(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(lm_gray050),
@@ -175,10 +175,11 @@ fun TayTopAppBarSearch(
                     capitalization = KeyboardCapitalization.None,
                     autoCorrect = true,
                     keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done )
+                    imeAction = ImeAction.Done
+                )
             )
 
-            if(queryValue!=""){
+            if (queryValue != "") {
                 CancelButton(
                     modifier = Modifier.align(Alignment.CenterEnd),
                     onClick = { onCloseClick() }
