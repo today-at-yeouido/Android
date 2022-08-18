@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.navigation.ProfileDestination
-import com.example.tayapp.presentation.states.LoginState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.ProfileViewModel
@@ -32,7 +31,6 @@ fun Profile(
     navController: NavController
 ) {
     val viewModel = hiltViewModel<ProfileViewModel>()
-
     Box(
         modifier = Modifier
             .statusBarsPadding()
@@ -46,8 +44,7 @@ fun Profile(
                     TayAppTheme.colors.primary,
                     RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
                 ),
-
-            )
+        )
 
         Column(
             modifier = Modifier
@@ -61,10 +58,10 @@ fun Profile(
                     .height(50.dp)
             )
             CardUserProfile()
-            if (LoginState.isLogin()) {
-                ProfileSettings(navController)
-                TayDivider()
-            }
+//            if (LoginState.isLogin()) {
+            ProfileSettings(navController)
+            TayDivider()
+//            }
             ProfileLineItems()
             ProfileBottomButtons(viewModel::logout)
         }
@@ -76,30 +73,22 @@ private fun ProfileSettings(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        CardProfilSection(
-            icon = Icons.Filled.AccountCircle,
+        CardProfilSection(icon = Icons.Filled.AccountCircle,
             title = "계정",
             subTitle = "관심분야 설정, 구독서비스",
-            onClick = { navController.navigate(ProfileDestination.ACCOUNT) }
-        )
-        CardProfilSection(
-            icon = Icons.Outlined.Settings,
+            onClick = { navController.navigate(ProfileDestination.ACCOUNT) })
+        CardProfilSection(icon = Icons.Outlined.Settings,
             title = "앱 설정",
             subTitle = "보기, 알람",
-            onClick = { navController.navigate(ProfileDestination.APPSETTING) }
-        )
-        CardProfilSection(
-            icon = Icons.Outlined.HelpOutline,
+            onClick = { navController.navigate(ProfileDestination.APPSETTING) })
+        CardProfilSection(icon = Icons.Outlined.HelpOutline,
             title = "문의하기",
             subTitle = "FAQ, 이메일 문의",
-            onClick = { navController.navigate(ProfileDestination.INQUIRE) }
-        )
-        CardProfilSection(
-            icon = Icons.Outlined.Info,
+            onClick = { navController.navigate(ProfileDestination.INQUIRE) })
+        CardProfilSection(icon = Icons.Outlined.Info,
             title = "앱 정보",
             subTitle = "이용약관, 개인정보 정책, 오픈소스",
-            onClick = { navController.navigate(ProfileDestination.APPINFO) }
-        )
+            onClick = { navController.navigate(ProfileDestination.APPINFO) })
     }
 }
 
@@ -116,17 +105,13 @@ private fun ProfileLineItems() {
             )
         }
         CardProfileListItemWithOutIcon(
-            text = "버전",
-            subtext = "v.1.0.0"
+            text = "버전", subtext = "v.1.0.0"
         ) {
             TayButton(
-                onClick = { /*TODO*/ },
-                contentColor = TayAppTheme.colors.headText
+                onClick = { /*TODO*/ }, contentColor = TayAppTheme.colors.headText
             ) {
                 Text(
-                    text = "업데이트",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp
+                    text = "업데이트", fontWeight = FontWeight.Medium, fontSize = 14.sp
                 )
             }
         }
@@ -145,9 +130,7 @@ private fun ProfileBottomButtons(logout: () -> Unit) {
             border = BorderStroke(1.dp, lm_gray200)
         ) {
             Text(
-                text = "로그아웃",
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp
+                text = "로그아웃", fontWeight = FontWeight.Medium, fontSize = 14.sp
             )
         }
         TayButton(
@@ -157,9 +140,7 @@ private fun ProfileBottomButtons(logout: () -> Unit) {
             border = BorderStroke(1.dp, TayAppTheme.colors.border)
         ) {
             Text(
-                text = "회원 탈퇴",
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp
+                text = "회원 탈퇴", fontWeight = FontWeight.Medium, fontSize = 14.sp
             )
         }
     }

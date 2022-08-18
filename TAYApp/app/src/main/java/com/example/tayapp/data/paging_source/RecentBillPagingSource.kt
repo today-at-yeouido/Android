@@ -56,7 +56,7 @@ class RecentBillPagingResource @Inject constructor(
             }
         }
     }.retryWhen { cause, attempt ->
-        Log.d("##88", "404 Error, unAuthorization token")
+        Log.d("##88", "401 Error, unAuthorization token")
         cause is UnAuthorizationError || attempt < 3
     }
 }

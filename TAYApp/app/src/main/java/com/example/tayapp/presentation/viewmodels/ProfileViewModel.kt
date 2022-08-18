@@ -4,24 +4,25 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.domain.use_case.login.RequestLogoutUseCase
-import com.example.tayapp.presentation.states.LoginState
+import com.example.tayapp.domain.use_case.mode.SaveThemeModeUseCase
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.states.UserInfo
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(private val logoutUseCase: RequestLogoutUseCase) :
-    ViewModel() {
-
+class ProfileViewModel @Inject constructor(
+    private val logoutUseCase: RequestLogoutUseCase,
+    private val saveThemeModeUseCase: SaveThemeModeUseCase
+) : ViewModel() {
     fun logout() {
         viewModelScope.launch {
-            if (logoutUseCase(LoginState.user.refreshToken).last()) {
-                when (LoginState.user.sns) {
+            if (logoutUseCase(UserState.user.refreshToken).last()) {
+                when (UserState.user.sns) {
                     "naver" -> {
                         NaverIdLoginSDK.logout()
                     }
@@ -35,8 +36,14 @@ class ProfileViewModel @Inject constructor(private val logoutUseCase: RequestLog
                         }
                     }
                 }
-                LoginState.user = UserInfo()
+                UserState.user = UserInfo()
             }
+        }
+    }
+
+    fun saveThemeMode(mode: String) {
+        viewModelScope.launch {
+            saveThemeModeUseCase(mode)
         }
     }
 }

@@ -4,15 +4,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.utils.ThemeModeConst.DARK
+import com.example.tayapp.presentation.utils.ThemeModeConst.LIGHT
+import com.example.tayapp.presentation.utils.ThemeModeConst.SYSTEM
 
 
 @Composable
@@ -30,7 +37,83 @@ fun CustomAlertDialog(
 }
 
 @Composable
-fun EmailVerifyLinkNoticeDialog(
+fun SettingModeDialog(
+    visible: Boolean,
+    setMode: (String) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    if (visible) {
+        CustomAlertDialog(onDismissRequest = { onDismissRequest() }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(color = TayAppTheme.colors.background)
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "모드",
+                    color = TayAppTheme.colors.bodyText,
+                    fontSize = 16.sp,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                RadioRow(SYSTEM)
+                RadioRow(LIGHT)
+                RadioRow(DARK)
+                Spacer(modifier = Modifier.height(18.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TayButton(
+                        onClick = {
+                            onDismissRequest()
+                        },
+                        modifier = Modifier.size(ButtonSmallWidth, ButtonSmallHeight),
+                        backgroundColor = TayAppTheme.colors.layer2,
+                        contentColor = TayAppTheme.colors.bodyText
+                    ) {
+                        Text(text = "취소", style = TayAppTheme.typo.typography.button)
+                    }
+                    TayButton(
+                        onClick = { setMode(UserState.mode) },
+                        modifier = Modifier.size(ButtonSmallWidth, ButtonSmallHeight),
+                        backgroundColor = TayAppTheme.colors.bodyText,
+                        contentColor = TayAppTheme.colors.background
+                    ) {
+                        Text(text = "확인", style = TayAppTheme.typo.typography.button)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RadioRow(mode: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        RadioButton(
+            selected = UserState.mode == mode,
+            onClick = {
+                UserState.mode = mode
+            }
+        )
+        Text(
+            text = mode,
+            color = TayAppTheme.colors.bodyText,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun AppFinishNoticeDialog(
     visible: Boolean,
     onDismissRequest: () -> Unit,
     finishApp: () -> Unit,
@@ -51,7 +134,7 @@ fun EmailVerifyLinkNoticeDialog(
                     text = "종료하시겠습니까~?~?~?~?",
                     style = TayAppTheme.typo.typography.h1
                 )
-                Row(modifier = Modifier.align(Alignment.End)){
+                Row(modifier = Modifier.align(Alignment.End)) {
 
                     Text(
                         modifier = Modifier

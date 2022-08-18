@@ -4,6 +4,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import com.example.tayapp.presentation.states.UserState
+import com.example.tayapp.presentation.utils.ThemeModeConst
+import com.example.tayapp.presentation.utils.ThemeModeConst.DARK
+import com.example.tayapp.presentation.utils.ThemeModeConst.LIGHT
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
@@ -74,7 +78,17 @@ private val LightColorPalette = TayColorSystem(
 )
 
 @Composable
-fun TayAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun rememberThemeMode(): Boolean {
+    return when (UserState.mode) {
+        LIGHT -> false
+        DARK -> true
+        else -> isSystemInDarkTheme()
+    }
+}
+
+
+@Composable
+fun TayAppTheme(darkTheme: Boolean = rememberThemeMode(), content: @Composable () -> Unit) {
     val tayColorSystem = if (darkTheme) {
         DarkColorPalette
     } else {

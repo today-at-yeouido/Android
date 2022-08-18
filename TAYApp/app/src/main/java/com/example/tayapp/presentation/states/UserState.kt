@@ -3,9 +3,12 @@ package com.example.tayapp.presentation.states
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.example.tayapp.presentation.utils.ThemeModeConst.SYSTEM
 
-object LoginState {
+object UserState {
     var user by mutableStateOf(UserInfo())
+
+    var mode by mutableStateOf(SYSTEM)
 
     fun isLogin(): Boolean {
         return user.id != ""

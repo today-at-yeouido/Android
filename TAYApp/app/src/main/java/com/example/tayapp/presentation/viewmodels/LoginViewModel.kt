@@ -8,13 +8,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.R
-import com.example.tayapp.TayApplication
 import com.example.tayapp.data.pref.model.toState
-import com.example.tayapp.data.remote.dto.login.LoginDto
 import com.example.tayapp.data.remote.dto.login.RegistrationDto
 import com.example.tayapp.domain.use_case.AuthGoogleUseCase
 import com.example.tayapp.domain.use_case.LoginUseCases
-import com.example.tayapp.presentation.states.LoginState
+import com.example.tayapp.domain.use_case.mode.GetThemeModeUseCase
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.states.LoginUserUiState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -32,7 +31,6 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -43,6 +41,7 @@ import kotlin.coroutines.suspendCoroutine
 class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
     private val authGoogleUseCase: AuthGoogleUseCase,
+    private val getThemeModeUseCase: GetThemeModeUseCase,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -51,11 +50,19 @@ class LoginViewModel @Inject constructor(
 
     var isLogin = mutableStateOf(false)
         private set
+
     init {
         checkLogin()
+        getThemeMode()
     }
 
     private val context = application.applicationContext
+
+    private fun getThemeMode() {
+        viewModelScope.launch {
+            UserState.mode = getThemeModeUseCase()
+        }
+    }
 
     fun requestLogin(e: String, p1: String) {
         viewModelScope.launch {
@@ -63,7 +70,7 @@ class LoginViewModel @Inject constructor(
             val response = loginUseCases.requestLoginUseCase(
                 user.email, user.password
             )
-            if (response){
+            if (response) {
                 isLogin.value = true
             }
         }
@@ -82,7 +89,7 @@ class LoginViewModel @Inject constructor(
             isLogin.value = loginUseCases.checkLoginUseCase()
             if (isLogin.value) {
                 val user = loginUseCases.getUserUseCase()
-                LoginState.user = user.toState()
+                UserState.user = user.toState()
             }
         }
 
