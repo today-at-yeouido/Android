@@ -2,6 +2,7 @@ package com.example.tayapp.presentation.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,17 +24,21 @@ import com.example.tayapp.presentation.viewmodels.LoginViewModel
 fun NavGraph(
     appState: TayAppState, innerPadding: PaddingValues
 ) {
-    NavHost(
-        navController = appState.navController,
-        startDestination = AppGraph.INITIAL_GRAPH,
-        modifier = Modifier.padding(innerPadding)
-    ) {
-        tayNavGraph(
+    if(appState.isConnection()) {
+        NavHost(
             navController = appState.navController,
-            upPress = appState::upPress,
-            appState = appState,
-            onBillSelected = appState::navigateToBillDetail,
-        )
+            startDestination = AppGraph.INITIAL_GRAPH,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            tayNavGraph(
+                navController = appState.navController,
+                upPress = appState::upPress,
+                appState = appState,
+                onBillSelected = appState::navigateToBillDetail,
+            )
+        }
+    } else {
+        NetworkErrorScreen()
     }
 }
 

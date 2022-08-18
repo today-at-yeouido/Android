@@ -13,23 +13,26 @@ import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.navigation.BottomBarDestination
 import com.example.tayapp.presentation.navigation.Destinations
-import com.example.tayapp.presentation.ui.theme.rememberThemeMode
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun rememberTayAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-) = remember(scaffoldState, navController, coroutineScope) {
-    TayAppState(scaffoldState, navController, coroutineScope)
+    connection: State<ConnectionState> = ConnectivityState(),
+) = remember(scaffoldState, navController, connection, coroutineScope) {
+    TayAppState(scaffoldState, navController, connection, coroutineScope)
 }
 
 @Stable
 class TayAppState(
     val scaffoldState: ScaffoldState,
     val navController: NavHostController,
+    val connection: State<ConnectionState>,
     scope: CoroutineScope,
 ) {
     //    로그인 체크
@@ -73,6 +76,8 @@ class TayAppState(
     fun upPress() {
         navController.navigateUp()
     }
+
+    fun isConnection(): Boolean = connection.value === ConnectionState.Available
 }
 
 private fun NavBackStackEntry.lifecycleIsResumed() =
