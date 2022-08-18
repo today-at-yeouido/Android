@@ -1,6 +1,5 @@
 package com.example.tayapp.presentation.states
 
-import android.util.Log
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -12,9 +11,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.presentation.components.BottomBarTabs
-import com.example.tayapp.presentation.navigation.AppGraph
 import com.example.tayapp.presentation.navigation.BottomBarDestination
 import com.example.tayapp.presentation.navigation.Destinations
+import com.example.tayapp.presentation.ui.theme.rememberThemeMode
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -22,7 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 fun rememberTayAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ) = remember(scaffoldState, navController, coroutineScope) {
     TayAppState(scaffoldState, navController, coroutineScope)
 }
@@ -31,7 +30,7 @@ fun rememberTayAppState(
 class TayAppState(
     val scaffoldState: ScaffoldState,
     val navController: NavHostController,
-    scope: CoroutineScope
+    scope: CoroutineScope,
 ) {
     //    로그인 체크
 //    init {

@@ -1,13 +1,11 @@
 package com.example.tayapp.domain.use_case.login
 
 import android.util.Log
-import com.example.tayapp.data.pref.model.UserPref
 import com.example.tayapp.data.pref.model.toState
-import com.example.tayapp.data.remote.dto.login.LoginResponse
 import com.example.tayapp.data.remote.dto.login.SnsLoginDto
 import com.example.tayapp.data.remote.dto.login.toPref
 import com.example.tayapp.domain.repository.LoginRepository
-import com.example.tayapp.presentation.states.LoginState
+import com.example.tayapp.presentation.states.UserState
 import javax.inject.Inject
 
 class RequestSnsUseCase @Inject constructor(
@@ -20,7 +18,7 @@ class RequestSnsUseCase @Inject constructor(
                 Log.d("##99", "sns success ${r.code()}")
                 val user = r.body()!!.toPref().copy(sns = sns)
                 repository.setLoginUser(user)
-                LoginState.user = user.toState()
+                UserState.user = user.toState()
                 true
             }
             else -> {

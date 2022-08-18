@@ -37,7 +37,7 @@ class GetSearchResultUseCase @Inject constructor(
             else -> emit(Resource.Error("Couldn't reach server"))
         }
     }.retryWhen { cause, attempt ->
-        Log.d("##88", "404 Error, unAuthorization token")
+        Log.d("##88", "401 Error, unAuthorization token")
         cause is UnAuthorizationError || attempt < 3
     }
 }

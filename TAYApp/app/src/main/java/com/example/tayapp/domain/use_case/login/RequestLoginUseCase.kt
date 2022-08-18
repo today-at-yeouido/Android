@@ -6,7 +6,7 @@ import com.example.tayapp.data.remote.dto.login.LoginDto
 import com.example.tayapp.data.remote.dto.login.LoginResponse
 import com.example.tayapp.data.remote.dto.login.toState
 import com.example.tayapp.domain.repository.LoginRepository
-import com.example.tayapp.presentation.states.LoginState
+import com.example.tayapp.presentation.states.UserState
 import javax.inject.Inject
 
 class RequestLoginUseCase @Inject constructor(
@@ -18,8 +18,8 @@ class RequestLoginUseCase @Inject constructor(
         return when (r.code()) {
             200 -> {
                 setUser(r.body()!!)
-                LoginState.user = r.body()!!.toState()
-                Log.d("##99", "로그인 유즈케이스${LoginState.user}")
+                UserState.user = r.body()!!.toState()
+                Log.d("##99", "로그인 유즈케이스${UserState.user}")
                 true
             }
             400 -> false

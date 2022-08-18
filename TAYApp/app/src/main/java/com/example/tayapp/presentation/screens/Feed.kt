@@ -1,9 +1,6 @@
 package com.example.tayapp.presentation.screens
 
 import android.app.Activity
-import android.app.Application
-import android.content.Context
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
@@ -17,14 +14,10 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
-import com.example.tayapp.TayApplication
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.viewmodels.FeedViewModel
-import com.example.tayapp.utils.getActivity
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @Composable
@@ -42,7 +35,7 @@ fun Feed(
     val activity = (LocalContext.current as Activity)
     val scope = rememberCoroutineScope()
 
-    EmailVerifyLinkNoticeDialog(dialogVisible, {
+    AppFinishNoticeDialog(dialogVisible, {
         dialogVisible = !dialogVisible
     }) { activity.finish() }
 

@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.tayapp.data.pref.model.UserPref
+import com.example.tayapp.presentation.utils.ThemeModeConst.SYSTEM
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -28,6 +29,18 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
 
         val FAVORIT_CATEGORY = stringSetPreferencesKey("favorit_category")
         val RECENT_SEARCH_TERM = stringPreferencesKey("recent_search_term")
+
+        val THEME_MODE = stringPreferencesKey("theme_mode")
+    }
+
+    fun getThemeMode(): Flow<String> = context.dataStore.data.map {
+        it[THEME_MODE] ?: SYSTEM
+    }
+
+    suspend fun saveThemeMode(mode: String) {
+        context.dataStore.edit {
+            it[THEME_MODE] = mode
+        }
     }
 
     suspend fun saveRecentSearchTerm(query: String) {
@@ -40,8 +53,8 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         it[RECENT_SEARCH_TERM] ?: ""
     }
 
-    suspend fun logoutUser(){
-        context.dataStore.edit {settings ->
+    suspend fun logoutUser() {
+        context.dataStore.edit { settings ->
             settings[LOGIN_USER_ACCESS_TOKEN] = ""
             settings[LOGIN_USER_REFRESH_TOKEN] = ""
             settings[LOGIN_USER_ID] = ""
@@ -82,7 +95,7 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         }
     }
 
-    suspend fun updateAccessToken(accessToken : String){
+    suspend fun updateAccessToken(accessToken: String) {
         context.dataStore.edit { settings ->
             settings[LOGIN_USER_ACCESS_TOKEN] = accessToken
         }
