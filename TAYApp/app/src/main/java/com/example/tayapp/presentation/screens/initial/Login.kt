@@ -164,7 +164,6 @@ private fun InputField(
             Text(
                 "로그인",
                 style = TayAppTheme.typo.typography.button,
-                color = TayAppTheme.colors.headText
             )
         }
 
