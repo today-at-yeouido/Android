@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.tayapp.domain.model.MostViewedBill
 import com.example.tayapp.presentation.MainActivity
@@ -89,7 +90,7 @@ fun MostViewedRow(
             itemSpacing = Card_Gap,
             contentPadding = PaddingValues(horizontal = MostViewedValues.KeyLine)
         ) { i ->
-                MostViewedRowCard(billItem = items[i])
+            MostViewedRowCard(billItem = items[i])
         }
     }
 }
@@ -127,13 +128,23 @@ private fun CardNewsLayout(newsList: List<MostViewedBill.New>) {
     val mUriHandler = LocalUriHandler.current
     Column(
         modifier = Modifier
+            .fillMaxWidth()
             .height(MostViewedValues.News_Height)
             .background(color = TayAppTheme.colors.bodyText, shape = CardNewsShape.large)
             .padding(MostViewedValues.Padding)
     ) {
         NewsSub()
-        for (news in newsList) {
-            NewsHeaderItem(news, mUriHandler)
+        if (newsList.isEmpty()) {
+            Text(
+                "관련뉴스 없음",
+                Modifier.fillMaxSize(),
+                color = TayAppTheme.colors.background,
+                fontSize = 20.sp
+            )
+        } else {
+            for (news in newsList) {
+                NewsHeaderItem(news, mUriHandler)
+            }
         }
     }
 }
@@ -212,7 +223,12 @@ fun NewsLabelIcon() {
             .background(color = TayAppTheme.colors.bodyText, shape = CardNewsShape.medium)
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
-        Text(text = "개정안", color = TayAppTheme.colors.background, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
+        Text(
+            text = "개정안",
+            color = TayAppTheme.colors.background,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.textDp
+        )
     }
 }
 
@@ -224,7 +240,12 @@ fun NewsLabelIcon2() {
             .background(color = TayAppTheme.colors.background, shape = CardNewsShape.medium)
             .padding(horizontal = 6.dp, vertical = 2.dp)
     ) {
-        Text(text = "접수", color = TayAppTheme.colors.bodyText, fontWeight = FontWeight.Normal, fontSize = 12.textDp)
+        Text(
+            text = "접수",
+            color = TayAppTheme.colors.bodyText,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.textDp
+        )
     }
 }
 
@@ -278,8 +299,8 @@ private fun String.removeNewline(): String {
 }
 
 // bill type 매핑
-private fun Int.mapType():String{
-    return when(this){
+private fun Int.mapType(): String {
+    return when (this) {
         0 -> "제정안"
         1 -> "개정안"
         2 -> "일부개정안"
