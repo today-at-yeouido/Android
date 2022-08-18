@@ -20,9 +20,9 @@ import com.example.tayapp.presentation.ui.theme.lm_gray600
 fun CardNews(
     imageURL: String = "https://yt3.ggpht.com/ytc/AKedOLR5NNn9lbbFQqPkHCTMgvgvCjZi94G2JRU7DjsM=s900-c-k-c0x00ffffff-no-rj",
     title: String = "중대재해처벌법, 두려움을 기회로 바꿔라",
-    date: String ="22.07.19",
+    date: String = "22.07.19",
     press: String = "언론사"
-){
+) {
     TayCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +32,7 @@ fun CardNews(
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.padding(end = Card_Inner_Padding)
-        ){
+        ) {
 
             TayImage(
                 imageURL = imageURL,
@@ -49,6 +49,7 @@ fun CardNews(
                     text = title,
                     modifier = Modifier
                         .fillMaxWidth(),
+                    color = TayAppTheme.colors.headText,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
                     maxLines = 2
@@ -80,7 +81,7 @@ fun CardNews(
 fun TayImage(
     imageURL: String,
     modifier: Modifier = Modifier,
-){
+) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageURL)
@@ -95,7 +96,7 @@ fun TayImage(
 
 @Preview
 @Composable
-private fun NewsCardPreview(){
+private fun NewsCardPreview() {
     TayAppTheme() {
         CardNews()
     }

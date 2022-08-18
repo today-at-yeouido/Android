@@ -36,7 +36,6 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
 
-
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = { BillProgressDetail() },
@@ -89,7 +88,7 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                TayAppTheme.colors.caution1,
+                TayAppTheme.colors.success2,
                 RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
             )
             .padding(bottom = 20.dp),
@@ -106,9 +105,8 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
             PillList(bill.billType, bill.status)
 
             Text(
-                fontSize = 12.sp,
-                color = TayAppTheme.colors.subduedText,
-                fontWeight = FontWeight.Normal,
+                fontSize = 24.sp,
+                color = TayAppTheme.colors.headText,
                 text = bill.billName,
                 style = TayAppTheme.typo.typography.h1
             )
@@ -117,13 +115,6 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
-                Icon(
-                    imageVector = TayIcons.visibility_outlined,
-                    contentDescription = "null",
-                    tint = TayAppTheme.colors.controlBorder,
-                    modifier = Modifier.size(20.dp)
-                )
 
                 Text(
                     text = bill.proposer,
@@ -311,9 +302,11 @@ private fun CardBillLine() {
             TayButton(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .size(ButtonLargeWidth, ButtonLargeHeight),
+                backgroundColor = TayAppTheme.colors.bodyText,
+                contentColor = TayAppTheme.colors.background
             ) {
-                Text("버튼", style = TayAppTheme.typo.typography.button)
+                Text("건 모두 보기", style = TayAppTheme.typo.typography.button)
             }
         }
     }
@@ -330,10 +323,12 @@ private fun BillPointText(
         Title(string = "법안 핵심 내용")
         Text(
             text = "제안이유 및 주요내용",
+            color = TayAppTheme.colors.bodyText,
             style = TayAppTheme.typo.typography.body1
         )
         Text(
             text = if (summary.isNullOrBlank()) "" else summary,
+            color = TayAppTheme.colors.headText,
             style = TayAppTheme.typo.typography.body2
         )
     }
@@ -388,7 +383,12 @@ private fun BillRevisionText() {
                 modifier = Modifier.padding(Card_Inner_Padding),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Title(string = "개정 내용 확인하기")
+                Text(
+                    text = "개정된 조항",
+                    color = TayAppTheme.colors.bodyText,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                )
                 Column(
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
@@ -403,7 +403,9 @@ private fun BillRevisionText() {
         TayButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            contentColor = TayAppTheme.colors.background,
+            backgroundColor = TayAppTheme.colors.bodyText
         ) {
             Text("개정 내용 확인하기", style = TayAppTheme.typo.typography.button)
             Icon(
@@ -422,6 +424,7 @@ private fun BillRevisionItem() {
         Pill("개정안")
         Text(
             text = "어쩌구저꺼주",
+            color = TayAppTheme.colors.subduedText,
             style = TayAppTheme.typo.typography.body2
         )
     }

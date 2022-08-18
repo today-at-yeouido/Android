@@ -132,6 +132,7 @@ fun AppFinishNoticeDialog(
                         .padding(top = 24.dp)
                         .padding(horizontal = 24.dp),
                     text = "종료하시겠습니까~?~?~?~?",
+                    color = TayAppTheme.colors.bodyText,
                     style = TayAppTheme.typo.typography.h1
                 )
                 Row(modifier = Modifier.align(Alignment.End)) {
@@ -144,6 +145,7 @@ fun AppFinishNoticeDialog(
                             }
                             .padding(12.dp),
                         text = "Yes",
+                        color = TayAppTheme.colors.bodyText,
                         style = TayAppTheme.typo.typography.h3
                     )
                     Text(
@@ -154,6 +156,7 @@ fun AppFinishNoticeDialog(
                             }
                             .padding(12.dp),
                         text = "No",
+                        color = TayAppTheme.colors.bodyText,
                         style = TayAppTheme.typo.typography.h3
                     )
                 }
