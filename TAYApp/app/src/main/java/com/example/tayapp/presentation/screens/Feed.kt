@@ -16,6 +16,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.tayapp.presentation.components.*
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.viewmodels.FeedViewModel
 import kotlinx.coroutines.launch
@@ -37,8 +38,6 @@ fun Feed(
     val activity = (LocalContext.current as Activity)
     val scope = rememberCoroutineScope()
 
-    val networkConnection by viewModel.networkConnection
-
     AppFinishNoticeDialog(dialogVisible, {
         dialogVisible = !dialogVisible
     }) { activity.finish() }
@@ -57,7 +56,7 @@ fun Feed(
             isExpanded = isExpanded!!,
             onArrowClick = viewModel::onExpandChange
         )
-        if (networkConnection) {
+        if (UserState.network) {
             if (recentBill.loadState.refresh == LoadState.Loading) {
                 LoadingView(modifier = Modifier.fillMaxSize())
             }
@@ -95,21 +94,16 @@ fun Feed(
                         )
 
                     }
-
-
                 }
             }
         } else {
-            NetworkErrorScreen(viewModel::retry)
+            NetworkErrorScreen(viewModel::tryGetMostViewed)
         }
     }
 
-    LaunchedEffect(key1 = networkConnection) {
-        if (networkConnection) {
-            viewModel.fetchData()
-            Log.d("##33", "피드 연결됨 $networkConnection")
-        } else {
-            Log.d("##33", "피드 연결안됨 $networkConnection")
+    LaunchedEffect(key1 = UserState.network) {
+        if (UserState.network) {
+            recentBill.retry()
         }
     }
 }

@@ -10,6 +10,7 @@ object UserState {
 
     var mode by mutableStateOf(SYSTEM)
 
+    var network by mutableStateOf(true)
     fun isLogin(): Boolean {
         return user.id != ""
     }

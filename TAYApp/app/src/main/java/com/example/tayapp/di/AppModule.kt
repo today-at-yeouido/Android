@@ -80,7 +80,7 @@ object AppModule {
         @LoggingInterceptor loggingInterceptor: Interceptor
     ): OkHttpClient = OkHttpClient
         .Builder()
-//        .addInterceptor(networkInterceptor)
+        .addInterceptor(networkInterceptor)
         .addInterceptor(interceptor)
         .addInterceptor(loggingInterceptor)
         .build()

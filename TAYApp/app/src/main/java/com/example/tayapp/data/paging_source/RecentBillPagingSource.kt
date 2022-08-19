@@ -7,6 +7,7 @@ import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.domain.repository.GetBillRepository
 import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.NoConnectivityException
 import com.example.tayapp.utils.UnAuthorizationError
 import kotlinx.coroutines.flow.*
@@ -53,6 +54,7 @@ class RecentBillPagingResource @Inject constructor(
                 }
             }
         } catch (e: NoConnectivityException) {
+            UserState.network = false
             emit(LoadResult.Error(Throwable(e.message)))
         }
     }.retryWhen { cause, attempt ->

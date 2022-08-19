@@ -1,16 +1,13 @@
 package com.example.tayapp.presentation.viewmodels
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.tayapp.domain.model.Bill
-import com.example.tayapp.domain.model.MostViewedBill
 import com.example.tayapp.domain.use_case.GetMostViewedUseCase
 import com.example.tayapp.domain.use_case.GetRecentBillUseCase
 import com.example.tayapp.presentation.states.FeedUiState
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -34,25 +31,13 @@ constructor(
 
     val recentBill = getRecentBillUseCase().cachedIn(viewModelScope)
 
-    val networkConnection = mutableStateOf(true)
-
     init {
         getMostViewed()
     }
 
-    fun fetchData() {
+    fun tryGetMostViewed() {
         getMostViewed()
     }
-
-    fun retry() {
-        Log.d("##33","재시도 전 ${networkConnection.value}")
-        networkConnection.value = !networkConnection.value
-        Log.d("##33","재시도 후 ${networkConnection.value}")
-    }
-
-//    private fun getRecentBill(): Flow<PagingData<Bill>> {
-//       return getRecentBillUseCase().cachedIn(viewModelScope)
-//    }
 
     private fun getMostViewed() {
         getMostViewedUseCase().onEach { result ->
@@ -70,7 +55,7 @@ constructor(
                     _state.value = FeedUiState(isLoading = true)
                 }
                 is Resource.NetworkConnectionError -> {
-                    networkConnection.value = false
+                    UserState.network = false
                 }
             }
         }.launchIn(viewModelScope)

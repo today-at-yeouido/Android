@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.bill.DetailBillDto
 import com.example.tayapp.presentation.components.*
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
@@ -46,37 +48,47 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
     ) {
         Column {
             TayTopAppBarWithScrap(billId, upPress, viewModel::addScrap)
-            Column(
-                modifier = Modifier.verticalScroll(scrollState)
-            ) {
-                DetailHeader(onProgressClick = {
-                    coroutineScope.launch {
-
-                        if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
-                            bottomSheetScaffoldState.bottomSheetState.expand()
-                        } else {
-                            bottomSheetScaffoldState.bottomSheetState.collapse()
-                        }
-                    }
-                }, bill = detailState.value.billDetail!!)
-
-                Spacer(modifier = Modifier.size(16.dp))
-
+            if (UserState.network) {
                 Column(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = KeyLine,
-                            vertical = 24.dp
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    modifier = Modifier.verticalScroll(scrollState)
                 ) {
-                    CardPieGraph()
-                    CardBillLine()
-                    BillPointText(detailState.value.billDetail.summary)
-                    BillRevisionText()
-                    BillDetailNews()
+                    DetailHeader(onProgressClick = {
+                        coroutineScope.launch {
+
+                            if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                                bottomSheetScaffoldState.bottomSheetState.expand()
+                            } else {
+                                bottomSheetScaffoldState.bottomSheetState.collapse()
+                            }
+                        }
+                    }, bill = detailState.value.billDetail!!)
+
+                    Spacer(modifier = Modifier.size(16.dp))
+
+                    Column(
+                        modifier = Modifier
+                            .padding(
+                                horizontal = KeyLine,
+                                vertical = 24.dp
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        CardPieGraph()
+                        CardBillLine()
+                        BillPointText(detailState.value.billDetail.summary)
+                        BillRevisionText()
+                        BillDetailNews()
+                    }
                 }
+            } else {
+                NetworkErrorScreen({})
             }
+        }
+    }
+
+    LaunchedEffect(key1 = UserState.network) {
+        if (UserState.network) {
+            viewModel.tryGetBillDetail()
         }
     }
 }

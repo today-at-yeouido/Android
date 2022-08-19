@@ -32,12 +32,12 @@ class DetailViewModel @Inject constructor(
     var detailState = MutableStateFlow(BillDetailUiState(isLoading = true))
         private set
 
-    init {
+
+
+    fun tryGetBillDetail(){
         getBillDetail(billId)
-
     }
-
-    fun getBillDetail(billId: Int){
+    private fun getBillDetail(billId: Int){
         viewModelScope.launch {
             getBillDetailUseCase(billId).collect(){ result ->
                 when(result){

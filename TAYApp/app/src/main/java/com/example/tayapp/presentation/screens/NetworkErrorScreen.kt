@@ -9,10 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 
 @Composable
-fun NetworkErrorScreen(kFunction0: () -> Unit) {
+fun NetworkErrorScreen(tryGetData: () -> Unit) {
     Box(
         Modifier
             .fillMaxSize()
@@ -25,7 +26,8 @@ fun NetworkErrorScreen(kFunction0: () -> Unit) {
             modifier = Modifier
                 .align(Alignment.Center)
                 .clickable {
-                    kFunction0()
+                    UserState.network = true
+                    tryGetData()
                 }
         )
     }
