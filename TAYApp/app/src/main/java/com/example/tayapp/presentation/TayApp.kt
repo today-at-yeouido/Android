@@ -7,7 +7,9 @@ import com.example.tayapp.presentation.components.TayScaffold
 import com.example.tayapp.presentation.navigation.NavGraph
 import com.example.tayapp.presentation.states.rememberTayAppState
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun TayApp() {
     TayAppTheme {
@@ -27,5 +29,6 @@ fun TayApp() {
         ) { innerPadding ->
             NavGraph(appState, innerPadding)
         }
+
     }
 }

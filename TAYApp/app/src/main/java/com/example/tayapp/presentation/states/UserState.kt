@@ -10,13 +10,14 @@ object UserState {
 
     var mode by mutableStateOf(SYSTEM)
 
+    var network by mutableStateOf(true)
     fun isLogin(): Boolean {
         return user.id != ""
     }
 }
 
 data class UserInfo(
-    val id: String = "",
+    val id: String = "Guest",
     val email: String = "",
     val refreshToken: String = "",
     val sns: String = ""

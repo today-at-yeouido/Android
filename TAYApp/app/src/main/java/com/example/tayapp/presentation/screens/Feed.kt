@@ -15,6 +15,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.example.tayapp.presentation.components.*
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.viewmodels.FeedViewModel
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ fun Feed(
     val isExpanded by viewModel.isExpanded.collectAsState()
     val mostViewed by viewModel.state.collectAsState()
     val recentBill = viewModel.recentBill.collectAsLazyPagingItems()
+
     var dialogVisible by remember { mutableStateOf(false) }
     val activity = (LocalContext.current as Activity)
     val scope = rememberCoroutineScope()
@@ -45,6 +47,7 @@ fun Feed(
         }
     }
 
+
     Column() {
         TayHomeTopAppBar(
             onTagClick = viewModel::onCategorySelected,
@@ -52,47 +55,54 @@ fun Feed(
             isExpanded = isExpanded!!,
             onArrowClick = viewModel::onExpandChange
         )
-
-        if (recentBill.loadState.refresh == LoadState.Loading) {
-            LoadingView(modifier = Modifier.fillMaxSize())
-        }
-
-
-        Crossfade(targetState = selectedCategory) { it ->
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-
-                itemsIndexed(items = recentBill) { index, item ->
-                    if (index == 0) {
-                        CardMostViewed(items = mostViewed.bill)
-                        Spacer(modifier = Modifier.height(40.dp))
-
-                        Title(
-                            "사용자 맞춤 추천법안",
-                            modifier = Modifier
-                                .padding(vertical = 0.dp, horizontal = KeyLine)
-                        )
-                        CardsUser(onClick = onBillSelected)
-                        Spacer(modifier = Modifier.height(40.dp))
-
-                        Title(
-                            "최근 발의 법안 ${it}",
-                            modifier = Modifier
-                                .padding(vertical = 7.dp, horizontal = KeyLine)
-                        )
-                    }
-
-                    CardBill(
-                        modifier = Modifier.padding(horizontal = KeyLine),
-                        bill = item!!,
-                        onClick = onBillSelected
-                    )
-
-                }
-
-
+        if (UserState.network) {
+            if (recentBill.loadState.refresh == LoadState.Loading) {
+                LoadingView(modifier = Modifier.fillMaxSize())
             }
+
+
+            Crossfade(targetState = selectedCategory) { it ->
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    itemsIndexed(items = recentBill) { index, item ->
+                        if (index == 0) {
+                            CardMostViewed(items = mostViewed)
+                            Spacer(modifier = Modifier.height(40.dp))
+
+                            Title(
+                                "사용자 맞춤 추천법안",
+                                modifier = Modifier
+                                    .padding(vertical = 0.dp, horizontal = KeyLine)
+                            )
+                            CardsUser(onClick = onBillSelected)
+                            Spacer(modifier = Modifier.height(40.dp))
+
+                            Title(
+                                "최근 발의 법안 ${it}",
+                                modifier = Modifier
+                                    .padding(vertical = 7.dp, horizontal = KeyLine)
+                            )
+                        }
+
+                        CardBill(
+                            modifier = Modifier.padding(horizontal = KeyLine),
+                            bill = item!!,
+                            onClick = onBillSelected
+                        )
+
+                    }
+                }
+            }
+        } else {
+            NetworkErrorScreen(viewModel::tryGetMostViewed)
+        }
+    }
+
+    LaunchedEffect(key1 = UserState.network) {
+        if (UserState.network) {
+            recentBill.retry()
         }
     }
 }

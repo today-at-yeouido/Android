@@ -7,6 +7,7 @@ import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
 import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
 import com.example.tayapp.presentation.states.FeedUiState
 import com.example.tayapp.presentation.states.SearchState
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -46,6 +47,9 @@ class SearchViewModel @Inject constructor(
                     searchState.update {
                         it.copy(isLoading = true)
                     }
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
                 }
             }
         }.launchIn(viewModelScope)

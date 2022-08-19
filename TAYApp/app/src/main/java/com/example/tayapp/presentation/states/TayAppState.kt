@@ -13,8 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.navigation.BottomBarDestination
 import com.example.tayapp.presentation.navigation.Destinations
-import com.example.tayapp.presentation.ui.theme.rememberThemeMode
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 @Composable

@@ -2,6 +2,7 @@ package com.example.tayapp.presentation.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,24 +18,25 @@ import com.example.tayapp.presentation.screens.initial.RegisterScreen
 import com.example.tayapp.presentation.screens.initial.SplashScreen
 import com.example.tayapp.presentation.screens.search.Search
 import com.example.tayapp.presentation.states.TayAppState
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
 
 @Composable
 fun NavGraph(
     appState: TayAppState, innerPadding: PaddingValues
 ) {
-    NavHost(
-        navController = appState.navController,
-        startDestination = AppGraph.INITIAL_GRAPH,
-        modifier = Modifier.padding(innerPadding)
-    ) {
-        tayNavGraph(
+        NavHost(
             navController = appState.navController,
-            upPress = appState::upPress,
-            appState = appState,
-            onBillSelected = appState::navigateToBillDetail,
-        )
-    }
+            startDestination = AppGraph.INITIAL_GRAPH,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            tayNavGraph(
+                navController = appState.navController,
+                upPress = appState::upPress,
+                appState = appState,
+                onBillSelected = appState::navigateToBillDetail,
+            )
+        }
 }
 
 private fun NavGraphBuilder.tayNavGraph(

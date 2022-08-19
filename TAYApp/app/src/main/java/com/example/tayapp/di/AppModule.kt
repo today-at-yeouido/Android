@@ -1,5 +1,6 @@
 package com.example.tayapp.di
 
+import android.content.Context
 import android.util.Log
 import com.example.tayapp.data.pref.PrefDataSource
 import com.example.tayapp.data.remote.BillApi
@@ -8,9 +9,11 @@ import com.example.tayapp.data.remote.Constants.BASE_URL
 import com.example.tayapp.data.remote.Constants.GOOGLE_URL
 import com.example.tayapp.data.remote.GoogleApi
 import com.example.tayapp.data.remote.LoginApi
+import com.example.tayapp.utils.NetworkInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -20,14 +23,14 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Singleton
+    @AuthInterceptorOkHttpClient
     @Provides
     fun providesAuthInterceptor(
         pref: PrefDataSource
@@ -54,27 +57,36 @@ object AppModule {
             .proceed(newRequest)
     }
 
-    @Singleton
+    @NetworkInterceptor
     @Provides
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+    fun provideNetworkConnectionInterceptor(
+        @ApplicationContext context: Context
+    ): Interceptor = NetworkInterceptor(context)
+
+    @LoggingInterceptor
+    @Provides
+    fun provideLoggingInterceptor(): Interceptor =
         HttpLoggingInterceptor {
             Log.d("Loggin", "Logging $it")
         }.setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
+
+
     @Singleton
     @Provides
     fun providesOkHttpClient(
-        interceptor: Interceptor,
-        loggingInterceptor: HttpLoggingInterceptor
+        @AuthInterceptorOkHttpClient interceptor: Interceptor,
+        @NetworkInterceptor networkInterceptor: Interceptor,
+        @LoggingInterceptor loggingInterceptor: Interceptor
     ): OkHttpClient = OkHttpClient
         .Builder()
+        .addInterceptor(networkInterceptor)
         .addInterceptor(interceptor)
         .addInterceptor(loggingInterceptor)
         .build()
 
-    @Singleton
+    @TayRetrofit
     @Provides
-    @Named("normal")
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -83,9 +95,8 @@ object AppModule {
             .build()
     }
 
-    @Singleton
+    @GoogleAuthRetrofit
     @Provides
-    @Named("google")
     fun provideGoogleRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(GOOGLE_URL)
@@ -94,10 +105,10 @@ object AppModule {
             .build()
     }
 
-    @Singleton
+
     @Provides
     fun provideGoogleApi(
-        @Named("google") retrofit: Retrofit
+        @GoogleAuthRetrofit retrofit: Retrofit
     ): GoogleApi {
         return retrofit.create(GoogleApi::class.java)
     }
@@ -105,7 +116,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRegistrationApi(
-        @Named("normal") retrofit: Retrofit
+        @TayRetrofit retrofit: Retrofit
     ): LoginApi {
         return retrofit.create(LoginApi::class.java)
     }
@@ -113,8 +124,28 @@ object AppModule {
     @Singleton
     @Provides
     fun provideGetBillApi(
-        @Named("normal") retrofit: Retrofit
+        @TayRetrofit retrofit: Retrofit
     ): BillApi {
         return retrofit.create(BillApi::class.java)
     }
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class AuthInterceptorOkHttpClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class NetworkInterceptor
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class LoggingInterceptor
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class GoogleAuthRetrofit
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class TayRetrofit
 }
