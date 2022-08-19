@@ -3,7 +3,7 @@ package com.example.tayapp.presentation.states
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.tayapp.presentation.utils.ThemeModeConst.SYSTEM
+import com.example.tayapp.utils.ThemeConstants.SYSTEM
 
 object UserState {
     var user by mutableStateOf(UserInfo())
@@ -12,7 +12,7 @@ object UserState {
 
     var network by mutableStateOf(true)
     fun isLogin(): Boolean {
-        return user.id != ""
+        return user.id != "Guest"
     }
 }
 

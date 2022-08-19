@@ -25,25 +25,25 @@ import com.example.tayapp.presentation.viewmodels.LoginViewModel
 fun NavGraph(
     appState: TayAppState, innerPadding: PaddingValues
 ) {
-        NavHost(
+    NavHost(
+        navController = appState.navController,
+        startDestination = AppGraph.INITIAL_GRAPH,
+        modifier = Modifier.padding(innerPadding)
+    ) {
+        tayNavGraph(
             navController = appState.navController,
-            startDestination = AppGraph.INITIAL_GRAPH,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            tayNavGraph(
-                navController = appState.navController,
-                upPress = appState::upPress,
-                appState = appState,
-                onBillSelected = appState::navigateToBillDetail,
-            )
-        }
+            upPress = appState::upPress,
+            appState = appState,
+            onBillSelected = appState::navigateToBillDetail,
+        )
+    }
 }
 
 private fun NavGraphBuilder.tayNavGraph(
     navController: NavController,
     upPress: () -> Unit,
     appState: TayAppState,
-    onBillSelected: (Int,  NavBackStackEntry) -> Unit,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit,
 ) {
     initialNavigation(appState)
 
@@ -124,7 +124,9 @@ fun NavGraphBuilder.homeGraph(
     onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     composable(route = BottomBarTabs.Feed.route) { from ->
-        Feed(navController = navController, onBillSelected = { id -> onBillSelected(id, from) })
+        Feed(
+            navigateToLogin = { navController.navigate(Destinations.LOGIN) },
+            onBillSelected = { id -> onBillSelected(id, from) })
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
         Scrap(onBillSelected = { id -> onBillSelected(id, from) })

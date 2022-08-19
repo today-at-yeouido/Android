@@ -5,9 +5,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import com.example.tayapp.presentation.states.UserState
-import com.example.tayapp.presentation.utils.ThemeModeConst
-import com.example.tayapp.presentation.utils.ThemeModeConst.DARK
-import com.example.tayapp.presentation.utils.ThemeModeConst.LIGHT
+import com.example.tayapp.utils.ThemeConstants.DARK
+import com.example.tayapp.utils.ThemeConstants.LIGHT
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 

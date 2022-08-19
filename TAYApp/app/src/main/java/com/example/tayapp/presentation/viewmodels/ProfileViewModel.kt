@@ -8,6 +8,8 @@ import com.example.tayapp.domain.use_case.mode.SaveThemeModeUseCase
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.states.UserInfo
 import com.example.tayapp.utils.NoConnectivityException
+import com.example.tayapp.utils.SocialConstants.KAKAO
+import com.example.tayapp.utils.SocialConstants.NAVER
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,10 +28,10 @@ class ProfileViewModel @Inject constructor(
             try {
                 if (logoutUseCase(UserState.user.refreshToken).last()) {
                     when (UserState.user.sns) {
-                        "naver" -> {
+                        NAVER -> {
                             NaverIdLoginSDK.logout()
                         }
-                        "kakao" -> {
+                        KAKAO -> {
                             UserApiClient.instance.logout { error ->
                                 if (error != null) {
                                     Log.e("##88", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
