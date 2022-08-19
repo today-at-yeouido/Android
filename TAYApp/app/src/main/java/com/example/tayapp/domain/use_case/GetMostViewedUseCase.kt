@@ -40,7 +40,7 @@ constructor(
                 else -> emit(Resource.Error("Couldn't reach server"))
             }
         } catch (e: NoConnectivityException){
-            emit(Resource.NetworkConnectionError("Network Error"))
+            emit(Resource.NetworkConnectionError())
         }
     }.retryWhen { cause, attempt ->
         Log.d("##88", "401 Error, unAuthorization token")

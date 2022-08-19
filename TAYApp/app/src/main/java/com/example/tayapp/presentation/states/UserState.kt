@@ -17,7 +17,7 @@ object UserState {
 }
 
 data class UserInfo(
-    val id: String = "",
+    val id: String = "Guest",
     val email: String = "",
     val refreshToken: String = "",
     val sns: String = ""

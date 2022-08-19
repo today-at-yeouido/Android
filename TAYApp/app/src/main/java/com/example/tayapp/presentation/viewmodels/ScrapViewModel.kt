@@ -7,6 +7,7 @@ import com.example.tayapp.domain.use_case.scrap.GetScrapUseCase
 import com.example.tayapp.domain.use_case.scrap.PostAddScrapUseCase
 import com.example.tayapp.domain.use_case.scrap.PostDeleteScrapUseCase
 import com.example.tayapp.presentation.states.ScrapState
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,7 @@ class ScrapViewModel @Inject constructor(
     private val postAddScrapUseCase: PostAddScrapUseCase,
     private val postDeleteScrapUseCase: PostDeleteScrapUseCase,
     private val getScrapUseCase: GetScrapUseCase
-) : ViewModel(){
+) : ViewModel() {
 
     private var _scrapState = MutableStateFlow(ScrapState(isLoading = true))
     val scrapState = _scrapState
@@ -35,7 +36,7 @@ class ScrapViewModel @Inject constructor(
         getScrapBill()
     }
 
-    fun getScrapBill(){
+    private fun getScrapBill() {
         getScrapUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
@@ -54,17 +55,17 @@ class ScrapViewModel @Inject constructor(
                         it.copy(isLoading = true)
                     }
                 }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
             }
         }.launchIn(viewModelScope)
 
     }
 
-    fun refresh(){
-        viewModelScope.launch {
-            _isRefreshing.value = true
-            getScrapBill()
-            _isRefreshing.value = false
-
-        }
+    fun refresh() {
+        _isRefreshing.value = true
+        getScrapBill()
+        _isRefreshing.value = false
     }
 }

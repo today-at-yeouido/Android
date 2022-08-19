@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -30,24 +31,31 @@ fun Scrap(
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
 
-    Column() {
+    Column {
         TayTopAppBar("스크랩")
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing),
-            onRefresh = { viewModel.refresh() },
-        ) {
-            if (UserState.isLogin())
-                LazyColumn(
-                    modifier = Modifier.padding(horizontal = KeyLine, vertical = 20.dp),
-                    verticalArrangement = Arrangement.spacedBy(if (list.count() == 0) 10.dp else 16.dp)
-                ) {
-                    items(scrapState.bill) {
-                        CardSearch(
-                            bill = it,
-                            onBillSelected = onBillSelected
-                        )
+        if (UserState.network) {
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing),
+                onRefresh = { viewModel.refresh() },
+            ) {
+                if (UserState.isLogin())
+                    LazyColumn(
+                        modifier = Modifier.padding(horizontal = KeyLine, vertical = 20.dp),
+                        verticalArrangement = Arrangement.spacedBy(if (list.isEmpty()) 10.dp else 16.dp)
+                    ) {
+                        items(scrapState.bill) {
+                            CardSearch(
+                                bill = it,
+                                onBillSelected = onBillSelected
+                            )
+                        }
                     }
-                }
+            }
+        } else {
+            NetworkErrorScreen {
+                UserState.network = true
+                viewModel.refresh()
+            }
         }
     }
 }
