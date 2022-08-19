@@ -34,7 +34,6 @@ import com.example.tayapp.presentation.viewmodels.DetailViewModel
 import com.example.tayapp.utils.dashedBorder
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BillDetail(billId: Int, upPress: () -> Unit) {
@@ -71,7 +70,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                                 bottomSheetScaffoldState.bottomSheetState.collapse()
                             }
                         }
-                    }, bill = detailState.value.billDetail!!)
+                    }, bill = detailState.value.billDetail)
 
                     Spacer(modifier = Modifier.size(16.dp))
 
