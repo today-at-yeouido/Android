@@ -24,6 +24,7 @@ import androidx.compose.ui.zIndex
 import com.example.tayapp.domain.model.MostViewedBill
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.components.MostViewedValues.Card_Gap
+import com.example.tayapp.presentation.states.FeedUiState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayEmoji
 import com.example.tayapp.presentation.utils.TayIcons
@@ -51,7 +52,7 @@ private object MostViewedValues {
 }
 
 @Composable
-fun CardMostViewed(items: List<MostViewedBill>) {
+fun CardMostViewed(items: FeedUiState) {
     Title(
         "최근 이슈 법안",
         modifier = Modifier
@@ -60,7 +61,15 @@ fun CardMostViewed(items: List<MostViewedBill>) {
                 vertical = 7.dp,
             )
     )
-    MostViewedRow(items = items)
+    if (items.isLoading || items.error.isNotBlank()) {
+        MostViewedRow(items = items.bill)
+    } else {
+        Box(
+            modifier = Modifier
+                .size(MainActivity.displayWidth - KeyLine.twice(), MostViewedValues.Card_Height)
+                .background(color = lm_card_yellow, shape = CardNewsShape.large),
+        )
+    }
 }
 
 

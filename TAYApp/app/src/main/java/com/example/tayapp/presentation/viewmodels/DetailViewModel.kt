@@ -12,6 +12,7 @@ import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.states.BillDetailUiState
 import com.example.tayapp.presentation.states.SearchState
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,10 +34,14 @@ class DetailViewModel @Inject constructor(
         private set
 
 
+    init {
+        getBillDetail(billId)
+    }
 
     fun tryGetBillDetail(){
         getBillDetail(billId)
     }
+
     private fun getBillDetail(billId: Int){
         viewModelScope.launch {
             getBillDetailUseCase(billId).collect(){ result ->
@@ -58,7 +63,7 @@ class DetailViewModel @Inject constructor(
                         }
                     }
                     is Resource.NetworkConnectionError -> {
-                        Log.d("##33", " 디테일 네트워크 에러")
+                        UserState.network = false
                     }
                 }
             }

@@ -1,7 +1,6 @@
 package com.example.tayapp.presentation.screens
 
 import android.app.Activity
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
@@ -69,7 +68,7 @@ fun Feed(
 
                     itemsIndexed(items = recentBill) { index, item ->
                         if (index == 0) {
-                            CardMostViewed(items = mostViewed.bill)
+                            CardMostViewed(items = mostViewed)
                             Spacer(modifier = Modifier.height(40.dp))
 
                             Title(

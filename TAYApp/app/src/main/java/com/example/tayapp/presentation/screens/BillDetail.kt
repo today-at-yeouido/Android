@@ -81,14 +81,11 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                     }
                 }
             } else {
-                NetworkErrorScreen({})
+                NetworkErrorScreen{
+                    UserState.network = true
+                    viewModel.tryGetBillDetail()
+                }
             }
-        }
-    }
-
-    LaunchedEffect(key1 = UserState.network) {
-        if (UserState.network) {
-            viewModel.tryGetBillDetail()
         }
     }
 }
