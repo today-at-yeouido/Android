@@ -57,6 +57,9 @@ class DetailViewModel @Inject constructor(
                             it.copy(isLoading = true)
                         }
                     }
+                    is Resource.NetworkConnectionError -> {
+                        Log.d("##33", " 디테일 네트워크 에러")
+                    }
                 }
             }
         }

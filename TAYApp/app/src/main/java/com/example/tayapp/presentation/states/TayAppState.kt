@@ -17,22 +17,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun rememberTayAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    connection: State<ConnectionState> = ConnectivityState(),
-) = remember(scaffoldState, navController, connection, coroutineScope) {
-    TayAppState(scaffoldState, navController, connection, coroutineScope)
+) = remember(scaffoldState, navController, coroutineScope) {
+    TayAppState(scaffoldState, navController, coroutineScope)
 }
 
 @Stable
 class TayAppState(
     val scaffoldState: ScaffoldState,
     val navController: NavHostController,
-    val connection: State<ConnectionState>,
     scope: CoroutineScope,
 ) {
     //    로그인 체크
@@ -76,8 +73,6 @@ class TayAppState(
     fun upPress() {
         navController.navigateUp()
     }
-
-    fun isConnection(): Boolean = connection.value === ConnectionState.Available
 }
 
 private fun NavBackStackEntry.lifecycleIsResumed() =

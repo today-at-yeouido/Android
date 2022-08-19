@@ -1,6 +1,7 @@
 package com.example.tayapp.presentation.screens
 
 import android.app.Activity
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
@@ -31,9 +32,12 @@ fun Feed(
     val isExpanded by viewModel.isExpanded.collectAsState()
     val mostViewed by viewModel.state.collectAsState()
     val recentBill = viewModel.recentBill.collectAsLazyPagingItems()
+
     var dialogVisible by remember { mutableStateOf(false) }
     val activity = (LocalContext.current as Activity)
     val scope = rememberCoroutineScope()
+
+    val networkConnection by viewModel.networkConnection
 
     AppFinishNoticeDialog(dialogVisible, {
         dialogVisible = !dialogVisible
@@ -45,6 +49,7 @@ fun Feed(
         }
     }
 
+
     Column() {
         TayHomeTopAppBar(
             onTagClick = viewModel::onCategorySelected,
@@ -52,47 +57,59 @@ fun Feed(
             isExpanded = isExpanded!!,
             onArrowClick = viewModel::onExpandChange
         )
+        if (networkConnection) {
+            if (recentBill.loadState.refresh == LoadState.Loading) {
+                LoadingView(modifier = Modifier.fillMaxSize())
+            }
 
-        if (recentBill.loadState.refresh == LoadState.Loading) {
-            LoadingView(modifier = Modifier.fillMaxSize())
-        }
 
+            Crossfade(targetState = selectedCategory) { it ->
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
 
-        Crossfade(targetState = selectedCategory) { it ->
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
+                    itemsIndexed(items = recentBill) { index, item ->
+                        if (index == 0) {
+                            CardMostViewed(items = mostViewed.bill)
+                            Spacer(modifier = Modifier.height(40.dp))
 
-                itemsIndexed(items = recentBill) { index, item ->
-                    if (index == 0) {
-                        CardMostViewed(items = mostViewed.bill)
-                        Spacer(modifier = Modifier.height(40.dp))
+                            Title(
+                                "사용자 맞춤 추천법안",
+                                modifier = Modifier
+                                    .padding(vertical = 0.dp, horizontal = KeyLine)
+                            )
+                            CardsUser(onClick = onBillSelected)
+                            Spacer(modifier = Modifier.height(40.dp))
 
-                        Title(
-                            "사용자 맞춤 추천법안",
-                            modifier = Modifier
-                                .padding(vertical = 0.dp, horizontal = KeyLine)
+                            Title(
+                                "최근 발의 법안 ${it}",
+                                modifier = Modifier
+                                    .padding(vertical = 7.dp, horizontal = KeyLine)
+                            )
+                        }
+
+                        CardBill(
+                            modifier = Modifier.padding(horizontal = KeyLine),
+                            bill = item!!,
+                            onClick = onBillSelected
                         )
-                        CardsUser(onClick = onBillSelected)
-                        Spacer(modifier = Modifier.height(40.dp))
 
-                        Title(
-                            "최근 발의 법안 ${it}",
-                            modifier = Modifier
-                                .padding(vertical = 7.dp, horizontal = KeyLine)
-                        )
                     }
 
-                    CardBill(
-                        modifier = Modifier.padding(horizontal = KeyLine),
-                        bill = item!!,
-                        onClick = onBillSelected
-                    )
 
                 }
-
-
             }
+        } else {
+            NetworkErrorScreen(viewModel::retry)
+        }
+    }
+
+    LaunchedEffect(key1 = networkConnection) {
+        if (networkConnection) {
+            viewModel.fetchData()
+            Log.d("##33", "피드 연결됨 $networkConnection")
+        } else {
+            Log.d("##33", "피드 연결안됨 $networkConnection")
         }
     }
 }

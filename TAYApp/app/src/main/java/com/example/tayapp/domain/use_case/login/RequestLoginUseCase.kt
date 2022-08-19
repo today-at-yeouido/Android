@@ -7,6 +7,7 @@ import com.example.tayapp.data.remote.dto.login.LoginResponse
 import com.example.tayapp.data.remote.dto.login.toState
 import com.example.tayapp.domain.repository.LoginRepository
 import com.example.tayapp.presentation.states.UserState
+import com.example.tayapp.utils.NoConnectivityException
 import javax.inject.Inject
 
 class RequestLoginUseCase @Inject constructor(
@@ -14,16 +15,21 @@ class RequestLoginUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(email: String, pass: String): Boolean {
-        val r = repository.requestLogin(LoginDto(email = email, password = pass))
-        return when (r.code()) {
-            200 -> {
-                setUser(r.body()!!)
-                UserState.user = r.body()!!.toState()
-                Log.d("##99", "로그인 유즈케이스${UserState.user}")
-                true
+        try {
+            val r = repository.requestLogin(LoginDto(email = email, password = pass))
+            return when (r.code()) {
+                200 -> {
+                    setUser(r.body()!!)
+                    UserState.user = r.body()!!.toState()
+                    Log.d("##99", "로그인 유즈케이스${UserState.user}")
+                    true
+                }
+                400 -> false
+                else -> false
             }
-            400 -> false
-            else -> false
+        } catch (e: NoConnectivityException) {
+            Log.d("##99", "네트워크 에러")
+            return true
         }
     }
 

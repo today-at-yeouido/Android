@@ -18,13 +18,13 @@ import com.example.tayapp.presentation.screens.initial.RegisterScreen
 import com.example.tayapp.presentation.screens.initial.SplashScreen
 import com.example.tayapp.presentation.screens.search.Search
 import com.example.tayapp.presentation.states.TayAppState
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.viewmodels.LoginViewModel
 
 @Composable
 fun NavGraph(
     appState: TayAppState, innerPadding: PaddingValues
 ) {
-    if(appState.isConnection()) {
         NavHost(
             navController = appState.navController,
             startDestination = AppGraph.INITIAL_GRAPH,
@@ -37,9 +37,6 @@ fun NavGraph(
                 onBillSelected = appState::navigateToBillDetail,
             )
         }
-    } else {
-        NetworkErrorScreen()
-    }
 }
 
 private fun NavGraphBuilder.tayNavGraph(
