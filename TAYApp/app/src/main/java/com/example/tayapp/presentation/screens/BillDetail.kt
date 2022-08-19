@@ -1,37 +1,31 @@
 package com.example.tayapp.presentation.screens
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.bill.DetailBillDto
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
-import com.example.tayapp.presentation.ui.theme.*
+import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
+import com.example.tayapp.presentation.ui.theme.KeyLine
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.ui.theme.lm_gray600
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
-import com.example.tayapp.utils.dashedBorder
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -238,9 +232,8 @@ private fun CardPieGraph() {
 
 @Composable
 private fun CardBillLine() {
-    TayCard(
-    ){
-        Box(){
+    TayCard {
+        Box {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
@@ -269,7 +262,6 @@ private fun CardBillLine() {
                     .padding(bottom = 18.dp)
                     .align(Alignment.BottomCenter)
                     .size(ButtonLargeWidth,ButtonLargeHeight)
-
                 ,
                 backgroundColor = TayAppTheme.colors.bodyText,
                 contentColor = TayAppTheme.colors.background

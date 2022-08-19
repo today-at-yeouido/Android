@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,9 +16,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.utils.ThemeModeConst.DARK
-import com.example.tayapp.presentation.utils.ThemeModeConst.LIGHT
-import com.example.tayapp.presentation.utils.ThemeModeConst.SYSTEM
+import com.example.tayapp.utils.ThemeConstants.DARK
+import com.example.tayapp.utils.ThemeConstants.LIGHT
+import com.example.tayapp.utils.ThemeConstants.SYSTEM
 
 
 @Composable

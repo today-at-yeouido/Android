@@ -1,7 +1,6 @@
 package com.example.tayapp.data.pref
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -9,7 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.tayapp.data.pref.model.UserPref
-import com.example.tayapp.presentation.utils.ThemeModeConst.SYSTEM
+import com.example.tayapp.utils.ThemeConstants.SYSTEM
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

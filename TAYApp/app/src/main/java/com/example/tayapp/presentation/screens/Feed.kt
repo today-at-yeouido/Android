@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
@@ -23,8 +22,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Feed(
-    navController: NavController,
     onBillSelected: (Int) -> Unit,
+    navigateToLogin: () -> Unit
 ) {
 
     val viewModel = hiltViewModel<FeedViewModel>()
@@ -76,7 +75,10 @@ fun Feed(
                                 modifier = Modifier
                                     .padding(vertical = 0.dp, horizontal = KeyLine)
                             )
-                            CardsUser(onClick = onBillSelected)
+                            CardsUser(
+                                onClick = onBillSelected,
+                                navigateToLogin = navigateToLogin
+                            )
                             Spacer(modifier = Modifier.height(40.dp))
 
                             Title(
