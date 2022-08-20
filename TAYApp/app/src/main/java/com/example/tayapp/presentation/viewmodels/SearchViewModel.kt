@@ -1,11 +1,9 @@
 package com.example.tayapp.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
 import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
-import com.example.tayapp.presentation.states.FeedUiState
 import com.example.tayapp.presentation.states.SearchState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
@@ -29,18 +27,26 @@ class SearchViewModel @Inject constructor(
         getRecentTerm()
     }
 
-    fun getSearchResult(){
+    fun getSearchResult() {
         getSearchUseCase(searchState.value.query).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     searchState.update {
-                        it.copy(bill = result.data ?: emptyList(), isLoading = false, searching = true)
+                        it.copy(
+                            bill = result.data ?: emptyList(),
+                            isLoading = false,
+                            searching = true
+                        )
                     }
 
                 }
                 is Resource.Error -> {
                     searchState.update {
-                        it.copy(error = result.message ?: "An unexpected error", isLoading = false, searching = true)
+                        it.copy(
+                            error = result.message ?: "An unexpected error",
+                            isLoading = false,
+                            searching = true
+                        )
                     }
                 }
                 is Resource.Loading -> {
@@ -60,47 +66,52 @@ class SearchViewModel @Inject constructor(
     }
 
 
-    fun onClearQuery(){
+    fun onClearQuery() {
         searchState.update {
             it.copy(bill = emptyList(), searching = false, query = "", keyword = "")
         }
     }
 
-    fun onChangeQuery(query: String){
+    fun onChangeQuery(query: String) {
         searchState.update {
             it.copy(query = query)
         }
     }
 
 
-    fun getRecentTerm(){
+    private fun getRecentTerm() {
         viewModelScope.launch {
             val result = getRecentSearchTermUseCase.getRecentSearchUseCase()
             searchState.update {
-                it.copy(recentTerm = result.first(), isLoading = false )
+                it.copy(recentTerm = result.first(), isLoading = false)
             }
         }
     }
 
 
-
     fun saveRecentTerm() {
         viewModelScope.launch {
-            val result = searchState.value.recentTerm
-            getRecentSearchTermUseCase.saveRecentSearchUseCase("${searchState.value.query} $result".trim())
+            val recentTerm = searchState.value.recentTerm
+            val query = searchState.value.query
+            getRecentSearchTermUseCase.saveRecentSearchUseCase(recentTerm, query)
             searchState.update {
-                it.copy(recentTerm = getRecentSearchTermUseCase.getRecentSearchUseCase().first(), isLoading = false )
+                it.copy(
+                    recentTerm = getRecentSearchTermUseCase.getRecentSearchUseCase().first(),
+                    isLoading = false
+                )
             }
         }
     }
 
     fun removeRecentTerm(index: Int) {
         viewModelScope.launch {
-            val list = searchState.value.recentTerm.split(" ").toMutableList()
-            list.removeAt(index)
-            getRecentSearchTermUseCase.removeRecentSearchUseCase(list.toString())
+            val recentTerm = searchState.value.recentTerm
+            getRecentSearchTermUseCase.saveRecentSearchUseCase(recentTerm, index)
             searchState.update {
-                it.copy(recentTerm = getRecentSearchTermUseCase.getRecentSearchUseCase().first(), isLoading = false )
+                it.copy(
+                    recentTerm = getRecentSearchTermUseCase.getRecentSearchUseCase().first(),
+                    isLoading = false
+                )
             }
         }
     }
