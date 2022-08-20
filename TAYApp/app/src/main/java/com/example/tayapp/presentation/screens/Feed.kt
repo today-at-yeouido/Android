@@ -55,7 +55,7 @@ fun Feed(
             onArrowClick = viewModel::onExpandChange
         )
         if (UserState.network) {
-            if (recentBill.loadState.refresh == LoadState.Loading) {
+            if (recentBill.loadState.refresh == LoadState.Loading || mostViewed.isLoading) {
                 LoadingView(modifier = Modifier.fillMaxSize())
             }
 
@@ -98,7 +98,10 @@ fun Feed(
                 }
             }
         } else {
-            NetworkErrorScreen(viewModel::tryGetMostViewed)
+            NetworkErrorScreen{
+                UserState.network = true
+                viewModel.tryGetMostViewed()
+            }
         }
     }
 

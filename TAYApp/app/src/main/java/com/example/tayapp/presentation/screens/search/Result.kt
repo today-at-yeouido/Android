@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,45 +11,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import com.example.tayapp.R
-import com.example.tayapp.data.remote.dto.bill.BillDto
-import com.example.tayapp.data.remote.dto.bill.SearchBillDto
-import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.presentation.components.CardSearch
+import com.example.tayapp.presentation.components.LoadingView
 import com.example.tayapp.presentation.components.Title
+import com.example.tayapp.presentation.states.SearchState
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.ui.theme.lm_gray400
 
 @Composable
 fun SearchResults(
-    searchResult: List<BillDto>,
+    searchResult: SearchState,
     onBillClick: (Int) -> Unit,
     keyword: String
-){
-    Column(modifier = Modifier.fillMaxSize().padding(KeyLine)) {
-        Title(
-            string = "검색 결과",
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+) {
+    if (searchResult.isLoading) {
+        LoadingView(modifier = Modifier.fillMaxSize())
+    } else {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(KeyLine)) {
+            Title(
+                string = "검색 결과",
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ){
-            items(searchResult){ it->
-                CardSearch(
-                    bill = it.toDomain(),
-                    onBillSelected = onBillClick,
-                    keyword = keyword
-                )
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(searchResult.bill) {
+                    CardSearch(
+                        bill = it.toDomain(),
+                        onBillSelected = onBillClick,
+                        keyword = keyword
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun NoResult(){
+fun NoResult() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
