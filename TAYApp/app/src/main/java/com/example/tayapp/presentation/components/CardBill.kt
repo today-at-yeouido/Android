@@ -55,10 +55,19 @@ fun CardBill(
 }
 
 @Composable
-fun CardBillWithScrap() {
+fun CardBillWithScrap(
+    bill: Bill,
+    _isBookMarked: Boolean = false,
+    onBillSelected: (Int) -> Unit,
+    onScrapClickNotClicked: () -> Unit = {},
+    onScrapClickClicked: () -> Unit = {}
+) {
+    var isBookMarked = _isBookMarked
+
     TayCard(
-        modifier = Modifier.fillMaxWidth(),
-        enable = true
+        modifier = if(isBookMarked) Modifier.fillMaxSize().padding(vertical = 8.dp) else Modifier.size(0.dp),
+        enable = true,
+        onClick = { onBillSelected(bill.id) }
     ) {
         Row(
             modifier = Modifier.padding(5.dp)
@@ -66,11 +75,18 @@ fun CardBillWithScrap() {
             CardBillDefault(
                 modifier = Modifier
                     .padding(9.dp)
-                    .weight(1f)
+                    .weight(1f),
+                title = bill.billName,
+                status = bill.status,
+                bill = bill.billType,
+                date = bill.proposeDt,
+                people = bill.proposer
             )
             BookmarkButton(
-                isBookmarked = false,
-                onClick = { /*TODO*/ },
+                isBookmarked = isBookMarked,
+                onClick = {
+                    if(isBookMarked) onScrapClickClicked() else onScrapClickNotClicked()
+                }
             )
         }
     }
@@ -201,27 +217,3 @@ fun CardEmoij() {
     }
 }
 
-
-@Preview
-@Composable
-private fun CardPreview() {
-    TayAppTheme() {
-        //CardBill()
-    }
-}
-
-@Preview
-@Composable
-private fun Card2Preview() {
-    TayAppTheme() {
-        CardBillWithScrap()
-    }
-}
-
-@Preview
-@Composable
-private fun Card3Preview() {
-    TayAppTheme() {
-        CardBillWithEmoij()
-    }
-}

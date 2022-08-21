@@ -63,6 +63,19 @@ class ScrapViewModel @Inject constructor(
 
     }
 
+    fun deleteScrap(bill: Int) {
+        viewModelScope.launch {
+            postDeleteScrapUseCase(bill).collect() { it ->
+                when (it) {
+                    is Resource.Success -> Log.d("스크랩", "스크랩 취소 성공")
+                    is Resource.Error -> Log.d("스크랩", "스크랩 취소 실패")
+                    is Resource.Loading -> Log.d("스크랩", "스크랩 취소 올리는중")
+                }
+            }
+        }
+    }
+
+
     fun refresh() {
         _isRefreshing.value = true
         getScrapBill()

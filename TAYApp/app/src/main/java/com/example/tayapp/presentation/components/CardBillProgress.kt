@@ -24,7 +24,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun CardBillProgress(
     onProgressClick: () -> Unit,
@@ -80,7 +80,7 @@ fun CardBillProgress(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 private fun BillDate(date: String): Int{
 

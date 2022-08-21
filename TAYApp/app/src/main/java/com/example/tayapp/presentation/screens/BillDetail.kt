@@ -28,6 +28,7 @@ import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BillDetail(billId: Int, upPress: () -> Unit) {
@@ -94,7 +95,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
     Column(
