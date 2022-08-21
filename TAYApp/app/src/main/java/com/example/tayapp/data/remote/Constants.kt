@@ -17,7 +17,7 @@ object Constants {
     const val GET_BILL_RECENT = "bill/test/recent-create/"
     const val GET_BILL_USER_RECOMMENDED = "bill/test/recommend/"
     const val GET_BILL_USER_RECENT_VIEWED = "bill/test/user-recent-view/"
-    const val GET_BILL_SEARCH = "bill/test/search/"
+    const val GET_BILL_SEARCH = "bill/search/"
 
     const val POST_ADD_SCRAP ="bill/scrap/add/"
     const val POST_DELETE_SCRAP ="bill/scrap/delete/"

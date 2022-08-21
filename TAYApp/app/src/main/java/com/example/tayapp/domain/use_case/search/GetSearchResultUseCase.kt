@@ -2,6 +2,7 @@ package com.example.tayapp.domain.use_case.search
 
 import android.util.Log
 import com.example.tayapp.data.remote.dto.bill.BillDto
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.MostViewedBill
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.domain.repository.GetBillRepository
@@ -19,13 +20,14 @@ class GetSearchResultUseCase @Inject constructor(
     private val repository: GetBillRepository,
     private val checkLoginUseCase: CheckLoginUseCase
 ){
-    operator fun invoke(query: String): Flow<Resource<List<BillDto>>> = flow {
+    operator fun invoke(query: String): Flow<Resource<List<ScrapBillDto>>> = flow {
         emit(Resource.Loading())
         try{
             val response = repository.getBillSearch(query)
-            Log.d("asdf","${response.code()}")
             when (response.code()) {
-                200 -> { emit(Resource.Success(response.body()!!)) }
+                200 -> {
+                    emit(Resource.Success(response.body()!!))
+                }
                 400 -> emit(
                     Resource.Error(
                         response.errorBody().toString() ?: "An unexpected error occurred"

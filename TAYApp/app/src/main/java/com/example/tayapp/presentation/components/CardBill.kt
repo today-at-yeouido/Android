@@ -130,7 +130,7 @@ fun CardBillWithEmoij(
 }
 
 @Composable
-private fun CardBillDefault(
+fun CardBillDefault(
     modifier: Modifier = Modifier.padding(Card_Inner_Padding),
     title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
     bill: Int = 1,

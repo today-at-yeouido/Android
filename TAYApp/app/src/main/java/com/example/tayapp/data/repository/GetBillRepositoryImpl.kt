@@ -38,7 +38,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillUserRecentViewed()
     }
 
-    override suspend fun getBillSearch(query: String): Response<List<BillDto>> {
+    override suspend fun getBillSearch(query: String): Response<List<ScrapBillDto>> {
         return billApi.getBillSearch(query)
     }
 

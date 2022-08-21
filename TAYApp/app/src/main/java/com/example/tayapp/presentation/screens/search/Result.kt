@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens.search
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,8 +16,10 @@ import androidx.compose.ui.unit.dp
 import com.example.tayapp.R
 import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.bill.SearchBillDto
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.domain.model.toDomain
+import com.example.tayapp.presentation.components.CardMultiple
 import com.example.tayapp.presentation.components.CardSearch
 import com.example.tayapp.presentation.components.Title
 import com.example.tayapp.presentation.ui.theme.KeyLine
@@ -25,10 +28,11 @@ import com.example.tayapp.presentation.ui.theme.lm_gray400
 
 @Composable
 fun SearchResults(
-    searchResult: List<BillDto>,
+    searchResult: List<ScrapBillDto>,
     onBillClick: (Int) -> Unit,
     keyword: String
 ){
+
     Column(modifier = Modifier.fillMaxSize().padding(KeyLine)) {
         Title(
             string = "검색 결과",
@@ -38,12 +42,20 @@ fun SearchResults(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
-            items(searchResult){ it->
-                CardSearch(
-                    bill = it.toDomain(),
-                    onBillSelected = onBillClick,
-                    keyword = keyword
+            items(searchResult){ bill->
+                if(bill.bills.size == 1){
+                    CardSearch(
+                        bill = bill,
+                        onBillSelected = onBillClick,
+                        keyword = keyword
+                    )
+                }else{
+                    CardMultiple(
+                        bill = bill,
+                        onLineClick = onBillClick,
+                        keyword = keyword
                 )
+            }
             }
         }
     }

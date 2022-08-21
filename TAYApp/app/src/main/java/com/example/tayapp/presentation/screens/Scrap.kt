@@ -106,7 +106,8 @@ fun Scrap(
                                 }else{
                                     CardMultiple(
                                         bill = bill,
-                                        onLineClick = onBillSelected
+                                        onLineClick = onBillSelected,
+                                        keyword = ""
                                     )
                                 }
                             }

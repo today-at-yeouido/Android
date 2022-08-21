@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,8 +10,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,11 +27,32 @@ import com.example.tayapp.presentation.utils.NavigateNextButton
 
 @Composable
 fun CardSearch(
-    bill: Bill,
+    bill: ScrapBillDto,
     onBillSelected: (Int) -> Unit,
     keyword: String = ""
 ){
-    CardBill(bill = bill, onClick = onBillSelected, keyword = keyword)
+
+    TayCard(
+        modifier = Modifier.fillMaxSize(),
+        enable = true,
+        onClick = { onBillSelected(bill.bills.first().id) }
+    ) {
+        Row(
+            modifier = Modifier.padding(5.dp)
+        ) {
+            CardBillDefault(
+                modifier = Modifier
+                    .padding(9.dp)
+                    .weight(1f),
+                title = bill.billName,
+                bill = bill.bills.first().billType,
+                status = bill.bills.first().status,
+                date = bill.bills.first().proposeDt,
+                people = bill.bills.first().proposer,
+                keyword = keyword
+            )
+        }
+    }
 }
 
 
@@ -35,7 +60,8 @@ fun CardSearch(
 @Composable
 fun CardMultiple(
     bill: ScrapBillDto,
-    onLineClick:(Int) -> Unit
+    onLineClick:(Int) -> Unit,
+    keyword: String
 ){
     TayCard(
         modifier = Modifier.fillMaxWidth(),
@@ -45,15 +71,44 @@ fun CardMultiple(
             modifier = Modifier.padding(Card_Inner_Padding),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
-                text = bill.billName,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                fontWeight = FontWeight.Medium,
-                fontSize = 16.sp,
-                maxLines = 2,
-                color = TayAppTheme.colors.bodyText
-            )
+            val startIndex = bill.billName.indexOf(keyword)
+            if (keyword != "" && startIndex != -1) {
+
+                Text(
+                    text = buildAnnotatedString {
+
+                        if (startIndex == 0) {
+                            withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
+                                append(keyword)
+                            }
+                            append(bill.billName.substring(keyword.length, bill.billName.length))
+                        } else {
+                            append(bill.billName.substring(0, startIndex))
+
+                            withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
+                                append(keyword)
+                            }
+                            append(bill.billName.substring(startIndex + keyword.length, bill.billName.length))
+                        }
+                    },
+                    color = TayAppTheme.colors.bodyText,
+                    modifier = Modifier
+                        .height(54.dp),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
+                    maxLines = 2
+                )
+            } else {
+                Text(
+                    text = bill.billName,
+                    modifier = Modifier
+                        .height(54.dp),
+                    color = TayAppTheme.colors.bodyText,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
+                    maxLines = 2
+                )
+            }
             Text(
                 text = "총 ${bill.bills.size}건 ",
                 fontWeight = FontWeight.Normal,

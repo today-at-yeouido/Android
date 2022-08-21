@@ -39,7 +39,7 @@ interface BillApi {
     @GET(GET_BILL_SEARCH)
     suspend fun getBillSearch(
         @Query("query") query: String
-    ) : Response<List<BillDto>>
+    ) : Response<List<ScrapBillDto>>
 
     @GET(GET_BILL_MOST_VIEWED)
     suspend fun getBillMostViewed() : Response<List<MostViewedBillDto>>
