@@ -1,6 +1,7 @@
 package com.example.tayapp.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
@@ -13,6 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
@@ -30,9 +33,9 @@ fun CardSearch(
 
 
 @Composable
-private fun CardSearchMultiple(
-    title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
-    list: List<String> = listOf<String>("1", "2","3","4"),
+fun CardMultiple(
+    bill: ScrapBillDto,
+    onLineClick:(Int) -> Unit
 ){
     TayCard(
         modifier = Modifier.fillMaxWidth(),
@@ -43,16 +46,16 @@ private fun CardSearchMultiple(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = title,
+                text = bill.billName,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
+                    .fillMaxWidth(),
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                maxLines = 2
+                maxLines = 2,
+                color = TayAppTheme.colors.bodyText
             )
             Text(
-                text = "총 ${list.count()}건 ",
+                text = "총 ${bill.bills.size}건 ",
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.subduedText,
@@ -62,11 +65,11 @@ private fun CardSearchMultiple(
             TayDivider(
                 modifier = Modifier.padding(vertical = 6.dp)
             )
-            list.forEach {
-                LineSearchedBill(people = it)
+            bill.bills.forEach {
+                LineSearchedBill(bill = it, onLineClick = onLineClick)
             }
 
-            if(list.count() > 3){
+            if(bill.bills.size > 3){
                 TayButton(
                     onClick = { /*TODO*/ },
                     backgroundColor = TayAppTheme.colors.background,
@@ -77,11 +80,7 @@ private fun CardSearchMultiple(
                     Text("더보기", style = TayAppTheme.typo.typography.button)
                 }
             }
-            BookmarkButton(
-                modifier = Modifier.align(Alignment.End),
-                isBookmarked = false,
-                onClick = { /*TODO*/ },
-            )
+
         }
     }
 }
@@ -90,13 +89,12 @@ private fun CardSearchMultiple(
 
 @Composable
 fun LineSearchedBill(
-    date: String = "2022.06.17",
-    people: String = "박태출 등 10인",
-    bill: Int = 1,
-    status: String = "접수"
+    bill: ScrapBillItemDto,
+    onLineClick: (Int) -> Unit
+
 ){
     Surface(
-        modifier = Modifier.height(34.dp),
+        modifier = Modifier.height(34.dp).clickable(onClick = {onLineClick(bill.id)}),
         color = TayAppTheme.colors.layer1,
         shape = RoundedCornerShape(10.dp)
     ) {
@@ -110,28 +108,21 @@ fun LineSearchedBill(
 
             ) {
             Text(
-                text = date,
+                text = bill.proposeDt,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.subduedText
             )
             Text(
-                text = people,
+                text = bill.proposer,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.subduedText,
                 modifier = Modifier.weight(1f)
             )
-            PillList(bill, status)
+            PillList(bill.billType, bill.status)
             NavigateNextButton()
         }
     }
 }
 
-@Preview
-@Composable
-private fun SearchBillPreview(){
-    TayAppTheme {
-        LineSearchedBill()
-    }
-}

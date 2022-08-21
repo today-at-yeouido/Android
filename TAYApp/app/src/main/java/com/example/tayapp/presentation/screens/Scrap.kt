@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +31,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Scrap(
-    list: List<String> = listOf("1", "2", "3"),
     onBillSelected: (Int) -> Unit
 ) {
 
@@ -55,7 +55,7 @@ fun Scrap(
             )
         }
     ) {
-        Column {
+        Column( modifier = Modifier.background(TayAppTheme.colors.background)) {
             TayTopAppBar("스크랩")
             if (UserState.network) {
                 SwipeRefresh(
@@ -80,29 +80,35 @@ fun Scrap(
                             modifier = Modifier.fillMaxSize()
                                 .padding(horizontal = KeyLine, vertical = 20.dp)
                         ) {
-                            items(scrapState.bill) {
-                                    bill ->
+                            items(scrapState.bill) { bill ->
                                 var _isBookMarked = remember{mutableStateOf(true)}
 
-                                CardBillWithScrap(
-                                    bill = bill,
-                                    onBillSelected = onBillSelected,
-                                    _isBookMarked = _isBookMarked.value,
-                                    onScrapClickClicked = {
-                                        _isBookMarked.value = false
-                                        coroutineScope.launch {
-                                            val snackbarResult =
-                                                scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = "",
-                                                    actionLabel = "스크랩을 취소하시겠습니까?"
-                                                )
-                                            when (snackbarResult) {
-                                                SnackbarResult.ActionPerformed -> {_isBookMarked.value = true}
-                                                SnackbarResult.Dismissed -> viewModel.deleteScrap(bill.id)
+                                if(bill.bills.size == 1){
+                                    CardBillWithScrap(
+                                        bill = bill,
+                                        onBillSelected = onBillSelected,
+                                        _isBookMarked = _isBookMarked.value,
+                                        onScrapClickClicked = {
+                                            _isBookMarked.value = false
+                                            coroutineScope.launch {
+                                                val snackbarResult =
+                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                        message = "",
+                                                        actionLabel = "스크랩을 취소하시겠습니까?"
+                                                    )
+                                                when (snackbarResult) {
+                                                    SnackbarResult.ActionPerformed -> {_isBookMarked.value = true}
+                                                    SnackbarResult.Dismissed -> viewModel.deleteScrap(bill.bills.first().id)
+                                                }
                                             }
                                         }
-                                    }
-                                )
+                                    )
+                                }else{
+                                    CardMultiple(
+                                        bill = bill,
+                                        onLineClick = onBillSelected
+                                    )
+                                }
                             }
                         }
                 }

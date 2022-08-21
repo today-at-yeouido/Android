@@ -282,8 +282,6 @@ private fun CardBillLine() {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ){
-                    LineSearchedBill()
-                    LineSearchedBill()
                     Spacer(modifier = Modifier.size(ButtonLargeHeight))
                 }
             }

@@ -61,5 +61,5 @@ interface BillApi {
     ) : Response<DeleteScrapResponseDto>
 
     @GET(GET_BILL_SCRAP)
-    suspend fun getBillScrap() : Response<ScrapBillDto>
+    suspend fun getBillScrap() : Response<List<ScrapBillDto>>
 }

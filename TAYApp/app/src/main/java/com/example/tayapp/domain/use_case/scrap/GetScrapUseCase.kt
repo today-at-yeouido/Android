@@ -21,14 +21,13 @@ class GetScrapUseCase @Inject constructor(
     val repository: GetBillRepository,
     private val checkLoginUseCase: CheckLoginUseCase
 ) {
-    operator fun invoke(): Flow<Resource<List<Bill>>> = flow {
+    operator fun invoke(): Flow<Resource<List<ScrapBillDto>>> = flow {
         emit(Resource.Loading())
         try{
             val response = repository.getBillScrap()
             when (response.code()) {
                 200 -> {
-                    val bill = response.body()!!.bill.map { it.toDomain() }
-                    emit(Resource.Success(bill))
+                    emit(Resource.Success(response.body()!!))
                 }
                 401 -> {
                     checkLoginUseCase()

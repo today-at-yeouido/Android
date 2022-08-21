@@ -26,7 +26,7 @@ interface GetBillRepository {
 
     suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>
     suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto>
-    suspend fun getBillScrap(): Response<ScrapBillDto>
+    suspend fun getBillScrap(): Response<List<ScrapBillDto>>
 
 }
 

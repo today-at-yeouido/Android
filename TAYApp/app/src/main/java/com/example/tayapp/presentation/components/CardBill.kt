@@ -23,6 +23,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
@@ -56,7 +57,7 @@ fun CardBill(
 
 @Composable
 fun CardBillWithScrap(
-    bill: Bill,
+    bill: ScrapBillDto,
     _isBookMarked: Boolean = false,
     onBillSelected: (Int) -> Unit,
     onScrapClickNotClicked: () -> Unit = {},
@@ -67,7 +68,7 @@ fun CardBillWithScrap(
     TayCard(
         modifier = if(isBookMarked) Modifier.fillMaxSize().padding(vertical = 8.dp) else Modifier.size(0.dp),
         enable = true,
-        onClick = { onBillSelected(bill.id) }
+        onClick = { onBillSelected(bill.bills.first().id) }
     ) {
         Row(
             modifier = Modifier.padding(5.dp)
@@ -77,10 +78,10 @@ fun CardBillWithScrap(
                     .padding(9.dp)
                     .weight(1f),
                 title = bill.billName,
-                status = bill.status,
-                bill = bill.billType,
-                date = bill.proposeDt,
-                people = bill.proposer
+                status = bill.bills.first().status,
+                bill = bill.bills.first().billType,
+                date = bill.bills.first().proposeDt,
+                people = bill.bills.first().proposer
             )
             BookmarkButton(
                 isBookmarked = isBookMarked,
