@@ -21,12 +21,13 @@ interface GetBillRepository {
     suspend fun getBillRecent(page: Int): Response<List<BillDto>>
     suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
     suspend fun getBillUserRecommended(): List<BillDto>
-    suspend fun getBillUserRecentViewed(): List<BillDto>
+    suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
     suspend fun getBillSearch(query: String): Response<List<ScrapBillDto>>
 
     suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>
     suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto>
     suspend fun getBillScrap(): Response<List<ScrapBillDto>>
+    suspend fun getAutoComplete(query: String): Response<AutoCompleteDto>
 
 }
 
