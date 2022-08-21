@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -13,21 +15,26 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
+import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray600
 
 @Composable
 fun CardNews(
-    imageURL: String = "https://yt3.ggpht.com/ytc/AKedOLR5NNn9lbbFQqPkHCTMgvgvCjZi94G2JRU7DjsM=s900-c-k-c0x00ffffff-no-rj",
+    imageURL: String? = "https://yt3.ggpht.com/ytc/AKedOLR5NNn9lbbFQqPkHCTMgvgvCjZi94G2JRU7DjsM=s900-c-k-c0x00ffffff-no-rj",
     title: String = "중대재해처벌법, 두려움을 기회로 바꿔라",
     date: String = "22.07.19",
-    press: String = "언론사"
+    press: String = "언론사",
+    newsLink: String,
+    mUriHandler: UriHandler
 ) {
     TayCard(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp),
-        enable = true
+            .padding(horizontal = KeyLine)
+            .height(100.dp)
+            .fillMaxWidth(),
+        enable = true,
+        onClick = {mUriHandler.openUri(newsLink)}
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -37,8 +44,8 @@ fun CardNews(
             TayImage(
                 imageURL = imageURL,
                 modifier = Modifier
-                    .fillMaxHeight()
                     .width(112.dp)
+                    .fillMaxHeight()
             )
 
             Column(
@@ -46,7 +53,7 @@ fun CardNews(
                 modifier = Modifier.padding(vertical = 15.dp)
             ) {
                 Text(
-                    text = title,
+                    text = title.replace("\n",""),
                     modifier = Modifier
                         .fillMaxWidth(),
                     color = TayAppTheme.colors.headText,
@@ -79,25 +86,16 @@ fun CardNews(
 
 @Composable
 fun TayImage(
-    imageURL: String,
+    imageURL: String?,
     modifier: Modifier = Modifier,
 ) {
     AsyncImage(
+        modifier = modifier,
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageURL)
             .crossfade(true)
             .build(),
         contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = modifier
-
+        contentScale = ContentScale.Crop
     )
-}
-
-@Preview
-@Composable
-private fun NewsCardPreview() {
-    TayAppTheme() {
-        CardNews()
-    }
 }

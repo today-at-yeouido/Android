@@ -4,6 +4,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -13,11 +15,13 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.data.remote.dto.bill.DetailBillDto
+import com.example.tayapp.data.remote.dto.bill.NewsDto
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
@@ -34,18 +38,12 @@ import kotlinx.coroutines.launch
 fun BillDetail(billId: Int, upPress: () -> Unit) {
 
     val viewModel =hiltViewModel<DetailViewModel>()
-    val detailState = viewModel.detailState.collectAsState()
-    val scrollState =rememberScrollState()
+    var detailState = viewModel.detailState.collectAsState()
     val coroutineScope =rememberCoroutineScope()
     val bottomSheetScaffoldState =rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
-
-    /**
-     * 수정 예정
-     */
-    var isBookMarked = remember{ mutableStateOf(false)}
-
+    val mUriHandler = LocalUriHandler.current
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -66,54 +64,67 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
             )
         }
     ){
-        Column{
+        Column(){
             TayTopAppBarWithScrap(
-                billId,
+                "의안상세",
                 upPress,
-                isBookMarked = isBookMarked.value,
+                isBookMarked = detailState.value.billDetail.isScrapped,
                 onClickScrap = {
-                    if(isBookMarked.value) viewModel.deleteScrap(billId) else viewModel.addScrap(billId)
-                    isBookMarked.value = !isBookMarked.value
                     coroutineScope.launch {
+                        if(detailState.value.billDetail.isScrapped) viewModel.deleteScrap(billId) else viewModel.addScrap(billId)
                         bottomSheetScaffoldState.snackbarHostState.showSnackbar(
                             message = "",
-                            actionLabel = if(isBookMarked.value) "스크랩 되었습니다." else "스크랩 취소 되었습니다."
+                            actionLabel = if(!detailState.value.billDetail.isScrapped) "스크랩 되었습니다." else "스크랩 취소 되었습니다."
                         )
                     }
                 }
             )
 
             if (UserState.network) {
-                Column(
-                    modifier = Modifier.verticalScroll(scrollState)
-                ) {
-                    DetailHeader(onProgressClick = {
-                        coroutineScope.launch {
+                LazyColumn() {
+                    item {
+                        DetailHeader(onProgressClick = {
+                            coroutineScope.launch {
 
-                            if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
-                                bottomSheetScaffoldState.bottomSheetState.expand()
-                            } else {
-                                bottomSheetScaffoldState.bottomSheetState.collapse()
+                                if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                } else {
+                                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                                }
                             }
+                        }, bill = detailState.value.billDetail)
+
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Column(
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = KeyLine,
+                                    vertical = 24.dp
+                                ),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            CardPieGraph()
+                            CardBillLine()
+                            BillPointText(detailState.value.billDetail.summary)
+                            BillRevisionText()
+                            if(detailState.value.billDetail.news.size > 0)NewsHeader()
                         }
-                    }, bill = detailState.value.billDetail)
-
-                    Spacer(modifier = Modifier.size(16.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .padding(
-                                horizontal = KeyLine,
-                                vertical = 24.dp
-                            ),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        CardPieGraph()
-                        CardBillLine()
-                        BillPointText(detailState.value.billDetail.summary)
-                        BillRevisionText()
-                        BillDetailNews()
                     }
+
+                    items(detailState.value.billDetail.news){news ->
+                        CardNews(
+                            imageURL = news.imgUrl.firstOrNull(),
+                            title = news.newsName,
+                            date = news.pubDate,
+                            press = news.newsFrom,
+                            newsLink = news.newsLink,
+                            mUriHandler
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+                    }
+
+
+
                 }
             } else {
                 NetworkErrorScreen{
@@ -143,7 +154,7 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal =KeyLine),
+                .padding(horizontal = KeyLine),
 
             ){
             Spacer(modifier = Modifier.height(20.dp))
@@ -291,7 +302,7 @@ private fun CardBillLine() {
                 modifier = Modifier
                     .padding(bottom = 18.dp)
                     .align(Alignment.BottomCenter)
-                    .size(ButtonLargeWidth,ButtonLargeHeight)
+                    .size(ButtonLargeWidth, ButtonLargeHeight)
                 ,
                 backgroundColor = TayAppTheme.colors.bodyText,
                 contentColor = TayAppTheme.colors.background
@@ -325,21 +336,14 @@ private fun BillPointText(
 }
 
 @Composable
-private fun BillDetailNews() {
+private fun BillDetailNews(
+    news: List<NewsDto>
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(vertical = 24.dp)
     ){
-        NewsHeader()
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ){
-            CardNews()
-            CardNews()
-            CardNews()
-            CardNews()
-            CardNews()
-        }
+
     }
 }
 

@@ -83,7 +83,7 @@ fun TayTopAppBarWithBack(
 
 @Composable
 fun TayTopAppBarWithScrap(
-    billId: Int,
+    title: String,
     upPress: () -> Unit,
     onClickScrap: () -> Unit,
     isBookMarked: Boolean
@@ -104,7 +104,7 @@ fun TayTopAppBarWithScrap(
             onClick = upPress
         )
         TopBarTitle(
-            string = billId.toString(),
+            string = title,
             modifier = Modifier.align(Alignment.Center)
         )
         BookmarkButton(
