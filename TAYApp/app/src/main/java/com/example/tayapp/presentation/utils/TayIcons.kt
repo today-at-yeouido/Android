@@ -161,7 +161,8 @@ fun BookmarkButton(
     ) {
         Icon(
             imageVector = if (isBookmarked) TayIcons.bottombar_bookmark_click else TayIcons.bottombar_bookmark,
-            contentDescription = null
+            contentDescription = null,
+            tint = TayAppTheme.colors.icon
         )
     }
 }

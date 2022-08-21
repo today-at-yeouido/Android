@@ -8,9 +8,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +28,7 @@ import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BillDetail(billId: Int, upPress: () -> Unit) {
@@ -40,16 +41,47 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
 
+    /**
+     * 수정 예정
+     */
+    var isBookMarked = remember{ mutableStateOf(false)}
+
+
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent ={BillProgressDetail()},
         sheetShape =RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         sheetPeekHeight = 10.dp,
         backgroundColor = TayAppTheme.colors.background,
-        sheetBackgroundColor = TayAppTheme.colors.layer1
+        sheetBackgroundColor = TayAppTheme.colors.layer1,
+        snackbarHost = {
+            SnackbarHost(hostState = it,
+                snackbar = {
+                    TaySnackbar(
+                        snackbarData = it,
+                        imageVector = Icons.Filled.CheckCircle,
+                        imageColor = TayAppTheme.colors.success2
+                    )
+                }
+            )
+        }
     ){
         Column{
-            TayTopAppBarWithScrap(billId, upPress, viewModel::addScrap)
+            TayTopAppBarWithScrap(
+                billId,
+                upPress,
+                isBookMarked = isBookMarked.value,
+                onClickScrap = {
+                    if(isBookMarked.value) viewModel.deleteScrap(billId) else viewModel.addScrap(billId)
+                    isBookMarked.value = !isBookMarked.value
+                    coroutineScope.launch {
+                        bottomSheetScaffoldState.snackbarHostState.showSnackbar(
+                            message = "",
+                            actionLabel = if(isBookMarked.value) "스크랩 되었습니다." else "스크랩 취소 되었습니다."
+                        )
+                    }
+                }
+            )
 
             if (UserState.network) {
                 Column(
@@ -94,7 +126,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
     Column(
@@ -250,8 +282,6 @@ private fun CardBillLine() {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ){
-                    LineSearchedBill()
-                    LineSearchedBill()
                     Spacer(modifier = Modifier.size(ButtonLargeHeight))
                 }
             }

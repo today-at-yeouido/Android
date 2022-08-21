@@ -85,7 +85,8 @@ fun TayTopAppBarWithBack(
 fun TayTopAppBarWithScrap(
     billId: Int,
     upPress: () -> Unit,
-    onClickScrap: (Int) -> Unit
+    onClickScrap: () -> Unit,
+    isBookMarked: Boolean
 ) {
     Box(
         modifier = Modifier
@@ -108,8 +109,8 @@ fun TayTopAppBarWithScrap(
         )
         BookmarkButton(
             modifier = Modifier.align(Alignment.CenterEnd),
-            isBookmarked = false,
-            onClick = { onClickScrap(billId) }
+            isBookmarked = isBookMarked,
+            onClick = { onClickScrap() }
         )
 
     }

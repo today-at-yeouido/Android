@@ -23,6 +23,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
@@ -55,10 +56,19 @@ fun CardBill(
 }
 
 @Composable
-fun CardBillWithScrap() {
+fun CardBillWithScrap(
+    bill: ScrapBillDto,
+    _isBookMarked: Boolean = false,
+    onBillSelected: (Int) -> Unit,
+    onScrapClickNotClicked: () -> Unit = {},
+    onScrapClickClicked: () -> Unit = {}
+) {
+    var isBookMarked = _isBookMarked
+
     TayCard(
-        modifier = Modifier.fillMaxWidth(),
-        enable = true
+        modifier = if(isBookMarked) Modifier.fillMaxSize().padding(vertical = 8.dp) else Modifier.size(0.dp),
+        enable = true,
+        onClick = { onBillSelected(bill.bills.first().id) }
     ) {
         Row(
             modifier = Modifier.padding(5.dp)
@@ -66,11 +76,18 @@ fun CardBillWithScrap() {
             CardBillDefault(
                 modifier = Modifier
                     .padding(9.dp)
-                    .weight(1f)
+                    .weight(1f),
+                title = bill.billName,
+                status = bill.bills.first().status,
+                bill = bill.bills.first().billType,
+                date = bill.bills.first().proposeDt,
+                people = bill.bills.first().proposer
             )
             BookmarkButton(
-                isBookmarked = false,
-                onClick = { /*TODO*/ },
+                isBookmarked = isBookMarked,
+                onClick = {
+                    if(isBookMarked) onScrapClickClicked() else onScrapClickNotClicked()
+                }
             )
         }
     }
@@ -201,27 +218,3 @@ fun CardEmoij() {
     }
 }
 
-
-@Preview
-@Composable
-private fun CardPreview() {
-    TayAppTheme() {
-        //CardBill()
-    }
-}
-
-@Preview
-@Composable
-private fun Card2Preview() {
-    TayAppTheme() {
-        CardBillWithScrap()
-    }
-}
-
-@Preview
-@Composable
-private fun Card3Preview() {
-    TayAppTheme() {
-        CardBillWithEmoij()
-    }
-}
