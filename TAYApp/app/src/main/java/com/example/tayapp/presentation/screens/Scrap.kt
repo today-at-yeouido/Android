@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarResult
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -16,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.KeyLine
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.viewmodels.ScrapViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -36,7 +40,18 @@ fun Scrap(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        scaffoldState = scaffoldState
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(hostState = it,
+                snackbar = {
+                    TaySnackbar(
+                        snackbarData = it,
+                        imageVector = Icons.Default.QuestionMark,
+                        imageColor = TayAppTheme.colors.information1
+                    )
+                }
+            )
+        }
     ) {
         Column {
             TayTopAppBar("스크랩")
@@ -63,8 +78,8 @@ fun Scrap(
                                         coroutineScope.launch {
                                             val snackbarResult =
                                                 scaffoldState.snackbarHostState.showSnackbar(
-                                                    message = "asdf",
-                                                    actionLabel = "asdf"
+                                                    message = "",
+                                                    actionLabel = "스크랩을 취소하시겠습니까?"
                                                 )
                                             when (snackbarResult) {
                                                 SnackbarResult.ActionPerformed -> {_isBookMarked.value = true}
