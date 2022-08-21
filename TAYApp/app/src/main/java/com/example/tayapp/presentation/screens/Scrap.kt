@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarResult
@@ -22,6 +23,7 @@ import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.viewmodels.ScrapViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
@@ -59,6 +61,19 @@ fun Scrap(
                 SwipeRefresh(
                     state = rememberSwipeRefreshState(isRefreshing),
                     onRefresh = { viewModel.refresh() },
+                    refreshTriggerDistance = 50.dp,
+                    indicator = { state, trigger ->
+                        SwipeRefreshIndicator(
+                            // Pass the SwipeRefreshState + trigger through
+                            state = state,
+                            refreshTriggerDistance = trigger,
+                            // Enable the scale animation
+                            scale = true,
+                            // Change the color and shape
+                            backgroundColor = TayAppTheme.colors.background,
+                            shape = CircleShape,
+                        )
+                    }
                 ) {
                     if (UserState.isLogin())
                         LazyColumn(
