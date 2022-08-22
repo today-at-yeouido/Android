@@ -10,5 +10,6 @@ data class SearchState(
     val error: String = "",
     val recentTerm: String = "",
     val query: String = "",
-    val keyword: String = ""
+    val keyword: String = "",
+    val autoComplete: List<String> = emptyList()
 )

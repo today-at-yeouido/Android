@@ -2,6 +2,7 @@ package com.example.tayapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tayapp.domain.use_case.GetAutoCompleteUseCase
 import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
 import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
 import com.example.tayapp.presentation.states.SearchState
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getSearchUseCase: GetSearchResultUseCase,
-    private val getRecentSearchTermUseCase: RecentSearchTermUseCase
+    private val getRecentSearchTermUseCase: RecentSearchTermUseCase,
+    private val getAutoCompleteUseCase: GetAutoCompleteUseCase
 ) :
     ViewModel() {
 
@@ -68,7 +70,7 @@ class SearchViewModel @Inject constructor(
 
     fun onClearQuery() {
         searchState.update {
-            it.copy(bill = emptyList(), searching = false, query = "", keyword = "")
+            it.copy(bill = emptyList(), searching = false, query = "", keyword = "", autoComplete = emptyList())
         }
     }
 
@@ -76,6 +78,7 @@ class SearchViewModel @Inject constructor(
         searchState.update {
             it.copy(query = query)
         }
+        getAutoComplete()
     }
 
 
@@ -114,5 +117,43 @@ class SearchViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun getAutoComplete(){
+        getAutoCompleteUseCase(searchState.value.query).onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    if(!result.data.isNullOrEmpty()){
+                        searchState.update {
+                            it.copy(
+                                autoComplete = result.data!!
+                            )
+                        }
+                    }else{
+                        searchState.update {
+                            it.copy(
+                                autoComplete = emptyList()
+                            )
+                        }
+                    }
+
+                }
+                is Resource.Error -> {
+                    searchState.update {
+                        it.copy(
+                            error = result.message ?: "An unexpected error"
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    searchState.update {
+                        it.copy(isLoading = true)
+                    }
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 }
