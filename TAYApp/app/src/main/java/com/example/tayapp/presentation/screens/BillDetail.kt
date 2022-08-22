@@ -103,7 +103,10 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                                 ),
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            CardPieGraph()
+                            if(!detailState.value.billDetail.plenaryInfo.isNullOrEmpty()){
+                                CardPieGraph(detailState.value.billDetail)
+                            }
+
                             CardBillLine()
                             BillPointText(detailState.value.billDetail.summary)
                             BillRevisionText()
@@ -247,7 +250,9 @@ private fun CardCommittee(
 
 
 @Composable
-private fun CardPieGraph() {
+private fun CardPieGraph(
+    bill: DetailBillDto
+) {
     TayCard{
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -267,7 +272,11 @@ private fun CardPieGraph() {
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ){
-                PieGraph()
+                PieGraph(listOf(
+                    bill.plenaryInfo.firstOrNull()!!.approval,
+                    bill.plenaryInfo.firstOrNull()!!.opposition,
+                    bill.plenaryInfo.firstOrNull()!!.abstention,
+                    bill.plenaryInfo.firstOrNull()!!.total))
             }
         }
     }

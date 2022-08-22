@@ -184,7 +184,6 @@ fun TayTopAppBarSearch(
                         .fillMaxWidth()
                         .onFocusChanged {
                             isFocused = it.isFocused
-                            Log.d("자동완성", isFocused.toString())
                         }
                         .background(TayAppTheme.colors.layer1),
                     textStyle = TextStyle(fontSize = 14.textDp),
