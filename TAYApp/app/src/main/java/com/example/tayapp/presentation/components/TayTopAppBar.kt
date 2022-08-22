@@ -1,17 +1,26 @@
 package com.example.tayapp.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -24,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
+import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.BackButton
 import com.example.tayapp.presentation.utils.BookmarkButton
@@ -123,80 +133,100 @@ fun TayTopAppBarSearch(
     onCloseClick: () -> Unit,
     onChangeQuery: (String) -> Unit,
     queryValue: String,
+    autoComplete: List<String>,
     upPress: () -> Unit = {}
 ) {
-    Row(
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(
-                vertical = TopAppBarValue.VerticalPadding,
-                horizontal = TopAppBarValue.HorizontalPadding
-            )
-            .fillMaxWidth()
-            .height(TopAppBarValue.AppBarHeignt),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
 
-    ) {
+    val focusManager = LocalFocusManager.current
+    var isFocused by remember{ mutableStateOf(false)}
 
-        val focusManager = LocalFocusManager.current
-
-
-        Image(
+    Column() {
+        Row(
             modifier = Modifier
-                .size(26.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            painter = painterResource(id = R.drawable.ic_tay_logo_app),
-            contentDescription = "main_title_image"
-        )
-
-
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
-            TextField(
-                placeholder = {
-                    Text(
-                        text = "법안 검색",
-                        fontSize = 14.textDp,
-                        color = TayAppTheme.colors.subduedIcon
-                    )
-                },
-                value = queryValue,
-                onValueChange = { onChangeQuery(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(TayAppTheme.colors.layer1),
-                textStyle = TextStyle(fontSize = 14.textDp),
-                shape = RoundedCornerShape(8.dp),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        onSearchClick()
-                        saveQuery()
-                        focusManager.clearFocus()
-                    }
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = true,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
+                .statusBarsPadding()
+                .padding(
+                    vertical = TopAppBarValue.VerticalPadding,
+                    horizontal = TopAppBarValue.HorizontalPadding
                 )
+                .fillMaxWidth()
+                .height(TopAppBarValue.AppBarHeignt),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+
+        ) {
+
+
+
+
+            Image(
+                modifier = Modifier
+                    .size(26.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                painter = painterResource(id = R.drawable.ic_tay_logo_app),
+                contentDescription = "main_title_image"
             )
 
-            if (queryValue != "") {
-                CancelButton(
-                    modifier = Modifier.align(Alignment.CenterEnd),
-                    onClick = { onCloseClick() }
+
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                TextField(
+                    placeholder = {
+                        Text(
+                            text = "법안 검색",
+                            fontSize = 14.textDp,
+                            color = TayAppTheme.colors.subduedIcon
+                        )
+                    },
+                    value = queryValue,
+                    onValueChange = { onChangeQuery(it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged {
+                            isFocused = it.isFocused
+                            Log.d("자동완성", isFocused.toString())
+                        }
+                        .background(TayAppTheme.colors.layer1),
+                    textStyle = TextStyle(fontSize = 14.textDp),
+                    shape = RoundedCornerShape(8.dp),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            onSearchClick()
+                            saveQuery()
+                            focusManager.clearFocus()
+                        }
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    )
                 )
+
+                if (queryValue != "") {
+                    CancelButton(
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        onClick = { onCloseClick() }
+                    )
+                }
+            }
+
+            SearchButton(onClick = {
+                onSearchClick()
+                saveQuery()
+                focusManager.clearFocus()
+            })
+        }
+        if(isFocused){
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ){
+                items(autoComplete){ it ->
+                    AutoCompleteItem(onItemClick = {onChangeQuery(it); onSearchClick(); saveQuery()}, text = it)
+                }
             }
         }
-
-        SearchButton(onClick = {
-            onSearchClick()
-            saveQuery()
-            focusManager.clearFocus()
-        })
     }
 }
 
@@ -216,27 +246,29 @@ private fun TopBarTitle(
 
 }
 
-
-@Preview
 @Composable
-private fun TopBarPreview() {
-    TayAppTheme {
-        TayTopAppBar()
-    }
-}
+private fun AutoCompleteItem(
+    onItemClick: () -> Unit,
+    text: String
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = KeyLine)
+            .clickable(onClick = onItemClick)
+        ,
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = null,
+            tint = TayAppTheme.colors.icon
+        )
 
-@Preview
-@Composable
-private fun BackTopBarPreview() {
-    TayAppTheme() {
-        //TayTopAppBarWithBack(string = "스크랩")
-    }
-}
+        Spacer(modifier = Modifier.size(8.dp))
 
-@Preview
-@Composable
-private fun BookmarkTopBarPreview() {
-    TayAppTheme() {
-        //TayTopAppBarWithScrap(string = "스크랩")
+        Text(text, fontWeight = FontWeight.Normal, fontSize = 14.sp, maxLines = 1)
+
     }
+
 }

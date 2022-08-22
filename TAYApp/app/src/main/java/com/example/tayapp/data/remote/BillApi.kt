@@ -1,5 +1,6 @@
 package com.example.tayapp.data.remote
 
+import com.example.tayapp.data.remote.Constants.GET_AUTOCOMPLETE
 import com.example.tayapp.data.remote.Constants.GET_BILL_DETAIL
 import com.example.tayapp.data.remote.Constants.GET_BILL_HOME
 import com.example.tayapp.data.remote.Constants.GET_BILL_MOST_VIEWED
@@ -48,7 +49,7 @@ interface BillApi {
     suspend fun getBillUserRecommended() : List<BillDto>
 
     @GET(GET_BILL_USER_RECENT_VIEWED)
-    suspend fun getBillUserRecentViewed() : List<BillDto>
+    suspend fun getBillUserRecentViewed() : Response<List<BillDto>>
 
     @POST(POST_ADD_SCRAP)
     suspend fun postAddScrap(
@@ -62,4 +63,9 @@ interface BillApi {
 
     @GET(GET_BILL_SCRAP)
     suspend fun getBillScrap() : Response<List<ScrapBillDto>>
+
+    @GET(GET_AUTOCOMPLETE)
+    suspend fun getAutoComplete(
+        @Query("query") query: String
+    ) : Response<AutoCompleteDto>
 }

@@ -34,7 +34,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillUserRecommended()
     }
 
-    override suspend fun getBillUserRecentViewed(): List<BillDto> {
+    override suspend fun getBillUserRecentViewed(): Response<List<BillDto>> {
         return billApi.getBillUserRecentViewed()
     }
 
@@ -52,5 +52,9 @@ class GetBillRepositoryImpl @Inject
 
     override suspend fun getBillScrap(): Response<List<ScrapBillDto>> {
         return billApi.getBillScrap()
+    }
+
+    override suspend fun getAutoComplete(query: String): Response<AutoCompleteDto>{
+        return billApi.getAutoComplete(query)
     }
 }
