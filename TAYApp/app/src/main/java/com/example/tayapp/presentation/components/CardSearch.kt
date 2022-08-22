@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -63,9 +63,10 @@ fun CardMultiple(
     onLineClick:(Int) -> Unit,
     keyword: String
 ){
+    var isExpanded by remember{ mutableStateOf(false)}
+
     TayCard(
-        modifier = Modifier.fillMaxWidth(),
-        enable = true
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(Card_Inner_Padding),
@@ -120,19 +121,31 @@ fun CardMultiple(
             TayDivider(
                 modifier = Modifier.padding(vertical = 6.dp)
             )
-            bill.bills.forEach {
-                LineSearchedBill(bill = it, onLineClick = onLineClick)
-            }
 
             if(bill.bills.size > 3){
-                TayButton(
-                    onClick = { /*TODO*/ },
-                    backgroundColor = TayAppTheme.colors.background,
-                    contentColor = TayAppTheme.colors.headText,
-                    modifier = Modifier.fillMaxWidth(),
-                    border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                ) {
-                    Text("더보기", style = TayAppTheme.typo.typography.button)
+                bill.bills.subList(0,3).forEach {
+                    LineSearchedBill(bill = it, onLineClick = onLineClick)
+                }
+
+                if(!isExpanded){
+                    TayButton(
+                        onClick = {isExpanded = !isExpanded},
+                        backgroundColor = TayAppTheme.colors.background,
+                        contentColor = TayAppTheme.colors.headText,
+                        modifier = Modifier.fillMaxWidth(),
+                        border = BorderStroke(1.dp, TayAppTheme.colors.border)
+                    ) {
+                        Text("더보기", style = TayAppTheme.typo.typography.button)
+                    }
+                }else{
+                    bill.bills.subList(3, bill.bills.size).forEach {
+                        LineSearchedBill(bill = it, onLineClick = onLineClick)
+                    }
+                }
+
+            }else{
+                bill.bills.forEach {
+                    LineSearchedBill(bill = it, onLineClick = onLineClick)
                 }
             }
 
