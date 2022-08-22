@@ -1,6 +1,7 @@
 package com.example.tayapp.presentation.components
 
 import android.graphics.Paint
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
@@ -23,7 +24,9 @@ fun PieGraph(
     colors: List<Color> = listOf(Color.Red, Color.Blue, Color.Green, Color.LightGray)
 ) {
 
-    val total = 299f
+    Log.d("찬반기투", "${points[0]}  ${points[1]}  ${points[2]}  ${points[3]}")
+
+    val total = points[3].toFloat()
 
     val proportions = points.mapIndexed { index, i ->
         if (index == points.size - 1) {
