@@ -46,6 +46,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
     val mUriHandler = LocalUriHandler.current
 
     BottomSheetScaffold(
+        modifier = Modifier.navigationBarsPadding(),
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = { BillProgressDetail() },
         sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
@@ -126,7 +127,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                                 date = news.pubDate,
                                 press = news.newsFrom,
                                 newsLink = news.newsLink,
-                                mUriHandler
+                                mUriHandler = mUriHandler
                             )
                             Spacer(modifier = Modifier.size(8.dp))
                         }
