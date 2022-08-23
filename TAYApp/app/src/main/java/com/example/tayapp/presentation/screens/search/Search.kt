@@ -39,7 +39,7 @@ fun Search(
                     onSearchClick = viewModel::getSearchResult,
                     saveQuery = viewModel::saveRecentTerm
                 )
-            } else if (searchState.searching && searchState.bill.size == 0) {
+            } else if (searchState.searching && searchState.bill.isEmpty()) {
                 NoResult()
             } else {
                 SearchResults(
