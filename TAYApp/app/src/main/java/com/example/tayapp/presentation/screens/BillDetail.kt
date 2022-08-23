@@ -12,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Dangerous
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 fun BillDetail(billId: Int, upPress: () -> Unit) {
 
     val viewModel = hiltViewModel<DetailViewModel>()
-    var detailState = viewModel.detailState.collectAsState()
+    val detailState = viewModel.detailState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
@@ -54,12 +55,13 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         backgroundColor = TayAppTheme.colors.background,
         sheetBackgroundColor = TayAppTheme.colors.layer1,
         snackbarHost = {
-            SnackbarHost(hostState = it,
-                snackbar = {
+            SnackbarHost(
+                hostState = it,
+                snackbar = { data ->
                     TaySnackbar(
-                        snackbarData = it,
-                        imageVector = Icons.Filled.CheckCircle,
-                        imageColor = TayAppTheme.colors.success2
+                        snackbarData = data,
+                        imageVector = if (UserState.isLogin()) Icons.Filled.CheckCircle else Icons.Filled.Dangerous,
+                        imageColor = if (UserState.isLogin()) TayAppTheme.colors.success2 else TayAppTheme.colors.danger2
                     )
                 }
             )
@@ -77,7 +79,12 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                         )
                         bottomSheetScaffoldState.snackbarHostState.showSnackbar(
                             message = "",
-                            actionLabel = if (!detailState.value.billDetail.isScrapped) "스크랩 되었습니다." else "스크랩 취소 되었습니다."
+                            actionLabel =
+                            if (UserState.isLogin()) {
+                                if (!detailState.value.billDetail.isScrapped) "스크랩 되었습니다." else "스크랩 취소 되었습니다."
+                            } else {
+                                "로그인이 필요합니다!"
+                            }
                         )
                     }
                 }
@@ -91,7 +98,6 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                         item {
                             DetailHeader(onProgressClick = {
                                 coroutineScope.launch {
-
                                     if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
                                         bottomSheetScaffoldState.bottomSheetState.expand()
                                     } else {
@@ -109,14 +115,14 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                                     ),
                                 verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-                                if (!detailState.value.billDetail.plenaryInfo.isNullOrEmpty()) {
+                                if (detailState.value.billDetail.plenaryInfo.isNotEmpty()) {
                                     CardPieGraph(detailState.value.billDetail)
                                 }
 
                                 CardBillLine()
                                 BillPointText(detailState.value.billDetail.summary)
                                 BillRevisionText()
-                                if (detailState.value.billDetail.news.size > 0) NewsHeader()
+                                if (detailState.value.billDetail.news.isNotEmpty()) NewsHeader()
                             }
                         }
 
