@@ -51,12 +51,11 @@ fun Search(
                 NoResult()
             } else {
                 SearchResults(
-                    searchResult = searchState.bill,
+                    searchResult = searchState,
                     onBillClick = onBillSelected,
                     keyword = searchState.keyword
                 )
             }
-
         }
     } else {
         NetworkErrorScreen {
