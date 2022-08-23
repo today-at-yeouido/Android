@@ -43,5 +43,29 @@ fun NetworkErrorScreen(tryGetData: () -> Unit) {
             color = TayAppTheme.colors.disableText
         )
     }
+}
 
+@Composable
+fun UnAuthorizeScreen(tryGetData: () -> Unit) {
+    Box(
+        modifier = Modifier.fillMaxSize().clickable { tryGetData() }
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(top = 138.dp)
+                .size(100.dp)
+                .align(Alignment.TopCenter),
+            painter = painterResource(id = R.drawable.ic_tay_ch_emoji_gray_default),
+            contentDescription = "main_title_image"
+        )
+
+        Text(
+            text = "로그인이 필요한 서비스 입니다! \n 로그인 해주세요!",
+            modifier = Modifier
+                .padding(top = 258.dp)
+                .align(Alignment.TopCenter),
+            textAlign = TextAlign.Center,
+            color = TayAppTheme.colors.disableText
+        )
+    }
 }

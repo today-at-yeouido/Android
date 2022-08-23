@@ -37,18 +37,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun BillDetail(billId: Int, upPress: () -> Unit) {
 
-    val viewModel =hiltViewModel<DetailViewModel>()
+    val viewModel = hiltViewModel<DetailViewModel>()
     var detailState = viewModel.detailState.collectAsState()
-    val coroutineScope =rememberCoroutineScope()
-    val bottomSheetScaffoldState =rememberBottomSheetScaffoldState(
+    val coroutineScope = rememberCoroutineScope()
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val mUriHandler = LocalUriHandler.current
 
     BottomSheetScaffold(
+        modifier = Modifier.navigationBarsPadding(),
         scaffoldState = bottomSheetScaffoldState,
-        sheetContent ={BillProgressDetail()},
-        sheetShape =RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+        sheetContent = { BillProgressDetail() },
+        sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         sheetPeekHeight = 10.dp,
         backgroundColor = TayAppTheme.colors.background,
         sheetBackgroundColor = TayAppTheme.colors.layer1,
@@ -63,74 +64,77 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                 }
             )
         }
-    ){
-        Column(){
+    ) {
+        Column {
             TayTopAppBarWithScrap(
                 "의안상세",
                 upPress,
                 isBookMarked = detailState.value.billDetail.isScrapped,
                 onClickScrap = {
                     coroutineScope.launch {
-                        if(detailState.value.billDetail.isScrapped) viewModel.deleteScrap(billId) else viewModel.addScrap(billId)
+                        if (detailState.value.billDetail.isScrapped) viewModel.deleteScrap(billId) else viewModel.addScrap(
+                            billId
+                        )
                         bottomSheetScaffoldState.snackbarHostState.showSnackbar(
                             message = "",
-                            actionLabel = if(!detailState.value.billDetail.isScrapped) "스크랩 되었습니다." else "스크랩 취소 되었습니다."
+                            actionLabel = if (!detailState.value.billDetail.isScrapped) "스크랩 되었습니다." else "스크랩 취소 되었습니다."
                         )
                     }
                 }
             )
 
             if (UserState.network) {
-                LazyColumn() {
-                    item {
-                        DetailHeader(onProgressClick = {
-                            coroutineScope.launch {
+                if (detailState.value.isLoading) {
+                    LoadingView(modifier = Modifier.fillMaxSize())
+                } else {
+                    LazyColumn() {
+                        item {
+                            DetailHeader(onProgressClick = {
+                                coroutineScope.launch {
 
-                                if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
-                                    bottomSheetScaffoldState.bottomSheetState.expand()
-                                } else {
-                                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                                    if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                                        bottomSheetScaffoldState.bottomSheetState.expand()
+                                    } else {
+                                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                                    }
                                 }
-                            }
-                        }, bill = detailState.value.billDetail)
+                            }, bill = detailState.value.billDetail)
 
-                        Spacer(modifier = Modifier.size(16.dp))
-                        Column(
-                            modifier = Modifier
-                                .padding(
-                                    horizontal = KeyLine,
-                                    vertical = 24.dp
-                                ),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            if(!detailState.value.billDetail.plenaryInfo.isNullOrEmpty()){
-                                CardPieGraph(detailState.value.billDetail)
-                            }
+                            Spacer(modifier = Modifier.size(16.dp))
+                            Column(
+                                modifier = Modifier
+                                    .padding(
+                                        horizontal = KeyLine,
+                                        vertical = 24.dp
+                                    ),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                if (!detailState.value.billDetail.plenaryInfo.isNullOrEmpty()) {
+                                    CardPieGraph(detailState.value.billDetail)
+                                }
 
-                            CardBillLine()
-                            BillPointText(detailState.value.billDetail.summary)
-                            BillRevisionText()
-                            if(detailState.value.billDetail.news.size > 0)NewsHeader()
+                                CardBillLine()
+                                BillPointText(detailState.value.billDetail.summary)
+                                BillRevisionText()
+                                if (detailState.value.billDetail.news.size > 0) NewsHeader()
+                            }
+                        }
+
+                        items(detailState.value.billDetail.news) { news ->
+                            CardNews(
+                                imageURL = news.imgUrl.firstOrNull(),
+                                title = news.newsName,
+                                date = news.pubDate,
+                                press = news.newsFrom,
+                                newsLink = news.newsLink,
+                                mUriHandler = mUriHandler
+                            )
+                            Spacer(modifier = Modifier.size(8.dp))
                         }
                     }
-
-                    items(detailState.value.billDetail.news){news ->
-                        CardNews(
-                            imageURL = news.imgUrl.firstOrNull(),
-                            title = news.newsName,
-                            date = news.pubDate,
-                            press = news.newsFrom,
-                            newsLink = news.newsLink,
-                            mUriHandler
-                        )
-                        Spacer(modifier = Modifier.size(8.dp))
-                    }
-
-
-
                 }
             } else {
-                NetworkErrorScreen{
+                NetworkErrorScreen {
                     UserState.network = true
                     viewModel.tryGetBillDetail()
                 }
@@ -138,7 +142,6 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         }
     }
 }
-
 
 
 @Composable
@@ -152,14 +155,14 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
             )
             .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
-    ){
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = KeyLine),
 
-            ){
+            ) {
             Spacer(modifier = Modifier.height(20.dp))
             PillList(bill.billType, bill.status)
 
@@ -173,7 +176,7 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
 
                 Text(
                     text = bill.proposer,
@@ -183,17 +186,17 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ){
+                ) {
                     Icon(
                         imageVector = TayIcons.visibility_outlined,
                         contentDescription = "null",
-                        tint =lm_gray600,
+                        tint = lm_gray600,
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
                         text = "${bill.views}",
                         fontSize = 12.sp,
-                        color =lm_gray600,
+                        color = lm_gray600,
                         fontWeight = FontWeight.Normal
                     )
                 }
@@ -211,17 +214,17 @@ private fun CardCommittee(
     committee: String? = null
 ) {
     TayCard(
-        modifier = Modifier.padding(horizontal =KeyLine)
-    ){
+        modifier = Modifier.padding(horizontal = KeyLine)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Card_Inner_Padding),
             horizontalArrangement = Arrangement.SpaceBetween
-        ){
+        ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ){
+            ) {
                 Text(
                     text = "상임위원회",
                     fontSize = 16.sp,
@@ -248,18 +251,17 @@ private fun CardCommittee(
 }
 
 
-
 @Composable
 private fun CardPieGraph(
     bill: DetailBillDto
 ) {
-    TayCard{
+    TayCard {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 18.dp, horizontal = 11.dp)
-        ){
+        ) {
             Text(
                 text = "본 회의 투표 결과",
                 fontWeight = FontWeight.Medium,
@@ -271,12 +273,15 @@ private fun CardPieGraph(
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
-            ){
-                PieGraph(listOf(
-                    bill.plenaryInfo.firstOrNull()!!.approval,
-                    bill.plenaryInfo.firstOrNull()!!.opposition,
-                    bill.plenaryInfo.firstOrNull()!!.abstention,
-                    bill.plenaryInfo.firstOrNull()!!.total))
+            ) {
+                PieGraph(
+                    listOf(
+                        bill.plenaryInfo.firstOrNull()!!.approval,
+                        bill.plenaryInfo.firstOrNull()!!.opposition,
+                        bill.plenaryInfo.firstOrNull()!!.abstention,
+                        bill.plenaryInfo.firstOrNull()!!.total
+                    )
+                )
             }
         }
     }
@@ -290,7 +295,7 @@ private fun CardBillLine() {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .padding(vertical = 18.dp, horizontal = 11.dp)
-            ){
+            ) {
                 Text(
                     text = "이 법에 접수된 의안이 또 있어요!",
                     fontWeight = FontWeight.Medium,
@@ -301,21 +306,20 @@ private fun CardBillLine() {
                 )
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
-                ){
+                ) {
                     Spacer(modifier = Modifier.size(ButtonLargeHeight))
                 }
             }
             GradientCompponent(Modifier.align(Alignment.BottomCenter))
             TayButton(
-                onClick ={/*TODO*/},
+                onClick = {/*TODO*/ },
                 modifier = Modifier
                     .padding(bottom = 18.dp)
                     .align(Alignment.BottomCenter)
-                    .size(ButtonLargeWidth, ButtonLargeHeight)
-                ,
+                    .size(ButtonLargeWidth, ButtonLargeHeight),
                 backgroundColor = TayAppTheme.colors.bodyText,
                 contentColor = TayAppTheme.colors.background
-            ){
+            ) {
                 Text("건 모두 보기", style = TayAppTheme.typo.typography.button)
             }
         }
@@ -329,7 +333,7 @@ private fun BillPointText(
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(vertical = 24.dp)
-    ){
+    ) {
         Title(string = "법안 핵심 내용")
         Text(
             text = "제안이유 및 주요내용",
@@ -351,7 +355,7 @@ private fun BillDetailNews(
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(vertical = 24.dp)
-    ){
+    ) {
 
     }
 }
@@ -362,7 +366,7 @@ private fun NewsHeader() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
         Title(string = "관련 뉴스")
         Spinner()
     }
@@ -376,16 +380,16 @@ private fun BillRevisionText() {
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.padding(vertical = 24.dp)
-    ){
+    ) {
         Title(string = "개정 내용 확인하기")
 
         TayCard(
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             Column(
                 modifier = Modifier.padding(Card_Inner_Padding),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
-            ){
+            ) {
                 Text(
                     text = "개정된 조항",
                     color = TayAppTheme.colors.bodyText,
@@ -394,7 +398,7 @@ private fun BillRevisionText() {
                 )
                 Column(
                     verticalArrangement = Arrangement.spacedBy(14.dp)
-                ){
+                ) {
                     BillRevisionItem()
                     BillRevisionItem()
                     BillRevisionItem()
@@ -404,12 +408,12 @@ private fun BillRevisionText() {
         }
 
         TayButton(
-            onClick ={/*TODO*/},
+            onClick = {/*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth(),
             contentColor = TayAppTheme.colors.background,
             backgroundColor = TayAppTheme.colors.bodyText
-        ){
+        ) {
             Text("개정 내용 확인하기", style = TayAppTheme.typo.typography.button)
             Icon(
                 imageVector = TayIcons.navigate_next,
@@ -423,7 +427,7 @@ private fun BillRevisionText() {
 private fun BillRevisionItem() {
     Column(
         verticalArrangement = Arrangement.spacedBy(6.dp)
-    ){
+    ) {
         Pill("개정안")
         Text(
             text = "어쩌구저꺼주",

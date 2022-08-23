@@ -37,6 +37,7 @@ class ScrapViewModel @Inject constructor(
     }
 
     private fun getScrapBill() {
+        if(UserState.isLogin())
         getScrapUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
