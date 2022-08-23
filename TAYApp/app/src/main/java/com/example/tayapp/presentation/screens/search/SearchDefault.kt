@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens.search
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,7 +27,7 @@ fun SearchDefault(
     onChangeQuery: (String) -> Unit,
     onSearchClick: () -> Unit,
     saveQuery: () -> Unit
-){
+) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 20.dp, horizontal = KeyLine),
         verticalArrangement = Arrangement.spacedBy(60.dp)
@@ -37,12 +38,14 @@ fun SearchDefault(
                 modifier = Modifier.padding(bottom = 10.dp)
             )
             if (searchTerm.isNotEmpty()) {
-                searchTerm.split(" ").forEachIndexed { index, item ->
-                    SearchHistory(
-                        string = item,
-                        removeHistory = {removeRecentTerm(index)},
-                        onHistoryClick = {onChangeQuery(item); onSearchClick(); saveQuery()}
-                    )
+                searchTerm.split("&").forEachIndexed { index, item ->
+                    if (index < 3) {
+                        SearchHistory(
+                            string = item,
+                            removeHistory = { removeRecentTerm(index) },
+                            onHistoryClick = { onChangeQuery(item); onSearchClick(); saveQuery() }
+                        )
+                    }
                 }
             }
         }
@@ -101,7 +104,9 @@ fun SearchHistory(
     onHistoryClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(vertical = 5.dp).clickable(onClick = onHistoryClick),
+        modifier = Modifier
+            .padding(vertical = 5.dp)
+            .clickable(onClick = onHistoryClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
