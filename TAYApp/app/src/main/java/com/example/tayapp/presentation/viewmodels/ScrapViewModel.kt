@@ -37,30 +37,34 @@ class ScrapViewModel @Inject constructor(
     }
 
     private fun getScrapBill() {
-        if(UserState.isLogin())
-        getScrapUseCase().onEach { result ->
-            when (result) {
-                is Resource.Success -> {
-                    _scrapState.update {
-                        it.copy(bill = result.data ?: emptyList(), isLoading = false)
-                    }
+        if (UserState.isLogin()) {
+            getScrapUseCase().onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _scrapState.update {
+                            it.copy(bill = result.data ?: emptyList(), isLoading = false)
+                        }
 
-                }
-                is Resource.Error -> {
-                    _scrapState.update {
-                        it.copy(error = result.message ?: "An unexpected error", isLoading = false)
+                    }
+                    is Resource.Error -> {
+                        _scrapState.update {
+                            it.copy(
+                                error = result.message ?: "An unexpected error",
+                                isLoading = false
+                            )
+                        }
+                    }
+                    is Resource.Loading -> {
+                        _scrapState.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                    is Resource.NetworkConnectionError -> {
+                        UserState.network = false
                     }
                 }
-                is Resource.Loading -> {
-                    _scrapState.update {
-                        it.copy(isLoading = true)
-                    }
-                }
-                is Resource.NetworkConnectionError -> {
-                    UserState.network = false
-                }
-            }
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
+        }
 
     }
 
