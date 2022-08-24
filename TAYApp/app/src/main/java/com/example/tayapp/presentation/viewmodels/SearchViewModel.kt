@@ -3,6 +3,7 @@ package com.example.tayapp.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.domain.use_case.GetAutoCompleteUseCase
+import com.example.tayapp.domain.use_case.GetRecentViewedBillUseCase
 import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
 import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
 import com.example.tayapp.presentation.states.SearchState
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val getSearchUseCase: GetSearchResultUseCase,
     private val getRecentSearchTermUseCase: RecentSearchTermUseCase,
-    private val getAutoCompleteUseCase: GetAutoCompleteUseCase
+    private val getAutoCompleteUseCase: GetAutoCompleteUseCase,
+    private val getRecentViewedBillUseCase: GetRecentViewedBillUseCase
 ) :
     ViewModel() {
 
@@ -27,6 +29,41 @@ class SearchViewModel @Inject constructor(
 
     init {
         getRecentTerm()
+        getRecentViewedBill()
+    }
+
+
+    fun getRecentViewedBill(){
+        getRecentViewedBillUseCase().onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    searchState.update {
+                        it.copy(
+                            recentViewedBill = result.data ?: emptyList(),
+                            isLoading = false
+                        )
+                    }
+
+                }
+                is Resource.Error -> {
+                    searchState.update {
+                        it.copy(
+                            error = result.message ?: "An unexpected error",
+                            isLoading = false,
+                            searching = true
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    searchState.update {
+                        it.copy(isLoading = true)
+                    }
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun getSearchResult() {

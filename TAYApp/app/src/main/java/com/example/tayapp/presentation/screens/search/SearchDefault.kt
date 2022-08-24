@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.data.remote.dto.bill.BillDto
+import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.CloseButton
@@ -23,6 +26,7 @@ import com.google.accompanist.flowlayout.FlowRow
 fun SearchDefault(
     onBillSelected: (Int) -> Unit,
     searchTerm: String,
+    recentViewed: List<BillDto>,
     removeRecentTerm: (Int) -> Unit,
     onChangeQuery: (String) -> Unit,
     onSearchClick: () -> Unit,
@@ -30,7 +34,7 @@ fun SearchDefault(
 ) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 20.dp, horizontal = KeyLine),
-        verticalArrangement = Arrangement.spacedBy(60.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         item {
             Title(
@@ -49,6 +53,13 @@ fun SearchDefault(
                 }
             }
         }
+
+        item{
+            Spacer(modifier = Modifier.size(60.dp))
+        }
+
+
+
         item {
             Title(
                 string = "추천 검색어",
@@ -68,32 +79,38 @@ fun SearchDefault(
             }
         }
 
+        item{
+            Spacer(modifier = Modifier.size(60.dp))
+        }
+
+        
         item {
             Title(
                 string = "최근에 본 법안",
                 modifier = Modifier.padding(bottom = 10.dp)
             )
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                CardBillWithEmoij(onClick = onBillSelected)
-                CardBillWithEmoij(onClick = onBillSelected)
-                CardBillWithEmoij(onClick = onBillSelected)
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-            TayButton(
-                onClick = { /*TODO*/ },
-                backgroundColor = TayAppTheme.colors.background,
-                contentColor = TayAppTheme.colors.headText,
-                modifier = Modifier.fillMaxWidth(),
-                border = BorderStroke(1.dp, TayAppTheme.colors.border)
-            ) {
-                Text("더보기", style = TayAppTheme.typo.typography.button)
-            }
-
         }
 
+        items(recentViewed){ it ->
+            CardBill(
+                bill = it.toDomain(),
+                onClick = onBillSelected
+            )
+        }
+
+//        item{
+//            Spacer(modifier = Modifier.height(20.dp))
+//            TayButton(
+//                onClick = { /*TODO*/ },
+//                backgroundColor = TayAppTheme.colors.background,
+//                contentColor = TayAppTheme.colors.headText,
+//                modifier = Modifier.fillMaxWidth(),
+//                border = BorderStroke(1.dp, TayAppTheme.colors.border)
+//            ) {
+//                Text("더보기", style = TayAppTheme.typo.typography.button)
+//            }
+//
+//        }
     }
 }
 
