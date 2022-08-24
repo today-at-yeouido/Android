@@ -92,7 +92,7 @@ fun SearchDefault(
         }
 
         items(recentViewed){ it ->
-            CardBill(
+            CardBillWithEmoij(
                 bill = it.toDomain(),
                 onClick = onBillSelected
             )
