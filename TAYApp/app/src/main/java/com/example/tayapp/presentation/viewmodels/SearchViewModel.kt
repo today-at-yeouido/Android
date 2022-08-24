@@ -2,6 +2,7 @@ package com.example.tayapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.use_case.GetAutoCompleteUseCase
 import com.example.tayapp.domain.use_case.GetRecentViewedBillUseCase
 import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
@@ -20,7 +21,7 @@ class SearchViewModel @Inject constructor(
     private val getSearchUseCase: GetSearchResultUseCase,
     private val getRecentSearchTermUseCase: RecentSearchTermUseCase,
     private val getAutoCompleteUseCase: GetAutoCompleteUseCase,
-    private val getRecentViewedBillUseCase: GetRecentViewedBillUseCase
+    private val getRecentViewedBillUseCase: GetRecentViewedBillUseCase,
 ) :
     ViewModel() {
 
@@ -32,8 +33,7 @@ class SearchViewModel @Inject constructor(
         getRecentViewedBill()
     }
 
-
-    fun getRecentViewedBill(){
+    fun getRecentViewedBill() {
         getRecentViewedBillUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
@@ -66,6 +66,42 @@ class SearchViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun getPagingResult() {
+        getSearchUseCase(searchState.value.query, searchState.value.nextPage).onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    searchState.update {
+                        it.copy(
+                            bill = it.bill + result.data as List<ScrapBillDto>,
+                            pagingLoading = false,
+                            searching = true,
+                            nextPage = it.nextPage + 1,
+                            )
+                    }
+
+                }
+                is Resource.Error -> {
+                    searchState.update {
+                        it.copy(
+                            error = result.message ?: "An unexpected error",
+                            pagingLoading = false,
+                            searching = true,
+                            endReached = true
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    searchState.update {
+                        it.copy(pagingLoading = true)
+                    }
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     fun getSearchResult() {
         getSearchUseCase(searchState.value.query).onEach { result ->
             when (result) {
@@ -73,8 +109,10 @@ class SearchViewModel @Inject constructor(
                     searchState.update {
                         it.copy(
                             bill = result.data ?: emptyList(),
+                            nextPage = it.nextPage,
                             isLoading = false,
-                            searching = true
+                            searching = true,
+                            endReached = false
                         )
                     }
 
@@ -84,7 +122,8 @@ class SearchViewModel @Inject constructor(
                         it.copy(
                             error = result.message ?: "An unexpected error",
                             isLoading = false,
-                            searching = true
+                            searching = true,
+                            endReached = true
                         )
                     }
                 }
@@ -107,7 +146,13 @@ class SearchViewModel @Inject constructor(
 
     fun onClearQuery() {
         searchState.update {
-            it.copy(bill = emptyList(), searching = false, query = "", keyword = "", autoComplete = emptyList())
+            it.copy(
+                bill = emptyList(),
+                searching = false,
+                query = "",
+                keyword = "",
+                autoComplete = emptyList()
+            )
         }
     }
 
@@ -156,17 +201,17 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun getAutoComplete(){
+    fun getAutoComplete() {
         getAutoCompleteUseCase(searchState.value.query).onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    if(!result.data.isNullOrEmpty()){
+                    if (!result.data.isNullOrEmpty()) {
                         searchState.update {
                             it.copy(
                                 autoComplete = result.data!!
                             )
                         }
-                    }else{
+                    } else {
                         searchState.update {
                             it.copy(
                                 autoComplete = emptyList()

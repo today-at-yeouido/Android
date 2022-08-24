@@ -20,52 +20,53 @@ interface BillApi {
     @GET(GET_BILL_HOME)
     suspend fun getBillHome(
         @Query("page") page: Int = 0
-    ) : HomeBillDto
+    ): HomeBillDto
 
     @GET("$GET_BILL_DETAIL{id}/")
     suspend fun getBillDetail(
         @Path("id") billId: Int
-    ) : Response<DetailBillDto>
+    ): Response<DetailBillDto>
 
     @GET("$GET_BILL_DETAIL/{id}/table")
     suspend fun getBillTable(
         @Path("id") id: String
-    ) : DetailBillTableDto
+    ): DetailBillTableDto
 
     @GET(GET_BILL_RECENT)
     suspend fun getBillRecent(
         @Query("page") page: Int = 0
-    ) : Response<List<BillDto>>
+    ): Response<List<BillDto>>
 
     @GET(GET_BILL_SEARCH)
     suspend fun getBillSearch(
-        @Query("query") query: String
-    ) : Response<List<ScrapBillDto>>
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Response<List<ScrapBillDto>>
 
     @GET(GET_BILL_MOST_VIEWED)
-    suspend fun getBillMostViewed() : Response<List<MostViewedBillDto>>
+    suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
 
     @GET(GET_BILL_USER_RECOMMENDED)
-    suspend fun getBillUserRecommended() : List<BillDto>
+    suspend fun getBillUserRecommended(): List<BillDto>
 
     @GET(GET_BILL_USER_RECENT_VIEWED)
-    suspend fun getBillUserRecentViewed() : Response<List<BillDto>>
+    suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
 
     @POST(POST_ADD_SCRAP)
     suspend fun postAddScrap(
         @Body bill: AddScrapRequestDto
-    ) : Response<AddScrapResponseDto>
+    ): Response<AddScrapResponseDto>
 
     @POST(POST_DELETE_SCRAP)
     suspend fun postDeleteScrap(
         @Body bill: DeleteScrapRequestDto
-    ) : Response<DeleteScrapResponseDto>
+    ): Response<DeleteScrapResponseDto>
 
     @GET(GET_BILL_SCRAP)
-    suspend fun getBillScrap() : Response<List<ScrapBillDto>>
+    suspend fun getBillScrap(): Response<List<ScrapBillDto>>
 
     @GET(GET_AUTOCOMPLETE)
     suspend fun getAutoComplete(
         @Query("query") query: String
-    ) : Response<AutoCompleteDto>
+    ): Response<AutoCompleteDto>
 }

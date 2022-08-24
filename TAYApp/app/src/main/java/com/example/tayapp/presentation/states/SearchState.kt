@@ -13,5 +13,8 @@ data class SearchState(
     val query: String = "",
     val keyword: String = "",
     val autoComplete: List<String> = emptyList(),
-    val recentViewedBill: List<BillDto> = emptyList()
+    val recentViewedBill: List<BillDto> = emptyList(),
+    val nextPage: Int = 2,
+    val endReached: Boolean = false,
+    val pagingLoading : Boolean = false
 )

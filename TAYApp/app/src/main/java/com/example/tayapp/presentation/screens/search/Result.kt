@@ -1,9 +1,11 @@
 package com.example.tayapp.presentation.screens.search
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +26,7 @@ import com.example.tayapp.presentation.ui.theme.TayAppTheme
 fun SearchResults(
     searchResult: SearchState,
     onBillClick: (Int) -> Unit,
+    loadPaging: () -> Unit,
     keyword: String
 ) {
 
@@ -35,15 +38,21 @@ fun SearchResults(
                 .fillMaxSize()
                 .padding(KeyLine)
         ) {
-            Title(
-                string = "검색 결과",
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(searchResult.bill) { bill ->
+                item {
+                    Title(
+                        string = "검색 결과",
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
+
+                itemsIndexed(items =searchResult.bill) { index, bill ->
+                    Log.d("##55", "재구성")
+                    if (index >= searchResult.bill.size - 1 && !searchResult.endReached && !searchResult.pagingLoading) {
+                        loadPaging()
+                    }
                     if (bill.bills.size == 1) {
                         CardSearch(
                             bill = bill,
@@ -58,10 +67,23 @@ fun SearchResults(
                         )
                     }
                 }
+                item {
+                    if (searchResult.pagingLoading) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun NoResult() {
