@@ -38,8 +38,8 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillUserRecentViewed()
     }
 
-    override suspend fun getBillSearch(query: String): Response<List<ScrapBillDto>> {
-        return billApi.getBillSearch(query)
+    override suspend fun getBillSearch(query: String, page: Int): Response<List<ScrapBillDto>> {
+        return billApi.getBillSearch(query, page)
     }
 
     override suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>{

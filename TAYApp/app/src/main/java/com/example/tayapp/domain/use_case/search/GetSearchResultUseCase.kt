@@ -20,10 +20,10 @@ class GetSearchResultUseCase @Inject constructor(
     private val repository: GetBillRepository,
     private val checkLoginUseCase: CheckLoginUseCase
 ){
-    operator fun invoke(query: String): Flow<Resource<List<ScrapBillDto>>> = flow {
+    operator fun invoke(query: String, page:Int = 1): Flow<Resource<List<ScrapBillDto>>> = flow {
         emit(Resource.Loading())
         try{
-            val response = repository.getBillSearch(query)
+            val response = repository.getBillSearch(query, page)
             when (response.code()) {
                 200 -> {
                     emit(Resource.Success(response.body()!!))

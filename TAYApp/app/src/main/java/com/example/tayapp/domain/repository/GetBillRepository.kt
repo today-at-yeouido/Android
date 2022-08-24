@@ -22,7 +22,7 @@ interface GetBillRepository {
     suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
     suspend fun getBillUserRecommended(): List<BillDto>
     suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
-    suspend fun getBillSearch(query: String): Response<List<ScrapBillDto>>
+    suspend fun getBillSearch(query: String, page: Int): Response<List<ScrapBillDto>>
 
     suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>
     suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto>

@@ -46,6 +46,7 @@ fun Search(
                 SearchResults(
                     searchResult = searchState,
                     onBillClick = onBillSelected,
+                    viewModel::getPagingResult,
                     keyword = searchState.keyword
                 )
             }
