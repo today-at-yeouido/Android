@@ -17,7 +17,7 @@ class GetRecentViewedBillUseCase @Inject constructor(
     private val repository: GetBillRepository,
     private val checkLoginUseCase: CheckLoginUseCase
 ) {
-    operator fun invoke(query: String): Flow<Resource<List<BillDto>>> = flow {
+    operator fun invoke(): Flow<Resource<List<BillDto>>> = flow {
         emit(Resource.Loading())
         try{
             val response = repository.getBillUserRecentViewed()

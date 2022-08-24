@@ -34,6 +34,7 @@ fun Search(
                 SearchDefault(
                     onBillSelected = onBillSelected,
                     searchTerm = searchState.recentTerm,
+                    recentViewed = searchState.recentViewedBill,
                     removeRecentTerm = viewModel::removeRecentTerm,
                     onChangeQuery = viewModel::onChangeQuery,
                     onSearchClick = viewModel::getSearchResult,
