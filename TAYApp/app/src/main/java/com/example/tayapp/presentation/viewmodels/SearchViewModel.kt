@@ -76,8 +76,7 @@ class SearchViewModel @Inject constructor(
                             pagingLoading = false,
                             searching = true,
                             nextPage = it.nextPage + 1,
-                            endReached = result.data.isEmpty()
-                        )
+                            )
                     }
 
                 }
@@ -112,7 +111,8 @@ class SearchViewModel @Inject constructor(
                             bill = result.data ?: emptyList(),
                             nextPage = it.nextPage,
                             isLoading = false,
-                            searching = true
+                            searching = true,
+                            endReached = false
                         )
                     }
 
@@ -122,7 +122,8 @@ class SearchViewModel @Inject constructor(
                         it.copy(
                             error = result.message ?: "An unexpected error",
                             isLoading = false,
-                            searching = true
+                            searching = true,
+                            endReached = true
                         )
                     }
                 }
