@@ -13,11 +13,6 @@ import dagger.hilt.android.components.ViewModelComponent
 abstract class InterfaceModule {
 
     @Binds
-    abstract fun provideFavoriteCategoryImpl(
-        repository: FavoritCategoryRepositoryImpl
-    ) : FavoritCategoryRepository
-
-    @Binds
     abstract fun provideGetBillRepository(
         getBillRepoImpl: GetBillRepositoryImpl
     ): GetBillRepository
