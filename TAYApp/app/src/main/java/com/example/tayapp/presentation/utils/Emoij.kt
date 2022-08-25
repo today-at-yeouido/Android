@@ -25,3 +25,10 @@ val Emoij = mapOf(
     "기타" to "➕",
     "과학기술통신" to "\uD83D\uDD2C"
 )
+
+val EmoijList = mapOf<List<String>, String>(
+    listOf("학대", "범죄", "경찰") to "🚨",
+    listOf("건설", "건축")to "🏗️",
+    listOf("항공") to "✈️",
+    listOf("변호사", "법원") to "⚖️",
+)

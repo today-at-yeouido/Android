@@ -28,6 +28,7 @@ import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
 import com.example.tayapp.presentation.utils.Emoij
+import com.example.tayapp.presentation.utils.EmoijList
 
 
 /**
@@ -127,8 +128,16 @@ fun CardBillWithEmoij(
                 )
             }
             var selectedEmoij = ""
-            Emoij.forEach{ it ->
-                if(bill.billName.contains(it.key)) selectedEmoij = it.value
+
+            run{
+                EmoijList.forEach{ it ->
+                    it.key.forEach { key ->
+                        if(bill.billName.contains(key)){
+                            selectedEmoij = it.value
+                            return@run
+                        }
+                    }
+                }
             }
 
             EmoijText(selectedEmoij)
