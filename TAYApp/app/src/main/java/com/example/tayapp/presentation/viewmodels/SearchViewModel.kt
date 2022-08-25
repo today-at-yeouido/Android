@@ -6,6 +6,7 @@ import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.use_case.GetAutoCompleteUseCase
 import com.example.tayapp.domain.use_case.GetRecentViewedBillUseCase
 import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
+import com.example.tayapp.domain.use_case.RecommendSearchUseCase
 import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
 import com.example.tayapp.presentation.states.SearchState
 import com.example.tayapp.presentation.states.UserState
@@ -22,6 +23,7 @@ class SearchViewModel @Inject constructor(
     private val getRecentSearchTermUseCase: RecentSearchTermUseCase,
     private val getAutoCompleteUseCase: GetAutoCompleteUseCase,
     private val getRecentViewedBillUseCase: GetRecentViewedBillUseCase,
+    private val getRecommendSearchUseCase: RecommendSearchUseCase
 ) :
     ViewModel() {
 
@@ -31,6 +33,7 @@ class SearchViewModel @Inject constructor(
     init {
         getRecentTerm()
         getRecentViewedBill()
+        getRecommendSearchTerm()
     }
 
     fun getRecentViewedBill() {
@@ -76,7 +79,7 @@ class SearchViewModel @Inject constructor(
                             pagingLoading = false,
                             searching = true,
                             nextPage = it.nextPage + 1,
-                            )
+                        )
                     }
 
                 }
@@ -201,7 +204,31 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun getAutoComplete() {
+    private fun getRecommendSearchTerm() {
+        getRecommendSearchUseCase().onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    searchState.update {
+                        it.copy(
+                            recommendSearch = it.recommendSearch
+                        )
+                    }
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+                else -> {
+                    searchState.update {
+                        it.copy(
+                            error = result.message!!
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getAutoComplete() {
         getAutoCompleteUseCase(searchState.value.query).onEach { result ->
             when (result) {
                 is Resource.Success -> {
