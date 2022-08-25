@@ -3,9 +3,16 @@ package com.example.tayapp.presentation.screens
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -16,6 +23,7 @@ import androidx.paging.compose.itemsIndexed
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.KeyLine
+import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.viewmodels.FeedViewModel
 import kotlinx.coroutines.launch
 
@@ -71,11 +79,30 @@ fun Feed(
                             CardMostViewed(items = mostViewed)
                             Spacer(modifier = Modifier.height(40.dp))
 
-                            Title(
-                                "사용자 맞춤 추천법안",
-                                modifier = Modifier
-                                    .padding(vertical = 0.dp, horizontal = KeyLine)
-                            )
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Title(
+                                    "사용자 맞춤 추천법안",
+                                    modifier = Modifier
+                                        .padding(vertical = 0.dp, horizontal = KeyLine)
+                                )
+                                IconButton(
+                                    onClick = viewModel::tryRecommendBill,
+                                    modifier = Modifier
+                                        .padding(end = KeyLine)
+                                        .size(40.dp)
+                                        .border(1.dp, TayAppTheme.colors.border, CircleShape)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Refresh,
+                                        contentDescription = "refresh",
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                            }
                             CardsUser(
                                 onClick = onBillSelected,
                                 navigateToLogin = navigateToLogin,
