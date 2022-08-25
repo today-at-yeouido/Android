@@ -31,7 +31,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillMostViewed()
     }
 
-    override suspend fun getBillUserRecommended(): List<BillDto> {
+    override suspend fun getBillUserRecommended(): Response<List<RecommendBillDto>> {
         return billApi.getBillUserRecommended()
     }
 

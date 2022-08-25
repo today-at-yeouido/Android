@@ -127,20 +127,9 @@ fun CardBillWithEmoij(
                     fontSize = 16.sp
                 )
             }
-            var selectedEmoij = ""
 
-            run{
-                EmoijList.forEach{ it ->
-                    it.key.forEach { key ->
-                        if(bill.billName.contains(key)){
-                            selectedEmoij = it.value
-                            return@run
-                        }
-                    }
-                }
-            }
 
-            EmoijText(selectedEmoij)
+            EmoijText(title = bill.billName)
         }
     }
 }

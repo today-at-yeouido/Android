@@ -21,7 +21,7 @@ interface GetBillRepository {
 
     suspend fun getBillRecent(page: Int): Response<List<BillDto>>
     suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
-    suspend fun getBillUserRecommended(): List<BillDto>
+    suspend fun getBillUserRecommended(): Response<List<RecommendBillDto>>
     suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
     suspend fun getBillSearch(query: String, page: Int): Response<List<ScrapBillDto>>
 

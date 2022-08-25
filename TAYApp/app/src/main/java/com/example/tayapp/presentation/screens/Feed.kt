@@ -30,6 +30,7 @@ fun Feed(
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val isExpanded by viewModel.isExpanded.collectAsState()
     val mostViewed by viewModel.state.collectAsState()
+    val recommendBill by viewModel.recommendBill.collectAsState()
     val recentBill = viewModel.recentBill.collectAsLazyPagingItems()
 
     var dialogVisible by remember { mutableStateOf(false) }
@@ -77,7 +78,8 @@ fun Feed(
                             )
                             CardsUser(
                                 onClick = onBillSelected,
-                                navigateToLogin = navigateToLogin
+                                navigateToLogin = navigateToLogin,
+                                recommendBill = recommendBill
                             )
                             Spacer(modifier = Modifier.height(40.dp))
 
@@ -101,6 +103,7 @@ fun Feed(
             NetworkErrorScreen{
                 UserState.network = true
                 viewModel.tryGetMostViewed()
+                viewModel.tryRecommendBill()
             }
         }
     }

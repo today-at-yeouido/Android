@@ -49,7 +49,7 @@ interface BillApi {
     suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
 
     @GET(GET_BILL_USER_RECOMMENDED)
-    suspend fun getBillUserRecommended(): List<BillDto>
+    suspend fun getBillUserRecommended(): Response<List<RecommendBillDto>>
 
     @GET(GET_BILL_USER_RECENT_VIEWED)
     suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
