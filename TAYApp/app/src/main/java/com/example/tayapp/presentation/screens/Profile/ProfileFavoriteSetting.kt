@@ -25,25 +25,25 @@ import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.FavoritCategoryViewModel
 
-var favoritedatalist = listOf<String>(
-    "행정안전",
-    "보건복지",
-    "국토교통",
-    "기획재정",
-    "환경노동",
-    "교육",
-    "사법",
-    "문화체육관광",
-    "정무",
-    "농림식품해양",
-    "과학기술통신",
-    "산업기업",
-    "정보",
-    "외교통일",
-    "여성가족",
-    "국방",
-    "국회운영",
-    "기타"
+var favoritedatalist = listOf<List<String>>(
+    listOf("행정안전위원회", "행정안전"),
+    listOf("보건복지위원회", "보건복지"),
+    listOf("국토교통위원회", "국토교통"),
+    listOf("기획재정위원회", "기획재정"),
+    listOf("환경노동위원회", "환경노동"),
+    listOf("교육위원회", "교육"),
+    listOf("법제사법위원회", "사법"),
+    listOf("문화체육관광위원회", "문화체육관광"),
+    listOf("정무위원회", "정무"),
+    listOf("농림축산식품해양수산위원회", "농림식품해양"),
+    listOf("과학기술정보방송통신위원회", "과학기술통신"),
+    listOf("산업통상자원중소벤처기업위원회", "산업기업"),
+    listOf("정보위원회", "정보"),
+    listOf("외교통일위원회", "외교통일"),
+    listOf("여성가족위원회", "여성가족"),
+    listOf("국방위원회", "국방"),
+    listOf("국회운영위원회", "국회운영"),
+    listOf("기타", "기타")
 )
 
 
@@ -58,7 +58,7 @@ fun ProfileFavoriteSetting(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TayTopAppBarWithBack(string = "관심분야 설정", upPress)
+        TayTopAppBarWithBack(string = "관심분야 설정", {upPress(); viewModel.saveCategory()})
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -83,7 +83,7 @@ fun ProfileFavoriteSetting(
                 }
             }
             items(favoritedatalist){ item ->
-                ProfileFavoriteCard(title = item, isClicked = favoritCategory.favoritCategory.contains(item), onCardClick = viewModel::clickCategory)
+                ProfileFavoriteCard(title = item[1], isClicked = favoritCategory.favoritCategory.contains(item[0]), onCardClick = {viewModel.clickCategory(item[0])})
             }
         }
     }
@@ -94,14 +94,14 @@ fun ProfileFavoriteCard(
     title: String,
     subtitle: String = "국회운영 / 위원회 소관",
     isClicked: Boolean,
-    onCardClick: (String) -> Unit
+    onCardClick: () -> Unit
 ){
 
     TayCard(
         modifier = Modifier.fillMaxWidth(),
         enable = true,
         borderStroke = BorderStroke(1.dp, if(isClicked)TayAppTheme.colors.primary else TayAppTheme.colors.border),
-        onClick = {onCardClick(title)}
+        onClick = onCardClick
     ) {
         Box(
             modifier = Modifier.padding(10.dp)

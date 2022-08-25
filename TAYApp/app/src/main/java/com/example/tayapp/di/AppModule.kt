@@ -3,12 +3,9 @@ package com.example.tayapp.di
 import android.content.Context
 import android.util.Log
 import com.example.tayapp.data.pref.PrefDataSource
-import com.example.tayapp.data.remote.BillApi
-import com.example.tayapp.data.remote.Constants
+import com.example.tayapp.data.remote.*
 import com.example.tayapp.data.remote.Constants.BASE_URL
 import com.example.tayapp.data.remote.Constants.GOOGLE_URL
-import com.example.tayapp.data.remote.GoogleApi
-import com.example.tayapp.data.remote.LoginApi
 import com.example.tayapp.utils.NetworkInterceptor
 import dagger.Module
 import dagger.Provides
@@ -127,6 +124,14 @@ object AppModule {
         @TayRetrofit retrofit: Retrofit
     ): BillApi {
         return retrofit.create(BillApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserSettingApi(
+        @TayRetrofit retrofit: Retrofit
+    ): UserSettingApi {
+        return retrofit.create(UserSettingApi::class.java)
     }
 
     @Qualifier

@@ -24,4 +24,7 @@ object Constants {
     const val POST_ADD_SCRAP ="bill/scrap/add/"
     const val POST_DELETE_SCRAP ="bill/scrap/delete/"
     const val GET_BILL_SCRAP = "bill/scrap/"
+
+    const val POST_USER_COMMITTEE = "user/committee/"
+    const val GET_USER_COMMITTEE = "user/committee/"
 }
