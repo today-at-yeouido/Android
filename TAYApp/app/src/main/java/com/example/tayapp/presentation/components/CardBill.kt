@@ -105,7 +105,7 @@ fun CardBillWithEmoij(
 ) {
     TayCard(
         modifier = Modifier.fillMaxWidth(),
-        onClick = { onClick(1234) },
+        onClick = { onClick(bill.id) },
         enable = true
     ) {
         Row(
