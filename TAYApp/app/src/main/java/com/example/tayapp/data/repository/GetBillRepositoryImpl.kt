@@ -1,6 +1,7 @@
 package com.example.tayapp.data.repository
 
 import com.example.tayapp.data.remote.BillApi
+import com.example.tayapp.data.remote.dto.RecommendSearchDto
 import com.example.tayapp.data.remote.dto.bill.*
 import com.example.tayapp.data.remote.dto.scrap.*
 import com.example.tayapp.domain.repository.GetBillRepository
@@ -56,5 +57,9 @@ class GetBillRepositoryImpl @Inject
 
     override suspend fun getAutoComplete(query: String): Response<AutoCompleteDto>{
         return billApi.getAutoComplete(query)
+    }
+
+    override suspend fun getRecommendSearch(): Response<RecommendSearchDto> {
+        return billApi.getRecommendSearch()
     }
 }

@@ -1,7 +1,6 @@
 package com.example.tayapp.presentation.screens.search
 
 import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +26,7 @@ fun SearchDefault(
     onBillSelected: (Int) -> Unit,
     searchTerm: String,
     recentViewed: List<BillDto>,
+    recommendSearchTerm: List<String>,
     removeRecentTerm: (Int) -> Unit,
     onChangeQuery: (String) -> Unit,
     onSearchClick: () -> Unit,
@@ -66,11 +66,10 @@ fun SearchDefault(
                 modifier = Modifier.padding(bottom = 10.dp)
             )
             FlowRow(
-                modifier = Modifier,
                 mainAxisSpacing = 7.dp,
                 crossAxisSpacing = 7.dp
             ) {
-                datalist.forEach { item ->
+                recommendSearchTerm.forEach { item ->
                     TayTag(
                         item,
                         false,

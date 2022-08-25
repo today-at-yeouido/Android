@@ -25,14 +25,3 @@ interface LoginRepository {
     suspend fun prefLogout()
     suspend fun googleAuth(request: LoginGoogleRequest): Response<LoginGoogleResponse>?
 }
-
-/** 인터페이스 주입을 위한 모듈 */
-@InstallIn(ViewModelComponent::class)
-@Module
-abstract class LoginRepoModule {
-
-    @Binds
-    abstract fun bindLoginRepo(
-        loginImpl: LoginRepositoryImpl
-    ): LoginRepository
-}

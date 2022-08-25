@@ -1,5 +1,6 @@
 package com.example.tayapp.domain.repository
 
+import com.example.tayapp.data.remote.dto.RecommendSearchDto
 import com.example.tayapp.data.remote.dto.bill.*
 import com.example.tayapp.data.remote.dto.scrap.AddScrapResponseDto
 import com.example.tayapp.data.remote.dto.scrap.DeleteScrapResponseDto
@@ -28,14 +29,8 @@ interface GetBillRepository {
     suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto>
     suspend fun getBillScrap(): Response<List<ScrapBillDto>>
     suspend fun getAutoComplete(query: String): Response<AutoCompleteDto>
+    suspend fun getRecommendSearch(): Response<RecommendSearchDto>
 
 }
 
-@InstallIn(ViewModelComponent::class)
-@Module
-abstract class GetBillRepositoryModule {
-    @Binds
-    abstract fun provideGetBillRepository(
-        getBillRepoImpl: GetBillRepositoryImpl
-    ): GetBillRepository
-}
+
