@@ -2,6 +2,7 @@ package com.example.tayapp.presentation.screens.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +20,8 @@ fun Search(
     val viewModel = hiltViewModel<SearchViewModel>()
     val searchState by viewModel.searchState.collectAsState()
 
+
+
     if (UserState.network) {
         Column {
             TayTopAppBarSearch(
@@ -30,6 +33,7 @@ fun Search(
                 queryValue = searchState.query
             )
 
+
             if (!searchState.searching) {
                 SearchDefault(
                     onBillSelected = onBillSelected,
@@ -39,7 +43,8 @@ fun Search(
                     removeRecentTerm = viewModel::removeRecentTerm,
                     onChangeQuery = viewModel::onChangeQuery,
                     onSearchClick = viewModel::getSearchResult,
-                    saveQuery = viewModel::saveRecentTerm
+                    saveQuery = viewModel::saveRecentTerm,
+                    getRecentViewedBill = viewModel::getRecentViewedBill
                 )
             } else if (searchState.searching && searchState.bill.isEmpty()) {
                 NoResult()

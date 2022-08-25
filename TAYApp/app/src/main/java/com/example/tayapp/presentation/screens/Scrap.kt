@@ -1,12 +1,16 @@
 package com.example.tayapp.presentation.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -38,7 +42,13 @@ fun Scrap(
     val scrapState by viewModel.scrapState.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberLazyListState()
 
+    LaunchedEffect(key1 = true){
+        viewModel.refresh()
+    }
+    
+    
     TayScaffold(
         modifier = Modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
@@ -69,7 +79,8 @@ fun Scrap(
                             scrapState,
                             onBillSelected,
                             coroutineScope,
-                            scaffoldState
+                            scaffoldState,
+                            scrollState
                         )
                     }
                 } else {
@@ -94,7 +105,8 @@ private fun ScrapScreen(
     scrapState: ScrapState,
     onBillSelected: (Int) -> Unit,
     coroutineScope: CoroutineScope,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    scrollState: LazyListState
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
@@ -116,7 +128,8 @@ private fun ScrapScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = KeyLine)
+                .padding(horizontal = KeyLine),
+            state = scrollState
         ) {
             items(scrapState.bill) { bill ->
                 var _isBookMarked = remember { mutableStateOf(true) }
