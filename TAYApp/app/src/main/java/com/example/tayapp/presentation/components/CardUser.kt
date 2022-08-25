@@ -22,6 +22,7 @@ import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.Emoij
+import com.example.tayapp.presentation.utils.EmoijList
 
 private object CardUserValue {
     val ItemHeight = 72.dp
@@ -140,15 +141,14 @@ fun CardUserItem(
             .clickable(onClick = { onClick(bill.id) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        EmoijText()
+        EmoijText(bill.billName)
 
         Spacer(modifier = Modifier.width(CardUserValue.SpacerBetween))
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxHeight()
         ) {
             PillList(bill.billType, bill.status)
 
@@ -166,10 +166,23 @@ fun CardUserItem(
 
 @Composable
 fun EmoijText(
-    emoij: String? = Emoij["해양"]
+    title: String
 ) {
+    var selectedEmoij = ""
+
+    run{
+        EmoijList.forEach{ it ->
+            it.key.forEach { key ->
+                if(title.contains(key)){
+                    selectedEmoij = it.value
+                    return@run
+                }
+            }
+        }
+    }
+
     Text(
-        "$emoij",
+        selectedEmoij,
         modifier = Modifier
             .width(CardUserValue.fontWidth),
         fontSize = 30.sp,
