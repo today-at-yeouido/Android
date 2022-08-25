@@ -3,6 +3,7 @@ package com.example.tayapp.presentation.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.layout.ContentScale
@@ -11,6 +12,7 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -34,10 +36,11 @@ fun CardNews(
             .height(100.dp)
             .fillMaxWidth(),
         enable = true,
-        onClick = {mUriHandler.openUri(newsLink)}
+        onClick = { mUriHandler.openUri(newsLink) }
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(end = Card_Inner_Padding)
         ) {
 
@@ -50,14 +53,15 @@ fun CardNews(
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(vertical = 15.dp)
+                modifier = Modifier.padding(vertical = 13.dp)
             ) {
                 Text(
-                    text = title.replace("\n",""),
+                    text = title.replace("\n", ""),
                     modifier = Modifier
                         .fillMaxWidth(),
                     color = TayAppTheme.colors.headText,
                     fontWeight = FontWeight.Normal,
+                    lineHeight = 1.4.em,
                     fontSize = 16.sp,
                     maxLines = 2
                 )
@@ -66,17 +70,16 @@ fun CardNews(
                 ) {
                     Text(
                         text = date,
-                        fontWeight = FontWeight.Normal,
+                        fontWeight = FontWeight.Light,
                         fontSize = 12.sp,
                         color = TayAppTheme.colors.subduedText,
                         maxLines = 2
                     )
                     Text(
                         text = press,
-                        fontWeight = FontWeight.Normal,
+                        fontWeight = FontWeight.Light,
                         fontSize = 12.sp,
                         color = TayAppTheme.colors.subduedText,
-                        modifier = Modifier.weight(1f)
                     )
                 }
             }
