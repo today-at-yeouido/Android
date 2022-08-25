@@ -27,6 +27,8 @@ import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
+import com.example.tayapp.presentation.utils.Emoij
+import com.example.tayapp.presentation.utils.EmoijList
 
 
 /**
@@ -66,7 +68,9 @@ fun CardBillWithScrap(
     var isBookMarked = _isBookMarked
 
     TayCard(
-        modifier = if(isBookMarked) Modifier.fillMaxSize().padding(vertical = 8.dp) else Modifier.size(0.dp),
+        modifier = if(isBookMarked) Modifier
+            .fillMaxSize()
+            .padding(vertical = 8.dp) else Modifier.size(0.dp),
         enable = true,
         onClick = { onBillSelected(bill.bills.first().id) }
     ) {
@@ -95,9 +99,8 @@ fun CardBillWithScrap(
 
 @Composable
 fun CardBillWithEmoij(
-    title: String = "2023 순천만국제정원박람회 지원 및 사후활용 에 관한 특별법안",
-    bill: Int = 1,
-    status: String = "가결",
+    bill: Bill,
+    keyword: String = "",
     onClick: (Int) -> Unit = {}
 ) {
     TayCard(
@@ -116,15 +119,28 @@ fun CardBillWithEmoij(
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                PillList(bill, status)
+                PillList(bill.billType, bill.status)
                 Text(
-                    text = title,
+                    text = bill.billName,
                     fontWeight = FontWeight.Medium,
                     color = TayAppTheme.colors.bodyText,
                     fontSize = 16.sp
                 )
             }
-            CardEmoij()
+            var selectedEmoij = ""
+
+            run{
+                EmoijList.forEach{ it ->
+                    it.key.forEach { key ->
+                        if(bill.billName.contains(key)){
+                            selectedEmoij = it.value
+                            return@run
+                        }
+                    }
+                }
+            }
+
+            EmoijText(selectedEmoij)
         }
     }
 }
@@ -203,7 +219,7 @@ fun CardBillDefault(
 }
 
 @Composable
-fun CardEmoij() {
+fun CardEmoij(emoij: String ="") {
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -214,7 +230,7 @@ fun CardEmoij() {
                 .size(50.dp)
                 .background(TayAppTheme.colors.layer2)
         )
-        EmoijText()
+        EmoijText(emoij)
     }
 }
 
