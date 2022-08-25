@@ -49,7 +49,6 @@ fun SearchResults(
                 }
 
                 itemsIndexed(items =searchResult.bill) { index, bill ->
-                    Log.d("##55", "재구성")
                     if (index >= searchResult.bill.size - 1 && !searchResult.endReached && !searchResult.pagingLoading) {
                         loadPaging()
                     }

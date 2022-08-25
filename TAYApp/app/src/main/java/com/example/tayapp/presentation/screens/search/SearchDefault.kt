@@ -66,7 +66,6 @@ fun SearchDefault(
                 modifier = Modifier.padding(bottom = 10.dp)
             )
             FlowRow(
-                modifier = Modifier,
                 mainAxisSpacing = 7.dp,
                 crossAxisSpacing = 7.dp
             ) {
