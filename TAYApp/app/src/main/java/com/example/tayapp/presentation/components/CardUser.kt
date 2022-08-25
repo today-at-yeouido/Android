@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.data.remote.dto.bill.BillDto
+import com.example.tayapp.data.remote.dto.bill.RecommendBillDto
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
@@ -33,7 +36,8 @@ private object CardUserValue {
 fun CardsUser(
     modifier: Modifier = Modifier,
     onClick: (Int) -> Unit = {},
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    recommendBill: List<RecommendBillDto>
 ) {
     Box {
         LazyRow(
@@ -42,8 +46,8 @@ fun CardsUser(
             contentPadding = PaddingValues(KeyLine),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(3) {
-                CardUser(onClick = {})
+            items(recommendBill){ it ->
+                CardUser(onClick = onClick, recommendBillDto = it)
             }
         }
         if(!UserState.isLogin()) {
@@ -76,19 +80,20 @@ fun CardsUser(
 
 @Composable
 fun CardUser(
-    onClick: (Int) -> Unit = {}
+    onClick: (Int) -> Unit = {},
+    recommendBillDto: RecommendBillDto
 ) {
     TayCard(
         modifier = Modifier
             .width(CardUserValue.cardWidth)
     ) {
         Column {
-            CardUserHeader()
-            CardUserItem(onClick = onClick)
+            CardUserHeader(recommendBillDto.committee)
+            CardUserItem(onClick = onClick, bill = recommendBillDto.billSummary[0])
             TayDivider()
-            CardUserItem(onClick = onClick)
+            CardUserItem(onClick = onClick, bill = recommendBillDto.billSummary[1])
             TayDivider()
-            CardUserItem(onClick = onClick)
+            CardUserItem(onClick = onClick, bill = recommendBillDto.billSummary[2])
         }
     }
 }
@@ -109,7 +114,7 @@ fun CardUserHeader(title: String = "과학") {
         )
 
         Text(
-            "#$title",
+            text = title,
             fontWeight = FontWeight.Medium,
             color = TayAppTheme.colors.bodyText,
             fontSize = 16.sp,
@@ -124,9 +129,7 @@ fun CardUserHeader(title: String = "과학") {
  */
 @Composable
 fun CardUserItem(
-    bill: Int = 1,
-    status: String = "가결",
-    title: String = "가덕도 신공항 건설을 위한 특별법",
+    bill: BillDto,
     onClick: (Int) -> Unit = {}
 ) {
     Row(
@@ -134,7 +137,7 @@ fun CardUserItem(
             .padding(Card_Inner_Padding)
             .height(CardUserValue.ItemHeight)
             .width(CardUserValue.ItemWidth)
-            .clickable(onClick = { onClick(1234) }),
+            .clickable(onClick = { onClick(bill.id) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
         EmoijText()
@@ -147,10 +150,10 @@ fun CardUserItem(
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            PillList(bill, status)
+            PillList(bill.billType, bill.status)
 
             Text(
-                text = title,
+                text = bill.billName,
                 fontWeight = FontWeight.Normal,
                 color = TayAppTheme.colors.headText,
                 fontSize = 16.sp,

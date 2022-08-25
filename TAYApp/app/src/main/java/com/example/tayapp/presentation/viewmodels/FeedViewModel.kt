@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.tayapp.domain.use_case.GetMostViewedUseCase
 import com.example.tayapp.domain.use_case.GetRecentBillUseCase
+import com.example.tayapp.domain.use_case.GetRecommendBillUseCase
 import com.example.tayapp.presentation.states.FeedUiState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class FeedViewModel @Inject
 constructor(
     private val getMostViewedUseCase: GetMostViewedUseCase,
-    private val getRecentBillUseCase: GetRecentBillUseCase
+    private val getRecentBillUseCase: GetRecentBillUseCase,
+    private val getRecommendBillUseCase: GetRecommendBillUseCase
 ) : ViewModel() {
 
     private val _selectedCategory = MutableStateFlow<String?>("전체")
@@ -33,10 +35,17 @@ constructor(
 
     init {
         getMostViewed()
+        if(UserState.isLogin()){
+            getRecommendBill()
+        }
     }
 
     fun tryGetMostViewed() {
         getMostViewed()
+    }
+
+    fun tryRecommendBill() {
+        getRecommendBill()
     }
 
     private fun getMostViewed() {
@@ -45,6 +54,28 @@ constructor(
                 is Resource.Success -> {
                     _state.value = FeedUiState(
                         bill = result.data ?: emptyList()
+                    )
+                }
+                is Resource.Error -> {
+                    _state.value =
+                        FeedUiState(error = result.message ?: "An unexpected error")
+                }
+                is Resource.Loading -> {
+                    _state.value = FeedUiState(isLoading = true)
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getRecommendBill(){
+        getRecommendBillUseCase().onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    _state.value = FeedUiState(
+                        recommendBill = result.data ?: emptyList()
                     )
                 }
                 is Resource.Error -> {

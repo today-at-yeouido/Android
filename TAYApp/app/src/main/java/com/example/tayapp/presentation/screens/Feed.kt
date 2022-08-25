@@ -77,7 +77,8 @@ fun Feed(
                             )
                             CardsUser(
                                 onClick = onBillSelected,
-                                navigateToLogin = navigateToLogin
+                                navigateToLogin = navigateToLogin,
+                                recommendBill = mostViewed.recommendBill
                             )
                             Spacer(modifier = Modifier.height(40.dp))
 
@@ -101,6 +102,7 @@ fun Feed(
             NetworkErrorScreen{
                 UserState.network = true
                 viewModel.tryGetMostViewed()
+                viewModel.tryRecommendBill()
             }
         }
     }
