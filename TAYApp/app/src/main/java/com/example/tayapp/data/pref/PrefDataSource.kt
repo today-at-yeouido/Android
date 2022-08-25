@@ -25,8 +25,7 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         val LOGIN_USER_ID = stringPreferencesKey("login_user_id")
         val LOGIN_USER_EMAIL = stringPreferencesKey("login_user_email")
         val LOGIN_USER_SNS = stringPreferencesKey("login_user_sns")
-
-        val FAVORIT_CATEGORY = stringSetPreferencesKey("favorit_category")
+        
         val RECENT_SEARCH_TERM = stringPreferencesKey("recent_search_term")
 
         val THEME_MODE = stringPreferencesKey("theme_mode")
@@ -62,15 +61,6 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         }
     }
 
-    suspend fun saveFavoritCategory(favoritCategorySet: Set<String>) {
-        context.dataStore.edit {
-            it[FAVORIT_CATEGORY] = favoritCategorySet
-        }
-    }
-
-    fun getFavoritCategory(): Flow<Set<String>> = context.dataStore.data.map {
-        it[FAVORIT_CATEGORY] ?: emptySet()
-    }
 
     suspend fun setUser(user: UserPref) {
         context.dataStore.edit { settings ->
