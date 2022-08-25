@@ -44,7 +44,7 @@ class DetailViewModel @Inject constructor(
 
     private fun getBillDetail(billId: Int){
         viewModelScope.launch {
-            getBillDetailUseCase(billId).collect(){ result ->
+            getBillDetailUseCase(billId).collect { result ->
                 when(result){
                     is Resource.Success -> {
                         detailState.update {

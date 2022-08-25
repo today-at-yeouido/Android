@@ -1,11 +1,11 @@
 package com.example.tayapp.presentation.states
 
 
-import com.example.tayapp.data.remote.dto.bill.DetailBillDto
+import com.example.tayapp.domain.model.DetailBill
 
 data class BillDetailUiState (
     val isLoading: Boolean = false,
-    val billDetail: DetailBillDto = DetailBillDto(),
+    val billDetail: DetailBill = DetailBill(),
     val error: String = ""
 )
 

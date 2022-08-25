@@ -1,14 +1,11 @@
 package com.example.tayapp.presentation.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -21,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.tayapp.data.remote.dto.bill.DetailBillDto
 import com.example.tayapp.data.remote.dto.bill.NewsDto
+import com.example.tayapp.domain.model.DetailBill
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
@@ -45,6 +42,8 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val mUriHandler = LocalUriHandler.current
+
+    Log.d("##33", "billId $billId")
 
     BottomSheetScaffold(
         modifier = Modifier.navigationBarsPadding(),
@@ -115,7 +114,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
                                     ),
                                 verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-                                if (detailState.value.billDetail.plenaryInfo.isNotEmpty()) {
+                                if (detailState.value.billDetail.isPlenary) {
                                     CardPieGraph(detailState.value.billDetail)
                                 }
 
@@ -128,7 +127,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
 
                         items(detailState.value.billDetail.news) { news ->
                             CardNews(
-                                imageURL = news.imgUrl.firstOrNull(),
+                                imageURL = news.imgUrl?.firstOrNull(),
                                 title = news.newsName,
                                 date = news.pubDate,
                                 press = news.newsFrom,
@@ -151,7 +150,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
 
 
 @Composable
-fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
+fun DetailHeader(bill: DetailBill, onProgressClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -209,8 +208,12 @@ fun DetailHeader(bill: DetailBillDto, onProgressClick: () -> Unit) {
             }
         }
 
-        CardCommittee(bill.committeeInfo.firstOrNull()?.committee)
-        CardBillProgress(onProgressClick, bill)
+        CardCommittee(bill.committeeInfo.committee)
+        CardBillProgress(
+            onProgressClick,
+            bill.progressItems,
+            bill.proposeDt
+        )
 
     }
 }
@@ -259,7 +262,7 @@ private fun CardCommittee(
 
 @Composable
 private fun CardPieGraph(
-    bill: DetailBillDto
+    bill: DetailBill
 ) {
     TayCard {
         Column(
@@ -282,10 +285,10 @@ private fun CardPieGraph(
             ) {
                 PieGraph(
                     listOf(
-                        bill.plenaryInfo.firstOrNull()!!.approval,
-                        bill.plenaryInfo.firstOrNull()!!.opposition,
-                        bill.plenaryInfo.firstOrNull()!!.abstention,
-                        bill.plenaryInfo.firstOrNull()!!.total
+                        bill.plenaryInfo.approval,
+                        bill.plenaryInfo.opposition,
+                        bill.plenaryInfo.abstention,
+                        bill.plenaryInfo.total
                     )
                 )
             }

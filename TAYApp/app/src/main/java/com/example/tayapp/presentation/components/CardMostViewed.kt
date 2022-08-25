@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.tayapp.domain.model.MostViewedBill
+import com.example.tayapp.domain.model.News
 import com.example.tayapp.presentation.MainActivity
 import com.example.tayapp.presentation.components.MostViewedValues.Card_Gap
 import com.example.tayapp.presentation.states.FeedUiState
@@ -128,7 +129,7 @@ private fun CardContentLayout(bill: MostViewedBill.Bill) {
 }
 
 @Composable
-private fun CardNewsLayout(newsList: List<MostViewedBill.New>) {
+private fun CardNewsLayout(newsList: List<News>) {
 
     val mUriHandler = LocalUriHandler.current
     Column(
@@ -256,7 +257,7 @@ fun NewsLabelIcon2() {
 
 
 @Composable
-fun NewsHeaderItem(news: MostViewedBill.New, mUriHandler: UriHandler) {
+fun NewsHeaderItem(news: News, mUriHandler: UriHandler) {
 
     Row(
         modifier = Modifier

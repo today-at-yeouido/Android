@@ -1,129 +1,48 @@
-package com.example.tayapp.presentation.components
+package com.example.tayapp.domain.model
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.tayapp.data.remote.dto.bill.DetailBillDto
-import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
-import com.example.tayapp.presentation.ui.theme.KeyLine
-import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.utils.TayIcons
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import com.example.tayapp.data.remote.dto.bill.*
 
+data class DetailBill(
+    val billName: String = "",
+    val billType: Int = 0,
+    val isReflect: Boolean = false,
+    val proposeDt: String = "",
+    val proposer: String = "",
+    val status: String = "",
+    val summary: String? = "",
+    val hwpurl: String? = "",
+    val pdfurl: String? = "",
+    val views: Int = 0,
+    val isScrapped: Boolean = false,
+    val isPlenary: Boolean = false,
+    val plenaryInfo: PlenaryInfo = PlenaryInfo(),
+    val committeeInfo: CommitteeInfo = CommitteeInfo(),
+    val progressItems: List<BillProgressItem> = emptyList(),
+    val reflect_info: List<ReflectInfoDto> = emptyList(),
+    val news: List<News> = emptyList()
+)
 
-@Composable
-fun CardBillProgress(
-    onProgressClick: () -> Unit,
-    billProgressItems: List<com.example.tayapp.domain.model.BillProgressItem>,
-    proposeDt: String
-) {
-    TayCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = KeyLine),
-        enable = false
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.padding(Card_Inner_Padding),
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    Text(
-                        text = "진행현황",
-                        fontSize = 16.sp,
-                        color = TayAppTheme.colors.bodyText,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Icon(
-                        imageVector = TayIcons.help,
-                        contentDescription = "null",
-                        tint = TayAppTheme.colors.information2,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clickable(onClick = onProgressClick)
-                    )
-                    Text(
-                        text = "D+" + if (proposeDt.isNotBlank()) billDate(proposeDt).toString() else "",
-                        fontSize = 16.sp,
-                        color = TayAppTheme.colors.subduedText,
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-                LazyRow() {
-                    itemsIndexed(billProgressItems) { index, it ->
-                        if (index != 0) BillArrow()
-                        BillProgressItemComponent(string = it.title, it.date)
-                    }
-                }
-            }
-
-        }
-    }
-}
-
-
-@Composable
-private fun billDate(date: String): Int {
-
-    val formatter = DateTimeFormatter.ISO_DATE
-    val date2 = LocalDate.parse(date, formatter).atStartOfDay()
-    val current = LocalDateTime.now()
-
-    val diff = Duration.between(date2, current).toDays()
-    return diff.toInt()
-}
-
-@Composable
-private fun BillProgressItemComponent(
-    string: String,
-    date: String? = null
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(9.dp)
-    ) {
-        if (date.isNullOrBlank()) DashPill(string)
-        else {
-
-            Pill(string)
-            Text(
-                text = date.substring(2).replace("-", "."),
-                fontSize = 9.sp,
-                color = TayAppTheme.colors.subduedText,
-                fontWeight = FontWeight.Light
-            )
-        }
-    }
-}
-
-@Composable
-private fun BillArrow() {
-    Icon(
-        imageVector = TayIcons.navigate_next,
-        contentDescription = "",
-        modifier = Modifier
-            .width(12.dp)
-            .padding(start = 2.dp, end = 2.dp, top = 5.dp)
+fun DetailBillDto.toDomain(): DetailBill =
+    DetailBill(
+        billName = billName,
+        billType = billType,
+        isReflect = isReflect,
+        proposeDt = proposeDt,
+        proposer = proposer,
+        status = status,
+        summary = summary,
+        hwpurl = hwpurl,
+        pdfurl = pdfurl,
+        views = views,
+        plenaryInfo = plenaryInfo.firstOrNull()?.toDomain() ?: PlenaryInfo(),
+        committeeInfo = committeeInfo.firstOrNull()?.toDomain() ?: CommitteeInfo(),
+        isScrapped = isScrapped,
+        isPlenary = plenaryInfo.isNotEmpty(),
+        progressItems = getProgress(this),
+        reflect_info = reflect_info,
+        news = news.map { it.toDomain() }
     )
-}
+
 
 private fun getProgress(billDto: DetailBillDto): List<BillProgressItem> {
     val progressList: MutableList<BillProgressItem> =
