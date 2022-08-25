@@ -6,13 +6,12 @@ import com.example.tayapp.data.remote.dto.scrap.DeleteScrapRequestDto
 import com.example.tayapp.data.remote.dto.scrap.DeleteScrapResponseDto
 import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.data.remote.dto.user.UserFavoriteCommitteeDto
-import com.example.tayapp.domain.repository.GetBillRepository
-import com.example.tayapp.domain.repository.UserCommitteeRepository
+import com.example.tayapp.domain.repository.UserSettingRepository
 import retrofit2.Response
 import javax.inject.Inject
 
-class UserCommitteeRepositoryImpl  @Inject
-constructor(private val UserSettingApi: UserSettingApi) : UserCommitteeRepository {
+class UserSettingRepositoryImpl  @Inject
+constructor(private val UserSettingApi: UserSettingApi) : UserSettingRepository {
     override suspend fun postUserCommittee(userFavoriteCommitteeDto: UserFavoriteCommitteeDto): Response<UserFavoriteCommitteeDto> {
         return UserSettingApi.postUserCommittee(userFavoriteCommitteeDto)
     }
