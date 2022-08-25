@@ -14,12 +14,3 @@ interface FavoritCategoryRepository {
 }
 
 
-@Module
-@InstallIn(ViewModelComponent::class)
-abstract class FavoritCategoryModule {
-
-    @Binds
-    abstract fun provideFavoritCategoryImpl(
-        repository: FavoritCategoryRepositoryImpl
-    ) : FavoritCategoryRepository
-}

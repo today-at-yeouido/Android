@@ -12,15 +12,4 @@ interface ThemeModeRepository {
     suspend fun getThemeMode(): String
 
     suspend fun saveThemeMode(mode: String)
-
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-abstract class ThemeModeModule {
-
-    @Binds
-    abstract fun provideThemeModeImpl(
-        repository: ThemeModeRepositoryImpl
-    ): ThemeModeRepository
 }

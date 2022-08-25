@@ -12,14 +12,3 @@ interface RecentSearchRepository {
 //    suspend fun recentSearchTerm(): String
     val recentSearchTerm :Flow<String>
 }
-
-
-@Module
-@InstallIn(ViewModelComponent::class)
-abstract class RecentSearchModule {
-
-    @Binds
-    abstract fun provideRecentSearchImpl(
-        repository: RecentSearchRepositoryImpl
-    ) : RecentSearchRepository
-}
