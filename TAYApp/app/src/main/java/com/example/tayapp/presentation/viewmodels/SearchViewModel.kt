@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
@@ -31,6 +32,7 @@ class SearchViewModel @Inject constructor(
         private set
 
     init {
+        Log.d("##66", "뷰모델 실행")
         getRecentTerm()
         getRecentViewedBill()
         getRecommendSearchTerm()
@@ -206,11 +208,20 @@ class SearchViewModel @Inject constructor(
 
     private fun getRecommendSearchTerm() {
         getRecommendSearchUseCase().onEach { result ->
+            Log.d("##66", "뷰모델 실행")
             when (result) {
                 is Resource.Success -> {
                     searchState.update {
                         it.copy(
-                            recommendSearch = it.recommendSearch
+                            recommendSearch = result.data!!,
+                            isLoading = false
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    searchState.update {
+                        it.copy(
+                            isLoading = true
                         )
                     }
                 }
@@ -220,7 +231,8 @@ class SearchViewModel @Inject constructor(
                 else -> {
                     searchState.update {
                         it.copy(
-                            error = result.message!!
+                            error = result.message!!,
+                            isLoading = false
                         )
                     }
                 }
