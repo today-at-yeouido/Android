@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -30,8 +31,14 @@ fun SearchDefault(
     removeRecentTerm: (Int) -> Unit,
     onChangeQuery: (String) -> Unit,
     onSearchClick: () -> Unit,
-    saveQuery: () -> Unit
+    saveQuery: () -> Unit,
+    getRecentViewedBill: () -> Unit
 ) {
+
+    LaunchedEffect(key1 = true){
+        getRecentViewedBill()
+    }
+
     LazyColumn(
         modifier = Modifier.padding(vertical = 20.dp, horizontal = KeyLine),
         verticalArrangement = Arrangement.spacedBy(10.dp)
