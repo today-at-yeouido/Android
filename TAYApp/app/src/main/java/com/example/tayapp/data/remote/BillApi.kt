@@ -9,8 +9,10 @@ import com.example.tayapp.data.remote.Constants.GET_BILL_SCRAP
 import com.example.tayapp.data.remote.Constants.GET_BILL_SEARCH
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECENT_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_USER_RECOMMENDED
+import com.example.tayapp.data.remote.Constants.GET_RECCOMEND_SEARCH
 import com.example.tayapp.data.remote.Constants.POST_ADD_SCRAP
 import com.example.tayapp.data.remote.Constants.POST_DELETE_SCRAP
+import com.example.tayapp.data.remote.dto.RecommendSearchDto
 import com.example.tayapp.data.remote.dto.bill.*
 import com.example.tayapp.data.remote.dto.scrap.*
 import retrofit2.Response
@@ -69,4 +71,7 @@ interface BillApi {
     suspend fun getAutoComplete(
         @Query("query") query: String
     ): Response<AutoCompleteDto>
+
+    @GET(GET_RECCOMEND_SEARCH)
+    suspend fun getRecommendSearch(): Response<RecommendSearchDto>
 }

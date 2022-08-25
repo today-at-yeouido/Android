@@ -16,5 +16,6 @@ data class SearchState(
     val recentViewedBill: List<BillDto> = emptyList(),
     val nextPage: Int = 2,
     val endReached: Boolean = false,
-    val pagingLoading : Boolean = false
+    val pagingLoading : Boolean = false,
+    val recommendSearch: List<String> = emptyList()
 )
