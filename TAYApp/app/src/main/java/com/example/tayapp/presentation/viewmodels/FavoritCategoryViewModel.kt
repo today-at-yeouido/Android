@@ -1,12 +1,13 @@
 package com.example.tayapp.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.domain.use_case.FavoritCategoryUseCase
+import com.example.tayapp.presentation.states.UserState
+import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,13 +23,33 @@ class FavoritCategoryViewModel @Inject constructor(private val useCase: FavoritC
         getfavoritCategory()
     }
 
-    fun getfavoritCategory() {
-        viewModelScope.launch {
-            val result = useCase.getFavoritCategoryUseCase()
-            favoritCategoryState.update {
-                it.copy(favoritCategory = result.first(), isLoading = false )
-            }
+    private fun getfavoritCategory() {
+        if (UserState.isLogin()) {
+            useCase.getUserFavoriteCommitteeUseCase().onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        favoritCategoryState.update {
+                            it.copy(favoritCategory = result.data!!, isLoading = false )
+                        }
+
+                    }
+                    is Resource.Error -> {
+                        favoritCategoryState.update {
+                            it.copy(isLoading = false, error = true )
+                        }
+                    }
+                    is Resource.Loading -> {
+                        favoritCategoryState.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                    is Resource.NetworkConnectionError -> {
+                        UserState.network = false
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
+
     }
 
 
@@ -40,14 +61,25 @@ class FavoritCategoryViewModel @Inject constructor(private val useCase: FavoritC
                 it.copy(favoritCategory = favoritCategoryState.value.favoritCategory.plus(string), isLoading = false )
             }
         }
-        viewModelScope.launch{
-            useCase.saveFavoritCategoryUseCase(favoritCategoryState.value.favoritCategory)
+    }
+
+    fun saveCategory(){
+        viewModelScope.launch {
+            useCase.postUserFavoriteCommitteeUseCase(favoritCategoryState.value.favoritCategory).collect() { it ->
+                when (it) {
+                    is Resource.Success -> Log.d("관심법안", "관심법안 성공")
+                    is Resource.Error -> Log.d("관심법안", "관심법안 실패")
+                    is Resource.Loading -> Log.d("관심법안", "관심법안 올리는중")
+                }
+            }
         }
     }
+
 
 }
 
 data class FavoritCategoryState(
-    val favoritCategory: Set<String> = emptySet(),
-    val isLoading: Boolean
+    val favoritCategory: List<String> = emptyList(),
+    val isLoading: Boolean = true,
+    val error: Boolean = false,
 )
