@@ -89,6 +89,5 @@ enum class BottomBarTabs(
     Feed(R.string.bottom_home, TayIcons.bottombar_home, BottomBarDestination.FEED),
     SCRAP(R.string.bottom_scrap, TayIcons.bottombar_bookmark, BottomBarDestination.SCRAP),
     SEARCH(R.string.bottom_search, TayIcons.bottombar_search, BottomBarDestination.SEARCH),
-    REPORT(R.string.bottom_report, TayIcons.bottombar_message, BottomBarDestination.REPORT),
     PROFILE(R.string.bottom_profile, TayIcons.bottombar_person, BottomBarDestination.PROFILE)
 }

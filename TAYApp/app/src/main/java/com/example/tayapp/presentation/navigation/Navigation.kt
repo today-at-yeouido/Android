@@ -132,10 +132,7 @@ fun NavGraphBuilder.homeGraph(
     composable(BottomBarTabs.SEARCH.route) { from ->
         Search(onBillSelected = { id -> onBillSelected(id, from) })
     }
-    composable(BottomBarTabs.REPORT.route) {
-        //Report(Modifier.fillMaxSize())
-        //BillDetail()
-    }
+
     navigation(
         route = AppGraph.PROFILE_GRAPH, startDestination = BottomBarDestination.PROFILE
     ) {

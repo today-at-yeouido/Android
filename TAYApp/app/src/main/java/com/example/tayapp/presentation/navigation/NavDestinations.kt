@@ -14,7 +14,6 @@ object BottomBarDestination {
     const val FEED = "home/feed"
     const val SCRAP = "home/scrap"
     const val SEARCH = "home/search"
-    const val REPORT = "home/report"
     const val PROFILE = "home/profile"
 }
 
