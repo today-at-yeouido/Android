@@ -123,8 +123,10 @@ fun NavGraphBuilder.homeGraph(
 ) {
     composable(route = BottomBarTabs.Feed.route) { from ->
         Feed(
+            onBillSelected = { id -> onBillSelected(id, from) },
             navigateToLogin = { navController.navigate(Destinations.LOGIN) },
-            onBillSelected = { id -> onBillSelected(id, from) })
+            navigateToFavorite = { navController.navigate(ProfileDestination.FAVORITE) }
+        )
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
         Scrap(onBillSelected = { id -> onBillSelected(id, from) })

@@ -31,7 +31,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun Feed(
     onBillSelected: (Int) -> Unit,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    navigateToFavorite: () -> Unit
 ) {
 
     val viewModel = hiltViewModel<FeedViewModel>()
@@ -106,6 +107,7 @@ fun Feed(
                             CardsUser(
                                 onClick = onBillSelected,
                                 navigateToLogin = navigateToLogin,
+                                navigateToFavorite = navigateToFavorite,
                                 recommendBill = recommendBill
                             )
                             Spacer(modifier = Modifier.height(40.dp))
