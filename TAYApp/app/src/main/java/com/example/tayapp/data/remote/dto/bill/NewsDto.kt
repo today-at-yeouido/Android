@@ -5,5 +5,5 @@ data class NewsDto(
     val newsFrom: String,
     val newsName: String,
     val newsLink: String,
-    val imgUrl: List<String>
+    val imgUrl: String
 )

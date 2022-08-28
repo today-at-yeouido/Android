@@ -127,7 +127,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit) {
 
                         items(detailState.value.billDetail.news) { news ->
                             CardNews(
-                                imageURL = news.imgUrl?.firstOrNull(),
+                                imageURL = news.imgUrl,
                                 title = news.newsName,
                                 date = news.pubDate,
                                 press = news.newsFrom,

@@ -7,7 +7,7 @@ data class News(
     val newsLink: String,
     val newsName: String,
     val pubDate: String,
-    val imgUrl: List<String>?
+    val imgUrl: String?
 )
 
 fun NewsDto.toDomain() = News(

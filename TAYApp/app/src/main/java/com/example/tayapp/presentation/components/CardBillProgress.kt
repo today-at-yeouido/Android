@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.data.remote.dto.bill.DetailBillDto
+import com.example.tayapp.domain.model.BillProgressItem
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
@@ -26,7 +27,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CardBillProgress(
     onProgressClick: () -> Unit,
-    billProgressItems: List<com.example.tayapp.domain.model.BillProgressItem>,
+    billProgressItems: List<BillProgressItem>,
     proposeDt: String
 ) {
     TayCard(
@@ -217,8 +218,3 @@ private fun getProgress(billDto: DetailBillDto): List<BillProgressItem> {
 
     return progressList
 }
-
-data class BillProgressItem(
-    val title: String,
-    val date: String?
-)
