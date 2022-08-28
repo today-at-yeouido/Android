@@ -20,19 +20,19 @@ import androidx.compose.ui.unit.dp
 /** 찬성 수, 반대 수, 기권 수, 투표 수 */
 @Composable
 fun PieGraph(
-    points: List<Int> = listOf(200, 50, 30, 280),
+    points: List<Int?> = listOf(200, 50, 30, 280),
     colors: List<Color> = listOf(Color.Red, Color.Blue, Color.Green, Color.LightGray)
 ) {
 
     Log.d("찬반기투", "${points[0]}  ${points[1]}  ${points[2]}  ${points[3]}")
 
-    val total = points[3].toFloat()
+    val total = points[3]!!.toFloat()
 
     val proportions = points.mapIndexed { index, i ->
         if (index == points.size - 1) {
-            ((total - i) * 100 / total)
+            ((total - i!!) * 100 / total)
         } else {
-            (i * 100 / total)
+            (i!! * 100 / total)
         }
     }
 

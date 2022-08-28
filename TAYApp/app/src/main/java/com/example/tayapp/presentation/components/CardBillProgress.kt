@@ -1,7 +1,5 @@
 package com.example.tayapp.presentation.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.data.remote.dto.bill.DetailBillDto
+import com.example.tayapp.domain.model.BillProgressItem
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
@@ -28,7 +27,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CardBillProgress(
     onProgressClick: () -> Unit,
-    bill: DetailBillDto
+    billProgressItems: List<BillProgressItem>,
+    proposeDt: String
 ) {
     TayCard(
         modifier = Modifier
@@ -62,15 +62,15 @@ fun CardBillProgress(
                             .clickable(onClick = onProgressClick)
                     )
                     Text(
-                        text = "D+" + if(!bill.proposeDt.isNullOrBlank()) BillDate(bill.proposeDt).toString() else "",
+                        text = "D+" + if (proposeDt.isNotBlank()) billDate(proposeDt).toString() else "",
                         fontSize = 16.sp,
                         color = TayAppTheme.colors.subduedText,
                         fontWeight = FontWeight.Normal
                     )
                 }
-                LazyRow(){
-                    itemsIndexed(getProgress(bill)){ index, it ->
-                        if(index!=0) BillArrow()
+                LazyRow() {
+                    itemsIndexed(billProgressItems) { index, it ->
+                        if (index != 0) BillArrow()
                         BillProgressItemComponent(string = it.title, it.date)
                     }
                 }
@@ -82,13 +82,13 @@ fun CardBillProgress(
 
 
 @Composable
-private fun BillDate(date: String): Int{
+private fun billDate(date: String): Int {
 
     val formatter = DateTimeFormatter.ISO_DATE
-    val date2 = LocalDate.parse(date,formatter).atStartOfDay()
-    val current  = LocalDateTime.now()
+    val date2 = LocalDate.parse(date, formatter).atStartOfDay()
+    val current = LocalDateTime.now()
 
-    val diff = Duration.between(date2,current).toDays()
+    val diff = Duration.between(date2, current).toDays()
     return diff.toInt()
 }
 
@@ -106,7 +106,7 @@ private fun BillProgressItemComponent(
 
             Pill(string)
             Text(
-                text = date.substring(2).replace("-","."),
+                text = date.substring(2).replace("-", "."),
                 fontSize = 9.sp,
                 color = TayAppTheme.colors.subduedText,
                 fontWeight = FontWeight.Light
@@ -126,64 +126,95 @@ private fun BillArrow() {
     )
 }
 
-private fun getProgress(billDto: DetailBillDto): List<BillProgressItem>{
-    val progressList: MutableList<BillProgressItem> = mutableListOf(BillProgressItem("발의",billDto.proposeDt))
+private fun getProgress(billDto: DetailBillDto): List<BillProgressItem> {
+    val progressList: MutableList<BillProgressItem> =
+        mutableListOf(BillProgressItem("발의", billDto.proposeDt))
 
-    if(billDto.committeeInfo.firstOrNull()?.procResult == "회송"){
-        progressList.add(BillProgressItem("심사",billDto.committeeInfo.firstOrNull()?.submitDt))
-        progressList.add(BillProgressItem("회송",billDto.committeeInfo.firstOrNull()?.procDt))
-    }else{
-        when(billDto.status){
+    if (billDto.committeeInfo.firstOrNull()?.procResult == "회송") {
+        progressList.add(BillProgressItem("심사", billDto.committeeInfo.firstOrNull()?.submitDt))
+        progressList.add(BillProgressItem("회송", billDto.committeeInfo.firstOrNull()?.procDt))
+    } else {
+        when (billDto.status) {
             "철회", "본회의불부의" -> {
-                progressList.add(BillProgressItem("철회",
-                    if(!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
-                        billDto.committeeInfo.firstOrNull()?.submitDt
-                    else
-                        billDto.committeeInfo.firstOrNull()?.procDt))
+                progressList.add(
+                    BillProgressItem(
+                        "철회",
+                        if (!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
+                            billDto.committeeInfo.firstOrNull()?.submitDt
+                        else
+                            billDto.committeeInfo.firstOrNull()?.procDt
+                    )
+                )
             }
             "대안반영폐기" -> {
-                progressList.add(BillProgressItem("심사",
-                    if(!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
-                        billDto.committeeInfo.firstOrNull()?.submitDt
-                    else
-                        billDto.committeeInfo.firstOrNull()?.procDt))
-                progressList.add(BillProgressItem("대안",billDto.committeeInfo.firstOrNull()?.procDt))
+                progressList.add(
+                    BillProgressItem(
+                        "심사",
+                        if (!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
+                            billDto.committeeInfo.firstOrNull()?.submitDt
+                        else
+                            billDto.committeeInfo.firstOrNull()?.procDt
+                    )
+                )
+                progressList.add(
+                    BillProgressItem(
+                        "대안",
+                        billDto.committeeInfo.firstOrNull()?.procDt
+                    )
+                )
             }
             "부결" -> {
-                progressList.add(BillProgressItem("심사",
-                    if(!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
-                        billDto.committeeInfo.firstOrNull()?.submitDt
-                    else
-                        billDto.committeeInfo.firstOrNull()?.procDt))
-                progressList.add(BillProgressItem("심의",billDto.plenaryInfo.firstOrNull()?.prsntDt))
-                progressList.add(BillProgressItem("부결",billDto.plenaryInfo.firstOrNull()?.prsntDt))
+                progressList.add(
+                    BillProgressItem(
+                        "심사",
+                        if (!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
+                            billDto.committeeInfo.firstOrNull()?.submitDt
+                        else
+                            billDto.committeeInfo.firstOrNull()?.procDt
+                    )
+                )
+                progressList.add(BillProgressItem("심의", billDto.plenaryInfo.firstOrNull()?.prsntDt))
+                progressList.add(BillProgressItem("부결", billDto.plenaryInfo.firstOrNull()?.prsntDt))
             }
             "본회의의결" -> {
-                progressList.add(BillProgressItem("심사",
-                    if(!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
-                        billDto.committeeInfo.firstOrNull()?.submitDt
-                    else
-                        billDto.committeeInfo.firstOrNull()?.procDt))
-                progressList.add(BillProgressItem("가결",billDto.plenaryInfo.firstOrNull()?.prsntDt))
+                progressList.add(
+                    BillProgressItem(
+                        "심사",
+                        if (!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
+                            billDto.committeeInfo.firstOrNull()?.submitDt
+                        else
+                            billDto.committeeInfo.firstOrNull()?.procDt
+                    )
+                )
+                progressList.add(BillProgressItem("가결", billDto.plenaryInfo.firstOrNull()?.prsntDt))
             }
             else -> {
-                progressList.add(BillProgressItem("심사",
-                    if(!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
-                        billDto.committeeInfo.firstOrNull()?.submitDt
-                    else
-                        billDto.committeeInfo.firstOrNull()?.procDt))
-                progressList.add(BillProgressItem("심의",billDto.plenaryInfo.firstOrNull()?.prsntDt))
-                progressList.add(BillProgressItem("가결",billDto.plenaryInfo.firstOrNull()?.prsntDt))
-                progressList.add(BillProgressItem("정부이송",billDto.transferInfo.firstOrNull()?.transDt))
-                progressList.add(BillProgressItem("공포",billDto.announceInfo.firstOrNull()?.announceDt))
+                progressList.add(
+                    BillProgressItem(
+                        "심사",
+                        if (!billDto.committeeInfo.firstOrNull()?.submitDt.isNullOrBlank())
+                            billDto.committeeInfo.firstOrNull()?.submitDt
+                        else
+                            billDto.committeeInfo.firstOrNull()?.procDt
+                    )
+                )
+                progressList.add(BillProgressItem("심의", billDto.plenaryInfo.firstOrNull()?.prsntDt))
+                progressList.add(BillProgressItem("가결", billDto.plenaryInfo.firstOrNull()?.prsntDt))
+                progressList.add(
+                    BillProgressItem(
+                        "정부이송",
+                        billDto.transferInfo.firstOrNull()?.transDt
+                    )
+                )
+                progressList.add(
+                    BillProgressItem(
+                        "공포",
+                        billDto.announceInfo.firstOrNull()?.announceDt
+                    )
+                )
             }
         }
     }
 
     return progressList
 }
-
-data class BillProgressItem(
-    val title: String,
-    val date: String?
-)
