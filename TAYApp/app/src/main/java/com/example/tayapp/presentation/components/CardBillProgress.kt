@@ -103,8 +103,7 @@ private fun BillProgressItemComponent(
     ) {
         if (date.isNullOrBlank()) DashPill(string)
         else {
-
-            Pill(string)
+            Pill(string, fontSize = 16.sp)
             Text(
                 text = date.substring(2).replace("-", "."),
                 fontSize = 9.sp,

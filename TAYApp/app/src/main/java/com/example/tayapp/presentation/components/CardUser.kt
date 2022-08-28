@@ -36,9 +36,9 @@ private object CardUserValue {
 
 @Composable
 fun CardsUser(
-    modifier: Modifier = Modifier,
     onClick: (Int) -> Unit = {},
     navigateToLogin: () -> Unit,
+    navigateToFavorite: () -> Unit,
     recommendBill: List<RecommendBillDto>
 ) {
     Box {
@@ -48,37 +48,51 @@ fun CardsUser(
             contentPadding = PaddingValues(KeyLine),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(recommendBill){ it ->
+            items(recommendBill) { it ->
                 CardUser(onClick = onClick, recommendBillDto = it)
             }
         }
-        if(!UserState.isLogin()) {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .background(TayAppTheme.colors.layer3, RoundedCornerShape(12.dp))
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    "로그인이 필요한 서비스입니다!",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 15.sp
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                TayButton(
-                    onClick = navigateToLogin,
-                    modifier.size(ButtonMediumWidth, ButtonMediumHeight),
-                    backgroundColor = TayAppTheme.colors.primary,
-                    contentColor = TayAppTheme.colors.headText
-                ) {
-                    Text("로그인", fontSize = 15.sp)
-                }
+        when {
+            !UserState.isLogin() -> {
+                CardUserDialog(navigateToLogin, "로그인이 필요한 서비스입니다!", "로그인")
+            }
+            UserState.isLogin() && recommendBill.isEmpty() -> {
+                CardUserDialog(navigateToFavorite, "관심 소관위를 설정해주세요!", buttonText = "설정하로 가기")
+
             }
         }
     }
 }
 
+@Composable
+private fun BoxScope.CardUserDialog(
+    navigateToLogin: () -> Unit,
+    explanation: String,
+    buttonText: String
+) {
+    Column(
+        modifier = Modifier.Companion
+            .align(Alignment.Center)
+            .background(TayAppTheme.colors.layer3, RoundedCornerShape(12.dp))
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = explanation,
+            fontWeight = FontWeight.Medium,
+            fontSize = 15.sp
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        TayButton(
+            onClick = navigateToLogin,
+            Modifier.size(ButtonMediumWidth, ButtonMediumHeight),
+            backgroundColor = TayAppTheme.colors.primary,
+            contentColor = TayAppTheme.colors.headText
+        ) {
+            Text(text = buttonText, fontSize = 15.sp)
+        }
+    }
+}
 
 @Composable
 fun CardUser(
@@ -171,10 +185,10 @@ fun EmoijText(
 ) {
     var selectedEmoij = ""
 
-    run{
-        EmoijList.forEach{ it ->
+    run {
+        EmoijList.forEach { it ->
             it.key.forEach { key ->
-                if(title.contains(key)){
+                if (title.contains(key)) {
                     selectedEmoij = it.value
                     return@run
                 }
