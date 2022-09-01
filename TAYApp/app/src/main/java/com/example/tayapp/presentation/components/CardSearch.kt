@@ -63,7 +63,6 @@ fun CardMultiple(
     onLineClick:(Int) -> Unit,
     keyword: String
 ){
-    var isExpanded by remember{ mutableStateOf(false)}
 
     TayCard(
         modifier = Modifier.fillMaxWidth()
@@ -111,7 +110,7 @@ fun CardMultiple(
                 )
             }
             Text(
-                text = "총 ${bill.bills.size}건 ",
+                text = "총 ${bill.count}건 ",
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.subduedText,
@@ -122,25 +121,19 @@ fun CardMultiple(
                 modifier = Modifier.padding(vertical = 6.dp)
             )
 
-            if(bill.bills.size > 3){
+            if(bill.count > 3){
                 bill.bills.subList(0,3).forEach {
                     LineSearchedBill(bill = it, onLineClick = onLineClick)
                 }
 
-                if(!isExpanded){
-                    TayButton(
-                        onClick = {isExpanded = !isExpanded},
-                        backgroundColor = TayAppTheme.colors.background,
-                        contentColor = TayAppTheme.colors.headText,
-                        modifier = Modifier.fillMaxWidth(),
-                        border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                    ) {
-                        Text("더보기", style = TayAppTheme.typo.typography.button)
-                    }
-                }else{
-                    bill.bills.subList(3, bill.bills.size).forEach {
-                        LineSearchedBill(bill = it, onLineClick = onLineClick)
-                    }
+                TayButton(
+                    onClick = {},
+                    backgroundColor = TayAppTheme.colors.background,
+                    contentColor = TayAppTheme.colors.headText,
+                    modifier = Modifier.fillMaxWidth(),
+                    border = BorderStroke(1.dp, TayAppTheme.colors.border)
+                ) {
+                    Text("더보기", style = TayAppTheme.typo.typography.button)
                 }
 
             }else{
