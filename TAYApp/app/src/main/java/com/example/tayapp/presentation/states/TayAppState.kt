@@ -70,6 +70,13 @@ class TayAppState(
         }
     }
 
+    fun navigateToGroupBill(groupId: Int, from: NavBackStackEntry) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        if (from.lifecycleIsResumed()) {
+            navController.navigate("${Destinations.GROUP_ID}/$groupId")
+        }
+    }
+
     fun upPress() {
         navController.navigateUp()
     }

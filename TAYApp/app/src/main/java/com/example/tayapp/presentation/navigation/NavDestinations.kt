@@ -8,6 +8,7 @@ object Destinations {
     const val DETAIL = "detail"
     const val SIGN_UP = "signup"
     const val BILL_ID = "billId"
+    const val GROUP_ID = "groupId"
 }
 
 object BottomBarDestination {

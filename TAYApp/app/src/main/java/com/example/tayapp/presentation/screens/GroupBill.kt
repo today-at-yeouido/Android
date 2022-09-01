@@ -35,7 +35,7 @@ import com.example.tayapp.presentation.utils.TayIcons
 @Composable
 fun GroupBill(
     upPress: () -> Unit = {},
-    onLineClick: (Int) -> Unit = {},
+    onBillSelected: (Int) -> Unit = {},
     bill: List<ScrapBillItemDto>
 ){
 
@@ -70,7 +70,7 @@ fun GroupBill(
                             )
 
                             bill.forEach{ it ->
-                                LineSearchedBill(bill = it, onLineClick = onLineClick)
+                                LineSearchedBill(bill = it, onLineClick = onBillSelected)
                             }
 
 

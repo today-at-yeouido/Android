@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BillDetail(billId: Int, upPress: () -> Unit) {
+fun BillDetail(billId: Int, upPress: () -> Unit, onGroupBillSelected: (Int) -> Unit) {
 
     val viewModel = hiltViewModel<DetailViewModel>()
     val detailState = viewModel.detailState.collectAsState()

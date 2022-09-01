@@ -34,7 +34,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Scrap(
-    onBillSelected: (Int) -> Unit
+    onBillSelected: (Int) -> Unit,
+    onGroupBillSelected: (Int) -> Unit
 ) {
 
     val scaffoldState = rememberScaffoldState()

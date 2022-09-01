@@ -33,6 +33,7 @@ fun NavGraph(
             upPress = appState::upPress,
             appState = appState,
             onBillSelected = appState::navigateToBillDetail,
+            onGroupBillSelected = appState::navigateToGroupBill
         )
     }
 }
@@ -42,23 +43,42 @@ private fun NavGraphBuilder.tayNavGraph(
     upPress: () -> Unit,
     appState: TayAppState,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     initialNavigation(appState)
 
     /** nested Navigation */
-    homeNavigation(navController, upPress, onBillSelected)
+    homeNavigation(navController, upPress, onBillSelected, onGroupBillSelected)
 
-    detailNavigation(upPress)
+    detailNavigation(upPress, onBillSelected)
+
+    groupBillNavigation(upPress, onBillSelected)
 }
 
-private fun NavGraphBuilder.detailNavigation(upPress: () -> Unit) {
+private fun NavGraphBuilder.detailNavigation(
+    upPress: () -> Unit,
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
+) {
     composable(
         "${Destinations.DETAIL}/{${Destinations.BILL_ID}}",
         arguments = listOf(navArgument(Destinations.BILL_ID) { type = NavType.IntType })
     ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val billId = arguments.getInt(Destinations.BILL_ID)
-        BillDetail(billId = billId, upPress)
+        BillDetail(billId = billId, upPress, onGroupBillSelected = { id -> onGroupBillSelected(id, backStackEntry) })
+    }
+}
+
+private fun NavGraphBuilder.groupBillNavigation(
+    upPress: () -> Unit,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit
+) {
+    composable(
+        "${Destinations.GROUP_ID}/{${Destinations.GROUP_ID}}",
+        arguments = listOf(navArgument(Destinations.GROUP_ID) { type = NavType.IntType })
+    ) { backStackEntry ->
+        val arguments = requireNotNull(backStackEntry.arguments)
+        GroupBill(upPress, onBillSelected = {id -> onBillSelected(id, backStackEntry)})
     }
 }
 
@@ -74,12 +94,16 @@ private fun NavGraphBuilder.homeNavigation(
     navController: NavController,
     upPress: () -> Unit,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     navigation(
         route = AppGraph.HOME_GRAPH, startDestination = BottomBarTabs.Feed.route
     ) {
         homeGraph(
-            navController, upPress = upPress, onBillSelected = onBillSelected
+            navController,
+            upPress = upPress,
+            onBillSelected = onBillSelected,
+            onGroupBillSelected = onGroupBillSelected
         )
     }
 }
@@ -119,7 +143,8 @@ private fun NavGraphBuilder.initialGraph(navController: NavController) {
 fun NavGraphBuilder.homeGraph(
     navController: NavController,
     upPress: () -> Unit,
-    onBillSelected: (Int, NavBackStackEntry) -> Unit
+    onBillSelected: (Int, NavBackStackEntry) -> Unit,
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     composable(route = BottomBarTabs.Feed.route) { from ->
         Feed(
@@ -129,10 +154,16 @@ fun NavGraphBuilder.homeGraph(
         )
     }
     composable(BottomBarTabs.SCRAP.route) { from ->
-        Scrap(onBillSelected = { id -> onBillSelected(id, from) })
+        Scrap(
+            onBillSelected = { id -> onBillSelected(id, from) },
+            onGroupBillSelected = {id -> onGroupBillSelected(id, from)}
+        )
     }
     composable(BottomBarTabs.SEARCH.route) { from ->
-        Search(onBillSelected = { id -> onBillSelected(id, from) })
+        Search(
+            onBillSelected = { id -> onBillSelected(id, from) },
+            onGroupBillSelected = {id -> onGroupBillSelected(id, from)}
+        )
     }
 
     navigation(
