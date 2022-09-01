@@ -4,5 +4,7 @@ import com.example.tayapp.data.remote.dto.bill.BillDto
 
 data class ScrapBillDto(
     val billName: String,
-    val bills: List<ScrapBillItemDto>
+    val bills: List<ScrapBillItemDto>,
+    val groupId: Int,
+    val count: Int
 )
