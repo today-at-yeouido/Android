@@ -22,16 +22,6 @@ import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 
 
-//@Composable
-//fun GroupBill(
-//    upPress: () -> Unit = {},
-//    onLineClick: (Int) -> Unit = {}
-//){
-//    GroupBill(upPress, onLineClick, )
-//}
-
-
-
 @Composable
 fun GroupBill(
     upPress: () -> Unit = {},
@@ -75,7 +65,7 @@ fun GroupBill(
 
 
                             Text(
-                                text = "총 건",
+                                text = "총 ${bill.size}건",
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 12.sp,
                                 color = TayAppTheme.colors.bodyText,
