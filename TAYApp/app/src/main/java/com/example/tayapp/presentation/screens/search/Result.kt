@@ -14,10 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.tayapp.R
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.presentation.components.CardMultiple
 import com.example.tayapp.presentation.components.CardSearch
 import com.example.tayapp.presentation.components.LoadingView
 import com.example.tayapp.presentation.components.Title
+import com.example.tayapp.presentation.navigation.GroupBillParcelableModel
 import com.example.tayapp.presentation.states.SearchState
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
@@ -27,7 +29,8 @@ fun SearchResults(
     searchResult: SearchState,
     onBillClick: (Int) -> Unit,
     loadPaging: () -> Unit,
-    keyword: String
+    keyword: String,
+    onGroupBillSelected: (Int) -> Unit
 ) {
 
     if (searchResult.isLoading) {
@@ -62,7 +65,8 @@ fun SearchResults(
                         CardMultiple(
                             bill = bill,
                             onLineClick = onBillClick,
-                            keyword = keyword
+                            keyword = keyword,
+                            onButtonClick = {onGroupBillSelected(bill.groupId)}
                         )
                     }
                 }

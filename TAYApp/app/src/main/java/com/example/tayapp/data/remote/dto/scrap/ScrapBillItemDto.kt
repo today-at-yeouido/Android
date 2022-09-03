@@ -7,6 +7,6 @@ data class ScrapBillItemDto(
     val isReflect : Boolean,
     val proposeDt: String,
     val proposer: String,
-    val billName: String,
     val status: String,
+    val views: Int,
 )

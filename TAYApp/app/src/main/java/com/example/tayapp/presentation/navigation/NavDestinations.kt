@@ -1,6 +1,8 @@
 package com.example.tayapp.presentation.navigation
 
 
+const val GROUP_BILL = "groupBill"
+
 /** Destination 임시로 HOME, DETAIL 설정 */
 object Destinations {
     const val SPLASH = "splash"
@@ -8,6 +10,7 @@ object Destinations {
     const val DETAIL = "detail"
     const val SIGN_UP = "signup"
     const val BILL_ID = "billId"
+    const val GROUP_ID = "groupId"
 }
 
 object BottomBarDestination {

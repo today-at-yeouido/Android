@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.domain.model.Bill
+import com.example.tayapp.presentation.navigation.GroupBillParcelableModel
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
 import com.example.tayapp.presentation.utils.NavigateNextButton
@@ -61,7 +62,8 @@ fun CardSearch(
 fun CardMultiple(
     bill: ScrapBillDto,
     onLineClick:(Int) -> Unit,
-    keyword: String
+    keyword: String,
+    onButtonClick:()-> Unit
 ){
 
     TayCard(
@@ -127,7 +129,7 @@ fun CardMultiple(
                 }
 
                 TayButton(
-                    onClick = {},
+                    onClick = onButtonClick,
                     backgroundColor = TayAppTheme.colors.background,
                     contentColor = TayAppTheme.colors.headText,
                     modifier = Modifier.fillMaxWidth(),

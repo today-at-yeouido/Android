@@ -6,7 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.presentation.components.TayTopAppBarSearch
+import com.example.tayapp.presentation.navigation.GroupBillParcelableModel
 import com.example.tayapp.presentation.screens.NetworkErrorScreen
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.viewmodels.SearchViewModel
@@ -14,7 +16,8 @@ import com.example.tayapp.presentation.viewmodels.SearchViewModel
 
 @Composable
 fun Search(
-    onBillSelected: (Int) -> Unit
+    onBillSelected: (Int) -> Unit,
+    onGroupBillSelected: (Int) -> Unit
 ) {
 
     val viewModel = hiltViewModel<SearchViewModel>()
@@ -53,7 +56,8 @@ fun Search(
                     searchResult = searchState,
                     onBillClick = onBillSelected,
                     viewModel::getPagingResult,
-                    keyword = searchState.keyword
+                    keyword = searchState.keyword,
+                    onGroupBillSelected = onGroupBillSelected
                 )
             }
         }
