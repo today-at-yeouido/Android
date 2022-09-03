@@ -12,12 +12,14 @@ import com.example.tayapp.presentation.states.GroupUiState
 import com.example.tayapp.presentation.states.SearchState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
+@HiltViewModel
 class GroupViewModel @Inject constructor(
     private val getBillGroupUseCase: GetBillGroupUseCase,
     private val savedStateHandle: SavedStateHandle

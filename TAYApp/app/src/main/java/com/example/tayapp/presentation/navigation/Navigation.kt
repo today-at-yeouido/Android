@@ -34,7 +34,8 @@ fun NavGraph(
             upPress = appState::upPress,
             appState = appState,
             onBillSelected = appState::navigateToBillDetail,
-            onGroupBillSelected = appState::navigateToGroupBill
+            onGroupBillSelected = appState::navigateToGroupBill,
+            onGroupBillScrapSelected = appState::navigateToGroupBillScrap
         )
     }
 }
@@ -44,21 +45,24 @@ private fun NavGraphBuilder.tayNavGraph(
     upPress: () -> Unit,
     appState: TayAppState,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
-    onGroupBillSelected: (Int, GroupBillParcelableModel, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit,
+    onGroupBillScrapSelected: (Int, GroupBillParcelableModel, NavBackStackEntry) -> Unit
 ) {
     initialNavigation(appState)
 
     /** nested Navigation */
-    homeNavigation(navController, upPress, onBillSelected, onGroupBillSelected)
+    homeNavigation(navController, upPress, onBillSelected, onGroupBillSelected, onGroupBillScrapSelected)
 
     detailNavigation(upPress, onGroupBillSelected)
+
+    groupBillScrapNavigation(upPress, onBillSelected)
 
     groupBillNavigation(upPress, onBillSelected)
 }
 
 private fun NavGraphBuilder.detailNavigation(
     upPress: () -> Unit,
-    onGroupBillSelected: (Int, GroupBillParcelableModel, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     composable(
         "${Destinations.DETAIL}/{${Destinations.BILL_ID}}",
@@ -70,7 +74,7 @@ private fun NavGraphBuilder.detailNavigation(
     }
 }
 
-private fun NavGraphBuilder.groupBillNavigation(
+private fun NavGraphBuilder.groupBillScrapNavigation(
     upPress: () -> Unit,
     onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
@@ -88,6 +92,19 @@ private fun NavGraphBuilder.groupBillNavigation(
     }
 }
 
+private fun NavGraphBuilder.groupBillNavigation(
+    upPress: () -> Unit,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit
+) {
+    composable(
+        "groupID/{${Destinations.GROUP_ID}}",
+        arguments = listOf(navArgument(Destinations.GROUP_ID) { type = NavType.IntType })
+    ) { backStackEntry ->
+
+        GroupBill(upPress, onBillSelected = {id -> onBillSelected(id, backStackEntry)})
+    }
+}
+
 private fun NavGraphBuilder.initialNavigation(appState: TayAppState) {
     navigation(
         route = AppGraph.INITIAL_GRAPH, startDestination = Destinations.SPLASH
@@ -100,7 +117,9 @@ private fun NavGraphBuilder.homeNavigation(
     navController: NavController,
     upPress: () -> Unit,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
-    onGroupBillSelected: (Int,GroupBillParcelableModel, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit,
+    onGroupBillScrapSelected: (Int,GroupBillParcelableModel, NavBackStackEntry) -> Unit
+
 ) {
     navigation(
         route = AppGraph.HOME_GRAPH, startDestination = BottomBarTabs.Feed.route
@@ -109,7 +128,8 @@ private fun NavGraphBuilder.homeNavigation(
             navController,
             upPress = upPress,
             onBillSelected = onBillSelected,
-            onGroupBillSelected = onGroupBillSelected
+            onGroupBillSelected = onGroupBillSelected,
+            onGroupBillScrapSelected = onGroupBillScrapSelected
         )
     }
 }
@@ -150,7 +170,8 @@ fun NavGraphBuilder.homeGraph(
     navController: NavController,
     upPress: () -> Unit,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
-    onGroupBillSelected: (Int,GroupBillParcelableModel, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit,
+    onGroupBillScrapSelected: (Int,GroupBillParcelableModel, NavBackStackEntry) -> Unit
 ) {
     composable(route = BottomBarTabs.Feed.route) { from ->
         Feed(
@@ -162,13 +183,13 @@ fun NavGraphBuilder.homeGraph(
     composable(BottomBarTabs.SCRAP.route) { from ->
         Scrap(
             onBillSelected = { id -> onBillSelected(id, from) },
-            onGroupBillSelected = {id, list -> onGroupBillSelected(id, list, from)}
+            onGroupBillScrapSelected = {id, list -> onGroupBillScrapSelected(id, list, from)}
         )
     }
     composable(BottomBarTabs.SEARCH.route) { from ->
         Search(
             onBillSelected = { id -> onBillSelected(id, from) },
-            onGroupBillSelected = {id, list -> onGroupBillSelected(id, list, from)}
+            onGroupBillSelected = {id -> onGroupBillSelected(id,  from)}
         )
     }
 

@@ -17,7 +17,7 @@ import com.example.tayapp.presentation.viewmodels.SearchViewModel
 @Composable
 fun Search(
     onBillSelected: (Int) -> Unit,
-    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit
+    onGroupBillSelected: (Int) -> Unit
 ) {
 
     val viewModel = hiltViewModel<SearchViewModel>()

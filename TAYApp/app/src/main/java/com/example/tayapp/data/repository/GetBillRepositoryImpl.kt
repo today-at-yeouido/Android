@@ -15,7 +15,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillHome()
     }
 
-    override suspend fun getBillDetail(billId : Int): Response<DetailBillDto> {
+    override suspend fun getBillDetail(billId: Int): Response<DetailBillDto> {
         return billApi.getBillDetail(billId)
     }
 
@@ -43,7 +43,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillSearch(query, page)
     }
 
-    override suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>{
+    override suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto> {
         return billApi.postAddScrap(AddScrapRequestDto(bill))
     }
 
@@ -55,7 +55,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillScrap()
     }
 
-    override suspend fun getAutoComplete(query: String): Response<AutoCompleteDto>{
+    override suspend fun getAutoComplete(query: String): Response<AutoCompleteDto> {
         return billApi.getAutoComplete(query)
     }
 

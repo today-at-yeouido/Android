@@ -30,7 +30,7 @@ fun SearchResults(
     onBillClick: (Int) -> Unit,
     loadPaging: () -> Unit,
     keyword: String,
-    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit
+    onGroupBillSelected: (Int) -> Unit
 ) {
 
     if (searchResult.isLoading) {
@@ -66,7 +66,7 @@ fun SearchResults(
                             bill = bill,
                             onLineClick = onBillClick,
                             keyword = keyword,
-                            onButtonClick = onGroupBillSelected
+                            onButtonClick = {onGroupBillSelected(bill.groupId)}
                         )
                     }
                 }

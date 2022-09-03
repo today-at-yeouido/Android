@@ -74,7 +74,14 @@ class TayAppState(
         }
     }
 
-    fun navigateToGroupBill(groupId: Int, billList: GroupBillParcelableModel, from: NavBackStackEntry) {
+    fun navigateToGroupBill(groupId: Int, from: NavBackStackEntry) {
+
+        if (from.lifecycleIsResumed()) {
+            navController.navigate("groupID/$groupId")
+        }
+    }
+
+    fun navigateToGroupBillScrap(groupId: Int, billList: GroupBillParcelableModel, from: NavBackStackEntry) {
 
         val groupBill = Uri.encode(Gson().toJson(billList))
         if (from.lifecycleIsResumed()) {

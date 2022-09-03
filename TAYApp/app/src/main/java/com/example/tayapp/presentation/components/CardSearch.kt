@@ -63,7 +63,7 @@ fun CardMultiple(
     bill: ScrapBillDto,
     onLineClick:(Int) -> Unit,
     keyword: String,
-    onButtonClick:(Int, GroupBillParcelableModel) -> Unit
+    onButtonClick:()-> Unit
 ){
 
     TayCard(
@@ -129,7 +129,7 @@ fun CardMultiple(
                 }
 
                 TayButton(
-                    onClick = {onButtonClick(bill.groupId, GroupBillParcelableModel(bill.bills))},
+                    onClick = onButtonClick,
                     backgroundColor = TayAppTheme.colors.background,
                     contentColor = TayAppTheme.colors.headText,
                     modifier = Modifier.fillMaxWidth(),

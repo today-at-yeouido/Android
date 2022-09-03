@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun Scrap(
     onBillSelected: (Int) -> Unit,
-    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit
+    onGroupBillScrapSelected: (Int, GroupBillParcelableModel) -> Unit
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -84,7 +84,7 @@ fun Scrap(
                             coroutineScope,
                             scaffoldState,
                             scrollState,
-                            onGroupBillSelected
+                            onGroupBillScrapSelected
                         )
                     }
                 } else {
@@ -111,7 +111,7 @@ private fun ScrapScreen(
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState,
     scrollState: LazyListState,
-    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit
+    onGroupBillScrapSelected: (Int, GroupBillParcelableModel) -> Unit
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
@@ -168,7 +168,9 @@ private fun ScrapScreen(
                         bill = bill,
                         onLineClick = onBillSelected,
                         keyword = "",
-                        onButtonClick = onGroupBillSelected
+                        onButtonClick = {
+                            onGroupBillScrapSelected(bill.groupId, GroupBillParcelableModel(bill.bills)
+                        )}
                     )
                 }
             }

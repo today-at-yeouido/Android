@@ -45,7 +45,6 @@ fun GroupBill(
     onBillSelected: (Int) -> Unit = {},
     bill: List<ScrapBillItemDto>
 ){
-
     Column {
         TayTopAppBarWithBack(string = "입법현황 모두 보기", upPress = upPress)
 
@@ -58,7 +57,7 @@ fun GroupBill(
                     .fillMaxSize()
             ) {
                 item {
-                    GroupBillHeader(title = "중대재해 처벌 등에 관한 법률", view = 123)
+                    GroupBillHeader(title = "", view = 123)
                     TayCard(
                         modifier = Modifier.padding(KeyLine)
                     ) {
