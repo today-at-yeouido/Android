@@ -20,6 +20,7 @@ object Constants {
     const val GET_BILL_SEARCH = "bill/search/"
     const val GET_AUTOCOMPLETE = "bill/autocomplete/"
     const val GET_RECCOMEND_SEARCH = "bill/test/recommend-keyword/"
+    const val GET_BILL_GROUP = "bill/group/"
 
     const val POST_ADD_SCRAP ="bill/scrap/add/"
     const val POST_DELETE_SCRAP ="bill/scrap/delete/"

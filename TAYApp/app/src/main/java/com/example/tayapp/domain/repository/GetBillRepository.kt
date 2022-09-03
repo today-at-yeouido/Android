@@ -24,6 +24,7 @@ interface GetBillRepository {
     suspend fun getBillUserRecommended(): Response<List<RecommendBillDto>>
     suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
     suspend fun getBillSearch(query: String, page: Int): Response<List<ScrapBillDto>>
+    suspend fun getBillGroup(groupid: String): Response<ScrapBillDto>
 
     suspend fun postAddScrap(bill: Int): Response<AddScrapResponseDto>
     suspend fun postDeleteScrap(bill: Int): Response<DeleteScrapResponseDto>

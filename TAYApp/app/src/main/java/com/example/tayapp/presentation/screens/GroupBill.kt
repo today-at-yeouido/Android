@@ -7,20 +7,37 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.presentation.components.LineSearchedBill
 import com.example.tayapp.presentation.components.TayCard
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
+import com.example.tayapp.presentation.states.GroupUiState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
+import com.example.tayapp.presentation.viewmodels.DetailViewModel
+import com.example.tayapp.presentation.viewmodels.GroupViewModel
 
+
+@Composable
+fun GroupBill(
+    upPress: () -> Unit = {},
+    onBillSelected: (Int) -> Unit = {}
+){
+    val viewModel = hiltViewModel<GroupViewModel>()
+    val groupState by viewModel.groupState.collectAsState()
+
+    GroupBill(upPress, onBillSelected, groupState.bills)
+}
 
 @Composable
 fun GroupBill(

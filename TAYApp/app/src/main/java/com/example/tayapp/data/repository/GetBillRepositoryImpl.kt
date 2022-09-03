@@ -62,4 +62,8 @@ class GetBillRepositoryImpl @Inject
     override suspend fun getRecommendSearch(): Response<RecommendSearchDto> {
         return billApi.getRecommendSearch()
     }
+
+    override suspend fun getBillGroup(groupid: String): Response<ScrapBillDto> {
+        return billApi.getBillGroup(groupid)
+    }
 }

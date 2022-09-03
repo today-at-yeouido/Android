@@ -2,6 +2,7 @@ package com.example.tayapp.data.remote
 
 import com.example.tayapp.data.remote.Constants.GET_AUTOCOMPLETE
 import com.example.tayapp.data.remote.Constants.GET_BILL_DETAIL
+import com.example.tayapp.data.remote.Constants.GET_BILL_GROUP
 import com.example.tayapp.data.remote.Constants.GET_BILL_HOME
 import com.example.tayapp.data.remote.Constants.GET_BILL_MOST_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_RECENT
@@ -74,4 +75,9 @@ interface BillApi {
 
     @GET(GET_RECCOMEND_SEARCH)
     suspend fun getRecommendSearch(): Response<RecommendSearchDto>
+
+    @GET(GET_BILL_GROUP)
+    suspend fun getBillGroup(
+        @Query("groupid") groupid: String,
+    ): Response<ScrapBillDto>
 }
