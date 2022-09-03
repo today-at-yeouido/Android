@@ -11,7 +11,8 @@ import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class GroupBillParcelableModel(
-    val BillList: @RawValue List<ScrapBillItemDto>
+    val billList: @RawValue List<ScrapBillItemDto>,
+    val billName: String
 ): Parcelable {
     companion object NavigationType : NavType<GroupBillParcelableModel>(isNullableAllowed = false) {
         override fun get(bundle: Bundle, key: String): GroupBillParcelableModel? {

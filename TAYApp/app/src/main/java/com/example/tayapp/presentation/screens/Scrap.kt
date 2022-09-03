@@ -169,7 +169,7 @@ private fun ScrapScreen(
                         onLineClick = onBillSelected,
                         keyword = "",
                         onButtonClick = {
-                            onGroupBillScrapSelected(bill.groupId, GroupBillParcelableModel(bill.bills)
+                            onGroupBillScrapSelected(bill.groupId, GroupBillParcelableModel(bill.bills, bill.billName)
                         )}
                     )
                 }

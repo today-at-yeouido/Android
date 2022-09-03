@@ -88,7 +88,7 @@ private fun NavGraphBuilder.groupBillScrapNavigation(
         val arguments = requireNotNull(backStackEntry.arguments)
         val groupBill = arguments.getParcelable<GroupBillParcelableModel>(GROUP_BILL)!!
 
-        GroupBill(upPress, onBillSelected = {id -> onBillSelected(id, backStackEntry)}, groupBill.BillList)
+        GroupBill(upPress, onBillSelected = {id -> onBillSelected(id, backStackEntry)}, groupBill.billList, groupBill.billName)
     }
 }
 

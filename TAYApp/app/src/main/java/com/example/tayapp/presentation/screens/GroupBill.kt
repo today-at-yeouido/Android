@@ -36,14 +36,15 @@ fun GroupBill(
     val viewModel = hiltViewModel<GroupViewModel>()
     val groupState by viewModel.groupState.collectAsState()
 
-    GroupBill(upPress, onBillSelected, groupState.bills)
+    GroupBill(upPress, onBillSelected, groupState.bills, groupState.billName)
 }
 
 @Composable
 fun GroupBill(
     upPress: () -> Unit = {},
     onBillSelected: (Int) -> Unit = {},
-    bill: List<ScrapBillItemDto>
+    bill: List<ScrapBillItemDto>,
+    billName: String
 ){
     Column {
         TayTopAppBarWithBack(string = "입법현황 모두 보기", upPress = upPress)
@@ -57,7 +58,7 @@ fun GroupBill(
                     .fillMaxSize()
             ) {
                 item {
-                    GroupBillHeader(title = "", view = 123)
+                    GroupBillHeader(title = billName, view = 123)
                     TayCard(
                         modifier = Modifier.padding(KeyLine)
                     ) {
