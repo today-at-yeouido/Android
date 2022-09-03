@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.screens.*
 import com.example.tayapp.presentation.screens.Profile.*
@@ -43,21 +44,21 @@ private fun NavGraphBuilder.tayNavGraph(
     upPress: () -> Unit,
     appState: TayAppState,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
-    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int, GroupBillParcelableModel, NavBackStackEntry) -> Unit
 ) {
     initialNavigation(appState)
 
     /** nested Navigation */
     homeNavigation(navController, upPress, onBillSelected, onGroupBillSelected)
 
-    detailNavigation(upPress, onBillSelected)
+    detailNavigation(upPress, onGroupBillSelected)
 
     groupBillNavigation(upPress, onBillSelected)
 }
 
 private fun NavGraphBuilder.detailNavigation(
     upPress: () -> Unit,
-    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int, GroupBillParcelableModel, NavBackStackEntry) -> Unit
 ) {
     composable(
         "${Destinations.DETAIL}/{${Destinations.BILL_ID}}",
@@ -65,7 +66,7 @@ private fun NavGraphBuilder.detailNavigation(
     ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
         val billId = arguments.getInt(Destinations.BILL_ID)
-        BillDetail(billId = billId, upPress, onGroupBillSelected = { id -> onGroupBillSelected(id, backStackEntry) })
+        BillDetail(billId = billId, upPress, onGroupBillSelected = {})
     }
 }
 
@@ -74,11 +75,16 @@ private fun NavGraphBuilder.groupBillNavigation(
     onBillSelected: (Int, NavBackStackEntry) -> Unit
 ) {
     composable(
-        "${Destinations.GROUP_ID}/{${Destinations.GROUP_ID}}",
-        arguments = listOf(navArgument(Destinations.GROUP_ID) { type = NavType.IntType })
+        "groupID/{${Destinations.GROUP_ID}}/{${GROUP_BILL}}",
+        arguments = listOf(
+            navArgument(Destinations.GROUP_ID) { type = NavType.IntType },
+            navArgument(GROUP_BILL){ type = GroupBillParcelableModel.NavigationType}
+        )
     ) { backStackEntry ->
         val arguments = requireNotNull(backStackEntry.arguments)
-        GroupBill(upPress, onBillSelected = {id -> onBillSelected(id, backStackEntry)})
+        val groupBill = arguments.getParcelable<GroupBillParcelableModel>(GROUP_BILL)!!
+
+        GroupBill(upPress, onBillSelected = {id -> onBillSelected(id, backStackEntry)}, groupBill.BillList)
     }
 }
 
@@ -94,7 +100,7 @@ private fun NavGraphBuilder.homeNavigation(
     navController: NavController,
     upPress: () -> Unit,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
-    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int,GroupBillParcelableModel, NavBackStackEntry) -> Unit
 ) {
     navigation(
         route = AppGraph.HOME_GRAPH, startDestination = BottomBarTabs.Feed.route
@@ -144,7 +150,7 @@ fun NavGraphBuilder.homeGraph(
     navController: NavController,
     upPress: () -> Unit,
     onBillSelected: (Int, NavBackStackEntry) -> Unit,
-    onGroupBillSelected: (Int, NavBackStackEntry) -> Unit
+    onGroupBillSelected: (Int,GroupBillParcelableModel, NavBackStackEntry) -> Unit
 ) {
     composable(route = BottomBarTabs.Feed.route) { from ->
         Feed(
@@ -156,13 +162,13 @@ fun NavGraphBuilder.homeGraph(
     composable(BottomBarTabs.SCRAP.route) { from ->
         Scrap(
             onBillSelected = { id -> onBillSelected(id, from) },
-            onGroupBillSelected = {id -> onGroupBillSelected(id, from)}
+            onGroupBillSelected = {id, list -> onGroupBillSelected(id, list, from)}
         )
     }
     composable(BottomBarTabs.SEARCH.route) { from ->
         Search(
             onBillSelected = { id -> onBillSelected(id, from) },
-            onGroupBillSelected = {id -> onGroupBillSelected(id, from)}
+            onGroupBillSelected = {id, list -> onGroupBillSelected(id, list, from)}
         )
     }
 

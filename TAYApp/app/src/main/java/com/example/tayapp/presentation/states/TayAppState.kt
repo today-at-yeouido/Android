@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.states
 
+import android.net.Uri
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -10,11 +11,14 @@ import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.presentation.components.BottomBarTabs
 import com.example.tayapp.presentation.navigation.BottomBarDestination
 import com.example.tayapp.presentation.navigation.Destinations
+import com.example.tayapp.presentation.navigation.GROUP_BILL
+import com.example.tayapp.presentation.navigation.GroupBillParcelableModel
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 @Composable
@@ -70,10 +74,11 @@ class TayAppState(
         }
     }
 
-    fun navigateToGroupBill(groupId: Int, from: NavBackStackEntry) {
-        // In order to discard duplicated navigation events, we check the Lifecycle
+    fun navigateToGroupBill(groupId: Int, billList: GroupBillParcelableModel, from: NavBackStackEntry) {
+
+        val groupBill = Uri.encode(Gson().toJson(billList))
         if (from.lifecycleIsResumed()) {
-            navController.navigate("${Destinations.GROUP_ID}/$groupId")
+            navController.navigate("groupID/$groupId/${groupBill}")
         }
     }
 

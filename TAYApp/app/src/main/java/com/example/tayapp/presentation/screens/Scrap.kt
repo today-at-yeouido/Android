@@ -19,7 +19,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.presentation.components.*
+import com.example.tayapp.presentation.navigation.GroupBillParcelableModel
 import com.example.tayapp.presentation.states.ScrapState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.KeyLine
@@ -35,7 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun Scrap(
     onBillSelected: (Int) -> Unit,
-    onGroupBillSelected: (Int) -> Unit
+    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -81,7 +83,8 @@ fun Scrap(
                             onBillSelected,
                             coroutineScope,
                             scaffoldState,
-                            scrollState
+                            scrollState,
+                            onGroupBillSelected
                         )
                     }
                 } else {
@@ -107,7 +110,8 @@ private fun ScrapScreen(
     onBillSelected: (Int) -> Unit,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState,
-    scrollState: LazyListState
+    scrollState: LazyListState,
+    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
@@ -163,7 +167,8 @@ private fun ScrapScreen(
                     CardMultiple(
                         bill = bill,
                         onLineClick = onBillSelected,
-                        keyword = ""
+                        keyword = "",
+                        onButtonClick = onGroupBillSelected
                     )
                 }
             }
