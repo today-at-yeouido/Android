@@ -11,6 +11,7 @@ import com.example.tayapp.domain.use_case.GetHomeCommitteeBillUseCase
 import com.example.tayapp.domain.use_case.GetMostViewedUseCase
 import com.example.tayapp.domain.use_case.GetRecentBillUseCase
 import com.example.tayapp.domain.use_case.GetRecommendBillUseCase
+import com.example.tayapp.presentation.components.datalist
 import com.example.tayapp.presentation.states.FeedUiState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
@@ -27,8 +28,8 @@ constructor(
     private val getHomeCommitteeBillUseCase: GetHomeCommitteeBillUseCase
 ) : ViewModel() {
 
-    private val _selectedCategory = MutableStateFlow<String?>("전체")
-    val selectedCategory: StateFlow<String?> get() = _selectedCategory
+    private val _selectedCategory = MutableStateFlow<Int?>(0)
+    val selectedCategory: StateFlow<Int?> get() = _selectedCategory
 
     private val _isExpanded = MutableStateFlow<Boolean?>(false)
     val isExpanded: StateFlow<Boolean?> get() = _isExpanded
@@ -70,7 +71,7 @@ constructor(
     }
 
     fun tryGetRecentBill(){
-        if(_selectedCategory.value == "전체"){
+        if(_selectedCategory.value == 0){
             getRecentBill()
         }else{
             getBillCommittee()
@@ -129,12 +130,12 @@ constructor(
     }
 
 
-    fun onCategorySelected(category: String) {
+    fun onCategorySelected(category: Int) {
         _selectedCategory.value = category
         page.value = 1
         endReached.value = false
         _recentBill.value = emptyList()
-        if(_selectedCategory.value == "전체"){
+        if(_selectedCategory.value == 0){
             getMostViewed()
             getRecentBill()
         }else{
@@ -143,7 +144,7 @@ constructor(
     }
 
     private fun getBillCommittee(){
-        getHomeCommitteeBillUseCase(page.value,"정무위원회").onEach { result ->
+        getHomeCommitteeBillUseCase(page.value, datalist[selectedCategory.value!!][0]).onEach { result ->
             when(result) {
                 is Resource.Success -> {
                     _recentBill.value = _recentBill.value + result.data?.recentCreatedBill as List<BillDto>
