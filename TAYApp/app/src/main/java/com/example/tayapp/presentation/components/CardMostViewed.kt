@@ -30,6 +30,7 @@ import com.example.tayapp.presentation.ui.theme.CardNewsShape
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_card_yellow
+import com.example.tayapp.presentation.utils.StateColor
 import com.example.tayapp.presentation.utils.TayEmoji
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.utils.matchWidth
@@ -106,7 +107,7 @@ private fun MostViewedRowCard(billItem: MostViewedBill) {
     Column(
         modifier = Modifier
             .size(MainActivity.displayWidth - KeyLine.twice(), MostViewedValues.Card_Height)
-            .background(color = lm_card_yellow, shape = CardNewsShape.large),
+            .background(color = StateColor(status = billItem.bill.status), shape = CardNewsShape.large),
     ) {
         Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
         CardContentLayout(bill = billItem.bill)
@@ -188,6 +189,7 @@ private fun CardContent(bill: MostViewedBill.Bill) {
                 bill.billName,
                 color = TayAppTheme.colors.background,
                 fontSize = 18.textDp,
+                fontWeight = FontWeight.Bold,
                 lineHeight = 1.3.em,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,

@@ -26,6 +26,7 @@ import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray600
+import com.example.tayapp.presentation.utils.StateColor
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
 import kotlinx.coroutines.launch
@@ -155,7 +156,7 @@ fun DetailHeader(bill: DetailBill, onProgressClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                TayAppTheme.colors.success2,
+                StateColor(status = bill.status),
                 RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
             )
             .padding(bottom = 20.dp),
