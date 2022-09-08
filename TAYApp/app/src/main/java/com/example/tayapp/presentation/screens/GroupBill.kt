@@ -65,7 +65,8 @@ fun GroupBill(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = Card_Inner_Padding, vertical = 18.dp)
+                                .padding(horizontal = Card_Inner_Padding, vertical = 18.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Text(
                                 text = "입법 현황",
