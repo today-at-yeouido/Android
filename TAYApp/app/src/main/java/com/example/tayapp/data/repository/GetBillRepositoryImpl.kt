@@ -39,7 +39,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillUserRecentViewed()
     }
 
-    override suspend fun getBillHomeCommittee(page: Int, committee: String): Response<List<HomeCommitteeBillDto>> {
+    override suspend fun getBillHomeCommittee(page: Int, committee: String): Response<HomeCommitteeBillDto> {
         return billApi.getBillHomeCommittee(page, committee)
     }
 

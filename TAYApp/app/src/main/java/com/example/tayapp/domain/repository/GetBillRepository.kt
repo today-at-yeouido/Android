@@ -23,7 +23,7 @@ interface GetBillRepository {
     suspend fun getBillMostViewed(): Response<List<MostViewedBillDto>>
     suspend fun getBillUserRecommended(): Response<List<RecommendBillDto>>
     suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
-    suspend fun getBillHomeCommittee(page: Int, committee: String) : Response<List<HomeCommitteeBillDto>>
+    suspend fun getBillHomeCommittee(page: Int, committee: String) : Response<HomeCommitteeBillDto>
     suspend fun getBillSearch(query: String, page: Int): Response<List<ScrapBillDto>>
     suspend fun getBillGroup(groupid: String): Response<ScrapBillDto>
 

@@ -3,8 +3,12 @@ package com.example.tayapp.presentation.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.tayapp.data.remote.dto.bill.RecommendBillDto
+import com.example.tayapp.domain.model.toDomain
+import com.example.tayapp.domain.use_case.GetHomeCommitteeBillUseCase
 import com.example.tayapp.domain.use_case.GetMostViewedUseCase
 import com.example.tayapp.domain.use_case.GetRecentBillUseCase
 import com.example.tayapp.domain.use_case.GetRecommendBillUseCase
@@ -20,7 +24,8 @@ class FeedViewModel @Inject
 constructor(
     private val getMostViewedUseCase: GetMostViewedUseCase,
     private val getRecentBillUseCase: GetRecentBillUseCase,
-    private val getRecommendBillUseCase: GetRecommendBillUseCase
+    private val getRecommendBillUseCase: GetRecommendBillUseCase,
+    private val getHomeCommitteeBillUseCase: GetHomeCommitteeBillUseCase
 ) : ViewModel() {
 
     private val _selectedCategory = MutableStateFlow<String?>("전체")
@@ -32,10 +37,13 @@ constructor(
     private val _state = MutableStateFlow(FeedUiState())
     val state: StateFlow<FeedUiState> get() = _state
 
-    val recentBill = getRecentBillUseCase().cachedIn(viewModelScope)
+    var recentBill = getRecentBillUseCase().cachedIn(viewModelScope)
 
     private var _recommendBill = MutableStateFlow<List<RecommendBillDto>>(emptyList())
     val recommendBill: StateFlow<List<RecommendBillDto>> get() = _recommendBill
+
+    private var _recentBill = MutableStateFlow<List<RecommendBillDto>>(emptyList())
+    val recentBill2: StateFlow<List<RecommendBillDto>> get() = _recentBill
 
     init {
         getMostViewed()
@@ -50,6 +58,10 @@ constructor(
 
     fun tryRecommendBill() {
         getRecommendBill()
+    }
+
+    fun tryGetCommitteeBill(){
+        getBillCommittee()
     }
 
     private fun getMostViewed() {
@@ -89,6 +101,32 @@ constructor(
 
     fun onCategorySelected(category: String) {
         _selectedCategory.value = category
+        tryGetCommitteeBill()
+    }
+
+    private fun getBillCommittee(){
+        getHomeCommitteeBillUseCase(1,"정무위원회").onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            bill = result.data?.mostViewedBill?.map{it.toDomain()} ?: emptyList(),
+                            isLoading = false
+                        )
+                    }
+                }
+                is Resource.Error -> {
+                    _state.value =
+                        FeedUiState(error = result.message ?: "An unexpected error")
+                }
+                is Resource.Loading -> {
+                    _state.value = FeedUiState(isLoading = true)
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onExpandChange(isExpanded: Boolean) {

@@ -60,7 +60,7 @@ interface BillApi {
     suspend fun getBillHomeCommittee(
         @Query("page") page: Int,
         @Query("committee") committee : String
-    ): Response<List<HomeCommitteeBillDto>>
+    ): Response<HomeCommitteeBillDto>
 
     @POST(POST_ADD_SCRAP)
     suspend fun postAddScrap(
