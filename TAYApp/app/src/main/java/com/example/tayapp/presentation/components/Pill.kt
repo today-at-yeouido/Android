@@ -53,8 +53,8 @@ fun Pill(
     when (text) {
         "제정안", "개정안", "일부개정안", "폐지안" -> {
             Pill(
-                textColor = TayAppTheme.colors.subduedText,
-                backgroundColor = TayAppTheme.colors.background,
+                textColor = lm_gray600,
+                backgroundColor = lm_gray000,
                 border = BorderStroke(1.dp, TayAppTheme.colors.layer3)
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
@@ -62,7 +62,7 @@ fun Pill(
         }
         "접수", "발의", "소관위접수" -> {
             Pill(
-                textColor = TayAppTheme.colors.bodyText,
+                textColor = lm_gray700,
                 backgroundColor = TayAppTheme.colors.layer3
             ) {
                 Text("발의", fontSize = fontSize, fontWeight = FontWeight.Normal)
@@ -70,7 +70,7 @@ fun Pill(
         }
         "심사", "심의", "정부이송" -> {
             Pill(
-                textColor = TayAppTheme.colors.bodyText,
+                textColor = lm_gray700,
                 backgroundColor = TayAppTheme.colors.caution1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
@@ -78,7 +78,7 @@ fun Pill(
         }
         "가결", "공포" -> {
             Pill(
-                textColor = TayAppTheme.colors.bodyText,
+                textColor = lm_gray700,
                 backgroundColor = TayAppTheme.colors.success1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
@@ -86,7 +86,7 @@ fun Pill(
         }
         "대안", "부결", "철회", "폐기" -> {
             Pill(
-                textColor = TayAppTheme.colors.background,
+                textColor = lm_gray700,
                 backgroundColor = TayAppTheme.colors.danger1
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
