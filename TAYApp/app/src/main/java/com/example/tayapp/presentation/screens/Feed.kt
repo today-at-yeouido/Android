@@ -88,43 +88,46 @@ fun Feed(
                             CardMostViewed(items = mostViewed)
                             Spacer(modifier = Modifier.height(40.dp))
 
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Title(
-                                    "사용자 맞춤 추천법안",
-                                    modifier = Modifier
-                                        .padding(vertical = 0.dp, horizontal = KeyLine)
-                                )
-                                IconButton(
-                                    onClick = viewModel::tryRecommendBill,
-                                    modifier = Modifier
-                                        .padding(end = KeyLine)
-                                        .size(40.dp)
-                                        .border(1.dp, TayAppTheme.colors.border, CircleShape)
+                            if(selectedCategory == 0){
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Refresh,
-                                        contentDescription = "refresh",
-                                        modifier = Modifier.size(24.dp)
+                                    Title(
+                                        "사용자 맞춤 추천법안",
+                                        modifier = Modifier
+                                            .padding(vertical = 0.dp, horizontal = KeyLine)
                                     )
+                                    IconButton(
+                                        onClick = viewModel::tryRecommendBill,
+                                        modifier = Modifier
+                                            .padding(end = KeyLine)
+                                            .size(40.dp)
+                                            .border(1.dp, TayAppTheme.colors.border, CircleShape)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Refresh,
+                                            contentDescription = "refresh",
+                                            modifier = Modifier.size(24.dp),
+                                            tint = TayAppTheme.colors.icon
+                                        )
+                                    }
                                 }
+                                CardsUser(
+                                    onClick = onBillSelected,
+                                    navigateToLogin = navigateToLogin,
+                                    navigateToFavorite = navigateToFavorite,
+                                    recommendBill = recommendBill
+                                )
+                                Spacer(modifier = Modifier.height(40.dp))
                             }
-                            CardsUser(
-                                onClick = onBillSelected,
-                                navigateToLogin = navigateToLogin,
-                                navigateToFavorite = navigateToFavorite,
-                                recommendBill = recommendBill
-                            )
-                            Spacer(modifier = Modifier.height(40.dp))
-
                             Title(
-                                "최근 발의 법안 ${it}",
+                                "최근 발의 법안",
                                 modifier = Modifier
                                     .padding(vertical = 7.dp, horizontal = KeyLine)
                             )
+
                         }
 
                         CardBill(
@@ -135,6 +138,7 @@ fun Feed(
 
                     }
                 }
+                it
             }
         } else {
             NetworkErrorScreen{
