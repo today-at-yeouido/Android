@@ -85,7 +85,7 @@ fun Feed(
                             viewModel.tryGetRecentBill()
                         }
                         if (index == 0) {
-                            CardMostViewed(items = mostViewed)
+                            CardMostViewed(items = mostViewed, onBillSelected)
                             Spacer(modifier = Modifier.height(40.dp))
 
                             if(selectedCategory == 0){
