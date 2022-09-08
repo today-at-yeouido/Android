@@ -3,10 +3,9 @@ package com.example.tayapp.presentation.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
+import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.bill.RecommendBillDto
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.toDomain
 import com.example.tayapp.domain.use_case.GetHomeCommitteeBillUseCase
 import com.example.tayapp.domain.use_case.GetMostViewedUseCase
@@ -37,16 +36,22 @@ constructor(
     private val _state = MutableStateFlow(FeedUiState())
     val state: StateFlow<FeedUiState> get() = _state
 
-    var recentBill = getRecentBillUseCase().cachedIn(viewModelScope)
-
     private var _recommendBill = MutableStateFlow<List<RecommendBillDto>>(emptyList())
     val recommendBill: StateFlow<List<RecommendBillDto>> get() = _recommendBill
 
-    private var _recentBill = MutableStateFlow<List<RecommendBillDto>>(emptyList())
-    val recentBill2: StateFlow<List<RecommendBillDto>> get() = _recentBill
+    private var _recentBill = MutableStateFlow<List<BillDto>>(emptyList())
+    val recentBill: StateFlow<List<BillDto>> get() = _recentBill
+
+    var page = MutableStateFlow<Int>(1)
+        private set
+    var endReached = MutableStateFlow<Boolean>(false)
+        private set
+    var pagingLoading = MutableStateFlow<Boolean>(false)
+        private set
 
     init {
         getMostViewed()
+        getRecentBill()
         if(UserState.isLogin()){
             getRecommendBill()
         }
@@ -64,6 +69,14 @@ constructor(
         getBillCommittee()
     }
 
+    fun tryGetRecentBill(){
+        if(_selectedCategory.value == "전체"){
+            getRecentBill()
+        }else{
+            getBillCommittee()
+        }
+    }
+
     private fun getMostViewed() {
         getMostViewedUseCase().onEach { result ->
             when (result) {
@@ -71,10 +84,12 @@ constructor(
                     _state.value = FeedUiState(
                         bill = result.data ?: emptyList()
                     )
+                    endReached.value = false
                 }
                 is Resource.Error -> {
                     _state.value =
                         FeedUiState(error = result.message ?: "An unexpected error")
+                    endReached.value = true
                 }
                 is Resource.Loading -> {
                     _state.value = FeedUiState(isLoading = true)
@@ -99,28 +114,57 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
+    private fun getRecentBill(){
+        getRecentBillUseCase(page.value).onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    _recentBill.value = _recentBill.value + result.data as List<BillDto>
+                    page.value++
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+
     fun onCategorySelected(category: String) {
         _selectedCategory.value = category
-        tryGetCommitteeBill()
+        page.value = 1
+        endReached.value = false
+        _recentBill.value = emptyList()
+        if(_selectedCategory.value == "전체"){
+            getMostViewed()
+            getRecentBill()
+        }else{
+            getBillCommittee()
+        }
     }
 
     private fun getBillCommittee(){
-        getHomeCommitteeBillUseCase(1,"정무위원회").onEach { result ->
+        getHomeCommitteeBillUseCase(page.value,"정무위원회").onEach { result ->
             when(result) {
                 is Resource.Success -> {
+                    _recentBill.value = _recentBill.value + result.data?.recentCreatedBill as List<BillDto>
+                    page.value++
                     _state.update {
                         it.copy(
                             bill = result.data?.mostViewedBill?.map{it.toDomain()} ?: emptyList(),
                             isLoading = false
                         )
                     }
+                    endReached.value= false
+                    pagingLoading.value = false
+                    Log.d("asdf2",pagingLoading.toString())
                 }
                 is Resource.Error -> {
                     _state.value =
                         FeedUiState(error = result.message ?: "An unexpected error")
+                    endReached.value = true
                 }
                 is Resource.Loading -> {
-                    _state.value = FeedUiState(isLoading = true)
+                    pagingLoading.value = true
                 }
                 is Resource.NetworkConnectionError -> {
                     UserState.network = false
