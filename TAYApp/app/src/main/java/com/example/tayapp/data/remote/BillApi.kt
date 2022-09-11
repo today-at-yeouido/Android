@@ -4,6 +4,7 @@ import com.example.tayapp.data.remote.Constants.GET_AUTOCOMPLETE
 import com.example.tayapp.data.remote.Constants.GET_BILL_DETAIL
 import com.example.tayapp.data.remote.Constants.GET_BILL_GROUP
 import com.example.tayapp.data.remote.Constants.GET_BILL_HOME
+import com.example.tayapp.data.remote.Constants.GET_BILL_HOME_COMMITTEE
 import com.example.tayapp.data.remote.Constants.GET_BILL_MOST_VIEWED
 import com.example.tayapp.data.remote.Constants.GET_BILL_RECENT
 import com.example.tayapp.data.remote.Constants.GET_BILL_SCRAP
@@ -37,7 +38,7 @@ interface BillApi {
 
     @GET(GET_BILL_RECENT)
     suspend fun getBillRecent(
-        @Query("page") page: Int = 0
+        @Query("page") page: Int
     ): Response<List<BillDto>>
 
     @GET(GET_BILL_SEARCH)
@@ -54,6 +55,12 @@ interface BillApi {
 
     @GET(GET_BILL_USER_RECENT_VIEWED)
     suspend fun getBillUserRecentViewed(): Response<List<BillDto>>
+
+    @GET(GET_BILL_HOME_COMMITTEE)
+    suspend fun getBillHomeCommittee(
+        @Query("page") page: Int,
+        @Query("committee") committee : String
+    ): Response<HomeCommitteeBillDto>
 
     @POST(POST_ADD_SCRAP)
     suspend fun postAddScrap(

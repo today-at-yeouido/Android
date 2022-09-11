@@ -24,7 +24,7 @@ class SearchViewModel @Inject constructor(
     private val getRecentSearchTermUseCase: RecentSearchTermUseCase,
     private val getAutoCompleteUseCase: GetAutoCompleteUseCase,
     private val getRecentViewedBillUseCase: GetRecentViewedBillUseCase,
-    private val getRecommendSearchUseCase: RecommendSearchUseCase
+    val getRecommendSearchUseCase: RecommendSearchUseCase
 ) :
     ViewModel() {
 

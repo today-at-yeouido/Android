@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,10 @@ private object MostViewedValues {
 }
 
 @Composable
-fun CardMostViewed(items: FeedUiState) {
+fun CardMostViewed(
+    items: FeedUiState,
+    onBillClick: (Int) -> Unit
+) {
     Title(
         "최근 이슈 법안",
         modifier = Modifier
@@ -66,7 +70,7 @@ fun CardMostViewed(items: FeedUiState) {
                 vertical = 7.dp,
             )
     )
-    MostViewedRow(items = items.bill)
+    MostViewedRow(items = items.bill, onBillClick)
 
 }
 
@@ -74,7 +78,8 @@ fun CardMostViewed(items: FeedUiState) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MostViewedRow(
-    items: List<MostViewedBill>
+    items: List<MostViewedBill>,
+    onBillClick: (Int) -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -97,32 +102,39 @@ fun MostViewedRow(
             itemSpacing = Card_Gap,
             contentPadding = PaddingValues(horizontal = MostViewedValues.KeyLine)
         ) { i ->
-            MostViewedRowCard(billItem = items[i])
+            MostViewedRowCard(billItem = items[i], onBillClick)
         }
     }
 }
 
 @Composable
-private fun MostViewedRowCard(billItem: MostViewedBill) {
+private fun MostViewedRowCard(
+    billItem: MostViewedBill,
+    onBillClick: (Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .size(MainActivity.displayWidth - KeyLine.twice(), MostViewedValues.Card_Height)
-            .background(color = StateColor(status = billItem.bill.status), shape = CardNewsShape.large),
+            .background(
+                color = StateColor(status = billItem.bill.status),
+                shape = CardNewsShape.large
+            ),
     ) {
         Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
-        CardContentLayout(bill = billItem.bill)
+        CardContentLayout(bill = billItem.bill, onBillClick)
         Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
         CardNewsLayout(newsList = billItem.news)
     }
 }
 
 @Composable
-private fun CardContentLayout(bill: MostViewedBill.Bill) {
+private fun CardContentLayout(bill: MostViewedBill.Bill, onBillClick: (Int) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(MostViewedValues.Content_Height)
-            .padding(horizontal = 14.matchWidth),
+            .padding(horizontal = 14.matchWidth)
+            .clickable { onBillClick(bill.id) },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CardContent(bill)
@@ -143,10 +155,11 @@ private fun CardNewsLayout(newsList: List<News>) {
         NewsSub()
         if (newsList.isEmpty()) {
             Text(
-                "관련뉴스 없음",
-                Modifier.fillMaxSize(),
-                color = TayAppTheme.colors.background,
-                fontSize = 20.sp
+                "관련 뉴스가 없습니다.",
+                modifier = Modifier.fillMaxSize().padding(top = 10.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                color = TayAppTheme.colors.disableIcon
             )
         } else {
             for (news in newsList) {

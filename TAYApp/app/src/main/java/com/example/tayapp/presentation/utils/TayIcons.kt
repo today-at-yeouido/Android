@@ -125,7 +125,9 @@ fun NotificationButton(
         )
     }
 }
-
+/**
+ * bottom padding 넣은거 수정해야함
+ */
 @Composable
 fun ExpandButton(
     isExpanded: Boolean,
@@ -137,15 +139,15 @@ fun ExpandButton(
         onCheckedChange = { onClick() }
     ) {
         Icon(
+            modifier = Modifier.padding(bottom = 15.dp),
             imageVector = if (isExpanded) TayIcons.expand_less else TayIcons.expand_more,
-            contentDescription = null
+            contentDescription = null,
+            tint = TayAppTheme.colors.icon
         )
     }
 }
 
-/**
- * home의 북마크 표시와 그 외 북마크 표시를 구분한다면 수정해야함
- */
+
 @Composable
 fun BookmarkButton(
     isBookmarked: Boolean,

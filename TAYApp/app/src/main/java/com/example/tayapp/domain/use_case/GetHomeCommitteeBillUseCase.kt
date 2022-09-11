@@ -1,10 +1,8 @@
 package com.example.tayapp.domain.use_case
 
-
 import android.util.Log
-import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.bill.HomeCommitteeBillDto
-import com.example.tayapp.domain.model.Bill
+import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.repository.GetBillRepository
 import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
 import com.example.tayapp.utils.NoConnectivityException
@@ -15,14 +13,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retryWhen
 import javax.inject.Inject
 
-class GetRecentBillUseCase @Inject constructor(
+class GetHomeCommitteeBillUseCase @Inject constructor(
     private val repository: GetBillRepository,
     private val checkLoginUseCase: CheckLoginUseCase
-) {
-    operator fun invoke(page:Int = 1): Flow<Resource<List<BillDto>>> = flow {
+){
+    operator fun invoke(page:Int = 1, committee: String): Flow<Resource<HomeCommitteeBillDto>> = flow {
         emit(Resource.Loading())
         try{
-            val response = repository.getBillRecent(page)
+            val response = repository.getBillHomeCommittee(page, committee)
             when (response.code()) {
                 200 -> {
                     emit(Resource.Success(response.body()!!))

@@ -2,10 +2,7 @@ package com.example.tayapp.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -32,26 +29,26 @@ import kotlinx.coroutines.CoroutineScope
 /**
  * Tag data model 생성시 수정
  */
-var datalist = listOf<String>(
-    "전체",
-    "행정안전${Emoij["행정안전"]}",
-    "보건복지${Emoij["보건복지"]}",
-    "국토교통${Emoij["국토교통"]}",
-    "기획재정${Emoij["기획재정"]}",
-    "환경${Emoij["환경"]}/노동${Emoij["노동"]}",
-    "교육${Emoij["교육"]}",
-    "사법${Emoij["사법"]}",
-    "문화체육관광${Emoij["문화체육관광"]}",
-    "정무${Emoij["정무"]}",
-    "농림${Emoij["농림"]}/해양${Emoij["해양"]}",
-    "과학통신${Emoij["과학통신"]}",
-    "산업기업${Emoij["산업기업"]}",
-    "정보${Emoij["정보"]}",
-    "외교통일${Emoij["외교통일"]}",
-    "여성가족${Emoij["여성가족"]}",
-    "국방${Emoij["국방"]}",
-    "국회운영${Emoij["국회운영"]}",
-    "기타"
+var datalist = listOf<List<String>>(
+    listOf("전체", "전체"),
+    listOf("행정안전위원회", "행정안전\uD83D\uDEA8"),
+    listOf("보건복지위원회", "보건복지\uD83D\uDC89"),
+    listOf("국토교통위원회", "국토교통\uD83D\uDEE3"),
+    listOf("기획재정위원회", "기획재정\uD83E\uDE99"),
+    listOf("환경노동위원회", "환경\uD83C\uDF33/노동\uD83D\uDC77\uD83C\uDFFB"),
+    listOf("교육위원회", "교육\uD83D\uDCDA"),
+    listOf("법제사법위원회", "사법⚖"),
+    listOf("문화체육관광위원회", "문화체육관광\uD83C\uDF88"),
+    listOf("정무위원회", "정무\uD83D\uDCBC"),
+    listOf("농림축산식품해양수산위원회", "농림\uD83C\uDF3E/해양\uD83C\uDF0A"),
+    listOf("과학기술정보방송통신위원회", "과학통신\uD83D\uDD2C"),
+    listOf("산업통상자원중소벤처기업위원회", "산업기업\uD83C\uDFE2"),
+    listOf("정보위원회", "정보\uD83D\uDCD1"),
+    listOf("외교통일위원회", "외교통일\uD83C\uDF0F"),
+    listOf("여성가족위원회", "여성가족\uD83E\uDEC2"),
+    listOf("국방위원회", "국방\uD83E\uDE96"),
+    listOf("국회운영위원회", "국회운영\uD83D\uDCE3"),
+    listOf("기타", "기타➕")
 )
 
 
@@ -59,8 +56,8 @@ var datalist = listOf<String>(
 fun TayHomeTopAppBar(
     elevation: Dp = 0.dp,
     modifier: Modifier = Modifier,
-    onTagClick: (String) -> Unit,
-    currentTag: String,
+    onTagClick: (Int) -> Unit,
+    currentTag: Int,
 //    listState: LazyListState,
 //    scope: CoroutineScope,
     isExpanded: Boolean,
@@ -116,8 +113,8 @@ fun TayHomeTopAppBar(
 @Composable
 fun HomeTabBar(
     modifier: Modifier,
-    currentTag: String,
-    onTagClick: (String) -> Unit,
+    currentTag: Int,
+    onTagClick: (Int) -> Unit,
     listState: LazyListState,
     scope: CoroutineScope,
     isExpanded: Boolean,
@@ -163,8 +160,8 @@ fun HomeTabBar(
 @Composable
 private fun NotExpandedTagBar(
     modifier: Modifier = Modifier,
-    currentTag: String,
-    onTagClick: (String) -> Unit,
+    currentTag: Int,
+    onTagClick: (Int) -> Unit,
     listState: LazyListState,
     scope: CoroutineScope,
     isExpanded: Boolean
@@ -175,22 +172,22 @@ private fun NotExpandedTagBar(
         state = listState,
         contentPadding = PaddingValues(start = 16.dp)
     ){
-        items(datalist){ it ->
-            if(currentTag == it) TayTag(it, true, onClick = {onTagClick(it)})
-            else TayTag(it,false,onClick = {onTagClick(it)})
+        itemsIndexed(datalist){ index , it->
+            if(currentTag == index) TayTag(it[1], true, onClick = {onTagClick(index)})
+            else TayTag(it[1],false,onClick = {onTagClick(index)})
         }
     }
 
     LaunchedEffect(isExpanded){
-        listState.animateScrollToItem(index = datalist.indexOf(currentTag))
+        listState.animateScrollToItem(index = currentTag)
     }
 }
 
 @Composable
 private fun ExpandedTagBar(
     modifier: Modifier = Modifier,
-    currentTag: String,
-    onTagClick: (String) -> Unit,
+    currentTag: Int,
+    onTagClick: (Int) -> Unit,
     onArrowClick: (Boolean) -> Unit
 ){
     FlowRow(
@@ -200,8 +197,8 @@ private fun ExpandedTagBar(
 
     ){
         datalist.forEach{ it ->
-            if(currentTag == it) TayTag(it, true,onClick = {onTagClick(it);onArrowClick(false)})
-            else TayTag(it,false,onClick = {onTagClick(it); onArrowClick(false)})
+            if(currentTag == datalist.indexOf(it)) TayTag(it[1], true,onClick = {onTagClick(datalist.indexOf(it));onArrowClick(false)})
+            else TayTag(it[1],false,onClick = {onTagClick(datalist.indexOf(it)); onArrowClick(false)})
         }
 
     }
