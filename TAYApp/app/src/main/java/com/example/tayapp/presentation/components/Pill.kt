@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.utils.dashedBorder
+import com.example.tayapp.utils.textDp
 
 @Composable
 fun PillList(
@@ -104,6 +105,53 @@ fun Pill(
     }
 }
 
+@Composable
+fun ClausePill(
+    clause: String
+) {
+    when (clause) {
+        "삭제" -> {
+            Pill(
+                textColor = TayAppTheme.colors.background,
+                backgroundColor = TayAppTheme.colors.danger2,
+            ) {
+                Text("삭제", fontSize = 12.textDp, fontWeight = FontWeight.Normal)
+            }
+        }
+        "일부 삭제" -> {
+            Pill(
+                textColor = TayAppTheme.colors.bodyText,
+                backgroundColor = TayAppTheme.colors.danger1,
+            ) {
+                Text("일부 삭제", fontSize = 12.textDp, fontWeight = FontWeight.Normal)
+            }
+        }
+        "신설" -> {
+            Pill(
+                textColor = TayAppTheme.colors.bodyText,
+                backgroundColor = TayAppTheme.colors.sub50,
+            ) {
+                Text("신설", fontSize = 12.textDp, fontWeight = FontWeight.Normal)
+            }
+        }
+        "일부 신설" -> {
+            Pill(
+                textColor = TayAppTheme.colors.bodyText,
+                backgroundColor = TayAppTheme.colors.sub50,
+            ) {
+                Text("일부 신설", fontSize = 12.textDp, fontWeight = FontWeight.Normal)
+            }
+        }
+        "일부 수정" -> {
+            Pill(
+                textColor = TayAppTheme.colors.bodyText,
+                backgroundColor = TayAppTheme.colors.sub20,
+            ) {
+                Text("일부 수정", fontSize = 12.textDp, fontWeight = FontWeight.Normal)
+            }
+        }
+    }
+}
 
 @Composable
 fun DashPill(
