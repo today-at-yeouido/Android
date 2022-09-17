@@ -5,12 +5,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.domain.use_case.GetBillDetailUseCase
+import com.example.tayapp.domain.use_case.GetBillTableUseCase
 import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
 import com.example.tayapp.domain.use_case.scrap.PostAddScrapUseCase
 import com.example.tayapp.domain.use_case.scrap.PostDeleteScrapUseCase
 import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.states.BillDetailUiState
+import com.example.tayapp.presentation.states.BillTableUiState
 import com.example.tayapp.presentation.states.SearchState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
@@ -26,11 +28,14 @@ class DetailViewModel @Inject constructor(
     private val postAddScrapUseCase: PostAddScrapUseCase,
     private val postDeleteScrapUseCase: PostDeleteScrapUseCase,
     private val getBillDetailUseCase: GetBillDetailUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val getBillTableUseCase: GetBillTableUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel()  {
 
-    val billId: Int = savedStateHandle.get<Int>(Destinations.BILL_ID)!!
+    val billId: Int = savedStateHandle.get<String>(Destinations.BILL_ID)?.toInt()!!
     var detailState = MutableStateFlow(BillDetailUiState(isLoading = true))
+        private set
+    var table = MutableStateFlow(BillTableUiState(isLoading = true))
         private set
 
 

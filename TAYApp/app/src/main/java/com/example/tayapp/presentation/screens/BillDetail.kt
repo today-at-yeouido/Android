@@ -34,17 +34,19 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BillDetail(billId: Int, upPress: () -> Unit, onGroupBillSelected: (Int) -> Unit) {
-
-    val viewModel = hiltViewModel<DetailViewModel>()
+fun BillDetail(
+    viewModel: DetailViewModel = hiltViewModel(),
+    upPress: () -> Unit,
+    toTable: () -> Unit,
+    onGroupBillSelected: (Int) -> Unit = {}
+) {
+    val billId = viewModel.billId
     val detailState = viewModel.detailState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val mUriHandler = LocalUriHandler.current
-
-    Log.d("##33", "billId $billId")
 
     BottomSheetScaffold(
         modifier = Modifier.navigationBarsPadding(),
