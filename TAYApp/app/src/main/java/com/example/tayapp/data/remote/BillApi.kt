@@ -31,10 +31,10 @@ interface BillApi {
         @Path("id") billId: Int
     ): Response<DetailBillDto>
 
-    @GET("$GET_BILL_DETAIL/{id}/table")
+    @GET("$GET_BILL_DETAIL{id}/table/")
     suspend fun getBillTable(
-        @Path("id") id: String
-    ): DetailBillTableDto
+        @Path("id") id: Int
+    ): Response<ComparisonTableDto>
 
     @GET(GET_BILL_RECENT)
     suspend fun getBillRecent(
