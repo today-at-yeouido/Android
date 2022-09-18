@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -59,11 +60,11 @@ fun BillTable(
                 }
             }
 
-            items(table.billTable!!.article) { billTable ->
+            items(table.billTable!!.article) { article ->
 
                 val inlinePill = mutableMapOf<String, InlineTextContent>()
 
-                billTable.type.forEachIndexed { idx, text ->
+                article.type.forEachIndexed { idx, text ->
                     inlinePill["${idx}Row"] = InlineTextContent(
                         Placeholder(60.textDp, 16.textDp, PlaceholderVerticalAlign.TextCenter)
                     ) {
@@ -72,13 +73,33 @@ fun BillTable(
                 }
 
                 val title = getRevisionTitle(
-                    article = billTable,
+                    article = article,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     color = TayAppTheme.colors.headText,
                     inlineTextContent = inlinePill.keys as Set<String>
                 )
 
+                val articleText = buildAnnotatedString {
+                    article.text.let {
+                        var text = article.title.text
+                        if (it.row.isNotEmpty()) {
+                            it.row.forEach { row ->
+                                val beforeText = text.substringBefore(row.text)
+                                text = text.substringAfter(row.text)
+                                append(beforeText)
+                                withStyle(
+                                    SpanStyle(
+                                        textDecoration = TextDecoration.LineThrough
+                                    )
+                                ) {
+                                    append(row.cText)
+                                }
+                                append(row.text)
+                            }
+                        } else append(text)
+                    }
+                }
                 Column(
                     modifier = Modifier.padding(start = KeyLine, end = KeyLine, bottom = 50.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -97,6 +118,73 @@ fun BillTable(
                         border = BorderStroke(1.dp, TayAppTheme.colors.border)
                     ) {
                         Text("개정안만 보기")
+                    }
+                    article.paragraph?.forEach { q ->
+                        val text = buildAnnotatedString {
+                            var temp = q.textRow.text
+                            if (q.textRow.row.isNotEmpty()) {
+                                q.textRow.row.forEach { row ->
+                                    val beforeText = temp.substringBefore(row.text)
+                                    temp = temp.substringAfter(row.text)
+                                    append(beforeText)
+                                    withStyle(
+                                        SpanStyle(
+                                            textDecoration = TextDecoration.LineThrough
+                                        )
+                                    ) {
+                                        append(row.cText)
+                                    }
+                                    append(row.text)
+                                }
+                                append(temp)
+                            } else append(temp)
+                        }
+                        Log.d("##88", "subparahraph $text")
+                        Text(text = text)
+                        q.subParagraph?.forEach { s ->
+                            val text2 = buildAnnotatedString {
+                                var temp = s.textRow.text
+                                if (s.textRow.row.isNotEmpty()) {
+                                    s.textRow.row.forEach { row ->
+                                        val beforeText = temp.substringBefore(row.text)
+                                        temp = temp.substringAfter(row.text)
+                                        append(beforeText)
+                                        withStyle(
+                                            SpanStyle(
+                                                textDecoration = TextDecoration.LineThrough
+                                            )
+                                        ) {
+                                            append(row.cText)
+                                        }
+                                        append(row.text)
+                                    }
+                                    append(temp)
+                                } else append(temp)
+                            }
+                            Log.d("##88", "subparahraph $text2")
+                            Text(text2)
+                            s.subParagraph?.forEach { item ->
+                                val text2 = buildAnnotatedString {
+                                    var temp = item.textRow.text
+                                    if (item.textRow.row.isNotEmpty()) {
+                                        item.textRow.row.forEach { row ->
+                                            val beforeText = temp.substringBefore(row.text)
+                                            temp = temp.substringAfter(row.text)
+                                            append(beforeText)
+                                            withStyle(
+                                                SpanStyle(
+                                                    textDecoration = TextDecoration.LineThrough
+                                                )
+                                            ) {
+                                                append(row.cText)
+                                            }
+                                            append(row.text)
+                                        }
+                                        append(temp)
+                                    } else append(temp)
+                                }
+                            }
+                        }
                     }
                 }
             }

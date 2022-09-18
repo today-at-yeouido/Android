@@ -59,6 +59,29 @@ class DetailViewModel @Inject constructor(
                     table.update {
                         it.copy(billTable = result.data, isLoading = false)
                     }
+                    for (m in result.data!!.article) {
+                        Log.d("##77","-----------------------")
+                        Log.d("##77","-----------------------")
+                        Log.d("##77","${m.title}")
+                        Log.d("##77",m.text.toString())
+                        Log.d("##77",m.type.toString())
+                        if (m.paragraph != null) {
+                            for (n in m.paragraph) {
+                                Log.d("##77",n.toString())
+                                Log.d("##77",n.textRow.toString())
+                                if (n.subParagraph != null) {
+                                    for (k in n.subParagraph) {
+                                        Log.d("##77",k.textRow.toString())
+                                    }
+                                }
+                            }
+                        }
+                        if (m.subParagraph != null) {
+                            for (j in m.subParagraph) {
+                                println(j)
+                            }
+                        }
+                    }
                 }
                 is Resource.Error -> {
                     table.update {

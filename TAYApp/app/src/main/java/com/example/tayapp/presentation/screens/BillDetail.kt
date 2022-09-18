@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,6 +50,7 @@ fun BillDetail(
     onGroupBillSelected: (Int) -> Unit = {}
 ) {
     val billId = viewModel.billId
+    Log.d("##77", "billId $billId")
     val detailState = viewModel.detailState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -479,22 +481,22 @@ fun getRevisionTitle(
         ) {
             /** 타이틀 */
             article.title.let {
-                var p = article.title.text
+                var text = article.title.text
                 if (it.row.isNotEmpty()) {
-                    it.row.forEach { q ->
-                        val qq = p.substringBefore(q.text)
-                        p = p.substringAfter(q.text)
-                        append(qq)
+                    it.row.forEach { row ->
+                        val beforeText = text.substringBefore(row.text)
+                        text = text.substringAfter(row.text)
+                        append(beforeText)
                         withStyle(
                             SpanStyle(
                                 textDecoration = TextDecoration.LineThrough
                             )
                         ) {
-                            append(q.cText)
+                            append(row.cText)
                         }
-                        append(q.text)
+                        append(row.text)
                     }
-                } else append(p)
+                } else append(text)
             }
 
 

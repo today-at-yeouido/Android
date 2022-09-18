@@ -111,6 +111,28 @@ private fun getBillTable(table: ComparisonTableDto): BillTable {
         val amendmentT = amendment.text
         val s = if (!amendmentT.contains("--")) amendmentT else currentT
 
+        /** 조 단위 신설 예외처리 */
+        if (currentT.contains("<신  설>") && amendmentT.contains(articleRevisionRegex)) {
+            if (str.isNotBlank()) {
+                addArticle()
+            }
+
+            /** 조 단위로 신설되기에 바로 저장한다. */
+            articleList.add(parseArticle(amendmentT).copy(type = setOf("신설")))
+            continue
+        }
+
+        /** 조 단위 삭제 예외처리 */
+        if (amendmentT.contains("<삭  제>") && currentT.contains(articleRevisionRegex)) {
+            if (str.isNotBlank()) {
+                addArticle()
+            }
+
+            /** 조 단위로 삭제되기에 바로 저장한다. */
+            articleList.add(parseArticle(currentT).copy(type = setOf("삭제")))
+            continue
+        }
+
         /** 첫 Amendment가 조 형식일 때 */
         if (s.contains(articleRevisionRegex)) {
             addArticle()
@@ -236,21 +258,21 @@ fun setRevisionRow(article: Article, rowArray: ArrayList<Row>): Article {
     plusLength(article.text)
 
     article.subParagraph?.forEach { sub ->
-        plusLength(sub.text)
+        plusLength(sub.textRow)
 
         sub.subParagraph?.forEach { item ->
-            plusLength(item.text)
+            plusLength(item.textRow)
         }
     }
 
     article.paragraph?.forEach { par ->
-        plusLength(par.text)
+        plusLength(par.textRow)
 
         par.subParagraph?.forEach { sub ->
-            plusLength(sub.text)
+            plusLength(sub.textRow)
 
             sub.subParagraph?.forEach { item ->
-                plusLength(item.text)
+                plusLength(item.textRow)
             }
         }
     }
@@ -332,7 +354,7 @@ fun parseParagraph(str: String): MutableList<Paragraph> {
 
         if (paragraphChunk.isEmpty()) continue
 
-        if ((paragraphChunk.contains('∼') || paragraphChunk.contains('⋅')) && paragraphChunk.length < 10) {
+        if ((paragraphChunk.contains('∼') || paragraphChunk.contains('⋅')|| paragraphChunk.contains('ㆍ')) && paragraphChunk.length < 10) {
             if (idx < prefixList.size - 2) {
                 paragraphChunk =
                     str.substring(str.indexOf(prefixList[idx]), str.indexOf(prefixList[idx + 2]))
@@ -352,7 +374,7 @@ fun parseParagraph(str: String): MutableList<Paragraph> {
             paragraphChunk = paragraphChunk.substringBefore("1.")
         }
         val text = TextRow(paragraphChunk)
-        paragraphList.add(Paragraph(text = text, subParagraph = subParagraph))
+        paragraphList.add(Paragraph(textRow = text, subParagraph = subParagraph))
 
         idx++
     }
@@ -362,7 +384,7 @@ fun parseParagraph(str: String): MutableList<Paragraph> {
 
 //호
 fun parseSubParagraph(str: String): List<SubParagraph> {
-    val subParagraphRegex = Regex("\\s[123456890]+\\.")
+    val subParagraphRegex = Regex("\\s[1234567890]+\\.")
     val subParagraphList = arrayListOf<SubParagraph>()
 
     val kkk = subParagraphRegex.findAll(str).map { it.value }.toList()
@@ -378,7 +400,7 @@ fun parseSubParagraph(str: String): List<SubParagraph> {
 
         if (before.isEmpty()) continue
 
-        if ((before.contains('∼') || before.contains('⋅')) && before.length < 10) {
+        if ((before.contains('∼') || before.contains('⋅') || before.contains('ㆍ')) && before.length < 10) {
             if (k < kkk.size - 2) {
                 before = str.substring(str.indexOf(kkk[k]), str.indexOf(kkk[k + 2]))
                 k++
@@ -396,7 +418,7 @@ fun parseSubParagraph(str: String): List<SubParagraph> {
         }
 
         val text = TextRow(before)
-        subParagraphList.add(SubParagraph(subParagraph = subParagraph, text = text))
+        subParagraphList.add(SubParagraph(subParagraph = subParagraph, textRow = text))
 
         k++
     }
@@ -421,7 +443,7 @@ fun parseItem(str: String): List<SubParagraph> {
 
         if (before.isEmpty()) continue
 
-        if ((before.contains('∼') || before.contains('⋅')) && before.length < 10) {
+        if ((before.contains('∼') || before.contains('⋅') || before.contains('ㆍ')) && before.length < 10) {
             if (k < kkk.size - 2) {
                 before = str.substring(str.indexOf(kkk[k]), str.indexOf(kkk[k + 2]))
                 k++
@@ -432,7 +454,7 @@ fun parseItem(str: String): List<SubParagraph> {
         }
 
         val text = TextRow(before)
-        itemList.add(SubParagraph(text = text))
+        itemList.add(SubParagraph(textRow = text))
         k++
     }
 
@@ -460,13 +482,13 @@ data class Article(
 )
 
 data class Paragraph(
-    val text: TextRow,
+    val textRow: TextRow,
     val subParagraph: List<SubParagraph>? = null,
 )
 
 // 호, 목
 data class SubParagraph(
-    val text: TextRow,
+    val textRow: TextRow,
     val subParagraph: List<SubParagraph>? = null,
 )
 
