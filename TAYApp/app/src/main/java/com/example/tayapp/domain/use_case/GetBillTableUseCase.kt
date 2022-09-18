@@ -109,7 +109,11 @@ private fun getBillTable(table: ComparisonTableDto): BillTable {
         val amendment = firstAmendment[i]
         val currentT = current?.text ?: ""
         val amendmentT = amendment.text
-        val s = if (!amendmentT.contains("--")) amendmentT else currentT
+        val s = when{
+            amendmentT.contains("<삭  제>") -> " $currentT"
+            !amendmentT.contains("--") -> amendmentT
+            else -> currentT
+        }
 
         /** 조 단위 신설 예외처리 */
         if (currentT.contains("<신  설>") && amendmentT.contains(articleRevisionRegex)) {
@@ -185,7 +189,11 @@ private fun getBillTable(table: ComparisonTableDto): BillTable {
                 continue
             }
 
-            val lump = if (!amendmentT.contains("--")) amendmentT else currentT
+            val lump = when{
+                amendmentT.contains("<삭  제>") -> " $currentT"
+                !amendmentT.contains("--") -> amendmentT
+                else -> currentT
+            }
 
             /** lump가 조 형식이면 지금까지 저장한 str이 하나의 조 라는 뜻 */
             if (lump.contains(articleRevisionRegex) && aIdx == 0 && str.isNotBlank()) {

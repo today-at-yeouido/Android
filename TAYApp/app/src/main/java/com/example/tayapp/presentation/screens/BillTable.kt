@@ -47,7 +47,7 @@ fun BillTable(
         modifier = Modifier.navigationBarsPadding()
     ) {
         TayTopAppBarWithBack("개정 내용", upPress = upPress)
-        LazyColumn() {
+        LazyColumn {
 
             item {
                 TableHeader(detailState)
@@ -82,7 +82,7 @@ fun BillTable(
 
                 val articleText = buildAnnotatedString {
                     article.text.let {
-                        var text = article.title.text
+                        var text = article.text.text
                         if (it.row.isNotEmpty()) {
                             it.row.forEach { row ->
                                 val beforeText = text.substringBefore(row.text)
@@ -119,55 +119,30 @@ fun BillTable(
                     ) {
                         Text("개정안만 보기")
                     }
+                    Text(articleText)
                     article.paragraph?.forEach { q ->
                         val text = buildAnnotatedString {
                             var temp = q.textRow.text
                             if (q.textRow.row.isNotEmpty()) {
                                 q.textRow.row.forEach { row ->
-                                    val beforeText = temp.substringBefore(row.text)
-                                    temp = temp.substringAfter(row.text)
-                                    append(beforeText)
-                                    withStyle(
-                                        SpanStyle(
-                                            textDecoration = TextDecoration.LineThrough
-                                        )
-                                    ) {
-                                        append(row.cText)
-                                    }
-                                    append(row.text)
-                                }
-                                append(temp)
-                            } else append(temp)
-                        }
-                        Log.d("##88", "subparahraph $text")
-                        Text(text = text)
-                        q.subParagraph?.forEach { s ->
-                            val text2 = buildAnnotatedString {
-                                var temp = s.textRow.text
-                                if (s.textRow.row.isNotEmpty()) {
-                                    s.textRow.row.forEach { row ->
-                                        val beforeText = temp.substringBefore(row.text)
-                                        temp = temp.substringAfter(row.text)
-                                        append(beforeText)
-                                        withStyle(
-                                            SpanStyle(
-                                                textDecoration = TextDecoration.LineThrough
-                                            )
-                                        ) {
+                                    when (row.type) {
+                                        "신설" -> {
                                             append(row.cText)
+                                            append(row.text)
+                                            temp = ""
                                         }
-                                        append(row.text)
-                                    }
-                                    append(temp)
-                                } else append(temp)
-                            }
-                            Log.d("##88", "subparahraph $text2")
-                            Text(text2)
-                            s.subParagraph?.forEach { item ->
-                                val text2 = buildAnnotatedString {
-                                    var temp = item.textRow.text
-                                    if (item.textRow.row.isNotEmpty()) {
-                                        item.textRow.row.forEach { row ->
+                                        "삭제" -> {
+                                            withStyle(
+                                                SpanStyle(
+                                                    textDecoration = TextDecoration.LineThrough
+                                                )
+                                            ) {
+                                                append(row.cText)
+                                            }
+                                            append(row.text)
+                                            temp = ""
+                                        }
+                                        else -> {
                                             val beforeText = temp.substringBefore(row.text)
                                             temp = temp.substringAfter(row.text)
                                             append(beforeText)
@@ -180,9 +155,94 @@ fun BillTable(
                                             }
                                             append(row.text)
                                         }
+                                    }
+                                }
+                                append(temp)
+                            } else append(temp)
+                        }
+                        Text(text = text)
+                        q.subParagraph?.forEach { s ->
+                            val text2 = buildAnnotatedString {
+                                var temp = s.textRow.text
+                                if (s.textRow.row.isNotEmpty()) {
+                                    s.textRow.row.forEach { row ->
+                                        when (row.type) {
+                                            "신설" -> {
+                                                append(row.cText)
+                                                append(row.text)
+                                                temp = ""
+                                            }
+                                            "삭제" -> {
+                                                withStyle(
+                                                    SpanStyle(
+                                                        textDecoration = TextDecoration.LineThrough
+                                                    )
+                                                ) {
+                                                    append(row.cText)
+                                                }
+                                                append(row.text)
+                                                temp = ""
+                                            }
+                                            else -> {
+                                                val beforeText = temp.substringBefore(row.text)
+                                                temp = temp.substringAfter(row.text)
+                                                append(beforeText)
+                                                withStyle(
+                                                    SpanStyle(
+                                                        textDecoration = TextDecoration.LineThrough
+                                                    )
+                                                ) {
+                                                    append(row.cText)
+                                                }
+                                                append(row.text)
+                                            }
+                                        }
+                                    }
+                                    append(temp)
+                                } else append(temp)
+                            }
+                            Text(text2)
+                            s.subParagraph?.forEach { item ->
+                                val text3 = buildAnnotatedString {
+                                    var temp = item.textRow.text
+                                    if (item.textRow.row.isNotEmpty()) {
+                                        item.textRow.row.forEach { row ->
+                                            when (row.type) {
+                                                "신설" -> {
+                                                    append(row.cText)
+                                                    append(row.text)
+                                                    temp = ""
+                                                }
+                                                "삭제" -> {
+                                                    withStyle(
+                                                        SpanStyle(
+                                                            textDecoration = TextDecoration.LineThrough
+                                                        )
+                                                    ) {
+                                                        append(row.cText)
+                                                    }
+                                                    append(row.text)
+                                                    temp = ""
+                                                }
+                                                else -> {
+                                                    val beforeText = temp.substringBefore(row.text)
+                                                    temp = temp.substringAfter(row.text)
+                                                    append(beforeText)
+                                                    withStyle(
+                                                        SpanStyle(
+                                                            textDecoration = TextDecoration.LineThrough
+                                                        )
+                                                    ) {
+                                                        append(row.cText)
+                                                    }
+                                                    append(row.text)
+                                                }
+                                            }
+                                        }
                                         append(temp)
                                     } else append(temp)
                                 }
+                                Text(text3)
                             }
                         }
                     }
