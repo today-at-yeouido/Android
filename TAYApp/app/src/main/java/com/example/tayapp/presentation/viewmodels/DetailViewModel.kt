@@ -6,19 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tayapp.domain.use_case.GetBillDetailUseCase
 import com.example.tayapp.domain.use_case.GetBillTableUseCase
-import com.example.tayapp.domain.use_case.RecentSearchTermUseCase
 import com.example.tayapp.domain.use_case.scrap.PostAddScrapUseCase
 import com.example.tayapp.domain.use_case.scrap.PostDeleteScrapUseCase
-import com.example.tayapp.domain.use_case.search.GetSearchResultUseCase
 import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.states.BillDetailUiState
 import com.example.tayapp.presentation.states.BillTableUiState
-import com.example.tayapp.presentation.states.SearchState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,11 +36,48 @@ class DetailViewModel @Inject constructor(
 
 
     init {
-        getBillDetail(billId)
+        initFunction()
     }
 
-    fun tryGetBillDetail(){
-        getBillDetail(billId)
+    private fun initFunction() {
+        viewModelScope.launch {
+            getBillDetail(billId)
+            getBillTable(billId)
+        }
+    }
+
+    fun tryGetBillDetail() {
+        viewModelScope.launch {
+            getBillDetail(billId)
+        }
+    }
+
+    private suspend fun getBillTable(billId: Int) {
+        getBillTableUseCase(billId).collect { result ->
+            when (result) {
+                is Resource.Success -> {
+                    table.update {
+                        it.copy(billTable = result.data, isLoading = false)
+                    }
+                }
+                is Resource.Error -> {
+                    table.update {
+                        it.copy(
+                            error = result.message ?: "An unexpected error",
+                            isLoading = false
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+                    table.update {
+                        it.copy(isLoading = true)
+                    }
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }
     }
 
     private fun getBillDetail(billId: Int){

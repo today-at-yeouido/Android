@@ -45,8 +45,7 @@ class GetBillTableUseCase @Inject constructor(
         cause is UnAuthorizationError || attempt < 3
     }
 }
-
-fun getBillTable(table: ComparisonTableDto): BillTable {
+private fun getBillTable(table: ComparisonTableDto): BillTable {
 
     val articleRevisionRegex = Regex("^[제第]\\d+[조條](?!제)")
 
@@ -88,8 +87,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
             when {
                 /** 항으로 하나만 추가되는 경우 예외처리 */
                 (amendmentT.contains(Regex("[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]")) && amendmentT.length < 2)
-                -> {
-                }
+                -> {}
                 currentT.contains("<신  설>") || currentT.contains("<단서 신설>") -> {
                     rowList.add(Row(amendmentT, currentT, str.length, "신설"))
                 }
@@ -116,6 +114,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
         /** 첫 Amendment가 조 형식일 때 */
         if (s.contains(articleRevisionRegex)) {
             addArticle()
+            str += s
         }
 
         /** 첫 Amendment가 조 형식 아닐 때 -> 법률명 바뀐 경우 */
@@ -123,7 +122,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
             cBillTitle = currentT
             aBillTitle = amendmentT
         }
-        str += s
+
 
         // underline true 인 애들 위치랑 같이 저장
         checkRevisionType(amendment, amendmentT, currentT)
@@ -174,7 +173,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
                     continue
                 }
                 addArticle()
-            }
+            } else toggle = true
             str += lump
 
             // underline true 인 애들 위치랑 같이 저장
