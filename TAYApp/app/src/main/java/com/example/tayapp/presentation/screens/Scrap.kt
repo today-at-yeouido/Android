@@ -61,7 +61,8 @@ fun Scrap(
                     TaySnackbar(
                         snackbarData = it,
                         imageVector = Icons.Default.QuestionMark,
-                        imageColor = TayAppTheme.colors.information1
+                        imageColor = TayAppTheme.colors.information1,
+                        showProgress = true
                     )
                 }
             )
