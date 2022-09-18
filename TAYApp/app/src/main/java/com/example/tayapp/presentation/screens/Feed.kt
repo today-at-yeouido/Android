@@ -103,8 +103,10 @@ fun Feed(
                                         onClick = viewModel::tryRecommendBill,
                                         modifier = Modifier
                                             .padding(end = KeyLine)
-                                            .size(40.dp)
                                             .border(1.dp, TayAppTheme.colors.border, CircleShape)
+                                            .size(40.dp)
+
+
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Refresh,
