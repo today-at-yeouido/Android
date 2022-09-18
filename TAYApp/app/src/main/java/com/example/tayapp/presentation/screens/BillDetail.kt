@@ -1,6 +1,5 @@
 package com.example.tayapp.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.data.remote.dto.bill.NewsDto
 import com.example.tayapp.domain.model.DetailBill
+import com.example.tayapp.domain.use_case.Article
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
@@ -134,7 +134,7 @@ fun BillDetail(
                                 CardBillLine()
                                 BillPointText(detailState.value.billDetail.summary)
                                 if (table.billTable != null) BillRevisionText(
-                                    table.billTable!!,
+                                    table.billTable!!.article,
                                     toTable
                                 )
                                 if (detailState.value.billDetail.news.isNotEmpty()) NewsHeader()
@@ -406,7 +406,7 @@ private fun NewsHeader() {
  */
 @Composable
 private fun BillRevisionText(
-    billTable: List<BillTable>,
+    billTable: List<Article>,
     toTable: () -> Unit
 ) {
     Column(
@@ -434,7 +434,7 @@ private fun BillRevisionText(
 }
 
 @Composable
-fun RevisionSection(billTable: List<BillTable>) {
+fun RevisionSection(billTable: List<Article>) {
     TayCard(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -451,9 +451,9 @@ fun RevisionSection(billTable: List<BillTable>) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                billTable.forEach { billTable ->
-                    val title = getRevisionTitle(billTable)
-                    BillRevisionItem(title, billTable.type)
+                billTable.forEach { article ->
+                    val title = getRevisionTitle(article)
+                    BillRevisionItem(title, article.type)
                 }
             }
         }
@@ -463,14 +463,13 @@ fun RevisionSection(billTable: List<BillTable>) {
 
 @Composable
 fun getRevisionTitle(
-    billTable: BillTable,
+    article: Article,
     fontSize: TextUnit = 12.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     color: Color = TayAppTheme.colors.subduedText,
     inlineTextContent: Set<String> = emptySet()
 ) =
     buildAnnotatedString {
-        var titleIndex = 0
         withStyle(
             SpanStyle(
                 fontWeight = fontWeight,
@@ -479,32 +478,31 @@ fun getRevisionTitle(
             )
         ) {
             /** 타이틀 */
-            /** 타이틀 */
-            for (c in billTable.currentTitle) {
-                if (c.underline) {
-                    withStyle(
-                        SpanStyle(
-                            textDecoration = TextDecoration.LineThrough
-                        )
-                    ) {
-                        append(c.text)
+            article.title.let {
+                var p = article.title.text
+                if (it.row.isNotEmpty()) {
+                    it.row.forEach { q ->
+                        val qq = p.substringBefore(q.text)
+                        p = p.substringAfter(q.text)
+                        append(qq)
+                        withStyle(
+                            SpanStyle(
+                                textDecoration = TextDecoration.LineThrough
+                            )
+                        ) {
+                            append(q.cText)
+                        }
+                        append(q.text)
                     }
-                    withStyle(
-                        SpanStyle(
-                            fontWeight = FontWeight.Bold
-                        )
-                    ) {
-                        append(billTable.amendmentTitle[titleIndex++])
-                    }
-                } else {
-                    append(c.text)
-                }
+                } else append(p)
             }
-        }
-        if (inlineTextContent.isNotEmpty()) {
-            inlineTextContent.forEach {
-                append(" ")
-                appendInlineContent(it)
+
+
+            if (inlineTextContent.isNotEmpty()) {
+                inlineTextContent.forEach {
+                    append(" ")
+                    appendInlineContent(it)
+                }
             }
         }
     }

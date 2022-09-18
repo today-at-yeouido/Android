@@ -34,10 +34,14 @@ fun BillTable(
 ) {
     val detailState by viewModel.detailState.collectAsState()
 
-    val billId = viewModel.billId
     val table by viewModel.table.collectAsState()
-    
 
+
+    /**
+     * 1. 조 삭제, 조 신설
+     * 2. 일부 신설, 일부 삭제
+     * 3.
+     * */
     Column(
         modifier = Modifier.navigationBarsPadding()
     ) {
@@ -48,14 +52,14 @@ fun BillTable(
                 TableHeader(detailState)
                 Spacer(modifier = Modifier.height(20.dp))
                 Column(modifier = Modifier.padding(horizontal = KeyLine)) {
-                    RevisionSection(billTable = table.billTable!!)
+                    RevisionSection(billTable = table.billTable!!.article)
                     Spacer(modifier = Modifier.height(20.dp))
                     Title(string = "개정 내용")
                     Spacer(Modifier.height(15.dp))
                 }
             }
 
-            items(table.billTable!!) { billTable ->
+            items(table.billTable!!.article) { billTable ->
 
                 val inlinePill = mutableMapOf<String, InlineTextContent>()
 
@@ -68,86 +72,12 @@ fun BillTable(
                 }
 
                 val title = getRevisionTitle(
-                    billTable = billTable,
+                    article = billTable,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     color = TayAppTheme.colors.headText,
                     inlineTextContent = inlinePill.keys as Set<String>
                 )
-
-                val mainText = buildAnnotatedString {
-                    if (billTable.type.contains("신설")) {
-                        withStyle(
-                            SpanStyle(
-                                fontWeight = FontWeight.Normal,
-                                color = TayAppTheme.colors.headText
-                            )
-                        ) {
-                            billTable.amendmentText.forEach {
-                                append(it)
-                            }
-                        }
-                    } else {
-                        var textIndex = 0
-                        for (c in billTable.currentText) {
-                            val amendmentText =
-                                if (textIndex < billTable.amendmentText.size) billTable.amendmentText[textIndex]
-                                else ""
-                            if (c.underline) {
-                                when {
-                                    amendmentText.contains("<단서 신설>")
-                                            || amendmentText.contains("<신설>") -> {
-                                        withStyle(
-                                            SpanStyle(
-                                                fontWeight = FontWeight.Normal,
-                                                color = TayAppTheme.colors.headText
-                                            )
-                                        ) {
-                                            append("\n${billTable.amendmentText[textIndex]}\n")
-                                        }
-                                        textIndex++
-                                    }
-                                    else -> {
-                                        withStyle(
-                                            SpanStyle(
-                                                textDecoration = TextDecoration.LineThrough,
-                                                color = TayAppTheme.colors.fieldBorder
-                                            )
-                                        ) {
-                                            append(c.text)
-                                        }
-                                        withStyle(
-                                            SpanStyle(
-                                                background = TayAppTheme.colors.information1,
-                                                color = TayAppTheme.colors.headText
-                                            )
-                                        ) {
-                                            append(amendmentText)
-                                            textIndex++
-                                        }
-                                    }
-
-                                }
-                            } else if (c.text.contains("(생  략)")) {
-                                withStyle(SpanStyle(color = TayAppTheme.colors.headText)) {
-                                    append(c.text.replace("(생  략)", "(현행과 같음)"))
-                                }
-
-                            } else {
-                                withStyle(SpanStyle(color = TayAppTheme.colors.headText)) {
-                                    append(c.text)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                val regex1 = Regex("[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳].+")
-                val regex2 = Regex("[1234567890]\\..+")
-                val regex3 = Regex("[가나]\\..+")
-
-                val main = mainText.replace(regex1) { "\n" + it.value }.replace(regex2) { "\n " + it.value }
-                    .replace(regex3) { "\n    " + it.value }
 
                 Column(
                     modifier = Modifier.padding(start = KeyLine, end = KeyLine, bottom = 50.dp),
@@ -168,9 +98,6 @@ fun BillTable(
                     ) {
                         Text("개정안만 보기")
                     }
-                    Text(
-                        text = main, fontSize = 14.sp, style = TayAppTheme.typo.typography.body2
-                    )
                 }
             }
         }
