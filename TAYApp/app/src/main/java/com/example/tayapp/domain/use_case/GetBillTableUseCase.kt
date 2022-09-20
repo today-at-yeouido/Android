@@ -22,8 +22,8 @@ class GetBillTableUseCase @Inject constructor(
             val response = repo.getBillTable(id)
             when (response.code()) {
                 200 -> {
-                    val tableDto = response.body()!!
-                    val table = getBillTable(tableDto)
+                    val tableDto = response.body()
+                    val table = getBillTable(tableDto!!)
                     emit(Resource.Success(table))
                 }
                 401 -> {
@@ -32,7 +32,7 @@ class GetBillTableUseCase @Inject constructor(
                 }
                 400 -> emit(
                     Resource.Error(
-                        response.errorBody().toString() ?: "An unexpected error occurred"
+                        response.errorBody().toString()
                     )
                 )
                 else -> emit(Resource.Error("Couldn't reach server"))
@@ -47,7 +47,9 @@ class GetBillTableUseCase @Inject constructor(
 }
 
 
-fun getBillTable(table: ComparisonTableDto): BillTable {
+fun getBillTable(table: ComparisonTableDto): BillTable? {
+
+    if(table.compareTable == null) return null
 
     val articleRevisionRegex = Regex("^[제第]\\d+[조條](?!제)")
 
@@ -139,7 +141,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
         }
     }
 
-    for (i in 0 until table.compareTable.size) {
+    for (i in 0 until table.compareTable!!.size) {
 
         val compareTable = table.compareTable[i]
         val amendmentTable = compareTable.amendment.filter { it.text.isNotBlank() }
@@ -158,7 +160,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
             var lump = getLump(amendmentT, currentT)
             when {
                 lump.contains("-  -") -> break
-                lump.contains(Regex("^\\d+\\.")) -> lump = " $lump"
+                lump.contains(Regex("(\\d+의\\d+\\.)|(\\d+\\.)|(^\\d+의\\d(?!.+))")) -> lump = " $lump"
             }
 
             if (i > 0) {
@@ -172,21 +174,24 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
             }
 
             // underline true 인 애들 위치랑 같이 저장
+            /** 첫 Amendment가 조 형식 아닐 때 -> 법률명 바뀐 경우 */
+            if (j == 0 && !lump.contains(articleRevisionRegex)) {
+                cBillTitle = currentT
+                aBillTitle = amendmentT
+                continue
+            }
+            // underline true 인 애들 위치랑 같이 저장
             checkRevisionType(amendment ?: current!!, amendmentT, currentT)
 
-            if (i > 0) {
-                str += lump
+            str += if (i > 0) {
+                lump
             } else {
-                /** 첫 Amendment가 조 형식 아닐 때 -> 법률명 바뀐 경우 */
-                if (j == 0 && !lump.contains(articleRevisionRegex)) {
-                    cBillTitle = currentT
-                    aBillTitle = amendmentT
-                } else if (lump.contains(articleRevisionRegex)) {
+                if (lump.contains(articleRevisionRegex)) {
                     /** 첫 Amendment가 조 형식일 때 */
                     addArticle()
-                    str += lump
+                    lump
                 } else {
-                    str += lump
+                    lump
                 }
             }
         }
@@ -195,7 +200,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable {
     /** 마지막 조는 반복문이 끝난 뒤 저장한다. */
     articleList.add(setRevision(parseCondolences(str), rowList))
 
-    return BillTable(currentTitle = cBillTitle, amendmentTitle = aBillTitle, article = articleList)
+    return BillTable(currentTitle = cBillTitle, amendmentTitle = aBillTitle, condolences = articleList)
 }
 
 fun parseCondolences(str: String): Condolences {
@@ -240,7 +245,7 @@ fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
     val revisionTypeSet = mutableSetOf<String>()
 
     /** 문자열을 추가하고 */
-    fun plusLength(textRow: TextRow) {
+    fun plusLength(textRow: TextRow, flag: String = "") {
         val textRowLength = textRow.text.length
         while (idx < rowArraySize) {
             val row = rowArray[idx]
@@ -249,9 +254,11 @@ fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
                 if (idx + 1 <= rowArraySize) {
                     when (row.type) {
                         "신설" -> {
+                            if(flag == "article") revisionTypeSet.add("신설") else
                             revisionTypeSet.add("일부 신설")
                         }
                         "삭제" -> {
+                            if(flag == "article") revisionTypeSet.add("삭제") else
                             revisionTypeSet.add("일부 삭제")
                         }
                         "수정" -> {
@@ -267,14 +274,14 @@ fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
         strSize += textRowLength
     }
 
-    plusLength(article.title)
+    plusLength(article.title, "article")
 
     plusLength(article.text)
 
-    article.subClause?.forEach { sub ->
+    article.subCondolence?.forEach { sub ->
         plusLength(sub.text)
 
-        sub.subClause?.forEach { item ->
+        sub.subCondolence?.forEach { item ->
             plusLength(item.text)
         }
     }
@@ -282,10 +289,10 @@ fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
     article.paragraph?.forEach { par ->
         plusLength(par.text)
 
-        par.subClause?.forEach { sub ->
+        par.subCondolence?.forEach { sub ->
             plusLength(sub.text)
 
-            sub.subClause?.forEach { item ->
+            sub.subCondolence?.forEach { item ->
                 plusLength(item.text)
             }
         }
@@ -300,9 +307,9 @@ fun parseArticle(str: String): Article {
     val articleRegex = Regex("(^|.[^\\s])([제第])\\s?\\d{1,4}([조條])[^()]*\\([^)]*\\)")
 
     // 항을 저장할 리스트
-    var articleParagraph: List<SubClause>? = null
+    var articleParagraph: List<SubCondolence>? = null
     // 목을 저장할 리스트
-    var articleSubClause: List<SubClause>? = null
+    var articleSubCondolence: List<SubCondolence>? = null
 
     /** 조에서 항 전 부분 */
     val beforeParagraph = str.substringBefore('①')
@@ -335,7 +342,7 @@ fun parseArticle(str: String): Article {
     /** 호가 있는 경우 */
     if (s.contains(subParagraphRegex)) {
         /** 예외 때문에 index - 1을 넘긴다 */
-        articleSubClause =
+        articleSubCondolence =
             parseSubParagraph(s.substring(s.indexOf(subParagraphRegex.find(s)!!.value) - 1))
     }
 
@@ -343,7 +350,7 @@ fun parseArticle(str: String): Article {
         title = articleTitle,
         text = articleText,
         paragraph = articleParagraph,
-        subClause = articleSubClause
+        subCondolence = articleSubCondolence
     )
 }
 
@@ -351,7 +358,7 @@ fun parseArticle(str: String): Article {
 private fun parse(
     prefixList: List<String>,
     str: String,
-    subClauseList: ArrayList<SubClause>,
+    subClauseList: ArrayList<SubCondolence>,
     regex: Regex? = null,
 ) {
     var chunk: String
@@ -382,40 +389,40 @@ private fun parse(
             }
         }
 
-        var subClause: List<SubClause>? = null
+        var subCondolence: List<SubCondolence>? = null
 
         when (regex) {
             itemRegex ->
                 if (chunk.contains(regex)) {
-                    subClause = parseItem(chunk)
+                    subCondolence = parseItem(chunk)
                     chunk = chunk.substringBefore(itemRegex.find(chunk)!!.value)
                 }
             subParagraphRegex -> if (chunk.contains(regex)) {
                 val subIndex =
                     chunk.indexOf(subParagraphRegex.find(chunk)!!.value) - 1
                 /** 호가 있으면 호 저장 */
-                subClause =
+                subCondolence =
                     parseSubParagraph(chunk.substring(subIndex))
                 chunk = chunk.substring(0, subIndex)
             }
         }
 
         val text = TextRow(chunk)
-        subClauseList.add(SubClause(subClause = subClause, text = text))
+        subClauseList.add(SubCondolence(subCondolence = subCondolence, text = text))
 
         idx++
     }
 }
 
 // 항
-fun parseParagraph(str: String): MutableList<SubClause> {
+fun parseParagraph(str: String): MutableList<SubCondolence> {
     val paragraphRegex = Regex("[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]")
 
     /** 해당 문자열에서 항 접두사 추출 */
     val prefixList = paragraphRegex.findAll(str).map { it.value }.toList()
 
     /** 반환할 항 리스트 */
-    val paragraphList = arrayListOf<SubClause>()
+    val paragraphList = arrayListOf<SubCondolence>()
 
     parse(prefixList, str, paragraphList, subParagraphRegex)
 
@@ -423,54 +430,58 @@ fun parseParagraph(str: String): MutableList<SubClause> {
 }
 
 //호
-fun parseSubParagraph(str: String): List<SubClause> {
-    val subClauseList = arrayListOf<SubClause>()
+fun parseSubParagraph(str: String): List<SubCondolence> {
+    val subCondolenceList = arrayListOf<SubCondolence>()
     val prefix = subParagraphRegex.findAll(str).map { it.value }.toList()
-    parse(prefix, str, subClauseList, itemRegex)
-    return subClauseList
+    parse(prefix, str, subCondolenceList, itemRegex)
+    return subCondolenceList
 }
 
 //목
-fun parseItem(str: String): List<SubClause> {
-    val itemList = arrayListOf<SubClause>()
+fun parseItem(str: String): List<SubCondolence> {
+    val itemList = arrayListOf<SubCondolence>()
     val prefixList = itemRegex.findAll(str).map { it.value }.toList()
     parse(prefixList, str, itemList)
     return itemList
 }
-
-val itemRegex = Regex("[가나다라마바사아자차카타파하]\\.")
-val connectiveRegex = Regex("[∼⋅ㆍ]")
-val subParagraphRegex = Regex("(\\s\\d+의\\d+\\.)|(\\s\\d+\\.)")
-val legislationRegex = Regex("^법률.+법률\\s?(?!.+)")
-val chapterRegex = Regex("^[제第]\\d+[장]")
+/** 다. 자. 어떻게 예외처리..?
+ * 1042 "을 위반하여 경제적 이익등을 제공받은 자. 이 경우 취득한 경제적 이익등은 몰수하고, 몰수할 수 없을 때에는 그 가액을 추징한다.
+ * 자. item으로 인식*/
+private val itemRegex = Regex("[가나라마바사아차카타파하]\\.")
+private val connectiveRegex = Regex("[∼⋅ㆍ]")
+private val subParagraphRegex = Regex("(\\s\\d+의\\d+\\.)|(\\s\\d+\\.)")
+private val legislationRegex = Regex("^법률.+법률\\s?(?!.+)")
+private val chapterRegex = Regex("^[제第]\\d+[장]")
 
 data class BillTable(
     val currentTitle: String,
     val amendmentTitle: String,
-    val article: List<Condolences>
+    val condolences: List<Condolences>
 )
 
 interface Condolences{
     val title: TextRow
+    val type: Set<String>
 }
 
 
 data class BigCondolences(
     override val title: TextRow,
+    override val type: Set<String> = emptySet()
 ) : Condolences
 
 data class Article(
     override val title: TextRow,
     val text: TextRow,
-    val type: Set<String> = emptySet(),
-    val paragraph: List<SubClause>? = null,
-    val subClause: List<SubClause>? = null,
+    override val type: Set<String> = emptySet(),
+    val paragraph: List<SubCondolence>? = null,
+    val subCondolence: List<SubCondolence>? = null,
 ) : Condolences
 
 // 호, 목
-data class SubClause(
+data class SubCondolence(
     val text: TextRow,
-    val subClause: List<SubClause>? = null,
+    val subCondolence: List<SubCondolence>? = null,
 )
 
 data class TextRow(

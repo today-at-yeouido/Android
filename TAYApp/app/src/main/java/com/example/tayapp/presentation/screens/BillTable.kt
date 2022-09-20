@@ -1,6 +1,5 @@
 package com.example.tayapp.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,8 +16,12 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tayapp.domain.use_case.Article
+import com.example.tayapp.domain.use_case.SubCondolence
+import com.example.tayapp.domain.use_case.TextRow
 import com.example.tayapp.presentation.components.ClausePill
 import com.example.tayapp.presentation.components.TayButton
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
@@ -37,12 +40,6 @@ fun BillTable(
 
     val table by viewModel.table.collectAsState()
 
-
-    /**
-     * 1. 조 삭제, 조 신설
-     * 2. 일부 신설, 일부 삭제
-     * 3.
-     * */
     Column(
         modifier = Modifier.navigationBarsPadding()
     ) {
@@ -53,18 +50,20 @@ fun BillTable(
                 TableHeader(detailState)
                 Spacer(modifier = Modifier.height(20.dp))
                 Column(modifier = Modifier.padding(horizontal = KeyLine)) {
-                    RevisionSection(billTable = table.billTable!!.article)
+                    RevisionSection(billTable = table.billTable!!.condolences)
                     Spacer(modifier = Modifier.height(20.dp))
                     Title(string = "개정 내용")
                     Spacer(Modifier.height(15.dp))
                 }
             }
 
-            items(table.billTable!!.article) { article ->
+            items(table.billTable!!.condolences) { condolences ->
 
                 val inlinePill = mutableMapOf<String, InlineTextContent>()
 
-                article.type.forEachIndexed { idx, text ->
+                condolences.type.forEachIndexed { idx, text ->
+
+                    /** ClausePill을 Text로 넣기 위해서 InlineContent를 inlinePill에 넣는다 */
                     inlinePill["${idx}Row"] = InlineTextContent(
                         Placeholder(60.textDp, 16.textDp, PlaceholderVerticalAlign.TextCenter)
                     ) {
@@ -72,38 +71,18 @@ fun BillTable(
                     }
                 }
 
-                val title = getRevisionTitle(
-                    article = article,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = TayAppTheme.colors.headText,
-                    inlineTextContent = inlinePill.keys as Set<String>
-                )
-
-                val articleText = buildAnnotatedString {
-                    article.text.let {
-                        var text = article.text.text
-                        if (it.row.isNotEmpty()) {
-                            it.row.forEach { row ->
-                                val beforeText = text.substringBefore(row.text)
-                                text = text.substringAfter(row.text)
-                                append(beforeText)
-                                withStyle(
-                                    SpanStyle(
-                                        textDecoration = TextDecoration.LineThrough
-                                    )
-                                ) {
-                                    append(row.cText)
-                                }
-                                append(row.text)
-                            }
-                        } else append(text)
-                    }
-                }
                 Column(
                     modifier = Modifier.padding(start = KeyLine, end = KeyLine, bottom = 50.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+                    /** 편, 장, 절, 관, 조 이름을 얻는다. */
+                    val title = getRevisionTitle(
+                        article = condolences,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = TayAppTheme.colors.headText,
+                        inlineTextContent = inlinePill.keys as Set<String>
+                    )
+
                     Text(
                         text = title,
                         inlineContent = inlinePill,
@@ -111,144 +90,92 @@ fun BillTable(
                             .fillMaxWidth()
                             .background(color = TayAppTheme.colors.border)
                     )
-                    TayButton(
-                        onClick = { /*TODO*/ },
-                        backgroundColor = TayAppTheme.colors.background,
-                        contentColor = TayAppTheme.colors.headText,
-                        border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                    ) {
-                        Text("개정안만 보기")
-                    }
-                    Text(articleText)
-                    article.paragraph?.forEach { q ->
-                        val text = buildAnnotatedString {
-                            var temp = q.textRow.text
-                            if (q.textRow.row.isNotEmpty()) {
-                                q.textRow.row.forEach { row ->
-                                    when (row.type) {
-                                        "신설" -> {
-                                            append(row.cText)
-                                            append(row.text)
-                                            temp = ""
-                                        }
-                                        "삭제" -> {
-                                            withStyle(
-                                                SpanStyle(
-                                                    textDecoration = TextDecoration.LineThrough
-                                                )
-                                            ) {
-                                                append(row.cText)
-                                            }
-                                            append(row.text)
-                                            temp = ""
-                                        }
-                                        else -> {
-                                            val beforeText = temp.substringBefore(row.text)
-                                            temp = temp.substringAfter(row.text)
-                                            append(beforeText)
-                                            withStyle(
-                                                SpanStyle(
-                                                    textDecoration = TextDecoration.LineThrough
-                                                )
-                                            ) {
-                                                append(row.cText)
-                                            }
-                                            append(row.text)
-                                        }
-                                    }
-                                }
-                                append(temp)
-                            } else append(temp)
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    if (condolences is Article) {
+                        TayButton(
+                            onClick = { /*TODO*/ },
+                            backgroundColor = TayAppTheme.colors.background,
+                            contentColor = TayAppTheme.colors.headText,
+                            border = BorderStroke(1.dp, TayAppTheme.colors.border)
+                        ) {
+                            Text("개정안만 보기")
                         }
-                        Text(text = text)
-                        q.subParagraph?.forEach { s ->
-                            val text2 = buildAnnotatedString {
-                                var temp = s.textRow.text
-                                if (s.textRow.row.isNotEmpty()) {
-                                    s.textRow.row.forEach { row ->
-                                        when (row.type) {
-                                            "신설" -> {
-                                                append(row.cText)
-                                                append(row.text)
-                                                temp = ""
-                                            }
-                                            "삭제" -> {
-                                                withStyle(
-                                                    SpanStyle(
-                                                        textDecoration = TextDecoration.LineThrough
-                                                    )
-                                                ) {
-                                                    append(row.cText)
-                                                }
-                                                append(row.text)
-                                                temp = ""
-                                            }
-                                            else -> {
-                                                val beforeText = temp.substringBefore(row.text)
-                                                temp = temp.substringAfter(row.text)
-                                                append(beforeText)
-                                                withStyle(
-                                                    SpanStyle(
-                                                        textDecoration = TextDecoration.LineThrough
-                                                    )
-                                                ) {
-                                                    append(row.cText)
-                                                }
-                                                append(row.text)
-                                            }
-                                        }
-                                    }
-                                    append(temp)
-                                } else append(temp)
-                            }
-                            Text(text2)
-                            s.subParagraph?.forEach { item ->
-                                val text3 = buildAnnotatedString {
-                                    var temp = item.textRow.text
-                                    if (item.textRow.row.isNotEmpty()) {
-                                        item.textRow.row.forEach { row ->
-                                            when (row.type) {
-                                                "신설" -> {
-                                                    append(row.cText)
-                                                    append(row.text)
-                                                    temp = ""
-                                                }
-                                                "삭제" -> {
-                                                    withStyle(
-                                                        SpanStyle(
-                                                            textDecoration = TextDecoration.LineThrough
-                                                        )
-                                                    ) {
-                                                        append(row.cText)
-                                                    }
-                                                    append(row.text)
-                                                    temp = ""
-                                                }
-                                                else -> {
-                                                    val beforeText = temp.substringBefore(row.text)
-                                                    temp = temp.substringAfter(row.text)
-                                                    append(beforeText)
-                                                    withStyle(
-                                                        SpanStyle(
-                                                            textDecoration = TextDecoration.LineThrough
-                                                        )
-                                                    ) {
-                                                        append(row.cText)
-                                                    }
-                                                    append(row.text)
-                                                }
-                                            }
-                                        }
-                                        append(temp)
-                                    } else append(temp)
-                                }
-                                Text(text3)
-                            }
-                        }
+                        Spacer(modifier = Modifier.height(7.dp))
+                        /** 조 본문 */
+                        val articleText = buildAnnotatedString { getAnnotatedString(condolences.text) }
+                        if (articleText.isNotBlank()) Text(articleText)
+                        SubCondolenceText(condolences.subCondolence)
+                        SubCondolenceText(condolences.paragraph)
                     }
                 }
             }
         }
+    }
+}
+
+/** 항, 호, 목 등등 세부 subCondolence를 재귀를 통해 보여줌 */
+@Composable
+private fun SubCondolenceText(subCondolenceList: List<SubCondolence>?) {
+    if (subCondolenceList == null) return
+    Spacer(modifier = Modifier.height(23.dp))
+    subCondolenceList.forEach {
+        val text = buildAnnotatedString { getAnnotatedString(it = it.text) }
+        Text(text = text, lineHeight = 1.65.em)
+        SubCondolenceText(it.subCondolence)
+    }
+}
+
+
+@Composable
+private fun AnnotatedString.Builder.getAnnotatedString(it: TextRow) {
+    var temp = it.text
+    withStyle(
+        SpanStyle(
+            color = TayAppTheme.colors.headText, fontSize = 14.textDp,
+            fontWeight = FontWeight.Light
+        ),
+    ) {
+        if (it.row.isNotEmpty()) {
+            it.row.forEach { row ->
+                when (row.type) {
+                    "신설" -> {
+                        append(row.cText)
+                        append(row.text)
+                        temp = ""
+                    }
+                    "삭제" -> {
+                        withStyle(
+                            SpanStyle(
+                                textDecoration = TextDecoration.LineThrough,
+                                color = TayAppTheme.colors.fieldBorder,
+                                fontWeight = FontWeight.Light
+                            )
+                        ) {
+                            append(row.cText)
+                        }
+                        append(row.text)
+                        temp = ""
+                    }
+                    else -> {
+                        val beforeText = temp.substringBefore(row.text)
+                        temp = temp.substringAfter(row.text)
+                        append(beforeText)
+                        withStyle(
+                            SpanStyle(
+                                textDecoration = TextDecoration.LineThrough,
+                                color = TayAppTheme.colors.fieldBorder,
+                                fontWeight = FontWeight.Light
+                            )
+                        ) {
+                            append(row.cText)
+                        }
+                        append(row.text)
+                    }
+                }
+            }
+            append(temp)
+        } else append(temp)
     }
 }
 

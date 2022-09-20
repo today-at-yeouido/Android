@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.data.remote.dto.bill.NewsDto
 import com.example.tayapp.domain.model.DetailBill
 import com.example.tayapp.domain.use_case.Article
+import com.example.tayapp.domain.use_case.Condolences
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
@@ -136,7 +137,7 @@ fun BillDetail(
                                 CardBillLine()
                                 BillPointText(detailState.value.billDetail.summary)
                                 if (table.billTable != null) BillRevisionText(
-                                    table.billTable!!.article,
+                                    table.billTable!!.condolences,
                                     toTable
                                 )
                                 if (detailState.value.billDetail.news.isNotEmpty()) NewsHeader()
@@ -408,7 +409,7 @@ private fun NewsHeader() {
  */
 @Composable
 private fun BillRevisionText(
-    billTable: List<Article>,
+    billTable: List<Condolences>,
     toTable: () -> Unit
 ) {
     Column(
@@ -436,7 +437,7 @@ private fun BillRevisionText(
 }
 
 @Composable
-fun RevisionSection(billTable: List<Article>) {
+fun RevisionSection(billTable: List<Condolences>) {
     TayCard(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -454,8 +455,10 @@ fun RevisionSection(billTable: List<Article>) {
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 billTable.forEach { article ->
-                    val title = getRevisionTitle(article)
-                    BillRevisionItem(title, article.type)
+                    if (article is Article) {
+                        val title = getRevisionTitle(article)
+                        BillRevisionItem(title, article.type)
+                    }
                 }
             }
         }
@@ -465,7 +468,7 @@ fun RevisionSection(billTable: List<Article>) {
 
 @Composable
 fun getRevisionTitle(
-    article: Article,
+    article: Condolences,
     fontSize: TextUnit = 12.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     color: Color = TayAppTheme.colors.subduedText,
@@ -481,11 +484,12 @@ fun getRevisionTitle(
         ) {
             /** 타이틀 */
             article.title.let {
-                var text = article.title.text
-                if (it.row.isNotEmpty()) {
+                val text = article.title.text
+                var temp = it.text
+                if (it.row.isNotEmpty() && !(article.type.contains("신설") || article.type.contains("삭제"))) {
                     it.row.forEach { row ->
-                        val beforeText = text.substringBefore(row.text)
-                        text = text.substringAfter(row.text)
+                        val beforeText = temp.substringBefore(row.text)
+                        temp = temp.substringAfter(row.text)
                         append(beforeText)
                         withStyle(
                             SpanStyle(
@@ -496,6 +500,7 @@ fun getRevisionTitle(
                         }
                         append(row.text)
                     }
+                    append(temp)
                 } else append(text)
             }
 

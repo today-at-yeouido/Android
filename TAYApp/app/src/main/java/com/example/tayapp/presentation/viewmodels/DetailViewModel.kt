@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tayapp.domain.use_case.Article
 import com.example.tayapp.domain.use_case.GetBillDetailUseCase
 import com.example.tayapp.domain.use_case.GetBillTableUseCase
 import com.example.tayapp.domain.use_case.scrap.PostAddScrapUseCase
@@ -34,7 +35,6 @@ class DetailViewModel @Inject constructor(
     var table = MutableStateFlow(BillTableUiState(isLoading = true))
         private set
 
-
     init {
         initFunction()
     }
@@ -59,26 +59,19 @@ class DetailViewModel @Inject constructor(
                     table.update {
                         it.copy(billTable = result.data, isLoading = false)
                     }
-                    for (m in result.data!!.article) {
-                        Log.d("##77","-----------------------")
-                        Log.d("##77","-----------------------")
-                        Log.d("##77","${m.title}")
-                        Log.d("##77",m.text.toString())
-                        Log.d("##77",m.type.toString())
-                        if (m.paragraph != null) {
-                            for (n in m.paragraph) {
-                                Log.d("##77",n.toString())
-                                Log.d("##77",n.textRow.toString())
-                                if (n.subParagraph != null) {
-                                    for (k in n.subParagraph) {
-                                        Log.d("##77",k.textRow.toString())
-                                    }
-                                }
+                    result.data?.condolences?.forEach {
+                        if(it is Article){
+                            Log.d("##77", it.toString())
+                            Log.d("##77", it.title.toString())
+                            Log.d("##77", it.text.toString())
+                            it.subCondolence?.forEach { s ->
+                                Log.d("##77", s.text.toString())
                             }
-                        }
-                        if (m.subParagraph != null) {
-                            for (j in m.subParagraph) {
-                                println(j)
+                            it.paragraph?.forEach { p ->
+                                Log.d("##77", p.text.text.toString())
+                                p.subCondolence?.forEach { ps ->
+                                    Log.d("##77", ps.text.toString())
+                                }
                             }
                         }
                     }
