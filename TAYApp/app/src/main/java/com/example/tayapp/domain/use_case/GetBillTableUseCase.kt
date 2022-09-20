@@ -48,7 +48,7 @@ class GetBillTableUseCase @Inject constructor(
 
 fun getBillTable(table: ComparisonTableDto): BillTable? {
 
-    if(table.compareTable == null) return null
+    if (table.compareTable == null) return null
 
     val articleRevisionRegex = Regex("^[제第]\\d+[조條](?!제)")
 
@@ -159,12 +159,13 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
 //            if (checkArticleCase(currentT, amendmentT)) continue 조단위 필요없나?
 
             var lump = getLump(amendmentT, currentT)
-            if(lump == "7의2. 제46조의3제1항을 위반하여 의약품의 판매질서 등에 관한 교육을 받지 아니한 자"){
+            if (lump == "7의2. 제46조의3제1항을 위반하여 의약품의 판매질서 등에 관한 교육을 받지 아니한 자") {
                 println("")
             }
             when {
                 lump.contains("-  -") -> break
-                lump.contains(Regex("(\\d+의\\d+\\.)|(\\d+\\.)|(^\\d+의\\d(?!.+))")) -> lump = " $lump"
+                lump.contains(Regex("^\\s*((\\d+의\\d+\\.)|(\\d+\\.)|(^\\d+의\\d(?!.+)))")) -> lump =
+                    " $lump"
             }
 
             if (i > 0) {
@@ -204,7 +205,11 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
     /** 마지막 조는 반복문이 끝난 뒤 저장한다. */
     articleList.add(setRevision(parseCondolences(str), rowList))
 
-    return BillTable(currentTitle = cBillTitle, amendmentTitle = aBillTitle, condolences = articleList)
+    return BillTable(
+        currentTitle = cBillTitle,
+        amendmentTitle = aBillTitle,
+        condolences = articleList
+    )
 }
 
 fun parseCondolences(str: String): Condolences {
@@ -258,11 +263,11 @@ fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
                 if (idx + 1 <= rowArraySize) {
                     when (row.type) {
                         "신설" -> {
-                            if(flag == "article") revisionTypeSet.add("신설") else
+                            if (flag == "article") revisionTypeSet.add("신설") else
                                 revisionTypeSet.add("일부 신설")
                         }
                         "삭제" -> {
-                            if(flag == "article") revisionTypeSet.add("삭제") else
+                            if (flag == "article") revisionTypeSet.add("삭제") else
                                 revisionTypeSet.add("일부 삭제")
                         }
                         "수정" -> {
@@ -398,7 +403,7 @@ private fun parse(
         when (regex) {
             itemRegex ->
                 if (chunk.contains("가.")) {
-                    subCondolence = parseItem(chunk.substringAfter("가."))
+                    subCondolence = parseItem(chunk.substring(chunk.indexOf("가.") - 1))
                     chunk = chunk.substringBefore(chunk.substringBefore("가."))
                 }
             subParagraphRegex -> if (chunk.contains(regex)) {
@@ -448,6 +453,7 @@ fun parseItem(str: String): List<SubCondolence> {
     parse(prefixList, str, itemList)
     return itemList
 }
+
 /** 다. 자. 어떻게 예외처리..?
  * 1042 "을 위반하여 경제적 이익등을 제공받은 자. 이 경우 취득한 경제적 이익등은 몰수하고, 몰수할 수 없을 때에는 그 가액을 추징한다.
  * 자. item으로 인식*/
@@ -463,7 +469,7 @@ data class BillTable(
     val condolences: List<Condolences>
 )
 
-interface Condolences{
+interface Condolences {
     val title: TextRow
     val type: Set<String>
 }
