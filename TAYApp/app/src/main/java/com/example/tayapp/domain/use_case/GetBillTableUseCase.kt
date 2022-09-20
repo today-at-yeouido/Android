@@ -398,7 +398,7 @@ private fun parse(
         when (regex) {
             itemRegex ->
                 if (chunk.contains("가.")) {
-                    subCondolence = parseItem(chunk)
+                    subCondolence = parseItem(chunk.substringAfter("가."))
                     chunk = chunk.substringBefore(chunk.substringBefore("가."))
                 }
             subParagraphRegex -> if (chunk.contains(regex)) {
