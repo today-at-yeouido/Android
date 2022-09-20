@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,10 +13,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tayapp.R
 import com.example.tayapp.data.remote.dto.bill.BillDto
 import com.example.tayapp.data.remote.dto.bill.RecommendBillDto
 import com.example.tayapp.presentation.states.UserState
@@ -24,6 +28,7 @@ import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.utils.Emoij
 import com.example.tayapp.presentation.utils.EmoijList
+import com.example.tayapp.utils.ThemeConstants.LIGHT
 
 private object CardUserValue {
     val ItemHeight = 72.dp
@@ -43,7 +48,7 @@ fun CardsUser(
 ) {
     Box {
         LazyRow(
-            modifier = if (UserState.isLogin()) Modifier else Modifier.blur(10.dp),
+            modifier = Modifier,
             userScrollEnabled = UserState.isLogin(),
             contentPadding = PaddingValues(KeyLine),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -58,7 +63,6 @@ fun CardsUser(
             }
             UserState.isLogin() && recommendBill.isEmpty() -> {
                 CardUserDialog(navigateToFavorite, "관심 소관위를 설정해주세요!", buttonText = "설정하로 가기")
-
             }
         }
     }
@@ -70,26 +74,34 @@ private fun BoxScope.CardUserDialog(
     explanation: String,
     buttonText: String
 ) {
-    Column(
-        modifier = Modifier.Companion
-            .align(Alignment.Center)
-            .background(TayAppTheme.colors.layer3, RoundedCornerShape(12.dp))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = explanation,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp
+    Box(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)){
+        Image(
+            modifier = Modifier.fillMaxWidth(),
+            painter = painterResource(id = if(UserState.mode == LIGHT) R.drawable.feed_blur_light else R.drawable.feed_blur_dark),
+            contentDescription = "",
+            contentScale = ContentScale.Crop
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        TayButton(
-            onClick = navigateToLogin,
-            Modifier.size(ButtonMediumWidth, ButtonMediumHeight),
-            backgroundColor = TayAppTheme.colors.primary,
-            contentColor = TayAppTheme.colors.headText
+        Column(
+            modifier = Modifier.Companion
+                .align(Alignment.Center)
+                .background(TayAppTheme.colors.layer3, RoundedCornerShape(12.dp))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = buttonText, fontSize = 15.sp)
+            Text(
+                text = explanation,
+                fontWeight = FontWeight.Medium,
+                fontSize = 15.sp
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            TayButton(
+                onClick = navigateToLogin,
+                Modifier.size(ButtonMediumWidth, ButtonMediumHeight),
+                backgroundColor = TayAppTheme.colors.primary,
+                contentColor = TayAppTheme.colors.headText
+            ) {
+                Text(text = buttonText, fontSize = 15.sp)
+            }
         }
     }
 }
