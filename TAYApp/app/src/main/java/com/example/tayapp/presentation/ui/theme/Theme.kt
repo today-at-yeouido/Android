@@ -38,6 +38,8 @@ private val DarkColorPalette = TayColorSystem(
     information2 = dm_semantic_blue2,
     gray500 = dm_gray500,
     sub10 = dm_sub10,
+    sub20 = dm_sub20,
+    sub50 = dm_sub50,
     primary20 = dm_primary20,
     primary30 = dm_primary30,
     isDark = false,
@@ -71,6 +73,8 @@ private val LightColorPalette = TayColorSystem(
     information2 = lm_semantic_blue2,
     gray500 = lm_gray500,
     sub10 = lm_sub10,
+    sub20 = lm_sub20,
+    sub50 = lm_sub50,
     primary20 = lm_primary20,
     primary30 = lm_primary30,
     isDark = true,
@@ -177,6 +181,8 @@ class TayColorSystem(
     information2: Color,
     gray500: Color,
     sub10: Color,
+    sub20: Color,
+    sub50: Color,
     primary20: Color,
     primary30: Color,
     isDark: Boolean
@@ -235,6 +241,10 @@ class TayColorSystem(
         private set
     var sub10 by mutableStateOf(sub10)
         private set
+    var sub20 by mutableStateOf(sub20)
+        private set
+    var sub50 by mutableStateOf(sub50)
+        private set
     var primary20 by mutableStateOf(primary20)
         private set
     var primary30 by mutableStateOf(primary30)
@@ -276,6 +286,8 @@ class TayColorSystem(
 
         gray500 = other.gray500
         sub10 = other.sub10
+        sub20 = other.sub20
+        sub50 = other.sub50
         primary20 = other.primary20
         primary30 = other.primary30
 
@@ -316,7 +328,8 @@ class TayColorSystem(
         primary30 = primary30,
         primary20 = primary20,
         sub10 = sub10,
-
+        sub20 = sub20,
+        sub50 = sub50,
         isDark = isDark,
     )
 }

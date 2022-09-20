@@ -19,7 +19,7 @@ class GetBillRepositoryImpl @Inject
         return billApi.getBillDetail(billId)
     }
 
-    override suspend fun getBillTable(billId: String): DetailBillTableDto {
+    override suspend fun getBillTable(billId: Int): Response<ComparisonTableDto> {
         return billApi.getBillTable(billId)
     }
 

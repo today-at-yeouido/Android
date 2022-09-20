@@ -13,10 +13,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.example.tayapp.presentation.components.BottomBarTabs
-import com.example.tayapp.presentation.navigation.BottomBarDestination
-import com.example.tayapp.presentation.navigation.Destinations
-import com.example.tayapp.presentation.navigation.GROUP_BILL
-import com.example.tayapp.presentation.navigation.GroupBillParcelableModel
+import com.example.tayapp.presentation.navigation.*
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 
@@ -36,12 +33,7 @@ class TayAppState(
     val navController: NavHostController,
     scope: CoroutineScope,
 ) {
-    //    로그인 체크
-//    init {
-//        scope.launch {
-//
-//        }
-//    }
+
     val bottomBarTabs = BottomBarTabs.values()
     private val bottomBarRoutes = bottomBarTabs.map { it.route }
 
@@ -70,7 +62,7 @@ class TayAppState(
     fun navigateToBillDetail(billId: Int, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         if (from.lifecycleIsResumed()) {
-            navController.navigate("${Destinations.DETAIL}/$billId")
+            navController.navigate("${AppGraph.DETAIL_GRAPH}/$billId")
         }
     }
 

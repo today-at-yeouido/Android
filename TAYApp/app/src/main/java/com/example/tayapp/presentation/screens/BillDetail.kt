@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -13,13 +14,22 @@ import androidx.compose.material.icons.filled.Dangerous
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.data.remote.dto.bill.NewsDto
 import com.example.tayapp.domain.model.DetailBill
+import com.example.tayapp.domain.use_case.Article
+import com.example.tayapp.domain.use_case.Condolences
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
@@ -34,9 +44,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BillDetail(billId: Int, upPress: () -> Unit, onGroupBillSelected: (Int) -> Unit) {
-
-    val viewModel = hiltViewModel<DetailViewModel>()
+fun BillDetail(
+    viewModel: DetailViewModel = hiltViewModel(),
+    upPress: () -> Unit,
+    toTable: () -> Unit,
+    onGroupBillSelected: (Int) -> Unit = {}
+) {
+    val billId = viewModel.billId
+    Log.d("##77", "billId $billId")
     val detailState = viewModel.detailState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -44,7 +59,7 @@ fun BillDetail(billId: Int, upPress: () -> Unit, onGroupBillSelected: (Int) -> U
     )
     val mUriHandler = LocalUriHandler.current
 
-    Log.d("##33", "billId $billId")
+    val table by viewModel.table.collectAsState()
 
     BottomSheetScaffold(
         modifier = Modifier.navigationBarsPadding(),
@@ -121,7 +136,10 @@ fun BillDetail(billId: Int, upPress: () -> Unit, onGroupBillSelected: (Int) -> U
 
                                 CardBillLine()
                                 BillPointText(detailState.value.billDetail.summary)
-                                BillRevisionText()
+                                if (table.billTable != null) BillRevisionText(
+                                    table.billTable!!.condolences,
+                                    toTable
+                                )
                                 if (detailState.value.billDetail.news.isNotEmpty()) NewsHeader()
                             }
                         }
@@ -162,53 +180,7 @@ fun DetailHeader(bill: DetailBill, onProgressClick: () -> Unit) {
             .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = KeyLine),
-
-            ) {
-            Spacer(modifier = Modifier.height(20.dp))
-            PillList(bill.billType, bill.status)
-
-            Text(
-                fontSize = 24.sp,
-                color = TayAppTheme.colors.headText,
-                text = bill.billName,
-                style = TayAppTheme.typo.typography.h1
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                Text(
-                    text = bill.proposer,
-                    fontSize = 12.sp,
-                    color = TayAppTheme.colors.subduedText,
-                    fontWeight = FontWeight.Normal
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Icon(
-                        imageVector = TayIcons.visibility_outlined,
-                        contentDescription = "null",
-                        tint = lm_gray600,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Text(
-                        text = "${bill.views}",
-                        fontSize = 12.sp,
-                        color = lm_gray600,
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-            }
-        }
-
+        DetailTitle(bill)
         CardCommittee(bill.committeeInfo.committee)
         CardBillProgress(
             onProgressClick,
@@ -216,6 +188,56 @@ fun DetailHeader(bill: DetailBill, onProgressClick: () -> Unit) {
             bill.proposeDt
         )
 
+    }
+}
+
+@Composable
+fun DetailTitle(bill: DetailBill) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = KeyLine),
+
+        ) {
+        Spacer(modifier = Modifier.height(20.dp))
+        PillList(bill.billType, bill.status)
+
+        Text(
+            fontSize = 24.sp,
+            color = TayAppTheme.colors.headText,
+            text = bill.billName,
+            style = TayAppTheme.typo.typography.h1
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            Text(
+                text = bill.proposer,
+                fontSize = 12.sp,
+                color = TayAppTheme.colors.subduedText,
+                fontWeight = FontWeight.Normal
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Icon(
+                    imageVector = TayIcons.visibility_outlined,
+                    contentDescription = "null",
+                    tint = lm_gray600,
+                    modifier = Modifier.size(20.dp)
+                )
+                Text(
+                    text = "${bill.views}",
+                    fontSize = 12.sp,
+                    color = lm_gray600,
+                    fontWeight = FontWeight.Normal
+                )
+            }
+        }
     }
 }
 
@@ -386,39 +408,20 @@ private fun NewsHeader() {
  * pill수정 필요
  */
 @Composable
-private fun BillRevisionText() {
+private fun BillRevisionText(
+    billTable: List<Condolences>,
+    toTable: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.padding(vertical = 24.dp)
     ) {
         Title(string = "개정 내용 확인하기")
 
-        TayCard(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(Card_Inner_Padding),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "개정된 조항",
-                    color = TayAppTheme.colors.bodyText,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    BillRevisionItem()
-                    BillRevisionItem()
-                    BillRevisionItem()
-                    BillRevisionItem()
-                }
-            }
-        }
+        RevisionSection(billTable)
 
         TayButton(
-            onClick = {/*TODO*/ },
+            onClick = toTable,
             modifier = Modifier
                 .fillMaxWidth(),
             contentColor = TayAppTheme.colors.background,
@@ -434,16 +437,96 @@ private fun BillRevisionText() {
 }
 
 @Composable
-private fun BillRevisionItem() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+fun RevisionSection(billTable: List<Condolences>) {
+    TayCard(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Pill("개정안")
-        Text(
-            text = "어쩌구저꺼주",
-            color = TayAppTheme.colors.subduedText,
-            style = TayAppTheme.typo.typography.body2
-        )
+        Column(
+            modifier = Modifier.padding(Card_Inner_Padding),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = "개정된 조항",
+                color = TayAppTheme.colors.bodyText,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                billTable.forEach { article ->
+                    if (article is Article) {
+                        val title = getRevisionTitle(article)
+                        BillRevisionItem(title, article.type)
+                    }
+                }
+            }
+        }
     }
 }
 
+
+@Composable
+fun getRevisionTitle(
+    article: Condolences,
+    fontSize: TextUnit = 12.sp,
+    fontWeight: FontWeight = FontWeight.Normal,
+    color: Color = TayAppTheme.colors.subduedText,
+    inlineTextContent: Set<String> = emptySet()
+) =
+    buildAnnotatedString {
+        withStyle(
+            SpanStyle(
+                fontWeight = fontWeight,
+                fontSize = fontSize,
+                color = color
+            )
+        ) {
+            /** 타이틀 */
+            article.title.let {
+                val text = article.title.text
+                var temp = it.text
+                if (it.row.isNotEmpty() && !(article.type.contains("신설") || article.type.contains("삭제"))) {
+                    it.row.forEach { row ->
+                        val beforeText = temp.substringBefore(row.text)
+                        temp = temp.substringAfter(row.text)
+                        append(beforeText)
+                        withStyle(
+                            SpanStyle(
+                                textDecoration = TextDecoration.LineThrough
+                            )
+                        ) {
+                            append(row.cText)
+                        }
+                        append(row.text)
+                    }
+                    append(temp)
+                } else append(text)
+            }
+
+
+            if (inlineTextContent.isNotEmpty()) {
+                inlineTextContent.forEach {
+                    append(" ")
+                    appendInlineContent(it)
+                }
+            }
+        }
+    }
+
+@Composable
+private fun BillRevisionItem(title: AnnotatedString, type: Set<String>) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Row {
+            for (i in type)
+                ClausePill(clause = i)
+        }
+    }
+    Text(
+        text = title,
+        color = TayAppTheme.colors.subduedText,
+        style = TayAppTheme.typo.typography.body2
+    )
+}

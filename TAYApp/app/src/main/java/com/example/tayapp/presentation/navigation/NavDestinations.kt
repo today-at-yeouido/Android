@@ -8,6 +8,7 @@ object Destinations {
     const val SPLASH = "splash"
     const val LOGIN = "login"
     const val DETAIL = "detail"
+    const val DETAIL_TABLE = "table"
     const val SIGN_UP = "signup"
     const val BILL_ID = "billId"
     const val GROUP_ID = "groupId"
@@ -36,4 +37,5 @@ object AppGraph {
     const val PROFILE_GRAPH = "profile_graph"
     const val PROFILE_ACCOUNT_GRAPH = "profile_account_graph"
     const val PROFILE_APPSETTING_GRAPH = "profile_appsetting_graph"
+    const val DETAIL_GRAPH = "detail_graph"
 }
