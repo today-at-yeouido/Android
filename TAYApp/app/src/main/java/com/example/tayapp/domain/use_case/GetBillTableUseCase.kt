@@ -387,6 +387,7 @@ private fun parse(
 
         if (chunk.isEmpty()) continue
 
+        /** (현행과 같음) 이 아니라 본문 내용중 10이하이고 connectiveRegex 포함되면 어떻게..? */
         if (chunk.contains(connectiveRegex) && chunk.length < 10) {
             if (idx < prefixList.size - 2) {
                 chunk =
@@ -404,11 +405,11 @@ private fun parse(
             itemRegex ->
                 if (chunk.contains("가.")) {
                     subCondolence = parseItem(chunk.substring(chunk.indexOf("가.") - 1))
-                    chunk = chunk.substringBefore(chunk.substringBefore("가."))
+                    chunk = chunk.substringBefore("가.")
                 }
             subParagraphRegex -> if (chunk.contains(regex)) {
                 val subIndex =
-                    chunk.indexOf(subParagraphRegex.find(chunk)!!.value) - 1
+                    chunk.indexOf(subParagraphRegex.find(chunk)!!.value) -  1
                 /** 호가 있으면 호 저장 */
                 subCondolence =
                     parseSubParagraph(chunk.substring(subIndex))
