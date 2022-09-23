@@ -1,6 +1,8 @@
 package com.example.tayapp.domain.use_case
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.example.tayapp.data.remote.dto.bill.ComparisonTableDto
 import com.example.tayapp.data.remote.dto.bill.RowDto
 import com.example.tayapp.domain.repository.GetBillRepository
@@ -80,28 +82,6 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
         }
     }
 
-    fun checkArticleCase(currentT: String, amendmentT: String): Boolean {
-        /** 조 단위 신설 예외처리 */
-        if (currentT.contains("<신  설>") && amendmentT.contains(articleRevisionRegex)) {
-            if (str.isNotBlank()) {
-                addArticle()
-            }
-            /** 조 단위로 신설되기에 바로 저장한다. */
-            articleList.add(parseArticle(amendmentT).copy(type = setOf("신설")))
-            return true
-        }
-        /** 조 단위 삭제 예외처리 */
-        if (amendmentT.contains("<삭  제>") && currentT.contains(articleRevisionRegex)) {
-            if (str.isNotBlank()) {
-                addArticle()
-            }
-            /** 조 단위로 삭제되기에 바로 저장한다. */
-            articleList.add(parseArticle(currentT).copy(type = setOf("삭제")))
-            return true
-        }
-        return false
-    }
-
     fun getLump(amendmentT: String, currentT: String): String {
         var lump =
             when {
@@ -110,8 +90,6 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
                 !amendmentT.contains("--") -> amendmentT
                 else -> currentT
             }
-
-
 
         if (lump.contains('-')) {
             lump = lump.substringBefore('-') + "⋯⋯ " + lump.substringAfterLast('-')
@@ -156,12 +134,8 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
             val currentT = current?.text ?: ""
             val amendmentT = amendment?.text ?: ""
 
-//            if (checkArticleCase(currentT, amendmentT)) continue 조단위 필요없나?
-
             var lump = getLump(amendmentT, currentT)
-            if (lump == "7의2. 제46조의3제1항을 위반하여 의약품의 판매질서 등에 관한 교육을 받지 아니한 자") {
-                println("")
-            }
+
             when {
                 lump.contains("-  -") -> break
                 lump.contains(Regex("^\\s*((\\d+의\\d+\\.)|(\\d+\\.)|(^\\d+의\\d(?!.+)))")) -> lump =
@@ -180,7 +154,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
 
             // underline true 인 애들 위치랑 같이 저장
             /** 첫 Amendment가 조 형식 아닐 때 -> 법률명 바뀐 경우 */
-            if (i == 0 && !lump.contains(articleRevisionRegex)) {
+            if (i == 0 && str.isBlank() && !lump.contains(articleRevisionRegex)) {
                 cBillTitle = currentT
                 aBillTitle = amendmentT
                 continue
@@ -334,7 +308,7 @@ fun parseArticle(str: String): Article {
     val title = articleRegex.find(articlePart)!!.value
 
     val articleTitle = TextRow(title)
-    val articleText = TextRow(articlePart.replace(title, ""))
+
 
     /** 조 이름을 뺀 나머지 부분 */
     var s = str.replace(title, "")
@@ -352,8 +326,11 @@ fun parseArticle(str: String): Article {
     if (s.contains(subParagraphRegex)) {
         /** 예외 때문에 index - 1을 넘긴다 */
         articleSubCondolence =
-            parseSubParagraph(s.substring(s.indexOf(subParagraphRegex.find(s)!!.value) - 1))
+            parseSubParagraph(s.substring(s.indexOf(" 1.")))
+        s = s.substringBefore(" 1.")
     }
+
+    val articleText = TextRow(s)
 
     return Article(
         title = articleTitle,
@@ -387,6 +364,7 @@ private fun parse(
 
         if (chunk.isEmpty()) continue
 
+        /** (현행과 같음) 이 아니라 본문 내용중 10이하이고 connectiveRegex 포함되면 어떻게..? */
         if (chunk.contains(connectiveRegex) && chunk.length < 10) {
             if (idx < prefixList.size - 2) {
                 chunk =
@@ -404,11 +382,11 @@ private fun parse(
             itemRegex ->
                 if (chunk.contains("가.")) {
                     subCondolence = parseItem(chunk.substring(chunk.indexOf("가.") - 1))
-                    chunk = chunk.substringBefore(chunk.substringBefore("가."))
+                    chunk = chunk.substringBefore("가.")
                 }
             subParagraphRegex -> if (chunk.contains(regex)) {
                 val subIndex =
-                    chunk.indexOf(subParagraphRegex.find(chunk)!!.value) - 1
+                    chunk.indexOf(subParagraphRegex.find(chunk)!!.value)
                 /** 호가 있으면 호 저장 */
                 subCondolence =
                     parseSubParagraph(chunk.substring(subIndex))
@@ -458,7 +436,7 @@ fun parseItem(str: String): List<SubCondolence> {
  * 1042 "을 위반하여 경제적 이익등을 제공받은 자. 이 경우 취득한 경제적 이익등은 몰수하고, 몰수할 수 없을 때에는 그 가액을 추징한다.
  * 자. item으로 인식*/
 private val itemRegex = Regex("[가나다라마바사자아차카타파하]\\.")
-private val connectiveRegex = Regex("[∼⋅ㆍ]")
+private val connectiveRegex = Regex("[∼⋅ㆍ～]")
 private val subParagraphRegex = Regex("(\\s\\d+의\\d+\\.)|(\\s\\d+\\.)")
 private val legislationRegex = Regex("^법률.+법률\\s?(?!.+)")
 private val chapterRegex = Regex("^[제第]\\d+[장]")
@@ -486,6 +464,7 @@ data class Article(
     override val type: Set<String> = emptySet(),
     val paragraph: List<SubCondolence>? = null,
     val subCondolence: List<SubCondolence>? = null,
+    val showNormal: MutableState<Boolean> = mutableStateOf(true)
 ) : Condolences
 
 // 호, 목

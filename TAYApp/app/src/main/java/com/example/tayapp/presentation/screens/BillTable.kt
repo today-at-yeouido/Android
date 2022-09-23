@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,7 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -61,14 +64,16 @@ fun BillTable(
 
                 val inlinePill = mutableMapOf<String, InlineTextContent>()
 
-                condolences.type.forEachIndexed { idx, text ->
+                var articleRevision = ""
 
+                condolences.type.forEachIndexed { idx, text ->
                     /** ClausePill을 Text로 넣기 위해서 InlineContent를 inlinePill에 넣는다 */
                     inlinePill["${idx}Row"] = InlineTextContent(
                         Placeholder(60.textDp, 16.textDp, PlaceholderVerticalAlign.TextCenter)
                     ) {
                         ClausePill(clause = text)
                     }
+                    if (text == "신설" || text == "삭제") articleRevision = text
                 }
 
                 Column(
@@ -88,25 +93,43 @@ fun BillTable(
                         inlineContent = inlinePill,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(color = TayAppTheme.colors.border)
+                            .background(color = TayAppTheme.colors.border),
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
                     if (condolences is Article) {
-                        TayButton(
-                            onClick = { /*TODO*/ },
-                            backgroundColor = TayAppTheme.colors.background,
-                            contentColor = TayAppTheme.colors.headText,
-                            border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                        ) {
-                            Text("개정안만 보기")
+                        if (condolences.type.contains("일부 수정")) {
+                            TayButton(
+                                onClick = {
+                                    condolences.showNormal.value = !condolences.showNormal.value
+                                },
+                                backgroundColor = TayAppTheme.colors.background,
+                                contentColor = TayAppTheme.colors.headText,
+                                border = BorderStroke(1.dp, TayAppTheme.colors.border)
+                            ) {
+                                Text("개정안만 보기", fontWeight = FontWeight.Medium)
+                            }
                         }
                         Spacer(modifier = Modifier.height(7.dp))
+
                         /** 조 본문 */
-                        val articleText = buildAnnotatedString { getAnnotatedString(condolences.text) }
+                        val articleText =
+                            buildAnnotatedString { GetAnnotatedString(condolences.text) }
+
                         if (articleText.isNotBlank()) Text(articleText)
-                        SubCondolenceText(condolences.subCondolence)
-                        SubCondolenceText(condolences.paragraph)
+
+                        SubCondolenceText(
+                            condolences.subCondolence,
+                            padding = 16.dp,
+                            articleRevision = articleRevision,
+                            asd = condolences.showNormal.value
+                        )
+                        SubCondolenceText(
+                            condolences.paragraph,
+                            isParagraph = true,
+                            articleRevision = articleRevision,
+                            asd = condolences.showNormal.value
+                        )
                     }
                 }
             }
@@ -114,66 +137,158 @@ fun BillTable(
     }
 }
 
+
 /** 항, 호, 목 등등 세부 subCondolence를 재귀를 통해 보여줌 */
 @Composable
-private fun SubCondolenceText(subCondolenceList: List<SubCondolence>?) {
+private fun SubCondolenceText(
+    subCondolenceList: List<SubCondolence>?,
+    padding: Dp = 0.dp,
+    isParagraph: Boolean = false,
+    articleRevision: String = "",
+    asd: Boolean = true
+) {
+    val inlinePill = mapOf("신설" to InlineTextContent(
+        Placeholder(34.sp, 14.sp, PlaceholderVerticalAlign.TextCenter)
+    ) { ClausePill(clause = "신설") })
+
     if (subCondolenceList == null) return
-    Spacer(modifier = Modifier.height(23.dp))
-    subCondolenceList.forEach {
-        val text = buildAnnotatedString { getAnnotatedString(it = it.text) }
-        Text(text = text, lineHeight = 1.65.em)
-        SubCondolenceText(it.subCondolence)
+    subCondolenceList.forEach { sub ->
+        val text = buildAnnotatedString {
+            GetAnnotatedString(
+                text = sub.text,
+                isParagraph = isParagraph,
+                articleRevision = articleRevision,
+                asd = asd
+            )
+        }
+        Text(
+            text = text,
+            lineHeight = 1.65.em,
+            letterSpacing = (-0.2).sp,
+            inlineContent = inlinePill,
+            modifier = Modifier.padding(horizontal = padding, vertical = 1.dp)
+        )
+        if (padding == 0.dp) Spacer(modifier = Modifier.height(23.dp))
+        SubCondolenceText(
+            subCondolenceList = sub.subCondolence,
+            padding = padding + 13.dp,
+            articleRevision = articleRevision,
+            asd = asd
+        )
+    }
+    if (!isParagraph) Spacer(modifier = Modifier.height(23.dp))
+}
+
+@Composable
+private fun AnnotatedString.Builder.GetAnnotatedString(
+    text: TextRow,
+    isParagraph: Boolean = false,
+    articleRevision: String,
+    asd: Boolean
+) {
+    if (articleRevision.isBlank()) {
+        GetAnnotatedString(text = text, isParagraph = isParagraph, asd = asd)
+    } else {
+        GetAnnotatedString(text = text, articleRevision = articleRevision)
     }
 }
 
+@Composable
+private fun AnnotatedString.Builder.GetAnnotatedString(
+    text: TextRow,
+    articleRevision: String
+) {
+    if (articleRevision == "신설") {
+        withStyle(
+            SpanStyle(
+                color = TayAppTheme.colors.headText, fontSize = 14.sp,
+                fontWeight = FontWeight.Normal
+            )
+        ) {
+            append(text.text)
+        }
+    } else {
+        append("<삭 제>")
+        withStyle(
+            SpanStyle(
+                textDecoration = TextDecoration.LineThrough,
+                color = TayAppTheme.colors.fieldBorder,
+            )
+        ) {
+            append(text.text)
+        }
+    }
+}
 
 @Composable
-private fun AnnotatedString.Builder.getAnnotatedString(it: TextRow) {
-    var temp = it.text
+private fun AnnotatedString.Builder.GetAnnotatedString(
+    text: TextRow,
+    isParagraph: Boolean = false,
+    asd: Boolean = true
+) {
+    var temp = text.text
     withStyle(
         SpanStyle(
-            color = TayAppTheme.colors.headText, fontSize = 14.textDp,
+            color = TayAppTheme.colors.headText, fontSize = 14.sp,
             fontWeight = FontWeight.Light
         ),
     ) {
-        if (it.row.isNotEmpty()) {
-            it.row.forEach { row ->
+        if (text.row.isNotEmpty()) {
+            text.row.forEach { row ->
                 when (row.type) {
                     "신설" -> {
-                        append(row.cText)
-                        append(row.text)
-                        temp = ""
+                        if (isParagraph) {
+                            appendInlineContent("신설")
+                        } else append("${row.cText} ")
+                        withStyle(
+                            SpanStyle(
+                                fontWeight = FontWeight.Normal
+                            )
+                        ) {
+                            append(row.text)
+                            temp = ""
+                        }
                     }
                     "삭제" -> {
+                        append(row.text)
                         withStyle(
                             SpanStyle(
                                 textDecoration = TextDecoration.LineThrough,
                                 color = TayAppTheme.colors.fieldBorder,
-                                fontWeight = FontWeight.Light
                             )
                         ) {
                             append(row.cText)
                         }
-                        append(row.text)
                         temp = ""
                     }
                     else -> {
-                        val beforeText = temp.substringBefore(row.text)
-                        temp = temp.substringAfter(row.text)
-                        append(beforeText)
-                        withStyle(
-                            SpanStyle(
-                                textDecoration = TextDecoration.LineThrough,
-                                color = TayAppTheme.colors.fieldBorder,
-                                fontWeight = FontWeight.Light
-                            )
-                        ) {
-                            append(row.cText)
+                        if (asd) {
+                            val beforeText = temp.substringBefore(row.text)
+                            temp = temp.substringAfter(row.text)
+                            append(beforeText)
+                            withStyle(
+                                SpanStyle(
+                                    textDecoration = TextDecoration.LineThrough,
+                                    color = TayAppTheme.colors.fieldBorder,
+                                )
+                            ) {
+                                append(row.cText)
+                            }
+                            withStyle(
+                                SpanStyle(
+                                    background = TayAppTheme.colors.information1
+                                )
+                            ) {
+                                append(row.text)
+                            }
+                        } else {
+                            append(temp)
+                            temp = ""
                         }
-                        append(row.text)
                     }
                 }
             }
+            // 마지막 부분 textRow 출력
             append(temp)
         } else append(temp)
     }
