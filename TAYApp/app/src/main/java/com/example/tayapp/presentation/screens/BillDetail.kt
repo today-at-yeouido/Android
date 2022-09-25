@@ -130,7 +130,7 @@ fun BillDetail(
                                     ),
                                 verticalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-                                if (detailState.value.billDetail.isPlenary) {
+                                if (detailState.value.billDetail.isPlenary && detailState.value.billDetail.plenaryInfo.total!=0) {
                                     CardPieGraph(detailState.value.billDetail)
                                 }
 
