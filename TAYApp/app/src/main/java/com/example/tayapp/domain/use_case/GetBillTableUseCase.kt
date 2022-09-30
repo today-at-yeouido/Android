@@ -48,6 +48,14 @@ class GetBillTableUseCase @Inject constructor(
     }
 }
 
+
+/**
+ * 신구조문 처리는 3단계로 나눠서 한다.
+ *      1. Dto 객체에서 current와 amendment를 비교해서 표시할 편ㆍ장ㆍ절ㆍ관ㆍ조 단위로 문자열을 생성, 바뀌는 부분 체크하는 과정
+ *      2. 문자열을 세분화해 항ㆍ호ㆍ목으로 나누는 과정
+ *      3. 바뀐 부분을 해당하는 항ㆍ호ㆍ목에 적절하게 넣는 과정
+ *
+ */
 fun getBillTable(table: ComparisonTableDto): BillTable? {
 
     if (table.compareTable == null) return null
@@ -431,33 +439,55 @@ fun parseItem(str: String): List<SubCondolence> {
     parse(prefixList, str, itemList)
     return itemList
 }
-
-/** 다. 자. 어떻게 예외처리..?
- * 1042 "을 위반하여 경제적 이익등을 제공받은 자. 이 경우 취득한 경제적 이익등은 몰수하고, 몰수할 수 없을 때에는 그 가액을 추징한다.
- * 자. item으로 인식*/
+// 목 정규표현식, 하 이후 부분 추가 필요
 private val itemRegex = Regex("[가나다라마바사자아차카타파하]\\.")
+// 연결사들 ex) 1. ∼ 4. (현행과 같음) 에서 ∼
 private val connectiveRegex = Regex("[∼⋅ㆍ～]")
+// 호 정규표현식
 private val subParagraphRegex = Regex("(\\s\\d+의\\d+\\.)|(\\s\\d+\\.)")
+// 법률 정규표현식
 private val legislationRegex = Regex("^법률.+법률\\s?(?!.+)")
+// 장 정규표현식
 private val chapterRegex = Regex("^[제第]\\d+[장]")
 
+/**
+ * @param currentTitle 바뀌기 전 법률 명, 만약 바뀌지 않았으면 빈 스트링 ""
+ * @param amendmentTitle 바뀐 법률 명, 만약 바뀌지 않았으면 빈 스트링 ""
+ * @param condolences 해당 법률에서 편ㆍ장ㆍ절ㆍ관ㆍ조 단위의 리스트
+ * */
 data class BillTable(
     val currentTitle: String,
     val amendmentTitle: String,
     val condolences: List<Condolences>
 )
 
+/**
+ * 편ㆍ장ㆍ절ㆍ관ㆍ조 명세
+ * @param title 편ㆍ장ㆍ절ㆍ관ㆍ조 이름
+ * @param type 신설ㆍ삭제ㆍ수정ㆍ정보 저장
+ */
 interface Condolences {
     val title: TextRow
     val type: Set<String>
 }
 
-
+/**
+ * 편ㆍ장ㆍ절ㆍ관 클래스
+ */
 data class BigCondolences(
     override val title: TextRow,
     override val type: Set<String> = emptySet()
 ) : Condolences
 
+/**
+ * 조 클래스
+ * @param title 조 이름
+ * @param text 항ㆍ호ㆍ목에 속하지 않는 문자열
+ * @param type 신설ㆍ수정ㆍ삭제 여부
+ * @param paragraph 항
+ * @param subCondolence 호
+ * @param showNormal 개정안만 보기 / 현행안과 같이 보기 기능을 위함, true일 때 현행안과 같이 봄
+ */
 data class Article(
     override val title: TextRow,
     val text: TextRow,
@@ -467,17 +497,34 @@ data class Article(
     val showNormal: MutableState<Boolean> = mutableStateOf(true)
 ) : Condolences
 
-// 호, 목
+/**
+ *  항ㆍ호ㆍ목 클래스
+ * */
 data class SubCondolence(
     val text: TextRow,
     val subCondolence: List<SubCondolence>? = null,
 )
 
+/**
+ * 내용을 저장하는 클래스
+ * @param text 개정안 문자열
+ * @param row 바뀐 부분 저장함
+ * @sample TextRow(text= 5의17. (현행 제5호의7부터 제5호의13까지와 같음) , row=[Row(text=5의17, cText=5의13, location=832, type=수정)])
+ * UI에서 개정안만 보여줄 때는 text를 보여주고, 현행안과 같이 보여줘야 할 때 row를 사용한다.
+ */
 data class TextRow(
     val text: String,
     val row: MutableList<Row> = mutableListOf()
 )
 
+/**
+ * TextRow에서 바뀐 부분을 저장한다.
+ * Dto 클래스에서 underline true인 부분 저장
+ * @param text 개정안 내용
+ * @param cText 현행안 내용
+ * @param location 문자열 위치, 개정안 내용 넣을 때 사용
+ * @param type 신설, 수정, 삭제 정보 저장
+ */
 data class Row(
     val text: String,
     val cText: String,
