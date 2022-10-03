@@ -25,12 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -213,7 +216,7 @@ fun TayTopAppBarSearch(
                 modifier = Modifier.fillMaxWidth().fillMaxHeight()
             ){
                 items(autoComplete){ it ->
-                    AutoCompleteItem(onItemClick = { onAutoCompleteClick(it); focusManager.clearFocus()}, text = it)
+                    AutoCompleteItem(onItemClick = { onAutoCompleteClick(it); focusManager.clearFocus()}, text = it, keyword = queryValue)
                 }
             }
         }
@@ -239,7 +242,8 @@ private fun TopBarTitle(
 @Composable
 private fun AutoCompleteItem(
     onItemClick: () -> Unit,
-    text: String
+    text: String,
+    keyword: String
 ){
     Row(
         modifier = Modifier
@@ -257,7 +261,34 @@ private fun AutoCompleteItem(
 
         Spacer(modifier = Modifier.size(8.dp))
 
-        Text(text, fontWeight = FontWeight.Normal, fontSize = 14.sp, maxLines = 1)
+        val startIndex = text.indexOf(keyword)
+
+        if (keyword != "" && startIndex != -1) {
+            Text(
+                text = buildAnnotatedString {
+
+                    if (startIndex == 0) {
+                        withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
+                            append(keyword)
+                        }
+                        append(text.substring(keyword.length, text.length))
+                    } else {
+                        append(text.substring(0, startIndex))
+
+                        withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
+                            append(keyword)
+                        }
+                        append(text.substring(startIndex + keyword.length, text.length))
+                    }
+                },
+                color = TayAppTheme.colors.bodyText,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                maxLines = 1
+            )
+        } else {
+            Text(text, fontWeight = FontWeight.Normal, fontSize = 14.sp, maxLines = 1)
+        }
 
     }
 
