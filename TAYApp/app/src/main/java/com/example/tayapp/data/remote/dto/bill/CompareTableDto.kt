@@ -6,6 +6,8 @@ data class CompareTableDto(
 )
 
 interface RowDto {
+    val status: String
     val text: String
     val underline: Boolean
+    val table: List<String>
 }
