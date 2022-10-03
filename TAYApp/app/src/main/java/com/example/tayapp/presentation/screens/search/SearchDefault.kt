@@ -98,7 +98,7 @@ fun SearchDefault(
         }
 
         items(recentViewed){ it ->
-            CardBillWithEmoij(
+            CardBillWithEmoji(
                 bill = it.toDomain(),
                 onClick = onBillSelected
             )

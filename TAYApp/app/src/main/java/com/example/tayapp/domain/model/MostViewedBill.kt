@@ -14,6 +14,7 @@ data class MostViewedBill(
         val id: Int,
         val proposer: String,
         val status: String,
+        val emoji: String
     )
 }
 
@@ -28,7 +29,8 @@ fun MostViewedBillDto.toDomain(): MostViewedBill = MostViewedBill(
         ),
         id = this.billSummary.id,
         proposer = this.billSummary.proposer,
-        status = this.billSummary.status
+        status = this.billSummary.status,
+        emoji = this.billSummary.emoji
     ),
     news = if (news.isNotEmpty()) news.map {
         Log.d("##88", "뉴스 뉴스 ${it}")

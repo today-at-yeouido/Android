@@ -26,8 +26,6 @@ import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.utils.Emoij
-import com.example.tayapp.presentation.utils.EmoijList
 import com.example.tayapp.utils.ThemeConstants.LIGHT
 
 private object CardUserValue {
@@ -153,7 +151,7 @@ fun CardUserHeader(title: String = "과학") {
 
 
 /**
- * innerpadding 값 수정
+ * 사용자 추천법안에 사용되는 카드
  */
 @Composable
 fun CardUserItem(
@@ -168,7 +166,7 @@ fun CardUserItem(
             .clickable(onClick = { onClick(bill.id) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        EmoijText(bill.billName)
+        EmojiText(bill.emoji)
 
         Spacer(modifier = Modifier.width(CardUserValue.SpacerBetween))
 
@@ -192,24 +190,11 @@ fun CardUserItem(
 
 
 @Composable
-fun EmoijText(
-    title: String
+fun EmojiText(
+    emoji: String
 ) {
-    var selectedEmoij = ""
-
-    run {
-        EmoijList.forEach { it ->
-            it.key.forEach { key ->
-                if (title.contains(key)) {
-                    selectedEmoij = it.value
-                    return@run
-                }
-            }
-        }
-    }
-
     Text(
-        selectedEmoij,
+        emoji,
         modifier = Modifier
             .width(CardUserValue.fontWidth),
         fontSize = 30.sp,

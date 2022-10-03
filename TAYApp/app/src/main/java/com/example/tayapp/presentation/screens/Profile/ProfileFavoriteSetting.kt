@@ -21,7 +21,7 @@ import com.example.tayapp.presentation.components.CardProfileListItemWithNext
 import com.example.tayapp.presentation.components.TayCard
 import com.example.tayapp.presentation.components.TayTopAppBarWithBack
 import com.example.tayapp.presentation.ui.theme.*
-import com.example.tayapp.presentation.utils.Emoij
+import com.example.tayapp.presentation.utils.Emoji
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.FavoritCategoryViewModel
 
@@ -121,7 +121,7 @@ fun ProfileFavoriteCard(
 
             ) {
                 Text(
-                    "${Emoij[title]}",
+                    "${Emoji[title]}",
                     fontSize = 36.sp
                 )
                 Text("$title",
