@@ -1,5 +1,6 @@
 package com.example.tayapp.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -25,10 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tayapp.domain.use_case.Article
 import com.example.tayapp.domain.use_case.SubCondolence
 import com.example.tayapp.domain.use_case.TextRow
-import com.example.tayapp.presentation.components.ClausePill
-import com.example.tayapp.presentation.components.TayButton
-import com.example.tayapp.presentation.components.TayTopAppBarWithBack
-import com.example.tayapp.presentation.components.Title
+import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.BillDetailUiState
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
@@ -122,13 +119,13 @@ fun BillTable(
                             condolences.subCondolence,
                             padding = 16.dp,
                             articleRevision = articleRevision,
-                            asd = condolences.showNormal.value
+                            showType = condolences.showNormal.value
                         )
                         SubCondolenceText(
                             condolences.paragraph,
                             isParagraph = true,
                             articleRevision = articleRevision,
-                            asd = condolences.showNormal.value
+                            showType = condolences.showNormal.value
                         )
                     }
                 }
@@ -145,7 +142,7 @@ private fun SubCondolenceText(
     padding: Dp = 0.dp,
     isParagraph: Boolean = false,
     articleRevision: String = "",
-    asd: Boolean = true
+    showType: Boolean = true
 ) {
     val inlinePill = mapOf("신설" to InlineTextContent(
         Placeholder(34.sp, 14.sp, PlaceholderVerticalAlign.TextCenter)
@@ -158,7 +155,7 @@ private fun SubCondolenceText(
                 text = sub.text,
                 isParagraph = isParagraph,
                 articleRevision = articleRevision,
-                asd = asd
+                showType = showType
             )
         }
         Text(
@@ -168,12 +165,20 @@ private fun SubCondolenceText(
             inlineContent = inlinePill,
             modifier = Modifier.padding(horizontal = padding, vertical = 1.dp)
         )
+        if (sub.text.table.isNotEmpty()) {
+            Log.d("##12", "table")
+            Log.d("##12", "${sub.text.table}")
+            sub.text.table.forEach {
+                TayTable(it)
+            }
+        }
+
         if (padding == 0.dp) Spacer(modifier = Modifier.height(23.dp))
         SubCondolenceText(
             subCondolenceList = sub.subCondolence,
             padding = padding + 13.dp,
             articleRevision = articleRevision,
-            asd = asd
+            showType = showType
         )
     }
     if (!isParagraph) Spacer(modifier = Modifier.height(23.dp))
@@ -184,10 +189,10 @@ private fun AnnotatedString.Builder.GetAnnotatedString(
     text: TextRow,
     isParagraph: Boolean = false,
     articleRevision: String,
-    asd: Boolean
+    showType: Boolean
 ) {
     if (articleRevision.isBlank()) {
-        GetAnnotatedString(text = text, isParagraph = isParagraph, asd = asd)
+        GetAnnotatedString(text = text, isParagraph = isParagraph, showType = showType)
     } else {
         GetAnnotatedString(text = text, articleRevision = articleRevision)
     }
@@ -224,7 +229,7 @@ private fun AnnotatedString.Builder.GetAnnotatedString(
 private fun AnnotatedString.Builder.GetAnnotatedString(
     text: TextRow,
     isParagraph: Boolean = false,
-    asd: Boolean = true
+    showType: Boolean = true
 ) {
     var temp = text.text
     withStyle(
@@ -262,24 +267,44 @@ private fun AnnotatedString.Builder.GetAnnotatedString(
                         temp = ""
                     }
                     else -> {
-                        if (asd) {
-                            val beforeText = temp.substringBefore(row.text)
-                            temp = temp.substringAfter(row.text)
-                            append(beforeText)
-                            withStyle(
-                                SpanStyle(
-                                    textDecoration = TextDecoration.LineThrough,
-                                    color = TayAppTheme.colors.fieldBorder,
-                                )
-                            ) {
-                                append(row.cText)
-                            }
-                            withStyle(
-                                SpanStyle(
-                                    background = TayAppTheme.colors.information1
-                                )
-                            ) {
-                                append(row.text)
+                        if (showType) {
+                            /**4818 같이 일부 수정인데 항,호 같이 있는 경우  */
+                            if (temp.contains(row.text)) {
+                                val beforeText = temp.substringBefore(row.text)
+                                temp = temp.substringAfter(row.text)
+                                append(beforeText)
+                                withStyle(
+                                    SpanStyle(
+                                        textDecoration = TextDecoration.LineThrough,
+                                        color = TayAppTheme.colors.fieldBorder,
+                                    )
+                                ) {
+                                    append(row.cText)
+                                }
+                                withStyle(
+                                    SpanStyle(
+                                        background = TayAppTheme.colors.information1
+                                    )
+                                ) {
+                                    append(row.text)
+                                }
+                            } else {
+                                withStyle(
+                                    SpanStyle(
+                                        textDecoration = TextDecoration.LineThrough,
+                                        color = TayAppTheme.colors.fieldBorder,
+                                    )
+                                ) {
+                                    append(row.cText)
+                                }
+                                withStyle(
+                                    SpanStyle(
+                                        background = TayAppTheme.colors.information1
+                                    )
+                                ) {
+                                    append(temp)
+                                }
+                                temp = ""
                             }
                         } else {
                             append(temp)
