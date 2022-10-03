@@ -17,5 +17,6 @@ data class SearchState(
     val nextPage: Int = 2,
     val endReached: Boolean = false,
     val pagingLoading : Boolean = false,
-    val recommendSearch: List<String> = emptyList()
+    val recommendSearch: List<String> = emptyList(),
+    val isFocused: Boolean = false
 )
