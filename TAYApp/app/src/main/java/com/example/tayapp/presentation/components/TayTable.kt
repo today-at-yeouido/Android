@@ -11,6 +11,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.tayapp.domain.use_case.TableRow
 import com.example.tayapp.presentation.TayApp
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_gray100
@@ -23,15 +24,17 @@ import com.example.tayapp.presentation.ui.theme.lm_gray700
  * data: 테이블에 들어가는 전체 데이터
  */
 @Composable
-fun TayTable(row: Int, col: Int, data: List<String>){
+fun TayTable(table: TableRow){
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(lm_gray100),
     ) {
-        for(i in 0..row){
+        for(i in 0..table.row){
             //한 행씩 분리해서 Row생성
-            TayTableRow(data = data.subList(i*(col+1), (i+1)*(col+1)))
+            TayTableRow(data = table.data.subList(i*(table.col+1), (i+1)*(table.col+1)))
         }
     }
 }
@@ -62,6 +65,6 @@ private fun TayTableRow(data: List<String>){
 @Preview
 fun TayTablePreview(){
     TayAppTheme() {
-        TayTable(data = listOf("112983471098234098123490","2","3","4asdfadfassdfgsergsergserges","5","6","segrsesgeg7","8","9"), row = 2, col = 0)
+//        TayTable(data = listOf("112983471098234098123490","2","3","4asdfadfassdfgsergsergserges","5","6","segrsesgeg7","8","9"), row = 2, col = 2)
     }
 }
