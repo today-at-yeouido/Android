@@ -9,5 +9,7 @@ interface RowDto {
     val status: String
     val text: String
     val underline: Boolean
-    val table: List<String>
+    val table: List<TableDto>
 }
+
+data class TableDto(val row: String, val col: String, val text: String)

@@ -3,10 +3,7 @@ package com.example.tayapp.domain.use_case
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.example.tayapp.data.remote.dto.bill.AmendmentDto
-import com.example.tayapp.data.remote.dto.bill.ComparisonTableDto
-import com.example.tayapp.data.remote.dto.bill.CurrentDto
-import com.example.tayapp.data.remote.dto.bill.RowDto
+import com.example.tayapp.data.remote.dto.bill.*
 import com.example.tayapp.domain.repository.GetBillRepository
 import com.example.tayapp.domain.use_case.login.CheckLoginUseCase
 import com.example.tayapp.utils.NoConnectivityException
@@ -82,6 +79,7 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
 
     /** 개정 내용 담을 리스트 */
     var rowList = arrayListOf<Row>()
+    var tableList = arrayListOf<TableRow>()
 
     /**
      * articleList에 Condolences 객체를 추가하는 함수
@@ -109,9 +107,10 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
      * */
     fun addArticle() {
         if (toggle) {
-            val article = setRevision(parseCondolences(str), rowList)
+            val article = setRevision(parseCondolences(str), rowList, tableList)
             articleList.add(article)
             rowList = arrayListOf()
+            tableList = arrayListOf()
             str = ""
         } else {
             toggle = true
@@ -207,8 +206,10 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
     for (i in 0 until table.compareTable.size) {
 
         val compareTable = table.compareTable[i]
-        val amendmentTable = compareTable.amendment.filter { it.text.isNotBlank() }
-        val currentTable = compareTable.current.filter { it.text.isNotBlank() }
+        val amendmentTable =
+            compareTable.amendment.filter { it.text.isNotBlank() || it.table.isNotEmpty() }
+        val currentTable =
+            compareTable.current.filter { it.text.isNotBlank() || it.table.isNotEmpty() }
 
         /** currentTable 크기와 amendmentTable 크기 중 더 큰 것을 기준으로 반복*/
         val size = amendmentTable.size.coerceAtLeast(currentTable.size)
@@ -221,67 +222,76 @@ fun getBillTable(table: ComparisonTableDto): BillTable? {
             val amendmentT = amendment?.text ?: ""
 
             /** lump는 str에 합칠 Dto에서 얻은 문자열이다. */
-            var lump = getLump(amendment, current)
+            if (current?.status == "table" || amendment?.status == "table") {
+                val t = if (current?.status == "table") current else amendment
+                val row = t!!.table.maxOf { it.row }
+                val col = t.table.maxOf { it.col }
+                val data = t.table.map { it.text }
+                tableList.add(TableRow(data, row.toInt(), col.toInt(), str.length))
+            } else {
+                var lump = getLump(amendment, current)
 
-            when {
-                /** 가끔씩 마지막 부분에 -  -이 포함되는 경우 있음 -> 반복문 중단하고 lump를 str에 합치지 않음  */
-                lump.contains("-  -") -> break
-                /** lump가 호로 시작하는 경우 앞에 공백을 추가해준다.
-                 * 정규표현식 수정 필요할 수 있음, 앞에 공백이 없고 호로 시작하는 경우에만 공백을 추가하는 것이 좋음.
-                 * */
-                lump.contains(Regex("^\\s*((\\d+의\\d+\\.)|(\\d+\\.)|(^\\d+의\\d(?!.+)))")) -> lump =
-                    " $lump"
-            }
+                when {
+                    /** 가끔씩 마지막 부분에 -  -이 포함되는 경우 있음 -> 반복문 중단하고 lump를 str에 합치지 않음  */
+                    lump.contains("-  -") -> break
+                    /** lump가 호로 시작하는 경우 앞에 공백을 추가해준다.
+                     * 정규표현식 수정 필요할 수 있음, 앞에 공백이 없고 호로 시작하는 경우에만 공백을 추가하는 것이 좋음.
+                     * */
+                    lump.contains(Regex("^\\s*((\\d+의\\d+\\.)|(\\d+\\.)|(^\\d+의\\d(?!.+)))")) -> lump =
+                        " $lump"
+                }
 
-            if (i > 0) {
-                /** lump가 편ㆍ장ㆍ절ㆍ관ㆍ조 형식이면 지금까지 저장한 str을 분해해 articleList에 추가한다.
-                 *
-                 * 새로운 편ㆍ장ㆍ절ㆍ관ㆍ조는 항상 j == 0 에서만 나온다.
-                 * j가 0이 아닌경우는 조의 본문 내용임
-                 *
-                 * str이 빈 경우 : 연달아서 편ㆍ장ㆍ절ㆍ관ㆍ조 형식인 경우 예외처리 위함.. // 다른 곳에서 처리해서 이제 없어도 될거같기도 하고..?
-                 * */
-                if ((lump.contains(articleRevisionRegex)
+                if (i > 0) {
+                    /** lump가 편ㆍ장ㆍ절ㆍ관ㆍ조 형식이면 지금까지 저장한 str을 분해해 articleList에 추가한다.
+                     *
+                     * 새로운 편ㆍ장ㆍ절ㆍ관ㆍ조는 항상 j == 0 에서만 나온다.
+                     * j가 0이 아닌경우는 조의 본문 내용임
+                     *
+                     * str이 빈 경우 : 연달아서 편ㆍ장ㆍ절ㆍ관ㆍ조 형식인 경우 예외처리 위함.. // 다른 곳에서 처리해서 이제 없어도 될거같기도 하고..?
+                     * */
+                    if ((lump.contains(articleRevisionRegex)
+                                || lump.contains(legislationRegex)
+                                || lump.contains(chapterRegex))
+                        && j == 0 && str.isNotBlank()
+                    ) {
+                        addArticle()
+                    }
+                }
+
+                /** 첫 Amendment가 편ㆍ장ㆍ절ㆍ관ㆍ조 형식 아닐 때 -> 법률명 바뀐 경우 */
+                if (i == 0 && str.isBlank() && !(lump.contains(articleRevisionRegex)
                             || lump.contains(legislationRegex)
                             || lump.contains(chapterRegex))
-                    && j == 0 && str.isNotBlank()
                 ) {
-                    addArticle()
+                    cBillTitle = currentT
+                    aBillTitle = amendmentT
+                    continue
                 }
-            }
 
-            /** 첫 Amendment가 편ㆍ장ㆍ절ㆍ관ㆍ조 형식 아닐 때 -> 법률명 바뀐 경우 */
-            if (i == 0 && str.isBlank() && !(lump.contains(articleRevisionRegex)
-                        || lump.contains(legislationRegex)
-                        || lump.contains(chapterRegex))
-            ) {
-                cBillTitle = currentT
-                aBillTitle = amendmentT
-                continue
-            }
+                /** 바뀐 사항이 있는지 체크하고, 있다면 rowList에 추가 */
+                checkRevisionType(amendment ?: current!!, amendmentT, currentT)
 
-            /** 바뀐 사항이 있는지 체크하고, 있다면 rowList에 추가 */
-            checkRevisionType(amendment ?: current!!, amendmentT, currentT)
-
-            /** str을 더할 때 첫 Dto인지 아닌지에 따라 다르게 처리한다. */
-            str += if (i > 0) {
-                lump
-            } else {
-                if (lump.contains(articleRevisionRegex)
-                            || lump.contains(legislationRegex)
-                            || lump.contains(chapterRegex)) {
-                    /** 첫 Amendment가 편ㆍ장ㆍ절ㆍ관ㆍ조 형식일 때  */
-                    addArticle()
+                /** str을 더할 때 첫 Dto인지 아닌지에 따라 다르게 처리한다. */
+                str += if (i > 0) {
                     lump
                 } else {
-                    lump
+                    if (lump.contains(articleRevisionRegex)
+                        || lump.contains(legislationRegex)
+                        || lump.contains(chapterRegex)
+                    ) {
+                        /** 첫 Amendment가 편ㆍ장ㆍ절ㆍ관ㆍ조 형식일 때  */
+                        addArticle()
+                        lump
+                    } else {
+                        lump
+                    }
                 }
             }
         }
     }
 
     /** 마지막 조는 반복문이 끝난 뒤 저장한다. */
-    articleList.add(setRevision(parseCondolences(str), rowList))
+    articleList.add(setRevision(parseCondolences(str), rowList, tableList))
 
     return BillTable(
         currentTitle = cBillTitle,
@@ -306,9 +316,13 @@ fun parseBigCondolences(str: String): BigCondolences {
     return BigCondolences(TextRow(str))
 }
 
-fun setRevision(condolences: Condolences, rowArray: ArrayList<Row>): Condolences {
+fun setRevision(
+    condolences: Condolences,
+    rowArray: ArrayList<Row>,
+    tableArray: ArrayList<TableRow>
+): Condolences {
     return if (condolences is Article) {
-        setRowArticle(condolences, rowArray)
+        setRowArticle(condolences, rowArray, tableArray)
     } else setRowBigCondolences(condolences as BigCondolences, rowArray)
 }
 
@@ -321,11 +335,16 @@ fun setRowBigCondolences(condolences: BigCondolences, rowArray: ArrayList<Row>):
 
 /** 개정된 부분들을 적절한 위치(조, 항, 호, 목)에 저장해준다. */
 /** textRow가 null인 경우 있나? */
-fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
+fun setRowArticle(
+    article: Article,
+    rowArray: ArrayList<Row>,
+    tableArray: ArrayList<TableRow>
+): Article {
     // 문자열 길이
     var strSize = 0
     // 인덱스
     var idx = 0
+    var tableIdx = 0
     // 해당 조에서 개정된 부분의 사이즈
     val rowArraySize = rowArray.size
 
@@ -339,8 +358,18 @@ fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
     fun plusLength(textRow: TextRow, flag: String = "") {
         val textRowLength = textRow.text.length
         while (idx < rowArraySize) {
+
             val row = rowArray[idx]
             val rowLocation = row.location
+
+            if (tableArray.isNotEmpty() && tableIdx < tableArray.size) {
+                val table = tableArray[tableIdx]
+                if (strSize < table.location && table.location <= strSize + textRowLength) {
+                    textRow.table.add(table)
+                    tableIdx++
+                }
+            }
+
             if (strSize <= rowLocation && rowLocation < strSize + textRowLength) {
                 if (idx + 1 <= rowArraySize) {
                     when (row.type) {
@@ -395,7 +424,7 @@ fun setRowArticle(article: Article, rowArray: ArrayList<Row>): Article {
 /** 조를 분석해서 문자열을 적절한 위치에 잘라서 저장한다. */
 fun parseArticle(str: String): Article {
 
-    val articleRegex = Regex("(^|.[^\\s])([제第])\\s?\\d{1,4}([조條])[^()]*\\([^)]*\\)")
+    val articleRegex = Regex("(^|.\\S)([제第])\\s?\\d{1,4}([조條])[^()]*\\([^)]*\\)")
 
     // 항을 저장할 리스트
     var articleParagraph: List<SubCondolence>? = null
@@ -558,7 +587,7 @@ private val subParagraphRegex = Regex("(\\s\\d+의\\d+\\.)|(\\s\\d+\\.)")
 private val legislationRegex = Regex("^법률.+법률\\s?(?!.+)")
 
 // 장 정규표현식
-private val chapterRegex = Regex("^[제第]\\d+[장]")
+private val chapterRegex = Regex("^[제第]\\d+장")
 
 /**
  * @param currentTitle 바뀌기 전 법률 명, 만약 바뀌지 않았으면 빈 스트링 ""
@@ -624,7 +653,15 @@ data class SubCondolence(
  */
 data class TextRow(
     val text: String,
-    val row: MutableList<Row> = mutableListOf()
+    val row: MutableList<Row> = mutableListOf(),
+    val table: MutableList<TableRow> = mutableListOf(),
+)
+
+data class TableRow(
+    val data: List<String>,
+    val row: Int,
+    val col: Int,
+    val location: Int
 )
 
 /**

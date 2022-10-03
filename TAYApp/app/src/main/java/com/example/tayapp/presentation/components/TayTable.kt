@@ -62,6 +62,6 @@ private fun TayTableRow(data: List<String>){
 @Preview
 fun TayTablePreview(){
     TayAppTheme() {
-        TayTable(data = listOf("112983471098234098123490","2","3","4asdfadfassdfgsergsergserges","5","6","segrsesgeg7","8","9"), row = 2, col = 0)
+        TayTable(data = listOf("112983471098234098123490","2","3","4asdfadfassdfgsergsergserges","5","6","segrsesgeg7","8","9"), row = 2, col = 2)
     }
 }
