@@ -27,8 +27,7 @@ import com.example.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.example.tayapp.domain.model.Bill
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.BookmarkButton
-import com.example.tayapp.presentation.utils.Emoij
-import com.example.tayapp.presentation.utils.EmoijList
+
 
 
 /**
@@ -98,7 +97,7 @@ fun CardBillWithScrap(
 }
 
 @Composable
-fun CardBillWithEmoij(
+fun CardBillWithEmoji(
     bill: Bill,
     keyword: String = "",
     onClick: (Int) -> Unit = {}
@@ -129,7 +128,7 @@ fun CardBillWithEmoij(
             }
 
 
-            EmoijText(title = bill.billName)
+            EmojiText(emoji = bill.emoji)
         }
     }
 }
@@ -208,7 +207,7 @@ fun CardBillDefault(
 }
 
 @Composable
-fun CardEmoij(emoij: String ="") {
+fun CardEmoji(emoji: String ="") {
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -219,7 +218,7 @@ fun CardEmoij(emoij: String ="") {
                 .size(50.dp)
                 .background(TayAppTheme.colors.layer2)
         )
-        EmoijText(emoij)
+        EmojiText(emoji)
     }
 }
 

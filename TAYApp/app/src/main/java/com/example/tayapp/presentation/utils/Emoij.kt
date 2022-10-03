@@ -1,6 +1,6 @@
 package com.example.tayapp.presentation.utils
 
-val Emoij = mapOf(
+val Emoji = mapOf(
     "행정안전" to "\uD83D\uDEA8",
     "보건복지" to "\uD83D\uDC89",
     "국토교통" to "\uD83D\uDEE3",
@@ -26,7 +26,7 @@ val Emoij = mapOf(
     "과학기술통신" to "\uD83D\uDD2C"
 )
 
-val EmoijList = mapOf<List<String>, String>(
+val EmojiList = mapOf<List<String>, String>(
     listOf("학대", "범죄", "경찰") to  "🚨",
     listOf("건설", "건축") to  "🏗️"  ,
     listOf("항공") to  "✈️"  ,

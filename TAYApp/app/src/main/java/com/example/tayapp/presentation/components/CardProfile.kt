@@ -56,8 +56,8 @@ fun CardUserProfile() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Badge(title = "출석")
-                Badge(title = "법안", emoij = "\uD83C\uDF31")
-                Badge(title = "뉴스", emoij = "\uD83D\uDDDE️")
+                Badge(title = "법안", emoji = "\uD83C\uDF31")
+                Badge(title = "뉴스", emoji = "\uD83D\uDDDE️")
             }
 
             TayButton(
@@ -264,7 +264,7 @@ fun CardProfileListItemWithOutIcon(
 @Composable
 fun Badge(
     modifier: Modifier = Modifier,
-    emoij: String? = "\uD83D\uDC40",
+    emoji: String? = "\uD83D\uDC40",
     title: String = "출석"
 ) {
     Column(
@@ -294,7 +294,7 @@ fun Badge(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "$emoij",
+                    "$emoji",
                     fontSize = 24.sp
                 )
                 BadgePill(text = "Lv.1")

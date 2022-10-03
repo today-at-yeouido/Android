@@ -10,7 +10,8 @@ data class Bill(
     val proposeDt: String,
     val proposer: String,
     val status: String,
-    val views: Int
+    val views: Int,
+    val emoji: String
 )
 
 
@@ -24,5 +25,6 @@ fun BillDto.toDomain(): Bill = Bill(
     id = this.id,
     proposer = this.proposer,
     status = this.status,
-    views = this.views
+    views = this.views,
+    emoji = this.emoji
 )

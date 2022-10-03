@@ -220,9 +220,9 @@ private fun CardContent(bill: MostViewedBill.Bill) {
         }
         Spacer(modifier = Modifier.width(20.matchWidth))
         Text(
-            text = TayEmoji.card_emoji,
+            text = bill.emoji,
             fontSize = 72.textDp,
-            modifier = Modifier.requiredSize(80.dp)
+            modifier = Modifier.requiredSize(90.dp)
         )
     }
 }

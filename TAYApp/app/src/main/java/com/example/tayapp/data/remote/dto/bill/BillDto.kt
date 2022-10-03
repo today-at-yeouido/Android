@@ -9,6 +9,7 @@ data class BillDto(
     val proposeDt: String,
     val proposer: String,
     val status: String,
-    val views: Int
+    val views: Int,
+    val emoji: String = ""
 )
 
