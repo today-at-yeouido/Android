@@ -34,38 +34,36 @@ class GroupViewModel @Inject constructor(
     }
 
     private fun getBillGroup() {
-        if (UserState.isLogin()) {
-            getBillGroupUseCase(groupId.toString()).onEach { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        groupState.update {
-                            it.copy(
-                                billName = result.data!!.billName,
-                                bills = result.data!!.bills,
-                                isLoading = false
-                            )
-                        }
+        getBillGroupUseCase(groupId.toString()).onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    groupState.update {
+                        it.copy(
+                            billName = result.data!!.billName,
+                            bills = result.data!!.bills,
+                            isLoading = false
+                        )
+                    }
 
-                    }
-                    is Resource.Error -> {
-                        groupState.update {
-                            it.copy(
-                                error = result.message ?: "An unexpected error",
-                                isLoading = false
-                            )
-                        }
-                    }
-                    is Resource.Loading -> {
-                        groupState.update {
-                            it.copy(isLoading = true)
-                        }
-                    }
-                    is Resource.NetworkConnectionError -> {
-                        UserState.network = false
+                }
+                is Resource.Error -> {
+                    groupState.update {
+                        it.copy(
+                            error = result.message ?: "An unexpected error",
+                            isLoading = false
+                        )
                     }
                 }
-            }.launchIn(viewModelScope)
-        }
+                is Resource.Loading -> {
+                    groupState.update {
+                        it.copy(isLoading = true)
+                    }
+                }
+                is Resource.NetworkConnectionError -> {
+                    UserState.network = false
+                }
+            }
+        }.launchIn(viewModelScope)
 
     }
 }
