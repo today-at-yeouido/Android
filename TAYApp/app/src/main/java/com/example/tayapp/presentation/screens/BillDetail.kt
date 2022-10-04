@@ -21,6 +21,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -121,20 +122,18 @@ fun BillDetail(
                                 }
                             }, bill = detailState.value.billDetail)
 
-                            Spacer(modifier = Modifier.size(16.dp))
                             Column(
                                 modifier = Modifier
                                     .padding(
                                         horizontal = KeyLine,
                                         vertical = 24.dp
                                     ),
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                                verticalArrangement = Arrangement.spacedBy(14.dp)
                             ) {
                                 if (detailState.value.billDetail.isPlenary && detailState.value.billDetail.plenaryInfo.total!=0) {
                                     CardPieGraph(detailState.value.billDetail)
                                 }
 
-                                CardBillLine()
                                 BillPointText(detailState.value.billDetail.summary)
                                 if (table.billTable != null) BillRevisionText(
                                     table.billTable!!.condolences,
@@ -319,64 +318,48 @@ private fun CardPieGraph(
     }
 }
 
-@Composable
-private fun CardBillLine() {
-    TayCard {
-        Box {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .padding(vertical = 18.dp, horizontal = 11.dp)
-            ) {
-                Text(
-                    text = "이 법에 접수된 의안이 또 있어요!",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
-                    color = TayAppTheme.colors.bodyText,
-                    modifier = Modifier.padding(horizontal = 3.dp),
-                    maxLines = 1
-                )
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Spacer(modifier = Modifier.size(ButtonLargeHeight))
-                }
-            }
-            GradientCompponent(Modifier.align(Alignment.BottomCenter))
-            TayButton(
-                onClick = {/*TODO*/ },
-                modifier = Modifier
-                    .padding(bottom = 18.dp)
-                    .align(Alignment.BottomCenter)
-                    .size(ButtonLargeWidth, ButtonLargeHeight),
-                backgroundColor = TayAppTheme.colors.bodyText,
-                contentColor = TayAppTheme.colors.background
-            ) {
-                Text("건 모두 보기", style = TayAppTheme.typo.typography.button)
-            }
-        }
-    }
-}
-
+/**
+ * 법안 상세 내용
+ * 1. '이에,' '  이에' 가 포함되어있으면 하이라이팅
+ * 2. 제안이유, 주요내용이 있으면 글자 스타일을 부제목 으로
+ * 3. 그 외에는 기본 스타일
+ */
 @Composable
 private fun BillPointText(
-    summary: String? = ""
+    summary: List<String>
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(vertical = 24.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Title(string = "법안 핵심 내용")
-        Text(
-            text = "제안이유 및 주요내용",
-            color = TayAppTheme.colors.bodyText,
-            style = TayAppTheme.typo.typography.body1
-        )
-        Text(
-            text = if (summary.isNullOrBlank()) "" else summary,
-            color = TayAppTheme.colors.headText,
-            style = TayAppTheme.typo.typography.body2
-        )
+
+        summary.forEach {
+
+            if(it.contains("이에,") || it.startsWith("  이에")) {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(background = TayAppTheme.colors.caution1)) {
+                            append(it)
+                        }
+                    },
+                    color = TayAppTheme.colors.headText,
+                    style = TayAppTheme.typo.typography.body2
+                )
+            } else if(it.contains("제안이유") || it.contains("주요내용")) {
+                Text(
+                    text = it,
+                    color = TayAppTheme.colors.bodyText,
+                    style = TayAppTheme.typo.typography.body1
+                )
+            } else if(!it.isNullOrBlank()) {
+                Text(
+                    text = it,
+                    color = TayAppTheme.colors.headText,
+                    style = TayAppTheme.typo.typography.body2
+                )
+            }
+        }
+
     }
 }
 

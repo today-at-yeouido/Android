@@ -9,7 +9,7 @@ data class DetailBill(
     val proposeDt: String = "",
     val proposer: String = "",
     val status: String = "",
-    val summary: String? = "",
+    val summary: List<String> = emptyList(),
     val hwpurl: String? = "",
     val pdfurl: String? = "",
     val views: Int = 0,
@@ -30,7 +30,7 @@ fun DetailBillDto.toDomain(): DetailBill =
         proposeDt = proposeDt,
         proposer = proposer,
         status = status,
-        summary = summary,
+        summary = getSummary(this),
         hwpurl = hwpurl,
         pdfurl = pdfurl,
         views = views,
@@ -136,6 +136,14 @@ private fun getProgress(billDto: DetailBillDto): List<BillProgressItem> {
 
     return progressList
 }
+
+/**
+ * 상세 법안 문자열 분리
+ * 1. "\n" 으로 split
+ * 2. 제안이유 및 핵심 내용 제거
+ * 3. summary가 비어있는 경우 빈 list return
+ */
+fun getSummary(billDto: DetailBillDto): List<String> = billDto.summary?.split("\r\n") ?: emptyList()
 
 data class BillProgressItem(
     val title: String,

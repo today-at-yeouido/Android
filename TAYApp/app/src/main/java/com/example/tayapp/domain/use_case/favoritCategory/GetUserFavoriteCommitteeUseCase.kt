@@ -1,4 +1,4 @@
-package com.example.tayapp.domain.use_case.FavoritCategory
+package com.example.tayapp.domain.use_case.favoritCategory
 
 import android.util.Log
 import com.example.tayapp.domain.repository.UserSettingRepository
