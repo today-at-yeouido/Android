@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
@@ -194,7 +195,12 @@ fun TayTopAppBarSearch(
                         .padding(0.dp),
                     value = queryValue,
                     onValueChange = onChangeQuery,
-                    placeholder = { Text("법안 검색") },
+                    placeholder = {
+                        Text(
+                            "법안 검색",
+                            color = TayAppTheme.colors.disableText,
+                            fontSize = 13.sp
+                        ) },
                     focusManager = focusManager
                 )
                 if (queryValue != "") {
@@ -272,7 +278,7 @@ private fun AutoCompleteItem(
                             append(keyword)
                         }
                         append(text.substring(keyword.length, text.length))
-                    } else {
+                    } else if(startIndex != -1){
                         append(text.substring(0, startIndex))
 
                         withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {

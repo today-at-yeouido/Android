@@ -54,7 +54,8 @@ fun TayEditText(
     shape: Shape = RoundedCornerShape(8.dp),
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
         focusedBorderColor = TayAppTheme.colors.primary,
-        cursorColor = TayAppTheme.colors.background
+        cursorColor = TayAppTheme.colors.background,
+        textColor = TayAppTheme.colors.headText
     ),
     focusManager: FocusManager
 ){
@@ -71,7 +72,7 @@ fun TayEditText(
         onValueChange = onValueChange,
         enabled = enabled,
         readOnly = readOnly,
-        textStyle = TextStyle.Default,
+        textStyle = TextStyle.Default.copy(color = TayAppTheme.colors.headText),
         cursorBrush = SolidColor(colors.cursorColor(isError).value),
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
