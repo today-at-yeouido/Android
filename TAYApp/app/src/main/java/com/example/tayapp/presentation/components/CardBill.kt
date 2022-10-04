@@ -191,7 +191,7 @@ fun CardBillDefault(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(
-                text = date,
+                text = date.replace("-", "."),
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.subduedText
