@@ -121,20 +121,18 @@ fun BillDetail(
                                 }
                             }, bill = detailState.value.billDetail)
 
-                            Spacer(modifier = Modifier.size(16.dp))
                             Column(
                                 modifier = Modifier
                                     .padding(
                                         horizontal = KeyLine,
                                         vertical = 24.dp
                                     ),
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                                verticalArrangement = Arrangement.spacedBy(14.dp)
                             ) {
                                 if (detailState.value.billDetail.isPlenary && detailState.value.billDetail.plenaryInfo.total!=0) {
                                     CardPieGraph(detailState.value.billDetail)
                                 }
 
-                                CardBillLine()
                                 BillPointText(detailState.value.billDetail.summary)
                                 if (table.billTable != null) BillRevisionText(
                                     table.billTable!!.condolences,
@@ -319,52 +317,13 @@ private fun CardPieGraph(
     }
 }
 
-@Composable
-private fun CardBillLine() {
-    TayCard {
-        Box {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .padding(vertical = 18.dp, horizontal = 11.dp)
-            ) {
-                Text(
-                    text = "이 법에 접수된 의안이 또 있어요!",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
-                    color = TayAppTheme.colors.bodyText,
-                    modifier = Modifier.padding(horizontal = 3.dp),
-                    maxLines = 1
-                )
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Spacer(modifier = Modifier.size(ButtonLargeHeight))
-                }
-            }
-            GradientCompponent(Modifier.align(Alignment.BottomCenter))
-            TayButton(
-                onClick = {/*TODO*/ },
-                modifier = Modifier
-                    .padding(bottom = 18.dp)
-                    .align(Alignment.BottomCenter)
-                    .size(ButtonLargeWidth, ButtonLargeHeight),
-                backgroundColor = TayAppTheme.colors.bodyText,
-                contentColor = TayAppTheme.colors.background
-            ) {
-                Text("건 모두 보기", style = TayAppTheme.typo.typography.button)
-            }
-        }
-    }
-}
 
 @Composable
 private fun BillPointText(
     summary: String? = ""
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(vertical = 24.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Title(string = "법안 핵심 내용")
         Text(
