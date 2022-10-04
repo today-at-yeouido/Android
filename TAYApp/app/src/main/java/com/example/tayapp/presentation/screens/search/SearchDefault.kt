@@ -138,6 +138,7 @@ fun SearchHistory(
             contentDescription = null,
             tint = TayAppTheme.colors.disableIcon
         )
+        Spacer(modifier = Modifier.size(10.dp))
         Text(
             text = "$string",
             maxLines = 1,
