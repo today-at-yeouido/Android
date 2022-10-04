@@ -104,8 +104,7 @@ fun NoResult() {
         )
 
         Text(
-            text = "아직 스크랩된 법안이 없어요.\n" +
-                    "관심 있는 법안을 스크랩해보세요!",
+            text = "검색 결과가 없어요 :(",
             modifier = Modifier
                 .padding(top = 258.dp)
                 .align(Alignment.TopCenter),

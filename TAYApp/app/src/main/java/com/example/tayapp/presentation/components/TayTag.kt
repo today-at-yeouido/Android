@@ -24,12 +24,12 @@ fun TayTag(
             .background(
                 color = if (isClicked) TayAppTheme.colors.icon
                 else TayAppTheme.colors.background,
-                shape = RoundedCornerShape(100.dp)
+                shape = RoundedCornerShape(12.dp)
             )
             .border(
                 width = 1.dp,
                 color = TayAppTheme.colors.border,
-                shape = RoundedCornerShape(100.dp)
+                shape = RoundedCornerShape(12.dp)
             )
             .padding(
                 horizontal = 10.dp,

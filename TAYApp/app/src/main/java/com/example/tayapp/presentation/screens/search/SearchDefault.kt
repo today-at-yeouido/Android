@@ -41,7 +41,7 @@ fun SearchDefault(
 
     LazyColumn(
         modifier = Modifier.padding(vertical = 20.dp, horizontal = KeyLine),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
         item {
             Title(
@@ -62,7 +62,7 @@ fun SearchDefault(
         }
 
         item{
-            Spacer(modifier = Modifier.size(60.dp))
+            TayDivider(modifier = Modifier.padding(15.dp))
         }
 
 
@@ -86,7 +86,7 @@ fun SearchDefault(
         }
 
         item{
-            Spacer(modifier = Modifier.size(60.dp))
+            TayDivider()
         }
 
         
