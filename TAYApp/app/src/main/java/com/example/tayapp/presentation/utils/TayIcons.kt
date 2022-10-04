@@ -198,7 +198,6 @@ fun BackButton(
     IconButton(
         onClick = onClick,
         modifier = modifier
-            .padding(Icon_Padding)
             .size(Icon_Size)
     ) {
         Icon(

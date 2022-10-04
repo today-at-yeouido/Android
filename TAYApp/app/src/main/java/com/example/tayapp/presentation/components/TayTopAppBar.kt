@@ -19,26 +19,30 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.utils.BackButton
-import com.example.tayapp.presentation.utils.BookmarkButton
-import com.example.tayapp.presentation.utils.CancelButton
-import com.example.tayapp.presentation.utils.SearchButton
+import com.example.tayapp.presentation.utils.*
 import com.example.tayapp.utils.textDp
 
 
@@ -134,11 +138,13 @@ fun TayTopAppBarSearch(
     onChangeQuery: (String) -> Unit,
     queryValue: String,
     autoComplete: List<String>,
-    upPress: () -> Unit = {}
+    onAutoCompleteClick: (String) -> Unit,
+    onFocusChange: (Boolean) -> Unit,
+    isFocused: Boolean,
+    searching: Boolean
 ) {
 
     val focusManager = LocalFocusManager.current
-    var isFocused by remember{ mutableStateOf(false)}
 
     Column() {
         Row(
@@ -156,57 +162,49 @@ fun TayTopAppBarSearch(
         ) {
 
 
-
-
-            Image(
-                modifier = Modifier
-                    .size(26.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                painter = painterResource(id = R.drawable.ic_tay_logo_app),
-                contentDescription = "main_title_image"
-            )
+            if(searching) {
+                BackButton(
+                    modifier = Modifier.size(26.dp),
+                    onClick = {onCloseClick(); focusManager.clearFocus()}
+                )
+            } else {
+                Image(
+                    modifier = Modifier
+                        .size(26.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    painter = painterResource(id = R.drawable.ic_tay_logo_app),
+                    contentDescription = "main_title_image"
+                )
+            }
 
 
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                TextField(
-                    placeholder = {
-                        Text(
-                            text = "법안 검색",
-                            fontSize = 14.textDp,
-                            color = TayAppTheme.colors.subduedIcon
-                        )
-                    },
-                    value = queryValue,
-                    onValueChange = { onChangeQuery(it) },
+                TayEditText(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .onFocusChanged {
-                            isFocused = it.isFocused
-                        }
-                        .background(TayAppTheme.colors.layer1),
-                    textStyle = TextStyle(fontSize = 14.textDp),
-                    shape = RoundedCornerShape(8.dp),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onSearchClick()
-                            saveQuery()
-                            focusManager.clearFocus()
-                        }
-                    ),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        capitalization = KeyboardCapitalization.None,
-                        autoCorrect = true,
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    )
+                        .height(36.dp)
+                        .background(
+                            color = TayAppTheme.colors.layer1,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .onFocusChanged { onFocusChange(it.isFocused) }
+                        .padding(0.dp),
+                    value = queryValue,
+                    onValueChange = onChangeQuery,
+                    placeholder = {
+                        Text(
+                            "법안 검색",
+                            color = TayAppTheme.colors.disableText,
+                            fontSize = 13.sp
+                        ) },
+                    focusManager = focusManager
                 )
-
                 if (queryValue != "") {
                     CancelButton(
                         modifier = Modifier.align(Alignment.CenterEnd),
-                        onClick = { onCloseClick() }
+                        onClick = { onCloseClick(); focusManager.clearFocus() }
                     )
                 }
             }
@@ -219,10 +217,10 @@ fun TayTopAppBarSearch(
         }
         if(isFocused){
             LazyColumn(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().fillMaxHeight()
             ){
                 items(autoComplete){ it ->
-                    AutoCompleteItem(onItemClick = {onChangeQuery(it); onSearchClick(); saveQuery()}, text = it)
+                    AutoCompleteItem(onItemClick = { onAutoCompleteClick(it); focusManager.clearFocus()}, text = it, keyword = queryValue)
                 }
             }
         }
@@ -248,7 +246,8 @@ private fun TopBarTitle(
 @Composable
 private fun AutoCompleteItem(
     onItemClick: () -> Unit,
-    text: String
+    text: String,
+    keyword: String
 ){
     Row(
         modifier = Modifier
@@ -266,7 +265,44 @@ private fun AutoCompleteItem(
 
         Spacer(modifier = Modifier.size(8.dp))
 
-        Text(text, fontWeight = FontWeight.Normal, fontSize = 14.sp, maxLines = 1)
+        val startIndex = text.indexOf(keyword)
+
+        if (keyword != "" && startIndex != -1) {
+            Text(
+                text = buildAnnotatedString {
+
+                    if (startIndex == 0) {
+                        withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
+                            append(keyword)
+                        }
+                        append(text.substring(keyword.length, text.length))
+                    } else if(startIndex != -1){
+                        append(text.substring(0, startIndex))
+
+                        withStyle(style = SpanStyle(color = TayAppTheme.colors.primary)) {
+                            append(keyword)
+                        }
+                        append(text.substring(startIndex + keyword.length, text.length))
+                    }
+                },
+                color = TayAppTheme.colors.bodyText,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
+        } else {
+            Text(text, fontWeight = FontWeight.Normal, fontSize = 14.sp, maxLines = 1, modifier = Modifier.weight(1f))
+        }
+
+        Spacer(modifier = Modifier.size(8.dp))
+
+        Icon(
+            imageVector = TayIcons.north_east,
+            contentDescription = null,
+            tint = TayAppTheme.colors.disableIcon
+        )
 
     }
 

@@ -161,6 +161,14 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun onFocusChange(focused: Boolean) {
+        searchState.update {
+            it.copy(
+                isFocused = focused
+            )
+        }
+    }
+
     fun onChangeQuery(query: String) {
         searchState.update {
             it.copy(query = query)
@@ -206,6 +214,18 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    //자동완성을 클릭했을때
+    fun autoCompleteClick(query: String) {
+        onChangeQuery(query)
+        getSearchResult()
+        saveRecentTerm()
+        searchState.update {
+            it.copy(
+                searching = true
+            )
+        }
+    }
+
     private fun getRecommendSearchTerm() {
         getRecommendSearchUseCase().onEach { result ->
             Log.d("##66", "뷰모델 실행")
@@ -247,13 +267,15 @@ class SearchViewModel @Inject constructor(
                     if (!result.data.isNullOrEmpty()) {
                         searchState.update {
                             it.copy(
-                                autoComplete = result.data!!
+                                autoComplete = result.data!!,
+                                isLoading = false
                             )
                         }
                     } else {
                         searchState.update {
                             it.copy(
-                                autoComplete = emptyList()
+                                autoComplete = emptyList(),
+                                isLoading = false
                             )
                         }
                     }
@@ -262,7 +284,8 @@ class SearchViewModel @Inject constructor(
                 is Resource.Error -> {
                     searchState.update {
                         it.copy(
-                            error = result.message ?: "An unexpected error"
+                            error = result.message ?: "An unexpected error",
+                            isLoading = false
                         )
                     }
                 }
