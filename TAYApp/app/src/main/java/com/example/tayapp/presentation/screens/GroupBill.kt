@@ -119,27 +119,9 @@ private fun GroupBillHeader(
     ) {
         Text(
             fontSize = 24.sp,
-            color = TayAppTheme.colors.headText,
+            color = lm_gray000,
             text = title,
             style = TayAppTheme.typo.typography.h1
         )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Icon(
-                imageVector = TayIcons.visibility_outlined,
-                contentDescription = "null",
-                tint = lm_gray600,
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = "${view}",
-                fontSize = 12.sp,
-                color = lm_gray600,
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(end = 10.dp)
-            )
-        }
     }
 }

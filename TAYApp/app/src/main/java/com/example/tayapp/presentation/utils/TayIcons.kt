@@ -214,17 +214,11 @@ fun NavigateNextButton(
     modifier: Modifier = Modifier,
     tint: Color = TayAppTheme.colors.icon
 ) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier
-            .size(Icon_Size)
-    ) {
-        Icon(
-            imageVector = TayIcons.navigate_next,
-            contentDescription = null,
-            tint = tint
-        )
-    }
+    Icon(
+        imageVector = TayIcons.navigate_next,
+        contentDescription = null,
+        tint = tint
+    )
 }
 
 @Composable

@@ -14,6 +14,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -171,7 +172,7 @@ fun LineSearchedBill(
 
             ) {
             Text(
-                text = bill.proposeDt,
+                text = bill.proposeDt.substring(2).replace("-", "."),
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.subduedText
@@ -181,7 +182,9 @@ fun LineSearchedBill(
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.subduedText,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             PillList(bill.billType, bill.status)
             NavigateNextButton()
