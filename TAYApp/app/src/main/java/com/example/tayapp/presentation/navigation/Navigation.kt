@@ -78,6 +78,7 @@ private fun NavGraphBuilder.detailNavigation(
     ) {
         composable(
             Destinations.DETAIL,
+            deepLinks = listOf(navDeepLink { uriPattern = "https://todayeouido/{${Destinations.BILL_ID}}" })
         ) { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry("${AppGraph.DETAIL_GRAPH}/{${Destinations.BILL_ID}}")
