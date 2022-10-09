@@ -56,7 +56,7 @@ class FirebaseCloudMessage : FirebaseMessagingService() {
         } else {
             TaskStackBuilder.create(this).run {
                 addNextIntentWithParentStack(taskDetailIntent)
-                getPendingIntent(requestCode, PendingIntent.FLAG_CANCEL_CURRENT)
+                getPendingIntent(requestCode, PendingIntent.FLAG_UPDATE_CURRENT)
             }
         }
 
