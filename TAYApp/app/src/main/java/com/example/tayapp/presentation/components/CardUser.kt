@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
@@ -60,7 +61,7 @@ fun CardsUser(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    Box {
+    Box(modifier = Modifier.padding(top = 10.dp)) {
 
         /**
          * 사용자 맞춤 추천 법안 viewpager
@@ -221,7 +222,8 @@ fun CardUserItem(
                 fontWeight = FontWeight.Normal,
                 color = TayAppTheme.colors.headText,
                 fontSize = 16.sp,
-                maxLines = 2
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

@@ -62,6 +62,8 @@ fun Feed(
     }
 
 
+
+
     Column() {
         TayHomeTopAppBar(
             onTagClick = viewModel::onCategorySelected,
@@ -99,22 +101,7 @@ fun Feed(
                                         modifier = Modifier
                                             .padding(vertical = 0.dp, horizontal = KeyLine)
                                     )
-                                    IconButton(
-                                        onClick = viewModel::tryRecommendBill,
-                                        modifier = Modifier
-                                            .padding(end = KeyLine)
-                                            .border(1.dp, TayAppTheme.colors.border, CircleShape)
-                                            .size(40.dp)
 
-
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Refresh,
-                                            contentDescription = "refresh",
-                                            modifier = Modifier.size(24.dp),
-                                            tint = TayAppTheme.colors.icon
-                                        )
-                                    }
                                 }
                                 CardsUser(
                                     onClick = onBillSelected,
@@ -154,6 +141,11 @@ fun Feed(
     LaunchedEffect(key1 = UserState.network) {
         if (UserState.network) {
         }
+    }
+
+    //사용자 추천법안 refresh 버튼을 없애기 위해 생성
+    LaunchedEffect(key1 = selectedCategory == 0){
+        viewModel.tryRecommendBill()
     }
 }
 
