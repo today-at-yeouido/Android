@@ -10,11 +10,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,9 +28,13 @@ import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.utils.ThemeConstants.DARK
 import com.example.tayapp.utils.ThemeConstants.LIGHT
 import com.example.tayapp.utils.ThemeConstants.SYSTEM
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import com.google.accompanist.pager.rememberPagerState
+import kotlin.math.absoluteValue
 
 private object CardUserValue {
     val ItemHeight = 72.dp
@@ -43,6 +48,7 @@ private object CardUserValue {
 /**
  * 사용자 추천 법안
  */
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CardsUser(
     onClick: (Int) -> Unit = {},
@@ -50,17 +56,31 @@ fun CardsUser(
     navigateToFavorite: () -> Unit,
     recommendBill: List<RecommendBillDto>
 ) {
+    val pagerState = rememberPagerState()
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
     Box {
-        LazyRow(
-            modifier = Modifier,
-            userScrollEnabled = UserState.isLogin(),
-            contentPadding = PaddingValues(KeyLine),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(recommendBill) { it ->
-                CardUser(onClick = onClick, recommendBillDto = it)
-            }
+
+        /**
+         * 사용자 맞춤 추천 법안 viewpager
+         * contentPadding을 이용하여 카드 위치를 중앙에서 왼쪽으로 이동
+         */
+        HorizontalPager(
+            count = recommendBill.size,
+            state = pagerState,
+            itemSpacing = 8.dp,
+            contentPadding = PaddingValues(start = KeyLine,end = screenWidth - CardUserValue.cardWidth - KeyLine),
+            userScrollEnabled = UserState.isLogin()
+        ) { i ->
+            CardUser(
+                onClick = onClick,
+                recommendBillDto = recommendBill[i],
+                modifier = Modifier
+            )
+
         }
+
         when {
             !UserState.isLogin() -> {
                 CardUserDialog(navigateToLogin, "로그인이 필요한 서비스입니다!", "로그인")
@@ -119,13 +139,17 @@ private fun BoxScope.CardUserDialog(
     }
 }
 
+/**
+ * 사용자 추천 법안 카드
+ */
 @Composable
 fun CardUser(
     onClick: (Int) -> Unit = {},
-    recommendBillDto: RecommendBillDto
+    recommendBillDto: RecommendBillDto,
+    modifier: Modifier = Modifier
 ) {
     TayCard(
-        modifier = Modifier
+        modifier = modifier
             .width(CardUserValue.cardWidth)
     ) {
         Column {
@@ -215,4 +239,8 @@ fun EmojiText(
         fontSize = 30.sp,
         color = TayAppTheme.colors.headText
     )
+}
+
+fun lerp(start: Float, stop: Float, fraction: Float): Float {
+    return (1 - fraction) * start + fraction * stop
 }
