@@ -3,6 +3,7 @@ package com.example.tayapp.presentation.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -26,7 +27,9 @@ import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.utils.ThemeConstants.DARK
 import com.example.tayapp.utils.ThemeConstants.LIGHT
+import com.example.tayapp.utils.ThemeConstants.SYSTEM
 
 private object CardUserValue {
     val ItemHeight = 72.dp
@@ -37,6 +40,9 @@ private object CardUserValue {
     val headerHeight = 40.dp
 }
 
+/**
+ * 사용자 추천 법안
+ */
 @Composable
 fun CardsUser(
     onClick: (Int) -> Unit = {},
@@ -60,7 +66,7 @@ fun CardsUser(
                 CardUserDialog(navigateToLogin, "로그인이 필요한 서비스입니다!", "로그인")
             }
             UserState.isLogin() && recommendBill.isEmpty() -> {
-                CardUserDialog(navigateToFavorite, "관심 소관위를 설정해주세요!", buttonText = "설정하로 가기")
+                CardUserDialog(navigateToFavorite, "관심 소관위를 설정해주세요!", buttonText = "설정하러 가기")
             }
         }
     }
@@ -72,10 +78,19 @@ private fun BoxScope.CardUserDialog(
     explanation: String,
     buttonText: String
 ) {
-    Box(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 10.dp)){
+        /**
+         * 사용자 추천 법안 블러 이미지
+         * 사용시점 : 로그인 안했거나 관심 소관위가 없을 경우
+         */
         Image(
             modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = if(UserState.mode == LIGHT) R.drawable.feed_blur_light else R.drawable.feed_blur_dark),
+            painter = painterResource(id =
+                if(UserState.mode == LIGHT || (!isSystemInDarkTheme()&& UserState.mode == SYSTEM)) R.drawable.feed_blur_light
+                else R.drawable.feed_blur_dark
+            ),
             contentDescription = "",
             contentScale = ContentScale.Crop
         )
