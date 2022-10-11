@@ -89,11 +89,11 @@ fun Scrap(
                         )
                     }
                 } else {
-                    UnAuthorizeScreen {
-
-                    }
+                    //로그인 하지 않았을 때
+                    UnAuthorizeScreen()
                 }
             } else {
+                // 네트워크 연결 에러
                 NetworkErrorScreen {
                     UserState.network = true
                     viewModel.refresh()
@@ -102,6 +102,18 @@ fun Scrap(
         }
     }
 }
+
+/**
+ * 회원의 스크랩 화면(로그인 O, 네트워크 O)
+ * isRefreshing: 새로고침 중인가?
+ * viewModel: viewModel
+ * scrapState: 스크랩 화면 상태
+ * onBillSelected: 법안 클릭
+ * coroutineScope
+ * scaffoldState
+ * scrollState: LazyListState,
+ * onGroupBillScrapSelected: 그룹 법안 선택
+ */
 
 @Composable
 private fun ScrapScreen(
@@ -114,65 +126,70 @@ private fun ScrapScreen(
     scrollState: LazyListState,
     onGroupBillScrapSelected: (Int, GroupBillParcelableModel) -> Unit
 ) {
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing),
-        onRefresh = { viewModel.refresh() },
-        refreshTriggerDistance = 50.dp,
-        indicator = { state, trigger ->
-            SwipeRefreshIndicator(
-                // Pass the SwipeRefreshState + trigger through
-                state = state,
-                refreshTriggerDistance = trigger,
-                // Enable the scale animation
-                scale = true,
-                // Change the color and shape
-                backgroundColor = TayAppTheme.colors.background,
-                shape = CircleShape,
-            )
-        }
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = KeyLine),
-            state = scrollState
+    //비어있을 경우 비어있다고 띄우기
+    if(scrapState.bill.isEmpty()) {
+        NothingBillScreen()
+    } else {
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = { viewModel.refresh() },
+            refreshTriggerDistance = 50.dp,
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    // Pass the SwipeRefreshState + trigger through
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    // Enable the scale animation
+                    scale = true,
+                    // Change the color and shape
+                    backgroundColor = TayAppTheme.colors.background,
+                    shape = CircleShape,
+                )
+            }
         ) {
-            items(scrapState.bill) { bill ->
-                var _isBookMarked = remember { mutableStateOf(true) }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = KeyLine),
+                state = scrollState
+            ) {
+                items(scrapState.bill) { bill ->
+                    var _isBookMarked = remember { mutableStateOf(true) }
 
-                if (bill.bills.size == 1) {
-                    CardBillWithScrap(
-                        bill = bill,
-                        onBillSelected = onBillSelected,
-                        _isBookMarked = _isBookMarked.value,
-                        onScrapClickClicked = {
-                            _isBookMarked.value = false
-                            coroutineScope.launch {
-                                val snackbarResult =
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        message = "",
-                                        actionLabel = "스크랩을 취소하시겠습니까?"
-                                    )
-                                when (snackbarResult) {
-                                    SnackbarResult.ActionPerformed -> {
-                                        _isBookMarked.value = true
+                    if (bill.bills.size == 1) {
+                        CardBillWithScrap(
+                            bill = bill,
+                            onBillSelected = onBillSelected,
+                            _isBookMarked = _isBookMarked.value,
+                            onScrapClickClicked = {
+                                _isBookMarked.value = false
+                                coroutineScope.launch {
+                                    val snackbarResult =
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "",
+                                            actionLabel = "스크랩을 취소하시겠습니까?"
+                                        )
+                                    when (snackbarResult) {
+                                        SnackbarResult.ActionPerformed -> {
+                                            _isBookMarked.value = true
+                                        }
+                                        SnackbarResult.Dismissed -> viewModel.deleteScrap(
+                                            bill.bills.first().id
+                                        )
                                     }
-                                    SnackbarResult.Dismissed -> viewModel.deleteScrap(
-                                        bill.bills.first().id
-                                    )
                                 }
                             }
-                        }
-                    )
-                } else {
-                    CardMultiple(
-                        bill = bill,
-                        onLineClick = onBillSelected,
-                        keyword = "",
-                        onButtonClick = {
-                            onGroupBillScrapSelected(bill.groupId, GroupBillParcelableModel(bill.bills, bill.billName)
-                        )}
-                    )
+                        )
+                    } else {
+                        CardMultiple(
+                            bill = bill,
+                            onLineClick = onBillSelected,
+                            keyword = "",
+                            onButtonClick = {
+                                onGroupBillScrapSelected(bill.groupId, GroupBillParcelableModel(bill.bills, bill.billName)
+                                )}
+                        )
+                    }
                 }
             }
         }
