@@ -45,13 +45,10 @@ fun BillTable(
     ) {
         TayTopAppBarWithBack("개정 내용", upPress = upPress)
         LazyColumn {
-
             item {
                 TableHeader(detailState)
                 Spacer(modifier = Modifier.height(20.dp))
                 Column(modifier = Modifier.padding(horizontal = KeyLine)) {
-                    RevisionSection(billTable = table.billTable!!.condolences)
-                    Spacer(modifier = Modifier.height(20.dp))
                     Title(string = "개정 내용")
                     Spacer(Modifier.height(15.dp))
                 }

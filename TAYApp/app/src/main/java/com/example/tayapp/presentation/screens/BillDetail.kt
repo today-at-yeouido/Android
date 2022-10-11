@@ -341,7 +341,7 @@ private fun BillPointText(
                     color = TayAppTheme.colors.headText,
                     style = TayAppTheme.typo.typography.body2
                 )
-            } else if(it.contains("제안이유") || it.contains("주요내용")) {
+            } else if(it.contains("제안이유") || it.contains("주요내용") || it.contains("참고사항")) {
                 Text(
                     text = it,
                     color = TayAppTheme.colors.bodyText,
@@ -416,6 +416,18 @@ private fun BillRevisionText(
 
 @Composable
 fun RevisionSection(billTable: List<Condolences>) {
+
+    /**
+     * 일부 수정, 삭제, 등등 개수를 계산하기 위한 코드
+     * 될 수 있으면 UseCase단에서 계산하면 좋을 듯
+     */
+    var typeCount = mutableMapOf<String, Int>()
+    billTable.forEach {
+        it.type.forEach { type ->
+            typeCount.put(type,(typeCount[type]?: 0) + 1)
+        }
+    }
+
     TayCard(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -432,11 +444,8 @@ fun RevisionSection(billTable: List<Condolences>) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                billTable.forEach { article ->
-                    if (article is Article) {
-                        val title = getRevisionTitle(article)
-                        BillRevisionItem(title, article.type)
-                    }
+                typeCount.forEach { type ->
+                    BillRevisionItem(type.key, type.value)
                 }
             }
         }
@@ -493,18 +502,17 @@ fun getRevisionTitle(
     }
 
 @Composable
-private fun BillRevisionItem(title: AnnotatedString, type: Set<String>) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+private fun BillRevisionItem(type: String, count: Int) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Row {
-            for (i in type)
-                ClausePill(clause = i)
-        }
+        ClausePill(clause = type)
+        Text(
+            text = "${count}개",
+            color = TayAppTheme.colors.subduedText,
+            style = TayAppTheme.typo.typography.body2
+        )
     }
-    Text(
-        text = title,
-        color = TayAppTheme.colors.subduedText,
-        style = TayAppTheme.typo.typography.body2
-    )
+
 }
