@@ -191,12 +191,14 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             val recentTerm = searchState.value.recentTerm
             val query = searchState.value.query
-            getRecentSearchTermUseCase.saveRecentSearchUseCase(recentTerm, query)
-            searchState.update {
-                it.copy(
-                    recentTerm = getRecentSearchTermUseCase.getRecentSearchUseCase().first(),
-                    isLoading = false
-                )
+            if(query.isNotBlank()) {
+                getRecentSearchTermUseCase.saveRecentSearchUseCase(recentTerm, query)
+                searchState.update {
+                    it.copy(
+                        recentTerm = getRecentSearchTermUseCase.getRecentSearchUseCase().first(),
+                        isLoading = false
+                    )
+                }
             }
         }
     }
