@@ -107,6 +107,11 @@ fun MostViewedRow(
     }
 }
 
+/**
+ * 최근 이슈 법안 카드
+ * billItem: 최근 이슈 법안 리스트
+ * onBillClick: 법안 상세 페이지로 향하는 이벤트
+ */
 @Composable
 private fun MostViewedRowCard(
     billItem: MostViewedBill,
@@ -120,21 +125,24 @@ private fun MostViewedRowCard(
                 shape = CardNewsShape.large
             ),
     ) {
-        Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
-        CardContentLayout(bill = billItem.bill, onBillClick)
-        Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
+        Column(
+            modifier = Modifier.clickable { onBillClick(billItem.bill.id)  }
+        ) {
+            Spacer(Modifier.height(MostViewedValues.Card_Top_Padding))
+            CardContentLayout(bill = billItem.bill)
+            Spacer(Modifier.height(MostViewedValues.Card_Between_Height))
+        }
         CardNewsLayout(newsList = billItem.news)
     }
 }
 
 @Composable
-private fun CardContentLayout(bill: MostViewedBill.Bill, onBillClick: (Int) -> Unit) {
+private fun CardContentLayout(bill: MostViewedBill.Bill) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(MostViewedValues.Content_Height)
-            .padding(horizontal = 14.matchWidth)
-            .clickable { onBillClick(bill.id) },
+            .padding(horizontal = 14.matchWidth),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CardContent(bill)
@@ -156,7 +164,9 @@ private fun CardNewsLayout(newsList: List<News>) {
         if (newsList.isEmpty()) {
             Text(
                 "관련 뉴스가 없습니다.",
-                modifier = Modifier.fillMaxSize().padding(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 10.dp),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 color = TayAppTheme.colors.disableIcon
