@@ -34,15 +34,17 @@ fun PieGraph(
     colors: List<Color> = listOf(
         TayAppTheme.colors.success1,
         TayAppTheme.colors.danger1,
-        TayAppTheme.colors.caution1
+        TayAppTheme.colors.caution1,
+        TayAppTheme.colors.disableIcon
     )
 ) {
     //전체 인원 수
     val total = points[3]!!.toFloat()
 
     //찬성 수, 반대 수, 기권 수 -> 비율로 변환
-    val proportions = points.subList(0, 3).mapIndexed { index, i ->
-        i!!.toFloat() / total
+    val proportions = points.mapIndexed { index, i ->
+        if(index != 3) (i ?: 0).toFloat() / 299
+        else 1 - (i ?: 0).toFloat() / 299
     }
 
     //찬성 비율 소수점
@@ -70,7 +72,7 @@ fun PieGraph(
     
     Box() {
         proportions.reversed().forEachIndexed{ index, item ->
-            DrawCircle(color = colors[2-index], sweepAngle = angleSum, animationPlayed = animationPlayed)
+            DrawCircle(color = colors[3-index], sweepAngle = angleSum, animationPlayed = animationPlayed)
             angleSum -= item
         }
         Text(
