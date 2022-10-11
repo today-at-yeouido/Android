@@ -19,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -203,8 +204,10 @@ fun TayTopAppBarSearch(
                 )
                 if (queryValue != "") {
                     CancelButton(
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                        onClick = { onCloseClick(); focusManager.clearFocus() }
+                        modifier = Modifier
+                            .padding(end = 3.dp)
+                            .align(Alignment.CenterEnd),
+                        onClick = { onChangeQuery(""); focusManager.moveFocus(FocusDirection.Up)}
                     )
                 }
             }
