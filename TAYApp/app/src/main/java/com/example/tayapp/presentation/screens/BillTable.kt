@@ -96,16 +96,16 @@ fun BillTable(
 
                     if (condolences is Article) {
                         if (condolences.type.contains("일부 수정")) {
-                            TayButton(
+                            TayToggleButton(
                                 onClick = {
                                     condolences.showNormal.value = !condolences.showNormal.value
                                 },
                                 backgroundColor = TayAppTheme.colors.background,
                                 contentColor = TayAppTheme.colors.headText,
-                                border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                            ) {
-                                Text("개정안만 보기", fontWeight = FontWeight.Medium)
-                            }
+                                border = BorderStroke(1.dp, TayAppTheme.colors.border),
+                                clickedContent = {Text("현행안과 함께 보기", fontWeight = FontWeight.Medium)},
+                                notClickedContent = {Text("개정안만 보기", fontWeight = FontWeight.Medium)}
+                            )
                         }
                         Spacer(modifier = Modifier.height(7.dp))
 
