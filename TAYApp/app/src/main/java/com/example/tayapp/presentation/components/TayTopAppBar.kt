@@ -1,6 +1,7 @@
 package com.example.tayapp.presentation.components
 
 import android.util.Log
+import android.view.KeyEvent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,10 +20,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -30,13 +31,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
@@ -184,7 +181,7 @@ fun TayTopAppBarSearch(
                 TayEditText(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(36.dp)
+                        .height(38.dp)
                         .background(
                             color = TayAppTheme.colors.layer1,
                             shape = RoundedCornerShape(8.dp)
@@ -199,12 +196,25 @@ fun TayTopAppBarSearch(
                             color = TayAppTheme.colors.disableText,
                             fontSize = 13.sp
                         ) },
-                    focusManager = focusManager
+                    focusManager = focusManager,
+                    //엔터 형태 결정
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(
+                        //엔터를 눌렀을 때 이벤트 정의
+                        onSearch = {
+                            onSearchClick()
+                            saveQuery()
+                            focusManager.clearFocus()
+                        }
+                    ),
+                    maxLines = 1
                 )
                 if (queryValue != "") {
                     CancelButton(
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                        onClick = { onCloseClick(); focusManager.clearFocus() }
+                        modifier = Modifier
+                            .padding(end = 3.dp)
+                            .align(Alignment.CenterEnd),
+                        onClick = { onChangeQuery(""); focusManager.moveFocus(FocusDirection.Up)}
                     )
                 }
             }

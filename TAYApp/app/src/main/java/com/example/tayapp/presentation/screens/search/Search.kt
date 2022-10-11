@@ -33,6 +33,7 @@ fun Search(
         Column(
             modifier = Modifier.addFocusCleaner(LocalFocusManager.current)
         ) {
+            //검색창
             TayTopAppBarSearch(
                 saveQuery = viewModel::saveRecentTerm,
                 onSearchClick = viewModel::getSearchResult,
