@@ -135,6 +135,9 @@ constructor(
                 is Resource.NetworkConnectionError -> {
                     UserState.network = false
                 }
+                is Resource.Loading -> {
+                    pagingLoading.value = true
+                }
             }
         }.launchIn(viewModelScope)
     }

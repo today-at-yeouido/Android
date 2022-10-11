@@ -111,6 +111,9 @@ fun Feed(
                                 )
                                 Spacer(modifier = Modifier.height(40.dp))
                             }
+                            /**
+                             * 최근 발의 법안
+                             */
                             Title(
                                 "최근 발의 법안",
                                 modifier = Modifier
@@ -125,6 +128,12 @@ fun Feed(
                             onClick = onBillSelected
                         )
 
+                    }
+
+                    if(pagingLoading) {
+                        item {
+                            LoadingView(modifier = Modifier.fillMaxWidth())
+                        }
                     }
                 }
                 it

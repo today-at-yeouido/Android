@@ -107,8 +107,9 @@ fun TayHomeTopAppBar(
 }
 
 
-
-
+/**
+ * 상임위 태그가 있는 Top Bar
+ */
 @Composable
 fun HomeTabBar(
     modifier: Modifier,

@@ -35,7 +35,7 @@ fun TayTag(
                 horizontal = 10.dp,
                 vertical = 5.dp
             )
-            .clickable { onStringClick(string); onClick() }
+            .clickable( enabled = !isClicked ) { onStringClick(string); onClick() }
 
     ) {
         Text(
