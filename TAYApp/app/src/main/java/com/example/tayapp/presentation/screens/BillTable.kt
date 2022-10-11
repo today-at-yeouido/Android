@@ -33,6 +33,7 @@ import com.example.tayapp.presentation.states.BillDetailUiState
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.presentation.ui.theme.lm_primary50
+import com.example.tayapp.presentation.utils.StateColor
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
 import com.example.tayapp.utils.textDp
 
@@ -332,7 +333,7 @@ private fun TableHeader(detailState: BillDetailUiState) {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                TayAppTheme.colors.success2,
+                StateColor(status = detailState.billDetail.status),
                 RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
             )
             .padding(bottom = 20.dp),
