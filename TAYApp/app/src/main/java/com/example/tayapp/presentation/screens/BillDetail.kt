@@ -458,8 +458,7 @@ fun getRevisionTitle(
     article: Condolences,
     fontSize: TextUnit = 12.sp,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = TayAppTheme.colors.subduedText,
-    inlineTextContent: Set<String> = emptySet()
+    color: Color = TayAppTheme.colors.subduedText
 ) =
     buildAnnotatedString {
         withStyle(
@@ -491,13 +490,6 @@ fun getRevisionTitle(
                 } else append(text)
             }
 
-
-            if (inlineTextContent.isNotEmpty()) {
-                inlineTextContent.forEach {
-                    append(" ")
-                    appendInlineContent(it)
-                }
-            }
         }
     }
 

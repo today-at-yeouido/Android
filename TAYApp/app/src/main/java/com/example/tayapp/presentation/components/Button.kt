@@ -106,8 +106,6 @@ fun TayToggleButton(
                     minHeight = ButtonDefaults.MinHeight
                 )
                 .padding(contentPadding),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
             content = if(isClicked) clickedContent else notClickedContent
         )
     }
