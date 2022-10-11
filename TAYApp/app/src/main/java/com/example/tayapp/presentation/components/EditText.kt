@@ -46,9 +46,9 @@ fun TayEditText(
     trailingIcon: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = false,
+    keyboardOptions: KeyboardOptions,
+    keyboardActions: KeyboardActions,
+    singleLine: Boolean = true,
     maxLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = RoundedCornerShape(8.dp),
@@ -76,10 +76,11 @@ fun TayEditText(
         cursorBrush = SolidColor(colors.cursorColor(isError).value),
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
-        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+        keyboardActions =  keyboardActions,
         interactionSource = interactionSource,
+        //설정할 경우 줄바꿈 안됨
         singleLine = singleLine,
-        maxLines = 1,
+        maxLines = maxLines,
         decorationBox = @Composable { innerTextField ->
             TextFieldDefaults.OutlinedTextFieldDecorationBox(
                 value = value,
