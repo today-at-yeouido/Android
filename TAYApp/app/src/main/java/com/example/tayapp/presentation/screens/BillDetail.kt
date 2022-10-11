@@ -33,10 +33,7 @@ import com.example.tayapp.domain.use_case.Article
 import com.example.tayapp.domain.use_case.Condolences
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
-import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
-import com.example.tayapp.presentation.ui.theme.KeyLine
-import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.ui.theme.lm_gray600
+import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.StateColor
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
@@ -203,7 +200,7 @@ fun DetailTitle(bill: DetailBill) {
 
         Text(
             fontSize = 24.sp,
-            color = TayAppTheme.colors.headText,
+            color = lm_gray800,
             text = bill.billName,
             style = TayAppTheme.typo.typography.h1
         )
