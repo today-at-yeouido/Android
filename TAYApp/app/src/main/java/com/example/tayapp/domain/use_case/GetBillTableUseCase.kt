@@ -442,7 +442,7 @@ fun parseArticle(str: String): Article {
         if (beforeSubParagraph.length < beforeParagraph.length) beforeSubParagraph else beforeParagraph
 
     /** 조 부분에서 조 이름 정규표현식에 맞는 부분 추출 */
-    val title = articleRegex.find(articlePart)!!.value
+    val title = articleRegex.find(articlePart)?.value ?: ""
 
     val articleTitle = TextRow(title)
 

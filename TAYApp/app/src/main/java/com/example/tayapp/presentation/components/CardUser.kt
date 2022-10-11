@@ -3,20 +3,23 @@ package com.example.tayapp.presentation.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tayapp.R
@@ -27,6 +30,12 @@ import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
 import com.example.tayapp.utils.ThemeConstants.LIGHT
+import com.example.tayapp.utils.ThemeConstants.SYSTEM
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import com.google.accompanist.pager.rememberPagerState
+import kotlin.math.absoluteValue
 
 private object CardUserValue {
     val ItemHeight = 72.dp
@@ -37,6 +46,10 @@ private object CardUserValue {
     val headerHeight = 40.dp
 }
 
+/**
+ * 사용자 추천 법안
+ */
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CardsUser(
     onClick: (Int) -> Unit = {},
@@ -44,23 +57,37 @@ fun CardsUser(
     navigateToFavorite: () -> Unit,
     recommendBill: List<RecommendBillDto>
 ) {
-    Box {
-        LazyRow(
-            modifier = Modifier,
-            userScrollEnabled = UserState.isLogin(),
-            contentPadding = PaddingValues(KeyLine),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(recommendBill) { it ->
-                CardUser(onClick = onClick, recommendBillDto = it)
-            }
+    val pagerState = rememberPagerState()
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    Box(modifier = Modifier.padding(top = 10.dp)) {
+
+        /**
+         * 사용자 맞춤 추천 법안 viewpager
+         * contentPadding을 이용하여 카드 위치를 중앙에서 왼쪽으로 이동
+         */
+        HorizontalPager(
+            count = recommendBill.size,
+            state = pagerState,
+            itemSpacing = 8.dp,
+            contentPadding = PaddingValues(start = KeyLine,end = screenWidth - CardUserValue.cardWidth - KeyLine),
+            userScrollEnabled = UserState.isLogin()
+        ) { i ->
+            CardUser(
+                onClick = onClick,
+                recommendBillDto = recommendBill[i],
+                modifier = Modifier
+            )
+
         }
+
         when {
             !UserState.isLogin() -> {
                 CardUserDialog(navigateToLogin, "로그인이 필요한 서비스입니다!", "로그인")
             }
             UserState.isLogin() && recommendBill.isEmpty() -> {
-                CardUserDialog(navigateToFavorite, "관심 소관위를 설정해주세요!", buttonText = "설정하로 가기")
+                CardUserDialog(navigateToFavorite, "관심 소관위를 설정해주세요!", buttonText = "설정하러 가기")
             }
         }
     }
@@ -72,10 +99,19 @@ private fun BoxScope.CardUserDialog(
     explanation: String,
     buttonText: String
 ) {
-    Box(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 10.dp)){
+        /**
+         * 사용자 추천 법안 블러 이미지
+         * 사용시점 : 로그인 안했거나 관심 소관위가 없을 경우
+         */
         Image(
             modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = if(UserState.mode == LIGHT) R.drawable.feed_blur_light else R.drawable.feed_blur_dark),
+            painter = painterResource(id =
+                if(UserState.mode == LIGHT || (!isSystemInDarkTheme()&& UserState.mode == SYSTEM)) R.drawable.feed_blur_light
+                else R.drawable.feed_blur_dark
+            ),
             contentDescription = "",
             contentScale = ContentScale.Crop
         )
@@ -104,13 +140,17 @@ private fun BoxScope.CardUserDialog(
     }
 }
 
+/**
+ * 사용자 추천 법안 카드
+ */
 @Composable
 fun CardUser(
     onClick: (Int) -> Unit = {},
-    recommendBillDto: RecommendBillDto
+    recommendBillDto: RecommendBillDto,
+    modifier: Modifier = Modifier
 ) {
     TayCard(
-        modifier = Modifier
+        modifier = modifier
             .width(CardUserValue.cardWidth)
     ) {
         Column {
@@ -182,7 +222,8 @@ fun CardUserItem(
                 fontWeight = FontWeight.Normal,
                 color = TayAppTheme.colors.headText,
                 fontSize = 16.sp,
-                maxLines = 2
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -200,4 +241,8 @@ fun EmojiText(
         fontSize = 30.sp,
         color = TayAppTheme.colors.headText
     )
+}
+
+fun lerp(start: Float, stop: Float, fraction: Float): Float {
+    return (1 - fraction) * start + fraction * stop
 }

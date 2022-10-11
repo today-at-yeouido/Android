@@ -16,6 +16,7 @@ import com.example.tayapp.presentation.states.FeedUiState
 import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -42,6 +43,11 @@ constructor(
 
     private var _recentBill = MutableStateFlow<List<BillDto>>(emptyList())
     val recentBill: StateFlow<List<BillDto>> get() = _recentBill
+
+    //최근 법안을 이미 불러오고 있는중일 경우 취소
+    private var getRecentBillJob: Job? = null
+    //최근 이슈법안을 이미 불러오고 있는중일 경우 취소
+    private var getMostViewedBillJob: Job? = null
 
     var page = MutableStateFlow<Int>(1)
         private set
@@ -79,7 +85,8 @@ constructor(
     }
 
     private fun getMostViewed() {
-        getMostViewedUseCase().onEach { result ->
+        getMostViewedBillJob?.cancel()
+        getMostViewedBillJob = getMostViewedUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     _state.value = FeedUiState(
@@ -116,14 +123,20 @@ constructor(
     }
 
     private fun getRecentBill(){
-        getRecentBillUseCase(page.value).onEach { result ->
+        getRecentBillJob?.cancel()
+        getRecentBillJob = getRecentBillUseCase(page.value).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     _recentBill.value = _recentBill.value + result.data as List<BillDto>
                     page.value++
+                    endReached.value= false
+                    pagingLoading.value = false
                 }
                 is Resource.NetworkConnectionError -> {
                     UserState.network = false
+                }
+                is Resource.Loading -> {
+                    pagingLoading.value = true
                 }
             }
         }.launchIn(viewModelScope)
@@ -144,7 +157,9 @@ constructor(
     }
 
     private fun getBillCommittee(){
-        getHomeCommitteeBillUseCase(page.value, datalist[selectedCategory.value!!][0]).onEach { result ->
+        getRecentBillJob?.cancel()
+        getMostViewedBillJob?.cancel()
+        getRecentBillJob = getHomeCommitteeBillUseCase(page.value, datalist[selectedCategory.value!!][0]).onEach { result ->
             when(result) {
                 is Resource.Success -> {
                     _recentBill.value = _recentBill.value + result.data?.recentCreatedBill as List<BillDto>
@@ -157,7 +172,6 @@ constructor(
                     }
                     endReached.value= false
                     pagingLoading.value = false
-                    Log.d("asdf2",pagingLoading.toString())
                 }
                 is Resource.Error -> {
                     _state.value =
