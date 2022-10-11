@@ -52,7 +52,6 @@ fun BillDetail(
     onGroupBillSelected: (Int) -> Unit = {}
 ) {
     val billId = viewModel.billId
-    Log.d("##77", "billId $billId")
     val detailState = viewModel.detailState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -380,10 +379,9 @@ private fun NewsHeader() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(top = 27.dp)
     ) {
         Title(string = "관련 뉴스")
-        Spinner()
     }
 }
 
