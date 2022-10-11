@@ -3,6 +3,7 @@ package com.example.tayapp.presentation.screens
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,7 +14,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -29,6 +32,8 @@ import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.BillDetailUiState
 import com.example.tayapp.presentation.ui.theme.KeyLine
 import com.example.tayapp.presentation.ui.theme.TayAppTheme
+import com.example.tayapp.presentation.ui.theme.lm_primary50
+import com.example.tayapp.presentation.utils.StateColor
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
 import com.example.tayapp.utils.textDp
 
@@ -45,13 +50,10 @@ fun BillTable(
     ) {
         TayTopAppBarWithBack("개정 내용", upPress = upPress)
         LazyColumn {
-
             item {
                 TableHeader(detailState)
                 Spacer(modifier = Modifier.height(20.dp))
                 Column(modifier = Modifier.padding(horizontal = KeyLine)) {
-                    RevisionSection(billTable = table.billTable!!.condolences)
-                    Spacer(modifier = Modifier.height(20.dp))
                     Title(string = "개정 내용")
                     Spacer(Modifier.height(15.dp))
                 }
@@ -59,56 +61,60 @@ fun BillTable(
 
             items(table.billTable!!.condolences) { condolences ->
 
-                val inlinePill = mutableMapOf<String, InlineTextContent>()
-
                 var articleRevision = ""
 
-                condolences.type.forEachIndexed { idx, text ->
-                    /** ClausePill을 Text로 넣기 위해서 InlineContent를 inlinePill에 넣는다 */
-                    inlinePill["${idx}Row"] = InlineTextContent(
-                        Placeholder(60.textDp, 16.textDp, PlaceholderVerticalAlign.TextCenter)
-                    ) {
-                        ClausePill(clause = text)
-                    }
-                    if (text == "신설" || text == "삭제") articleRevision = text
-                }
 
                 Column(
                     modifier = Modifier.padding(start = KeyLine, end = KeyLine, bottom = 50.dp),
                 ) {
+
+
+                    /** 토글과 버튼 */
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                            condolences.type.forEach {
+                                ClausePill(clause = it)
+                            }
+                        }
+                        
+                        if (condolences is Article) {
+                            if (condolences.type.contains("일부 수정")) {
+                                TayToggleButton(
+                                    onClick = {
+                                        condolences.showNormal.value = !condolences.showNormal.value
+                                    },
+                                    backgroundColor = TayAppTheme.colors.background,
+                                    contentColor = TayAppTheme.colors.headText,
+                                    border = BorderStroke(1.dp, TayAppTheme.colors.border),
+                                    clickedContent = {Text("현행/개정안 같이 보기", fontWeight = FontWeight.Medium)},
+                                    notClickedContent = {Text("개정안만 보기", fontWeight = FontWeight.Medium)}
+                                )
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(7.dp))
+
                     /** 편, 장, 절, 관, 조 이름을 얻는다. */
                     val title = getRevisionTitle(
                         article = condolences,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
-                        color = TayAppTheme.colors.headText,
-                        inlineTextContent = inlinePill.keys as Set<String>
+                        color = TayAppTheme.colors.headText
                     )
 
                     Text(
                         text = title,
-                        inlineContent = inlinePill,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(color = TayAppTheme.colors.border),
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    if (condolences is Article) {
-                        if (condolences.type.contains("일부 수정")) {
-                            TayButton(
-                                onClick = {
-                                    condolences.showNormal.value = !condolences.showNormal.value
-                                },
-                                backgroundColor = TayAppTheme.colors.background,
-                                contentColor = TayAppTheme.colors.headText,
-                                border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                            ) {
-                                Text("개정안만 보기", fontWeight = FontWeight.Medium)
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(7.dp))
-
+                    if(condolences is Article) {
                         /** 조 본문 */
                         val articleText =
                             buildAnnotatedString { GetAnnotatedString(condolences.text) }
@@ -128,6 +134,7 @@ fun BillTable(
                             showType = condolences.showNormal.value
                         )
                     }
+                    
                 }
             }
         }
@@ -326,7 +333,7 @@ private fun TableHeader(detailState: BillDetailUiState) {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                TayAppTheme.colors.success2,
+                StateColor(status = detailState.billDetail.status),
                 RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
             )
             .padding(bottom = 20.dp),

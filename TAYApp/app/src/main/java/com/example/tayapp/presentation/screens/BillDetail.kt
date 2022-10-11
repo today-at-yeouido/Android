@@ -33,10 +33,7 @@ import com.example.tayapp.domain.use_case.Article
 import com.example.tayapp.domain.use_case.Condolences
 import com.example.tayapp.presentation.components.*
 import com.example.tayapp.presentation.states.UserState
-import com.example.tayapp.presentation.ui.theme.Card_Inner_Padding
-import com.example.tayapp.presentation.ui.theme.KeyLine
-import com.example.tayapp.presentation.ui.theme.TayAppTheme
-import com.example.tayapp.presentation.ui.theme.lm_gray600
+import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.StateColor
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.DetailViewModel
@@ -52,7 +49,6 @@ fun BillDetail(
     onGroupBillSelected: (Int) -> Unit = {}
 ) {
     val billId = viewModel.billId
-    Log.d("##77", "billId $billId")
     val detailState = viewModel.detailState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -204,7 +200,7 @@ fun DetailTitle(bill: DetailBill) {
 
         Text(
             fontSize = 24.sp,
-            color = TayAppTheme.colors.headText,
+            color = lm_gray800,
             text = bill.billName,
             style = TayAppTheme.typo.typography.h1
         )
@@ -345,7 +341,7 @@ private fun BillPointText(
                     color = TayAppTheme.colors.headText,
                     style = TayAppTheme.typo.typography.body2
                 )
-            } else if(it.contains("제안이유") || it.contains("주요내용")) {
+            } else if(it.contains("제안이유") || it.contains("주요내용") || it.contains("참고사항")) {
                 Text(
                     text = it,
                     color = TayAppTheme.colors.bodyText,
@@ -380,10 +376,9 @@ private fun NewsHeader() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(top = 27.dp)
     ) {
         Title(string = "관련 뉴스")
-        Spinner()
     }
 }
 
@@ -421,6 +416,18 @@ private fun BillRevisionText(
 
 @Composable
 fun RevisionSection(billTable: List<Condolences>) {
+
+    /**
+     * 일부 수정, 삭제, 등등 개수를 계산하기 위한 코드
+     * 될 수 있으면 UseCase단에서 계산하면 좋을 듯
+     */
+    var typeCount = mutableMapOf<String, Int>()
+    billTable.forEach {
+        it.type.forEach { type ->
+            typeCount.put(type,(typeCount[type]?: 0) + 1)
+        }
+    }
+
     TayCard(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -437,11 +444,8 @@ fun RevisionSection(billTable: List<Condolences>) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                billTable.forEach { article ->
-                    if (article is Article) {
-                        val title = getRevisionTitle(article)
-                        BillRevisionItem(title, article.type)
-                    }
+                typeCount.forEach { type ->
+                    BillRevisionItem(type.key, type.value)
                 }
             }
         }
@@ -454,8 +458,7 @@ fun getRevisionTitle(
     article: Condolences,
     fontSize: TextUnit = 12.sp,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = TayAppTheme.colors.subduedText,
-    inlineTextContent: Set<String> = emptySet()
+    color: Color = TayAppTheme.colors.subduedText
 ) =
     buildAnnotatedString {
         withStyle(
@@ -487,29 +490,21 @@ fun getRevisionTitle(
                 } else append(text)
             }
 
-
-            if (inlineTextContent.isNotEmpty()) {
-                inlineTextContent.forEach {
-                    append(" ")
-                    appendInlineContent(it)
-                }
-            }
         }
     }
 
 @Composable
-private fun BillRevisionItem(title: AnnotatedString, type: Set<String>) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+private fun BillRevisionItem(type: String, count: Int) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Row {
-            for (i in type)
-                ClausePill(clause = i)
-        }
+        ClausePill(clause = type)
+        Text(
+            text = "${count}개",
+            color = TayAppTheme.colors.subduedText,
+            style = TayAppTheme.typo.typography.body2
+        )
     }
-    Text(
-        text = title,
-        color = TayAppTheme.colors.subduedText,
-        style = TayAppTheme.typo.typography.body2
-    )
+
 }
