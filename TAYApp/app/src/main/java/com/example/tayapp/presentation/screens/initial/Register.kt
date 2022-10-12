@@ -83,6 +83,8 @@ fun RegisterItems(
     viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
+    var email = viewModel.user.email
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,9 +92,9 @@ fun RegisterItems(
             .padding(horizontal = KeyLine, vertical = 30.dp)
     ) {
         when (index) {
-            0 -> Email(onClick = onClick)
-            1 -> TermsOfService(onClick = onClick)
-            2 -> BasicInformation(viewModel::requestRegister, onClick = onClick)
+            0 -> Email(onClick = onClick, getEmail = viewModel::getUserEmail)
+            1 -> BasicInformation(viewModel::requestRegister, onClick = onClick, email)
+            2 -> TermsOfService(onClick = onClick)
             3 -> Finish(onClick = onClick)
         }
     }

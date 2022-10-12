@@ -65,7 +65,7 @@ class FirebaseCloudMessage : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         //여기서 채널이랑 연결한다 서버에서 messageBody["channel"]에 넣어주면 됨
         val notificationBuilder = NotificationCompat.Builder(this, messageBody["channel"]!!)
-            .setSmallIcon(R.drawable.ic_tay_ch_emoji_gray_sleep)
+            .setSmallIcon(R.drawable.ic_tay_ch_default)
             .setContentTitle(messageBody["channel"])
             .setContentText(messageBody["body"])
             .setPriority(NotificationCompat.PRIORITY_HIGH)

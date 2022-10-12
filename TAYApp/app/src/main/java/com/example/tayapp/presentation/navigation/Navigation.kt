@@ -177,7 +177,7 @@ private fun NavGraphBuilder.initialGraph(navController: NavController) {
             navController.getBackStackEntry(AppGraph.INITIAL_GRAPH)
         }
         val viewModel = hiltViewModel<LoginViewModel>(parentEntry)
-        LoginScreen(navController, viewModel)
+        LoginScreen(navController, viewModel, { navController.navigateUp() })
     }
 
     composable(

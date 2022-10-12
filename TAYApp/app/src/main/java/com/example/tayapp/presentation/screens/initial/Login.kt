@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -12,12 +13,19 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tayapp.R
 import com.example.tayapp.presentation.components.ButtonLargeHeight
 import com.example.tayapp.presentation.components.TayButton
 import com.example.tayapp.presentation.components.TayTextField
@@ -41,6 +49,7 @@ fun LoginScreen(
     upPress: () -> Unit = {}
 ) {
     val loginState by viewModel.isLogin
+    val isTryLogin by viewModel.isTryLogin
 
     val navigate = { route: String ->
         navController.popBackStack()
@@ -51,6 +60,16 @@ fun LoginScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         TayTopAppBarWithBack(string = "로그인", upPress)
+
+        if(!loginState && isTryLogin) {
+            Text(
+                text = "아이디(로그인 전용 아이디) 또는 비밀번호를 잘못 입력했습니다. " +
+                    "입력하신 내용을 다시 확인해주세요.",
+                color = TayAppTheme.colors.danger2,
+                fontSize = 14.textDp,
+                modifier = Modifier.padding(horizontal = KeyLine)
+            )
+        }
         Login(
             viewModel::requestLogin,
             viewModel::kakaoLogin,
@@ -62,7 +81,7 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = loginState) {
         Log.d("##88", "런치드 이펙트 $loginState")
-        if (loginState) {
+        if (loginState == true) {
             navigate(AppGraph.HOME_GRAPH)
         }
     }
@@ -77,6 +96,7 @@ private fun Login(
     googleAuth: () -> GoogleSignInClient,
     navigate: (String) -> Unit
 ) {
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -105,12 +125,7 @@ private fun InputField(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val regex1 = Regex(pattern = "[a-zA-Z\\d._+-]+@[a-zA-Z\\d]+\\.[a-zA-Z\\d.]+")
-    val regex2 = Regex(pattern = "(?=.*\\d)(?=.*[a-z]).{8,}")
-    val bool1 = regex1.matches(email)
-    val bool2 = regex2.matches(password)
-    val bool3 = bool1 && bool2
-
+    val focusManager = LocalFocusManager.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -126,8 +141,15 @@ private fun InputField(
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = lm_gray000,
-                focusedBorderColor = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
-                unfocusedBorderColor = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
+                focusedBorderColor = TayAppTheme.colors.primary,
+                unfocusedBorderColor = TayAppTheme.colors.layer3
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                //엔터를 눌렀을 때 이벤트 정의
+                onDone = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
             ),
             value = email,
         ) { email = it }
@@ -144,8 +166,8 @@ private fun InputField(
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = lm_gray000,
-                focusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
-                unfocusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
+                focusedBorderColor = TayAppTheme.colors.primary,
+                unfocusedBorderColor = TayAppTheme.colors.layer3
             ),
             value = password,
         ) { password = it }
@@ -157,9 +179,8 @@ private fun InputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(ButtonLargeHeight),
-            backgroundColor = if (bool3) TayAppTheme.colors.bodyText else TayAppTheme.colors.layer3,
-            contentColor = if (bool3) TayAppTheme.colors.layer3 else TayAppTheme.colors.subduedIcon,
-            enabled = bool3
+            backgroundColor = TayAppTheme.colors.bodyText,
+            contentColor = TayAppTheme.colors.layer3
         ) {
             Text(
                 "로그인",
@@ -197,34 +218,41 @@ private fun SocialField(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text("소셜 로그인", fontSize = 16.textDp, color = TayAppTheme.colors.bodyText)
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
-            Canvas(modifier = Modifier
-                .size(50.dp)
-                .clickable {
-                    kakaoLogin()
-                }) {
-                drawCircle(Color.Yellow)
-            }
+            Image(
+                painter = painterResource(id = R.drawable.btn_kakao_login),
+                contentDescription = "kakao_login",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .width(250.dp)
+                    .clickable { kakaoLogin() }
+            )
 
-            Canvas(modifier = Modifier
-                .size(50.dp)
-                .clickable {
-                    naverLogin()
-                }) {
-                drawCircle(Color.Green)
-            }
+            Image(
+                painter = painterResource(id = R.drawable.btn_naver_login),
+                contentDescription = "naver_login",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .width(250.dp)
+                    .clickable { naverLogin() }
+            )
 
-            Canvas(modifier = Modifier
-                .size(50.dp)
-                .clickable {
-                    val client = googleAuth()
-                    resultLauncher.launch(client.signInIntent)
-                }) {
-                drawCircle(Color.Black)
-            }
+            Image(
+                painter = painterResource(id = R.drawable.btn_google_login),
+                contentDescription = "google_login",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .width(250.dp)
+                    .clickable {
+                        val client = googleAuth()
+                        resultLauncher.launch(client.signInIntent)
+                    }
+            )
+
+
         }
     }
 }
