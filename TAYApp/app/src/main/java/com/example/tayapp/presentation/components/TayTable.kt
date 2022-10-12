@@ -8,7 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tayapp.domain.use_case.TableRow
@@ -29,22 +31,33 @@ fun TayTable(table: TableRow){
 
     Column(
         modifier = Modifier
+            .background(TayAppTheme.colors.information1)
+            .padding(6.dp)
             .fillMaxWidth()
-            .background(lm_gray100),
+            ,
     ) {
         for(i in 0..table.row){
             //한 행씩 분리해서 Row생성
-            TayTableRow(data = table.data.subList(i*(table.col+1), (i+1)*(table.col+1)))
+            TayTableRow(
+                data = table.data.subList(i*(table.col+1), (i+1)*(table.col+1)),
+                if(i == 0) TayAppTheme.colors.layer1 else TayAppTheme.colors.background
+            )
         }
     }
 }
 
 @Composable
-private fun TayTableRow(data: List<String>){
+private fun TayTableRow(
+    data: List<String>,
+    backgroundColor: Color = TayAppTheme.colors.background
+){
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(IntrinsicSize.Min)
-        .border(1.dp, lm_gray700, RectangleShape)){
+        .background(backgroundColor)
+        .border(1.dp, TayAppTheme.colors.border, RectangleShape)
+    )
+    {
         //열 간격 조정을 위한 변수(수정예정)
         val weight = (1.0/data.size.toFloat()).toFloat()
         data.forEach {
@@ -52,9 +65,11 @@ private fun TayTableRow(data: List<String>){
                 text = it,
                 modifier = Modifier
                     .weight(weight,true)
+                    .padding(7.dp),
+                textAlign = TextAlign.Center
             )
             Divider(
-                color = lm_gray700,
+                color = TayAppTheme.colors.border,
                 modifier = Modifier.fillMaxHeight().width(1.dp)
             )
         }
