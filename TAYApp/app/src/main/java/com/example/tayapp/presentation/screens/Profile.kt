@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.components.*
+import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.navigation.ProfileDestination
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.ProfileViewModel
@@ -39,7 +41,7 @@ fun Profile(
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(100.dp)
                 .background(
                     TayAppTheme.colors.primary,
                     RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
@@ -57,13 +59,18 @@ fun Profile(
                     .statusBarsPadding()
                     .height(50.dp)
             )
-            CardUserProfile()
-//            if (LoginState.isLogin()) {
+
+            if (UserState.isLogin()) {
+                CardUserProfile()
+            } else {
+                CardGuestProfile { navController.navigate(Destinations.LOGIN) }
+            }
             ProfileSettings(navController)
-            TayDivider()
-//            }
             ProfileLineItems()
-            ProfileBottomButtons(viewModel::logout)
+
+            if(UserState.isLogin()) {
+                ProfileBottomButtons(viewModel::logout)
+            }
         }
     }
 }
