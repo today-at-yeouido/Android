@@ -80,10 +80,12 @@ private fun ProfileSettings(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        CardProfilSection(icon = Icons.Filled.AccountCircle,
-            title = "계정",
-            subTitle = "관심분야 설정, 구독서비스",
-            onClick = { navController.navigate(ProfileDestination.ACCOUNT) })
+        if(UserState.isLogin()) {
+            CardProfilSection(icon = Icons.Filled.AccountCircle,
+                title = "계정",
+                subTitle = "관심분야 설정, 구독서비스",
+                onClick = { navController.navigate(ProfileDestination.ACCOUNT) })
+        }
         CardProfilSection(icon = Icons.Outlined.Settings,
             title = "앱 설정",
             subTitle = "보기, 알람",
