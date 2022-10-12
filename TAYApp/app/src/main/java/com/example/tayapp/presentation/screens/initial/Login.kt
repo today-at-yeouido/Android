@@ -105,11 +105,6 @@ private fun InputField(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val regex1 = Regex(pattern = "[a-zA-Z\\d._+-]+@[a-zA-Z\\d]+\\.[a-zA-Z\\d.]+")
-    val regex2 = Regex(pattern = "(?=.*\\d)(?=.*[a-z]).{8,}")
-    val bool1 = regex1.matches(email)
-    val bool2 = regex2.matches(password)
-    val bool3 = bool1 && bool2
 
 
     Column(
@@ -126,8 +121,8 @@ private fun InputField(
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = lm_gray000,
-                focusedBorderColor = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
-                unfocusedBorderColor = if (bool1) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
+                focusedBorderColor = TayAppTheme.colors.primary,
+                unfocusedBorderColor = TayAppTheme.colors.layer3
             ),
             value = email,
         ) { email = it }
@@ -144,8 +139,8 @@ private fun InputField(
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = lm_gray000,
-                focusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3,
-                unfocusedBorderColor = if (bool2) TayAppTheme.colors.success2 else TayAppTheme.colors.layer3
+                focusedBorderColor = TayAppTheme.colors.primary,
+                unfocusedBorderColor = TayAppTheme.colors.layer3
             ),
             value = password,
         ) { password = it }
@@ -157,9 +152,8 @@ private fun InputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(ButtonLargeHeight),
-            backgroundColor = if (bool3) TayAppTheme.colors.bodyText else TayAppTheme.colors.layer3,
-            contentColor = if (bool3) TayAppTheme.colors.layer3 else TayAppTheme.colors.subduedIcon,
-            enabled = bool3
+            backgroundColor = TayAppTheme.colors.bodyText,
+            contentColor = TayAppTheme.colors.layer3
         ) {
             Text(
                 "로그인",
