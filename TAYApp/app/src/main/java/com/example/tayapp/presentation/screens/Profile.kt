@@ -13,7 +13,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tayapp.presentation.components.*
+import com.example.tayapp.presentation.navigation.Destinations
 import com.example.tayapp.presentation.navigation.ProfileDestination
+import com.example.tayapp.presentation.states.UserState
 import com.example.tayapp.presentation.ui.theme.*
 import com.example.tayapp.presentation.utils.TayIcons
 import com.example.tayapp.presentation.viewmodels.ProfileViewModel
@@ -31,6 +33,17 @@ fun Profile(
     navController: NavController
 ) {
     val viewModel = hiltViewModel<ProfileViewModel>()
+    var dialogVisible by remember { mutableStateOf(false) }
+
+    LogOutNoticeDialog(
+        "로그아웃 하시겠습니까?",
+        dialogVisible, {
+            dialogVisible = !dialogVisible
+        }) {
+        viewModel.logout()
+        dialogVisible = !dialogVisible
+    }
+
     Box(
         modifier = Modifier
             .statusBarsPadding()
@@ -39,7 +52,7 @@ fun Profile(
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(100.dp)
                 .background(
                     TayAppTheme.colors.primary,
                     RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
@@ -57,13 +70,18 @@ fun Profile(
                     .statusBarsPadding()
                     .height(50.dp)
             )
-            CardUserProfile()
-//            if (LoginState.isLogin()) {
+
+            if (UserState.isLogin()) {
+                CardUserProfile()
+            } else {
+                CardGuestProfile { navController.navigate(Destinations.LOGIN) }
+            }
             ProfileSettings(navController)
-            TayDivider()
-//            }
             ProfileLineItems()
-            ProfileBottomButtons(viewModel::logout)
+
+            if(UserState.isLogin()) {
+                ProfileBottomButtons { dialogVisible = !dialogVisible }
+            }
         }
     }
 }
@@ -73,10 +91,12 @@ private fun ProfileSettings(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        CardProfilSection(icon = Icons.Filled.AccountCircle,
-            title = "계정",
-            subTitle = "관심분야 설정, 구독서비스",
-            onClick = { navController.navigate(ProfileDestination.ACCOUNT) })
+        if(UserState.isLogin()) {
+            CardProfilSection(icon = Icons.Filled.AccountCircle,
+                title = "계정",
+                subTitle = "관심분야 설정, 구독서비스",
+                onClick = { navController.navigate(ProfileDestination.ACCOUNT) })
+        }
         CardProfilSection(icon = Icons.Outlined.Settings,
             title = "앱 설정",
             subTitle = "보기, 알람",
@@ -96,7 +116,8 @@ private fun ProfileSettings(navController: NavController) {
 private fun ProfileLineItems() {
     Column() {
         CardProfileListItemWithOutIcon(
-            text = "공지사항"
+            text = "공지사항",
+            subtext = ""
         ) {
             Icon(
                 imageVector = TayIcons.navigate_next,

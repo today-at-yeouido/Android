@@ -51,7 +51,9 @@ fun Feed(
     val pagingLoading by viewModel.pagingLoading.collectAsState()
     val endReached by viewModel.endReached.collectAsState()
 
-    AppFinishNoticeDialog(dialogVisible, {
+    AppFinishNoticeDialog(
+        "종료하시겠습니까?",
+        dialogVisible, {
         dialogVisible = !dialogVisible
     }) { activity.finish() }
 

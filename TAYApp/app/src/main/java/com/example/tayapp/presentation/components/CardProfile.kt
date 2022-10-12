@@ -49,28 +49,44 @@ fun CardUserProfile() {
                 }
             }
 
+        }
+    }
+}
+
+@Composable
+fun CardGuestProfile(
+    onClick:() -> Unit
+) {
+    TayCard() {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Card_Inner_Padding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 3.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Badge(title = "출석")
-                Badge(title = "법안", emoji = "\uD83C\uDF31")
-                Badge(title = "뉴스", emoji = "\uD83D\uDDDE️")
+                Text(
+                    "로그인이 필요해요",
+                    style = TayAppTheme.typo.typography.h2,
+                    color = TayAppTheme.colors.headText
+                )
             }
 
+
             TayButton(
-                onClick = { /*TODO*/ },
+                onClick = onClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(ButtonMediumHeight),
-                backgroundColor = TayAppTheme.colors.background,
-                contentColor = TayAppTheme.colors.headText,
-                border = BorderStroke(1.dp, TayAppTheme.colors.border)
+                backgroundColor = TayAppTheme.colors.primary,
+                contentColor = TayAppTheme.colors.headText
 
             ) {
-                Text("뱃지 더보기", style = TayAppTheme.typo.typography.button)
+                Text("로그인 하러가기", style = TayAppTheme.typo.typography.button)
                 Icon(
                     imageVector = TayIcons.navigate_next,
                     contentDescription = null
@@ -306,29 +322,5 @@ fun Badge(
             color = TayAppTheme.colors.subduedText,
             fontSize = 12.sp
         )
-    }
-}
-
-@Preview
-@Composable
-fun BadgePreview() {
-    TayAppTheme() {
-        Badge()
-    }
-}
-
-@Composable
-@Preview
-private fun CardIserPreview() {
-    TayAppTheme {
-        CardUserProfile()
-        //CardProfilSection()
-//        CardProfileListItem(){
-//            Icon(
-//                imageVector = TayIcons.north_east,
-//                contentDescription = null,
-//                tint = lm_gray300
-//            )
-//        }
     }
 }
