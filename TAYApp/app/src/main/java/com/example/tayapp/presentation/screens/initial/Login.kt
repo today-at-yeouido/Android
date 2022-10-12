@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -12,7 +13,10 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -78,6 +82,7 @@ private fun Login(
     navigate: (String) -> Unit
 ) {
 
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -105,7 +110,7 @@ private fun InputField(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-
+    val focusManager = LocalFocusManager.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -123,6 +128,13 @@ private fun InputField(
                 backgroundColor = lm_gray000,
                 focusedBorderColor = TayAppTheme.colors.primary,
                 unfocusedBorderColor = TayAppTheme.colors.layer3
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                //엔터를 눌렀을 때 이벤트 정의
+                onDone = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
             ),
             value = email,
         ) { email = it }
