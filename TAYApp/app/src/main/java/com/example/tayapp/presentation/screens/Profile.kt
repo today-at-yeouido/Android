@@ -105,7 +105,8 @@ private fun ProfileSettings(navController: NavController) {
 private fun ProfileLineItems() {
     Column() {
         CardProfileListItemWithOutIcon(
-            text = "공지사항"
+            text = "공지사항",
+            subtext = ""
         ) {
             Icon(
                 imageVector = TayIcons.navigate_next,
