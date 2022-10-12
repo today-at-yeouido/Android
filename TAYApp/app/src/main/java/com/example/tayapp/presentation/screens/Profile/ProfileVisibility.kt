@@ -53,7 +53,7 @@ fun ProfileVisibility(
             CardProfileListItemWithNext(
                 icon = Icons.Outlined.LightMode,
                 text = "모드",
-                subtext = "시스템",
+                subtext = UserState.mode,
                 onClick = { dialogVisible = !dialogVisible }
             )
 
