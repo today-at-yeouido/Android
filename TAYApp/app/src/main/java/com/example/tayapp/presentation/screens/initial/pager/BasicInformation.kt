@@ -55,12 +55,6 @@ fun BoxScope.BasicInformation(
                 TayTextField(
                     value = pass1,
                     onValueChange = { pass1 = it },
-                    colors =
-                    TextFieldDefaults.outlinedTextFieldColors(
-                        backgroundColor = TayAppTheme.colors.background,
-                        focusedBorderColor = if (bool2) TayAppTheme.colors.primary else TayAppTheme.colors.layer3,
-                        unfocusedBorderColor = if (bool2) TayAppTheme.colors.primary else TayAppTheme.colors.layer3
-                    ),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password,imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(
@@ -83,12 +77,6 @@ fun BoxScope.BasicInformation(
                 TayTextField(
                     value = pass2,
                     onValueChange = { pass2 = it },
-                    colors =
-                    TextFieldDefaults.outlinedTextFieldColors(
-                        backgroundColor = TayAppTheme.colors.background,
-                        focusedBorderColor = if (bool3) TayAppTheme.colors.primary else TayAppTheme.colors.layer3,
-                        unfocusedBorderColor = if (bool3) TayAppTheme.colors.primary else TayAppTheme.colors.layer3
-                    ),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )

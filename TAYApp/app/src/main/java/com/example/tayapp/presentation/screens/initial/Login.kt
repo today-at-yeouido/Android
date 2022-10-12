@@ -139,11 +139,6 @@ private fun InputField(
                     color = TayAppTheme.colors.fieldBorder
                 )
             },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = lm_gray000,
-                focusedBorderColor = TayAppTheme.colors.primary,
-                unfocusedBorderColor = TayAppTheme.colors.layer3
-            ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 //엔터를 눌렀을 때 이벤트 정의
@@ -164,11 +159,6 @@ private fun InputField(
                     color = lm_gray300
                 )
             },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = lm_gray000,
-                focusedBorderColor = TayAppTheme.colors.primary,
-                unfocusedBorderColor = TayAppTheme.colors.layer3
-            ),
             value = password,
         ) { password = it }
 
@@ -180,7 +170,7 @@ private fun InputField(
                 .fillMaxWidth()
                 .height(ButtonLargeHeight),
             backgroundColor = TayAppTheme.colors.bodyText,
-            contentColor = TayAppTheme.colors.layer3
+            contentColor = TayAppTheme.colors.layer1
         ) {
             Text(
                 "로그인",
