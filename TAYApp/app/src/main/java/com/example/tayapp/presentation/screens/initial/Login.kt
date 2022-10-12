@@ -45,6 +45,7 @@ fun LoginScreen(
     upPress: () -> Unit = {}
 ) {
     val loginState by viewModel.isLogin
+    val isTryLogin by viewModel.isTryLogin
 
     val navigate = { route: String ->
         navController.popBackStack()
@@ -55,6 +56,16 @@ fun LoginScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         TayTopAppBarWithBack(string = "로그인", upPress)
+
+        if(!loginState && isTryLogin) {
+            Text(
+                text = "아이디(로그인 전용 아이디) 또는 비밀번호를 잘못 입력했습니다. " +
+                    "입력하신 내용을 다시 확인해주세요.",
+                color = TayAppTheme.colors.danger2,
+                fontSize = 14.textDp,
+                modifier = Modifier.padding(horizontal = KeyLine)
+            )
+        }
         Login(
             viewModel::requestLogin,
             viewModel::kakaoLogin,
@@ -66,7 +77,7 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = loginState) {
         Log.d("##88", "런치드 이펙트 $loginState")
-        if (loginState) {
+        if (loginState == true) {
             navigate(AppGraph.HOME_GRAPH)
         }
     }

@@ -51,6 +51,12 @@ class LoginViewModel @Inject constructor(
     var isLogin = mutableStateOf(false)
         private set
 
+    /**
+     * 로그인을 한번이라도 시도했는가?
+     */
+    var isTryLogin = mutableStateOf(false)
+        private set
+
     init {
         checkLogin()
         getThemeMode()
@@ -66,6 +72,7 @@ class LoginViewModel @Inject constructor(
 
     fun requestLogin(e: String, p1: String) {
         viewModelScope.launch {
+            isTryLogin.value = true
             user = LoginUserUiState(e, p1)
             val response = loginUseCases.requestLoginUseCase(
                 user.email, user.password
