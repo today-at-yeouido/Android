@@ -510,7 +510,7 @@ private fun parse(
         if (chunk.contains(connectiveRegex) && chunk.length < 10) {
             if (idx < prefixList.size - 2) {
                 chunk =
-                    str.substring(str.indexOf(prefixList[idx]), str.indexOf(prefixList[idx + 2]))
+                    str.substring(str.indexOf(prefixList[idx]), str.indexOf(prefixList[idx + 2], str.indexOf(prefixList[idx]) ))
                 idx++
             } else {
                 chunk = str.substring(str.indexOf(prefixList[idx]))

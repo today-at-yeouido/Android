@@ -34,7 +34,11 @@ fun TayTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
+    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
+        focusedBorderColor = TayAppTheme.colors.primary,
+        unfocusedBorderColor = TayAppTheme.colors.layer3,
+        textColor = TayAppTheme.colors.headText
+    ),
     placeholder: @Composable (() -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {

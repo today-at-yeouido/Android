@@ -334,7 +334,7 @@ private fun BillPointText(
             if(it.contains("이에,") || it.startsWith("  이에")) {
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(background = TayAppTheme.colors.caution1)) {
+                        withStyle(style = SpanStyle(background = TayAppTheme.colors.caution1.copy(alpha = 0.3f))) {
                             append(it)
                         }
                     },

@@ -68,12 +68,7 @@ private fun EmailField(value: String, onValueChange: (String) -> Unit) {
                     "Tay@gmail.com", fontSize = 16.textDp, color = TayAppTheme.colors.disableIcon
                 )
             },
-            onValueChange = onValueChange,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = TayAppTheme.colors.background,
-                focusedBorderColor = TayAppTheme.colors.primary,
-                unfocusedBorderColor = TayAppTheme.colors.layer3
-            )
+            onValueChange = onValueChange
         )
     }
 }
