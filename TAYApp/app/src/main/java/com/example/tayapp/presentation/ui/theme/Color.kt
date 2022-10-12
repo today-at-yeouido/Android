@@ -73,7 +73,7 @@ val lm_semantic_green1 = Color(0xFFD3FFD1)
 val lm_semantic_green2 = Color(0xFF63ED5E)
 val lm_semantic_yellow1 = Color(0XFFFFF5CC)
 val lm_semantic_yellow2 = Color(0xFFFAD729)
-val lm_semantic_blue1 = Color(0xFFEBF5FF)
+val lm_semantic_blue1 = Color(0xFFB3D9FF)
 val lm_semantic_blue2 = Color(0xFF52A8FF)
 
 val dm_semantic_red1 = Color(0xFFFF7685)
