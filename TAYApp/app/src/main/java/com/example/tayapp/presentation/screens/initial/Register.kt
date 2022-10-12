@@ -93,8 +93,8 @@ fun RegisterItems(
     ) {
         when (index) {
             0 -> Email(onClick = onClick, getEmail = viewModel::getUserEmail)
-            1 -> TermsOfService(onClick = onClick)
-            2 -> BasicInformation(viewModel::requestRegister, onClick = onClick, email)
+            1 -> BasicInformation(viewModel::requestRegister, onClick = onClick, email)
+            2 -> TermsOfService(onClick = onClick)
             3 -> Finish(onClick = onClick)
         }
     }
