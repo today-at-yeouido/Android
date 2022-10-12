@@ -16,12 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tayapp.R
 import com.example.tayapp.presentation.components.ButtonLargeHeight
 import com.example.tayapp.presentation.components.TayButton
 import com.example.tayapp.presentation.components.TayTextField
@@ -214,34 +218,41 @@ private fun SocialField(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text("소셜 로그인", fontSize = 16.textDp, color = TayAppTheme.colors.bodyText)
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
 
-            Canvas(modifier = Modifier
-                .size(50.dp)
-                .clickable {
-                    kakaoLogin()
-                }) {
-                drawCircle(Color.Yellow)
-            }
+            Image(
+                painter = painterResource(id = R.drawable.btn_kakao_login),
+                contentDescription = "kakao_login",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .width(250.dp)
+                    .clickable { kakaoLogin() }
+            )
 
-            Canvas(modifier = Modifier
-                .size(50.dp)
-                .clickable {
-                    naverLogin()
-                }) {
-                drawCircle(Color.Green)
-            }
+            Image(
+                painter = painterResource(id = R.drawable.btn_naver_login),
+                contentDescription = "naver_login",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .width(250.dp)
+                    .clickable { naverLogin() }
+            )
 
-            Canvas(modifier = Modifier
-                .size(50.dp)
-                .clickable {
-                    val client = googleAuth()
-                    resultLauncher.launch(client.signInIntent)
-                }) {
-                drawCircle(Color.Black)
-            }
+            Image(
+                painter = painterResource(id = R.drawable.btn_google_login),
+                contentDescription = "google_login",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .width(250.dp)
+                    .clickable {
+                        val client = googleAuth()
+                        resultLauncher.launch(client.signInIntent)
+                    }
+            )
+
+
         }
     }
 }
