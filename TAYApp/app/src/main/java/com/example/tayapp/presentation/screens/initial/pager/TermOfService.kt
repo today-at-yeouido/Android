@@ -148,7 +148,7 @@ fun BoxScope.TermsOfService(
         backgroundColor = if (buttonEnable) TayAppTheme.colors.headText else TayAppTheme.colors.layer3,
         enabled = buttonEnable
     ) {
-        Text("이메일 인증하기", style = TayAppTheme.typo.typography.button)
+        Text("다음", style = TayAppTheme.typo.typography.button)
     }
 }
 

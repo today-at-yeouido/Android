@@ -38,8 +38,8 @@ fun BoxScope.Finish(
             .fillMaxWidth()
             .height(ButtonLargeHeight)
             .align(Alignment.BottomCenter),
-        contentColor = TayAppTheme.colors.disableText,
-        backgroundColor = TayAppTheme.colors.layer1,
+        contentColor = TayAppTheme.colors.background,
+        backgroundColor = TayAppTheme.colors.headText,
     ) {
         Text("완료", style = TayAppTheme.typo.typography.button)
     }

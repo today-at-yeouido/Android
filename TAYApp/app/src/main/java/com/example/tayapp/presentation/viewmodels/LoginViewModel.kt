@@ -73,7 +73,7 @@ class LoginViewModel @Inject constructor(
     fun requestLogin(e: String, p1: String) {
         viewModelScope.launch {
             isTryLogin.value = true
-            user = LoginUserUiState(e, p1)
+            user = user.copy(email = e, password = p1)
             val response = loginUseCases.requestLoginUseCase(
                 user.email, user.password
             )
@@ -89,6 +89,10 @@ class LoginViewModel @Inject constructor(
                 RegistrationDto(email = e, password1 = p1, password2 = p2)
             )
         }
+    }
+
+    fun getUserEmail(e: String) {
+        user = LoginUserUiState(e, "")
     }
 
     private fun checkLogin() =
