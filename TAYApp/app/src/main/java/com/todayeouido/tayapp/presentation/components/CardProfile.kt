@@ -226,12 +226,14 @@ fun CardProfileListItem(
 fun CardProfileListItemWithLink(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
-    subtext: String = ""
+    subtext: String = "",
+    onClick: () -> Unit
 ) {
     CardProfileListItem(
         icon = icon,
         text = text,
-        subtext = subtext
+        subtext = subtext,
+        onClick = onClick
     ) {
         Icon(
             imageVector = TayIcons.north_east,
