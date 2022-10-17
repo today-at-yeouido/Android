@@ -51,6 +51,11 @@ fun ProfileAppInfo(
                 text = "오픈소스",
                 onClick = { mUriHandler.openUri(OPEN_SOURCE) }
             )
+            CardProfileListItemWithLink(
+                icon = Icons.Outlined.Description,
+                text = "앱 정보",
+                onClick = { mUriHandler.openUri(APPINFO) }
+            )
         }
     }
 }
