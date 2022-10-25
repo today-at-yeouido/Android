@@ -2,9 +2,11 @@ package com.todayeouido.tayapp.di
 
 import android.content.Context
 import android.util.Log
+import com.todayeouido.tayapp.BuildConfig
 import com.todayeouido.tayapp.data.pref.PrefDataSource
 import com.todayeouido.tayapp.data.remote.*
-import com.todayeouido.tayapp.data.remote.Constants.BASE_URL
+import com.todayeouido.tayapp.data.remote.Constants.BASE_URL_DEBUG
+import com.todayeouido.tayapp.data.remote.Constants.BASE_URL_RELEASE
 import com.todayeouido.tayapp.data.remote.Constants.GOOGLE_URL
 import com.todayeouido.tayapp.utils.NetworkInterceptor
 import dagger.Module
@@ -82,11 +84,14 @@ object AppModule {
         .addInterceptor(loggingInterceptor)
         .build()
 
+
+    //Release MODE : 포트번호 81
+    //Debug MODE : 포트번호 80
     @TayRetrofit
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(if(BuildConfig.DEBUG) BASE_URL_DEBUG else BASE_URL_RELEASE)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
