@@ -12,6 +12,7 @@ import com.todayeouido.tayapp.utils.SocialConstants.KAKAO
 import com.todayeouido.tayapp.utils.SocialConstants.NAVER
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
+import com.todayeouido.tayapp.domain.use_case.login.DeleteUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val logoutUseCase: RequestLogoutUseCase,
-    private val saveThemeModeUseCase: SaveThemeModeUseCase
+    private val saveThemeModeUseCase: SaveThemeModeUseCase,
+    private val deleteUserInfoUseCase: DeleteUserInfoUseCase
 ) : ViewModel() {
     fun logout() {
         viewModelScope.launch {
@@ -49,6 +51,16 @@ class ProfileViewModel @Inject constructor(
                 Log.e("##88", "로그아웃 실패. SDK에서 토큰 삭제됨")
             }
         }
+    }
+
+    /**
+     * 회원탈퇴
+     */
+    fun withdraw() {
+        viewModelScope.launch {
+            deleteUserInfoUseCase()
+        }
+        logout()
     }
 
     fun saveThemeMode(mode: String) {

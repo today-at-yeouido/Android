@@ -220,3 +220,58 @@ fun LogOutNoticeDialog(
         }
     }
 }
+
+@Composable
+fun WithDrawNoticeDialog(
+    text: String,
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+    finishApp: () -> Unit,
+) {
+    if (visible) {
+        //onDismissRequest = 뒤로가기를 눌렀을 경우
+        CustomAlertDialog(onDismissRequest = { onDismissRequest() }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = TayAppTheme.colors.background)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .padding(horizontal = 24.dp),
+                    text = text,
+                    color = TayAppTheme.colors.bodyText,
+                    style = TayAppTheme.typo.typography.h1
+                )
+                Row(modifier = Modifier.align(Alignment.End)) {
+
+                    Text(
+                        modifier = Modifier
+                            .padding(12.dp)
+                            .clickable {
+                                finishApp()
+                            }
+                            .padding(12.dp),
+                        text = "Yes",
+                        color = TayAppTheme.colors.bodyText,
+                        style = TayAppTheme.typo.typography.h3
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(12.dp)
+                            .clickable {
+                                onDismissRequest()
+                            }
+                            .padding(12.dp),
+                        text = "No",
+                        color = TayAppTheme.colors.bodyText,
+                        style = TayAppTheme.typo.typography.h3
+                    )
+                }
+            }
+        }
+    }
+}
