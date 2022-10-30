@@ -1,5 +1,6 @@
 package com.todayeouido.tayapp.presentation.screens.initial.pager
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -7,11 +8,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.todayeouido.tayapp.presentation.components.ButtonLargeHeight
 import com.todayeouido.tayapp.presentation.components.TayButton
 import com.todayeouido.tayapp.presentation.components.TayCheckbox
+import com.todayeouido.tayapp.presentation.screens.Profile.PRIVACY_POLICY
+import com.todayeouido.tayapp.presentation.screens.Profile.TOS
 import com.todayeouido.tayapp.presentation.ui.theme.*
 import com.todayeouido.tayapp.presentation.utils.TayIcons
 import com.todayeouido.tayapp.presentation.viewmodels.LoginViewModel
@@ -23,11 +27,11 @@ import com.todayeouido.tayapp.utils.textDp
 fun BoxScope.TermsOfService(
     onClick: () -> Unit
 ) {
+
+    val mUriHandler = LocalUriHandler.current
     var bool1 by remember { mutableStateOf(false) }
     var bool2 by remember { mutableStateOf(false) }
     var bool3 by remember { mutableStateOf(false) }
-    var bool4 by remember { mutableStateOf(false) }
-    var bool5 by remember { mutableStateOf(false) }
     var buttonEnable = bool2 && bool3
 
     Column {
@@ -51,8 +55,6 @@ fun BoxScope.TermsOfService(
                         bool1 = true
                         bool2 = true
                         bool3 = true
-                        bool4 = true
-                        bool5 = true
                         buttonEnable = true
                     } else bool1 = false
                 }
@@ -67,7 +69,9 @@ fun BoxScope.TermsOfService(
         }
         Divider(color = TayAppTheme.colors.layer3)
         Row(
-            modifier = Modifier.height(44.dp),
+            modifier = Modifier
+                .height(44.dp)
+                .clickable { mUriHandler.openUri(TOS) },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -82,7 +86,9 @@ fun BoxScope.TermsOfService(
             Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
         }
         Row(
-            modifier = Modifier.height(44.dp),
+            modifier = Modifier
+                .height(44.dp)
+                .clickable { mUriHandler.openUri(PRIVACY_POLICY) },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -98,40 +104,7 @@ fun BoxScope.TermsOfService(
             )
             Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
         }
-        Row(
-            modifier = Modifier.height(44.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TayCheckbox(
-                checked = bool4,
-                onCheckedChange = { bool4 = !bool4 },
-            )
-            Text(
-                "[선택] 마케팅 정보 수신 동의",
-                fontWeight = FontWeight.Normal,
-                color = TayAppTheme.colors.subduedText,
-                modifier = Modifier.width(260.matchWidth)
-            )
-            Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
-        }
-        Row(
-            modifier = Modifier.height(44.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TayCheckbox(
-                checked = bool5,
-                onCheckedChange = { bool5 = !bool5 },
-            )
-            Text(
-                "[선택] 개인정보 수집 이용 동의",
-                fontWeight = FontWeight.Normal,
-                color = TayAppTheme.colors.subduedText,
-                modifier = Modifier.width(260.matchWidth)
-            )
-            Icon(imageVector = TayIcons.navigate_next, contentDescription = "")
-        }
+
     }
 
 
