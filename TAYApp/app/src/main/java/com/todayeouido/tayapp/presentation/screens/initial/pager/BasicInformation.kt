@@ -35,9 +35,17 @@ fun BoxScope.BasicInformation(
     var pass1 by remember { mutableStateOf("") }
     var pass2 by remember { mutableStateOf("") }
 
-    val regex2 = Regex(pattern = "(?=.*\\d)(?=.*[a-z]).{8,}")
+    //숫자포함
+    val regex2 = Regex(pattern = "(?=.*\\d).{1,}")
+    //특수문자
+    val regex3 = Regex(pattern = "^(?=.*[~`!@#\$%\\\\^&*()-]).{1,}")
+    //대문자
+    val regex4 = Regex(pattern = "^(?=.*[A-Z]).{1,}")
+
+    val bool0 = if(pass1.length in 8..20) true else false
     val bool2 = regex2.matches(pass1)
     val bool3 = if (pass2.isNotBlank()) pass1 == pass2 else false
+    val bool1 = regex3.matches(pass1) && regex4.matches(pass1)
 
     Column {
         Spacer(Modifier.height(10.dp))
@@ -67,10 +75,10 @@ fun BoxScope.BasicInformation(
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     IconText(
                         text = "8~20자 이내",
-                        color = if (bool2) TayAppTheme.colors.primary else TayAppTheme.colors.subduedIcon
+                        color = if (bool0) TayAppTheme.colors.primary else TayAppTheme.colors.subduedIcon
                     )
-                    IconText(text = "영문 포함", color = if (bool2) TayAppTheme.colors.primary else TayAppTheme.colors.subduedIcon)
                     IconText(text = "숫자 포함", color = if (bool2) TayAppTheme.colors.primary else TayAppTheme.colors.subduedIcon)
+                    IconText(text = "대문자/특수기호 포함", color = if (bool1) TayAppTheme.colors.primary else TayAppTheme.colors.subduedIcon)
                 }
                 Spacer(Modifier.height(10.dp))
                 Text("비밀번호 확인", color = TayAppTheme.colors.bodyText)
@@ -97,7 +105,7 @@ fun BoxScope.BasicInformation(
         }
     }
 
-    val bool4 = bool2 && bool3
+    val bool4 = bool2 && bool3 && bool1
 
     TayButton(
         onClick = {
