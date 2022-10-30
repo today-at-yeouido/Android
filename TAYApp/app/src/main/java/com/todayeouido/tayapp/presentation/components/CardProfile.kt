@@ -36,17 +36,7 @@ fun CardUserProfile() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 CardUserProfileText()
-                TayButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .width(ButtonSmallWidth)
-                        .height(ButtonSmallHeight),
-                    backgroundColor = TayAppTheme.colors.background,
-                    contentColor = TayAppTheme.colors.headText,
-                    border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                ) {
-                    Text("프로필 수정", style = TayAppTheme.typo.typography.button)
-                }
+
             }
 
         }
