@@ -106,7 +106,7 @@ private fun CardUserProfileText(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            "${UserState.user.id} 님",
+            "${UserState.user.email} 님",
             style = TayAppTheme.typo.typography.h2,
             color = TayAppTheme.colors.headText
         )
