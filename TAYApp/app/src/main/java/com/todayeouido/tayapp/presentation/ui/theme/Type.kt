@@ -63,6 +63,12 @@ val TayTypography = Typography(
         fontSize = 12.sp,
         letterSpacing = 0.sp,
         lineHeight = 1.65.em
+    ),
+    button = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        letterSpacing = 0.sp,
+        lineHeight = 1.65.em
     )
 
 )

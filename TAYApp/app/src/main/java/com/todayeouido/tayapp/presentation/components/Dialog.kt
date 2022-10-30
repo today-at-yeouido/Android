@@ -1,6 +1,7 @@
 package com.todayeouido.tayapp.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -125,41 +126,48 @@ fun AppFinishNoticeDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(8.dp))
                     .background(color = TayAppTheme.colors.background)
+                    .padding(vertical = 24.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .padding(horizontal = 24.dp),
+                    modifier = Modifier,
                     text = text,
                     color = TayAppTheme.colors.bodyText,
-                    style = TayAppTheme.typo.typography.h1
+                    style = TayAppTheme.typo.typography.body1
                 )
-                Row(modifier = Modifier.align(Alignment.End)) {
 
-                    Text(
+                Spacer(modifier = Modifier.size(20.dp))
+
+                Row() {
+                    TayButton(
+                        onClick = { onDismissRequest() },
+                        backgroundColor = TayAppTheme.colors.background,
                         modifier = Modifier
-                            .padding(12.dp)
-                            .clickable {
-                                finishApp()
-                            }
-                            .padding(12.dp),
-                        text = "Yes",
-                        color = TayAppTheme.colors.bodyText,
-                        style = TayAppTheme.typo.typography.h3
-                    )
-                    Text(
+                            .weight(1f)
+                            .height(ButtonSmallHeight)
+                            .border(1.dp, TayAppTheme.colors.border, RoundedCornerShape(8.dp))
+                    ) {
+                        Text(
+                            "돌아가기",
+                            style = TayAppTheme.typo.typography.button,
+                            color = TayAppTheme.colors.bodyText
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.size(10.dp))
+
+                    TayButton(
+                        onClick = { finishApp() },
+                        backgroundColor = TayAppTheme.colors.bodyText,
                         modifier = Modifier
-                            .padding(12.dp)
-                            .clickable {
-                                onDismissRequest()
-                            }
-                            .padding(12.dp),
-                        text = "No",
-                        color = TayAppTheme.colors.bodyText,
-                        style = TayAppTheme.typo.typography.h3
-                    )
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .height(ButtonSmallHeight)
+                    ) {
+                        Text("나가기", style = TayAppTheme.typo.typography.button)
+                    }
                 }
             }
         }
@@ -180,41 +188,49 @@ fun LogOutNoticeDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(8.dp))
                     .background(color = TayAppTheme.colors.background)
+                    .padding(vertical = 24.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .padding(horizontal = 24.dp),
+                    modifier = Modifier,
                     text = text,
                     color = TayAppTheme.colors.bodyText,
-                    style = TayAppTheme.typo.typography.h1
+                    style = TayAppTheme.typo.typography.body1
                 )
+
+                Spacer(modifier = Modifier.size(20.dp))
+
                 Row(modifier = Modifier.align(Alignment.End)) {
 
-                    Text(
+                    TayButton(
+                        onClick = { onDismissRequest() },
+                        backgroundColor = TayAppTheme.colors.background,
                         modifier = Modifier
-                            .padding(12.dp)
-                            .clickable {
-                                finishApp()
-                            }
-                            .padding(12.dp),
-                        text = "Yes",
-                        color = TayAppTheme.colors.bodyText,
-                        style = TayAppTheme.typo.typography.h3
-                    )
-                    Text(
+                            .weight(1f)
+                            .height(ButtonSmallHeight)
+                            .border(1.dp, TayAppTheme.colors.border, RoundedCornerShape(8.dp))
+                    ) {
+                        Text(
+                            "돌아가기",
+                            style = TayAppTheme.typo.typography.button,
+                            color = TayAppTheme.colors.bodyText
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.size(10.dp))
+
+                    TayButton(
+                        onClick = { finishApp() },
+                        backgroundColor = TayAppTheme.colors.bodyText,
                         modifier = Modifier
-                            .padding(12.dp)
-                            .clickable {
-                                onDismissRequest()
-                            }
-                            .padding(12.dp),
-                        text = "No",
-                        color = TayAppTheme.colors.bodyText,
-                        style = TayAppTheme.typo.typography.h3
-                    )
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .height(ButtonSmallHeight)
+                    ) {
+                        Text("로그아웃", style = TayAppTheme.typo.typography.button)
+                    }
                 }
             }
         }
@@ -235,41 +251,62 @@ fun WithDrawNoticeDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(8.dp))
                     .background(color = TayAppTheme.colors.background)
+                    .padding(vertical = 24.dp)
+                    .padding(horizontal = 16.dp)
+
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .padding(horizontal = 24.dp),
+                    modifier = Modifier,
                     text = text,
                     color = TayAppTheme.colors.bodyText,
-                    style = TayAppTheme.typo.typography.h1
+                    style = TayAppTheme.typo.typography.body1
                 )
-                Row(modifier = Modifier.align(Alignment.End)) {
 
-                    Text(
+                Spacer(modifier = Modifier.size(6.dp))
+
+
+                Text(
+                    modifier = Modifier,
+                    text = "탈퇴 후 7일 내 같은 계정으로 재가입할 수 없어요.",
+                    color = TayAppTheme.colors.subduedText,
+                    style = TayAppTheme.typo.typography.body2
+                )
+
+                Spacer(modifier = Modifier.size(20.dp))
+
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    
+                    TayButton(
+                        onClick = { onDismissRequest() },
+                        backgroundColor = TayAppTheme.colors.background,
                         modifier = Modifier
-                            .padding(12.dp)
-                            .clickable {
-                                finishApp()
-                            }
-                            .padding(12.dp),
-                        text = "Yes",
-                        color = TayAppTheme.colors.bodyText,
-                        style = TayAppTheme.typo.typography.h3
-                    )
-                    Text(
+                            .weight(1f)
+                            .height(ButtonSmallHeight)
+                            .border(1.dp, TayAppTheme.colors.border, RoundedCornerShape(8.dp))
+                    ) {
+                        Text(
+                            "취소",
+                            style = TayAppTheme.typo.typography.button,
+                            color = TayAppTheme.colors.bodyText
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.size(10.dp))
+
+                    TayButton(
+                        onClick = { finishApp() },
+                        backgroundColor = TayAppTheme.colors.danger2,
                         modifier = Modifier
-                            .padding(12.dp)
-                            .clickable {
-                                onDismissRequest()
-                            }
-                            .padding(12.dp),
-                        text = "No",
-                        color = TayAppTheme.colors.bodyText,
-                        style = TayAppTheme.typo.typography.h3
-                    )
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .height(ButtonSmallHeight)
+                    ) {
+                        Text("탈퇴", style = TayAppTheme.typo.typography.button)
+                    }
+                    
                 }
             }
         }
