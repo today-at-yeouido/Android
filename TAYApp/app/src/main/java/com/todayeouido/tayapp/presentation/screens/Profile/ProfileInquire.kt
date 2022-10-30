@@ -1,5 +1,7 @@
 package com.todayeouido.tayapp.presentation.screens.Profile
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,8 +12,10 @@ import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat.startActivity
 import com.todayeouido.tayapp.presentation.components.CardProfileListItemWithLink
 import com.todayeouido.tayapp.presentation.components.CardProfileListItemWithNext
 import com.todayeouido.tayapp.presentation.components.TayTopAppBarWithBack
@@ -25,6 +29,19 @@ const val EMAIL_REQUEST = "https://grandiose-nylon-a50.notion.site/FAQ-da4051eb5
 fun ProfileInquire(
     upPress: () -> Unit
 ){
+    val emailAddress = "todayatyeouido@gmail.com"
+
+    val mailIntent = Intent(Intent.ACTION_SENDTO) // 메일 전송 설정
+        .apply {
+            type = "text/plain" // 데이터 타입 설정
+            data = Uri.parse("mailto:") // 이메일 앱에서만 인텐트 처리되도록 설정
+
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress)) // 메일 수신 주소 목록
+        }
+    val context = LocalContext.current
+
+
+
 
     val mUriHandler = LocalUriHandler.current
     Column(
@@ -42,7 +59,7 @@ fun ProfileInquire(
             CardProfileListItemWithLink(
                 icon = Icons.Outlined.Mail,
                 text = "이메일 문의",
-                onClick = { mUriHandler.openUri(EMAIL_REQUEST) }
+                onClick = { startActivity(context, mailIntent, null) }
             )
         }
     }
