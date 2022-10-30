@@ -1,8 +1,10 @@
 package com.todayeouido.tayapp.data.remote
 
+import androidx.room.Delete
 import com.todayeouido.tayapp.data.remote.dto.login.*
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -33,5 +35,8 @@ interface LoginApi {
         @Path("sns") sns: String,
         @Body snsLogin: SnsLoginDto
     ): Response<LoginResponse>
+
+    @DELETE(Constants.DELETE_USER_INFO)
+    suspend fun deleteUserInfo() : Response<Void>
 }
 

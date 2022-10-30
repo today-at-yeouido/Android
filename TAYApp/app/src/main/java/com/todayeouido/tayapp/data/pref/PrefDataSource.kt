@@ -68,7 +68,7 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
             settings[LOGIN_USER_REFRESH_TOKEN] = user.refreshToken
             settings[LOGIN_USER_ID] = user.id
             settings[LOGIN_USER_EMAIL] = user.email
-            settings[LOGIN_USER_EMAIL] = user.sns
+            settings[LOGIN_USER_SNS] = user.sns
         }
     }
 

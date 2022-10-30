@@ -36,17 +36,7 @@ fun CardUserProfile() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 CardUserProfileText()
-                TayButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .width(ButtonSmallWidth)
-                        .height(ButtonSmallHeight),
-                    backgroundColor = TayAppTheme.colors.background,
-                    contentColor = TayAppTheme.colors.headText,
-                    border = BorderStroke(1.dp, TayAppTheme.colors.border)
-                ) {
-                    Text("프로필 수정", style = TayAppTheme.typo.typography.button)
-                }
+
             }
 
         }
@@ -106,7 +96,7 @@ private fun CardUserProfileText(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            "${UserState.user.id} 님",
+            "${UserState.user.email} 님",
             style = TayAppTheme.typo.typography.h2,
             color = TayAppTheme.colors.headText
         )

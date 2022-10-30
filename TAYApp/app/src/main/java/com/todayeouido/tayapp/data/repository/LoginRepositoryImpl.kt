@@ -63,4 +63,8 @@ class LoginRepositoryImpl @Inject constructor(
     override suspend fun googleAuth(request: LoginGoogleRequest): Response<LoginGoogleResponse>? {
        return google.fetchGoogleAuthInfo(request)
     }
+
+    override suspend fun deleteUserInfo(): Response<Void> {
+        return loginApi.deleteUserInfo()
+    }
 }

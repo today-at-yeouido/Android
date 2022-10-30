@@ -1,6 +1,7 @@
 package com.todayeouido.tayapp.domain.repository
 
 
+import android.os.strictmode.Violation
 import com.todayeouido.tayapp.data.pref.model.UserPref
 import com.todayeouido.tayapp.data.remote.dto.LoginGoogleRequest
 import com.todayeouido.tayapp.data.remote.dto.LoginGoogleResponse
@@ -24,4 +25,5 @@ interface LoginRepository {
     suspend fun requestSnsLogin(sns: String, snsLoginDto: SnsLoginDto): Response<LoginResponse>
     suspend fun prefLogout()
     suspend fun googleAuth(request: LoginGoogleRequest): Response<LoginGoogleResponse>?
+    suspend fun deleteUserInfo(): Response<Void>
 }

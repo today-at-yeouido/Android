@@ -22,6 +22,7 @@ const val TOS = "https://grandiose-nylon-a50.notion.site/e2dca65874374744aa702d3
 const val PRIVACY_POLICY = "https://grandiose-nylon-a50.notion.site/6408e668538946c0b604f18f8223802c"
 const val APPINFO = "https://grandiose-nylon-a50.notion.site/33c917da3cc846e58227e78850c684f4"
 const val OPEN_SOURCE = "https://grandiose-nylon-a50.notion.site/f6e7b2d8533b4da49a0692b04484ca77"
+const val NOTICE = "https://grandiose-nylon-a50.notion.site/0204fd1804fb4c249b439f965d99cb44"
 
 @Composable
 fun ProfileAppInfo(

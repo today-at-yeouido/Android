@@ -11,6 +11,7 @@ object Constants {
     const val POST_LOGOUT = "account/logout/"
     const val POST_JWT_REFRESH = "account/token/refresh/"
     const val POST_SOCIAL_LOGIN = "user/kakao/login/manage/"
+    const val DELETE_USER_INFO = "user/withdraw/"
 
     const val GET_BILL_DETAIL = "bill/detail/"
     const val GET_BILL_HOME = "bill/home/"

@@ -15,6 +15,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +24,8 @@ import androidx.navigation.NavController
 import com.todayeouido.tayapp.presentation.components.*
 import com.todayeouido.tayapp.presentation.navigation.Destinations
 import com.todayeouido.tayapp.presentation.navigation.ProfileDestination
+import com.todayeouido.tayapp.presentation.screens.Profile.NOTICE
+import com.todayeouido.tayapp.presentation.screens.Profile.OPEN_SOURCE
 import com.todayeouido.tayapp.presentation.states.UserState
 import com.todayeouido.tayapp.presentation.ui.theme.*
 import com.todayeouido.tayapp.presentation.utils.TayIcons
@@ -33,15 +36,25 @@ fun Profile(
     navController: NavController
 ) {
     val viewModel = hiltViewModel<ProfileViewModel>()
-    var dialogVisible by remember { mutableStateOf(false) }
+    var logoutDialogVisible by remember { mutableStateOf(false) }
+    var withDrawDialogVisible by remember { mutableStateOf(false) }
 
     LogOutNoticeDialog(
         "로그아웃 하시겠습니까?",
-        dialogVisible, {
-            dialogVisible = !dialogVisible
+        logoutDialogVisible, {
+            logoutDialogVisible = !logoutDialogVisible
         }) {
         viewModel.logout()
-        dialogVisible = !dialogVisible
+        logoutDialogVisible = !logoutDialogVisible
+    }
+
+    WithDrawNoticeDialog(
+        "정말 탈퇴하시겠어요?",
+        withDrawDialogVisible, {
+            withDrawDialogVisible = !withDrawDialogVisible
+        }) {
+        viewModel.withdraw()
+        withDrawDialogVisible = !withDrawDialogVisible
     }
 
     Box(
@@ -80,7 +93,10 @@ fun Profile(
             ProfileLineItems()
 
             if(UserState.isLogin()) {
-                ProfileBottomButtons { dialogVisible = !dialogVisible }
+                ProfileBottomButtons(
+                    logout = { logoutDialogVisible = !logoutDialogVisible },
+                    withdraw = { withDrawDialogVisible = !withDrawDialogVisible}
+                )
             }
         }
     }
@@ -114,10 +130,14 @@ private fun ProfileSettings(navController: NavController) {
 
 @Composable
 private fun ProfileLineItems() {
+
+    val mUriHandler = LocalUriHandler.current
+
     Column() {
         CardProfileListItemWithOutIcon(
             text = "공지사항",
-            subtext = ""
+            subtext = "",
+            onClick = { mUriHandler.openUri(NOTICE) }
         ) {
             Icon(
                 imageVector = TayIcons.navigate_next,
@@ -140,7 +160,7 @@ private fun ProfileLineItems() {
 }
 
 @Composable
-private fun ProfileBottomButtons(logout: () -> Unit) {
+private fun ProfileBottomButtons(logout: () -> Unit, withdraw: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -155,7 +175,7 @@ private fun ProfileBottomButtons(logout: () -> Unit) {
             )
         }
         TayButton(
-            onClick = { /*TODO*/ },
+            onClick = { withdraw() },
             contentColor = TayAppTheme.colors.headText,
             backgroundColor = TayAppTheme.colors.background,
             border = BorderStroke(1.dp, TayAppTheme.colors.border)

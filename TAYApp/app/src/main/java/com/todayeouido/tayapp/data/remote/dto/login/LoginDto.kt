@@ -15,6 +15,7 @@ data class SnsLoginDto(
     val access: String
 )
 
+
 data class LoginResponse(
     @SerializedName("access_token")
     val accessToken: String,
