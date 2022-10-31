@@ -1,12 +1,10 @@
 package com.todayeouido.tayapp.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -16,22 +14,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import com.todayeouido.tayapp.data.remote.dto.bill.NewsDto
+import com.todayeouido.tayapp.data.remote.dto.bill.ReflectInfoDto
+import com.todayeouido.tayapp.data.remote.dto.bill.toScrapBill
 import com.todayeouido.tayapp.domain.model.DetailBill
-import com.todayeouido.tayapp.domain.use_case.Article
 import com.todayeouido.tayapp.domain.use_case.Condolences
 import com.todayeouido.tayapp.presentation.components.*
+import com.todayeouido.tayapp.presentation.navigation.GroupBillParcelableModel
 import com.todayeouido.tayapp.presentation.states.UserState
 import com.todayeouido.tayapp.presentation.ui.theme.*
 import com.todayeouido.tayapp.presentation.utils.StateColor
@@ -46,7 +45,8 @@ fun BillDetail(
     viewModel: DetailViewModel = hiltViewModel(),
     upPress: () -> Unit,
     toTable: () -> Unit,
-    onGroupBillSelected: (Int) -> Unit = {}
+    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit,
+    onBillClick: (Int) -> Unit
 ) {
     val billId = viewModel.billId
     val detailState = viewModel.detailState.collectAsState()
@@ -130,6 +130,9 @@ fun BillDetail(
                                     CardPieGraph(detailState.value.billDetail)
                                 }
 
+                                if (detailState.value.billDetail.reflect_info.isNotEmpty()) {
+                                    CardBillLine(detailState.value.billDetail,detailState.value.billDetail.reflect_info, onBillClick, onGroupBillSelected)
+                                }
                                 BillPointText(detailState.value.billDetail.summary)
                                 if (table.billTable != null) BillRevisionText(
                                     table.billTable!!.condolences,
@@ -376,7 +379,9 @@ private fun NewsHeader() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth().padding(top = 27.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 27.dp)
     ) {
         Title(string = "관련 뉴스")
     }
@@ -507,4 +512,55 @@ private fun BillRevisionItem(type: String, count: Int) {
         )
     }
 
+}
+
+@Composable
+private fun CardBillLine(
+    bill: DetailBill,
+    reflectInfo: List<ReflectInfoDto>,
+    onBillClick: (Int) -> Unit,
+    onGroupBillSelected: (Int, GroupBillParcelableModel) -> Unit,
+) {
+    TayCard {
+        Box {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .padding(vertical = 18.dp, horizontal = 11.dp)
+            ) {
+                Text(
+                    text = "이 법에 접수된 의안이 또 있어요!",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
+                    color = TayAppTheme.colors.bodyText,
+                    modifier = Modifier.padding(horizontal = 3.dp),
+                    maxLines = 1
+                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    LineSearchedBill(
+                        bill = reflectInfo[0].disuseBill.toScrapBill(),
+                        onLineClick = onBillClick,
+                        reflectInfo.size <= 2
+                    )
+                    if(reflectInfo.size >= 2) LineSearchedBill(bill = reflectInfo[1].disuseBill.toScrapBill(), onLineClick = onBillClick, reflectInfo.size <= 2)
+                }
+            }
+            if(reflectInfo.size >= 3) {
+                GradientCompponent(Modifier.align(Alignment.BottomCenter))
+                TayButton(
+                    onClick = {onGroupBillSelected(-1, GroupBillParcelableModel(reflectInfo.map { it.disuseBill.toScrapBill() }, bill.billName))},
+                    modifier = Modifier
+                        .padding(bottom = 18.dp)
+                        .align(Alignment.BottomCenter)
+                        .size(ButtonLargeWidth, ButtonLargeHeight),
+                    backgroundColor = TayAppTheme.colors.bodyText,
+                    contentColor = TayAppTheme.colors.background
+                ) {
+                    Text("${reflectInfo.size}건 모두 보기", style = TayAppTheme.typo.typography.button)
+                }
+            }
+        }
+    }
 }

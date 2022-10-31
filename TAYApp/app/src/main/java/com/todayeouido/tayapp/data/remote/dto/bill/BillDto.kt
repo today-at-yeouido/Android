@@ -1,5 +1,8 @@
 package com.todayeouido.tayapp.data.remote.dto.bill
 
+import com.todayeouido.tayapp.data.remote.dto.scrap.ScrapBillDto
+import com.todayeouido.tayapp.data.remote.dto.scrap.ScrapBillItemDto
+
 data class BillDto(
     val billName: String,
     val billType: Int,
@@ -12,4 +15,15 @@ data class BillDto(
     val views: Int,
     val emoji: String = ""
 )
+
+fun BillDto.toScrapBill(): ScrapBillItemDto =
+    ScrapBillItemDto(
+        id = id,
+        billType = billType,
+        isReflect = isReflect,
+        proposeDt = proposeDt,
+        proposer = proposer,
+        status = status,
+        views = views,
+    )
 

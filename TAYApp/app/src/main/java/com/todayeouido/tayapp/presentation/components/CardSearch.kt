@@ -154,11 +154,11 @@ fun CardMultiple(
 @Composable
 fun LineSearchedBill(
     bill: ScrapBillItemDto,
-    onLineClick: (Int) -> Unit
-
+    onLineClick: (Int) -> Unit,
+    clickable: Boolean = true
 ){
     Surface(
-        modifier = Modifier.height(34.dp).clickable(onClick = {onLineClick(bill.id)}),
+        modifier = Modifier.height(34.dp).clickable(onClick = {onLineClick(bill.id)}, enabled = clickable),
         color = TayAppTheme.colors.layer1,
         shape = RoundedCornerShape(10.dp)
     ) {
