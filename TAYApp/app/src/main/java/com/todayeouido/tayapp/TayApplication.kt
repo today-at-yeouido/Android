@@ -1,7 +1,6 @@
 package com.todayeouido.tayapp
 
 import android.app.Application
-import android.content.Context
 import com.kakao.sdk.common.KakaoSdk
 import com.navercorp.nid.NaverIdLoginSDK
 import dagger.hilt.android.HiltAndroidApp
@@ -20,7 +19,6 @@ class TayApplication : Application() {
         val naverClientId = getString(R.string.social_login_info_naver_client_id)
         val naverClientSecret = getString(R.string.social_login_info_naver_client_secret)
         val naverClientName = getString(R.string.social_login_info_naver_client_name)
-
 
         NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret, naverClientName)
         // Kakao SDK 초기화
