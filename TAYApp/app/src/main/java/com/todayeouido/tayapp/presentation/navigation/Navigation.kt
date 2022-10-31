@@ -69,6 +69,8 @@ private fun NavGraphBuilder.tayNavGraph(
 private fun NavGraphBuilder.detailNavigation(
     navController: NavController,
     upPress: () -> Unit,
+    onBillSelected: (Int, NavBackStackEntry) -> Unit,
+    onGroupBillScrapSelected: (Int, GroupBillParcelableModel, NavBackStackEntry) -> Unit
 ) {
     //이거 navigate풀었는데 navigate로 묶다보니 딥링크에서 뒤로가기가 안되서 풀게 되었음.
     //viewModel관련해서 문제가 있는지 찾아봐야할 것같음
@@ -80,7 +82,12 @@ private fun NavGraphBuilder.detailNavigation(
             navController.getBackStackEntry("${AppGraph.DETAIL_GRAPH}/{${Destinations.BILL_ID}}")
         }
         val viewModel = hiltViewModel<DetailViewModel>(parentEntry)
-        BillDetail(viewModel, upPress, { navController.navigate(Destinations.DETAIL_TABLE) })
+        BillDetail(
+            viewModel,
+            upPress,
+            { navController.navigate(Destinations.DETAIL_TABLE) },
+            onGroupBillSelected = { id, list -> onGroupBillScrapSelected(id, list, backStackEntry) },
+            onBillClick = { id -> onBillSelected(id, backStackEntry) })
     }
 
     composable(route = Destinations.DETAIL_TABLE) { backStackEntry ->
@@ -155,7 +162,7 @@ private fun NavGraphBuilder.homeNavigation(
             onGroupBillScrapSelected = onGroupBillScrapSelected
         )
         //딥링크를 사용했을 때 뒤로가기를 누르면 Feed 화면을 노출시키기 위해 옮김
-        detailNavigation(navController, upPress)
+        detailNavigation(navController, upPress, onBillSelected, onGroupBillScrapSelected)
     }
 }
 
