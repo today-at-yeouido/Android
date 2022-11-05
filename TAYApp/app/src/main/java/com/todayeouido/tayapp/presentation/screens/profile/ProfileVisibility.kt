@@ -1,5 +1,6 @@
-package com.todayeouido.tayapp.presentation.screens.Profile
+package com.todayeouido.tayapp.presentation.screens.profile
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,7 +12,6 @@ import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.todayeouido.tayapp.presentation.components.CardProfileListItemWithNext
@@ -21,15 +21,15 @@ import com.todayeouido.tayapp.presentation.states.UserState
 import com.todayeouido.tayapp.presentation.ui.theme.KeyLine
 import com.todayeouido.tayapp.presentation.ui.theme.TayAppTheme
 import com.todayeouido.tayapp.presentation.viewmodels.ProfileViewModel
+import com.todayeouido.tayapp.utils.TextSize
 import com.todayeouido.tayapp.utils.mutableSize
-import com.todayeouido.tayapp.utils.textSize
 
 @Composable
 fun ProfileVisibility(
     upPress: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var value by remember { mutableStateOf(1f) }
+    var value by remember { UserState.textSize }
     var dialogVisible by remember { mutableStateOf(false) }
     val viewModel = hiltViewModel<ProfileViewModel>()
 
@@ -46,7 +46,10 @@ fun ProfileVisibility(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TayTopAppBarWithBack(string = "앱 정보", upPress)
+        TayTopAppBarWithBack(string = "앱 정보") {
+            viewModel.saveTextSize(UserState.textSize.value)
+            upPress()
+        }
         Column(
             modifier = Modifier.padding(KeyLine)
         ) {
@@ -61,7 +64,7 @@ fun ProfileVisibility(
             CardProfileListItemWithNext(
                 icon = Icons.Outlined.FormatSize,
                 text = "글자 크기",
-                subtext = "보통",
+                subtext = TextSize,
                 onClick = {
                     expanded = !expanded
                 }
@@ -71,11 +74,11 @@ fun ProfileVisibility(
                     Slider(
                         value = value,
                         onValueChange = {
-                            textSize.value = it.toDouble()
+                            UserState.textSize.value = it
                             value = it
                         },
-                        valueRange = 0.5f..2f,
-                        steps = 3,
+                        valueRange = 0.875f..1.25f,
+                        steps = 2,
                         modifier = Modifier.background(
                             TayAppTheme.colors.bodyText
                         )
@@ -85,6 +88,11 @@ fun ProfileVisibility(
                 }
             }
         }
+    }
+
+    BackHandler {
+        viewModel.saveTextSize(UserState.textSize.value)
+        upPress()
     }
 }
 

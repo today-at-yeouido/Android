@@ -1,21 +1,16 @@
-package com.todayeouido.tayapp.presentation.screens.Profile
+package com.todayeouido.tayapp.presentation.screens.profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.tooling.preview.Preview
 import com.todayeouido.tayapp.presentation.components.CardProfileListItemWithLink
-import com.todayeouido.tayapp.presentation.components.CardProfileListItemWithNext
 import com.todayeouido.tayapp.presentation.components.TayTopAppBarWithBack
 import com.todayeouido.tayapp.presentation.ui.theme.KeyLine
-import com.todayeouido.tayapp.presentation.ui.theme.TayAppTheme
 
 //이용약관
 const val TOS = "https://grandiose-nylon-a50.notion.site/e2dca65874374744aa702d3030e88f8c"

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.todayeouido.tayapp.presentation.MainActivity
+import com.todayeouido.tayapp.presentation.states.UserState
 
 @Composable
 fun getActivity() = LocalContext.current as ComponentActivity
@@ -52,13 +53,19 @@ private fun Int.matchWidth(): Dp {
 val Int.matchWidth: Dp
     @Composable get() = this.matchWidth()
 
-val textSize = mutableStateOf<Double>(1.0)
+val TextSize
+    get() = when(UserState.textSize.value){
+        0.875f -> "작게"
+        1f -> "보통"
+        1.125f -> "크게"
+        else -> "아주 크게"
+    }
 
 val Double.mutableSize: TextUnit
-    @Composable get() = this.textDp * textSize.value
+    @Composable get() = this.textDp * UserState.textSize.value
 
 val Int.mutableSize: TextUnit
-    @Composable get() = this.textDp * textSize.value
+    @Composable get() = this.textDp * UserState.textSize.value
 
 
 /**

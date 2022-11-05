@@ -24,8 +24,7 @@ import androidx.navigation.NavController
 import com.todayeouido.tayapp.presentation.components.*
 import com.todayeouido.tayapp.presentation.navigation.Destinations
 import com.todayeouido.tayapp.presentation.navigation.ProfileDestination
-import com.todayeouido.tayapp.presentation.screens.Profile.NOTICE
-import com.todayeouido.tayapp.presentation.screens.Profile.OPEN_SOURCE
+import com.todayeouido.tayapp.presentation.screens.profile.NOTICE
 import com.todayeouido.tayapp.presentation.states.UserState
 import com.todayeouido.tayapp.presentation.ui.theme.*
 import com.todayeouido.tayapp.presentation.utils.TayIcons

@@ -1,27 +1,17 @@
-package com.todayeouido.tayapp.presentation.screens.Profile
+package com.todayeouido.tayapp.presentation.screens.profile
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FormatSize
-import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.todayeouido.tayapp.presentation.components.CardProfileListItemWithNext
-import com.todayeouido.tayapp.presentation.components.TayCard
 import com.todayeouido.tayapp.presentation.components.TayTopAppBarWithBack
 import com.todayeouido.tayapp.presentation.ui.theme.*
-import com.todayeouido.tayapp.presentation.utils.TayIcons
 
 @Composable
 fun ProfileAlarm(

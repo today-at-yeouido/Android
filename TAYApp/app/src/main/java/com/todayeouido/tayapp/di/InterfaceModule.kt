@@ -29,6 +29,6 @@ abstract class InterfaceModule {
 
     @Binds
     abstract fun provideThemeModeImpl(
-        repository: ThemeModeRepositoryImpl
-    ): ThemeModeRepository
+        repository: UserPrefRepositoryImpl
+    ): UserPrefRepository
 }

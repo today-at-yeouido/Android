@@ -2,10 +2,7 @@ package com.todayeouido.tayapp.data.pref
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.todayeouido.tayapp.data.pref.model.UserPref
 import com.todayeouido.tayapp.utils.ThemeConstants.SYSTEM
@@ -29,6 +26,17 @@ class PrefDataSource @Inject constructor(@ApplicationContext val context: Contex
         val RECENT_SEARCH_TERM = stringPreferencesKey("recent_search_term")
 
         val THEME_MODE = stringPreferencesKey("theme_mode")
+        val TEXT_SIZE = floatPreferencesKey("text_size")
+    }
+
+    fun getTextSize(): Flow<Float> = context.dataStore.data.map {
+        it[TEXT_SIZE] ?: 1f
+    }
+
+    suspend fun saveTextSize(size: Float) {
+        context.dataStore.edit {
+            it[TEXT_SIZE] = size
+        }
     }
 
     fun getThemeMode(): Flow<String> = context.dataStore.data.map {

@@ -14,11 +14,10 @@ import androidx.compose.ui.unit.dp
 import com.todayeouido.tayapp.presentation.components.ButtonLargeHeight
 import com.todayeouido.tayapp.presentation.components.TayButton
 import com.todayeouido.tayapp.presentation.components.TayCheckbox
-import com.todayeouido.tayapp.presentation.screens.Profile.PRIVACY_POLICY
-import com.todayeouido.tayapp.presentation.screens.Profile.TOS
+import com.todayeouido.tayapp.presentation.screens.profile.PRIVACY_POLICY
+import com.todayeouido.tayapp.presentation.screens.profile.TOS
 import com.todayeouido.tayapp.presentation.ui.theme.*
 import com.todayeouido.tayapp.presentation.utils.TayIcons
-import com.todayeouido.tayapp.presentation.viewmodels.LoginViewModel
 import com.todayeouido.tayapp.utils.matchWidth
 import com.todayeouido.tayapp.utils.textDp
 

@@ -1,9 +1,7 @@
 package com.todayeouido.tayapp.presentation.viewmodels
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.ContextWrapper
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,15 +13,13 @@ import com.todayeouido.tayapp.data.pref.model.toState
 import com.todayeouido.tayapp.data.remote.dto.login.RegistrationDto
 import com.todayeouido.tayapp.domain.use_case.AuthGoogleUseCase
 import com.todayeouido.tayapp.domain.use_case.LoginUseCases
-import com.todayeouido.tayapp.domain.use_case.mode.GetThemeModeUseCase
+import com.todayeouido.tayapp.domain.use_case.pref.GetThemeModeUseCase
 import com.todayeouido.tayapp.presentation.states.UserState
 import com.todayeouido.tayapp.presentation.states.LoginUserUiState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.Scopes
-import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -33,6 +29,7 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.todayeouido.tayapp.domain.use_case.pref.GetTextSizeModelUseCae
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -45,6 +42,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
     private val authGoogleUseCase: AuthGoogleUseCase,
     private val getThemeModeUseCase: GetThemeModeUseCase,
+    private val getTextSizeModelUseCae: GetTextSizeModelUseCae,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -62,14 +60,15 @@ class LoginViewModel @Inject constructor(
 
     init {
         checkLogin()
-        getThemeMode()
+        getPref()
     }
 
     private val context = application.applicationContext
 
-    private fun getThemeMode() {
+    private fun getPref() {
         viewModelScope.launch {
             UserState.mode = getThemeModeUseCase()
+            UserState.textSize.value = getTextSizeModelUseCae()
         }
     }
 

@@ -9,10 +9,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.todayeouido.tayapp.data.remote.dto.scrap.ScrapBillItemDto
 import com.todayeouido.tayapp.presentation.components.BottomBarTabs
 import com.todayeouido.tayapp.presentation.screens.*
-import com.todayeouido.tayapp.presentation.screens.Profile.*
+import com.todayeouido.tayapp.presentation.screens.profile.*
 import com.todayeouido.tayapp.presentation.screens.initial.LoginScreen
 import com.todayeouido.tayapp.presentation.screens.initial.RegisterScreen
 import com.todayeouido.tayapp.presentation.screens.initial.SplashScreen
