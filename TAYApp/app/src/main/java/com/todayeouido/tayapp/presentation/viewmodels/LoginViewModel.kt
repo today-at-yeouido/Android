@@ -29,6 +29,7 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.todayeouido.tayapp.BuildConfig
 import com.todayeouido.tayapp.domain.use_case.pref.GetTextSizeModelUseCae
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -129,8 +130,8 @@ class LoginViewModel @Inject constructor(
             val serverAuthCode = account.serverAuthCode
             val accessToken = authGoogleUseCase(
                 authCode = serverAuthCode!!,
-                clientId = context.getString(R.string.google_client_ID),
-                clientSecret = context.getString(R.string.google_client_secret)
+                clientId = BuildConfig.GOOGLE_CLIENT_ID,
+                clientSecret = BuildConfig.GOOGLE_CLIENT_SECRET
             )
 
             val res = loginUseCases.requestSnsUseCase("google", accessToken)
@@ -139,7 +140,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun getGoogleLoginAuth(): GoogleSignInClient {
-        val clientId = context.getString(R.string.google_client_ID)
+        val clientId = BuildConfig.GOOGLE_CLIENT_ID
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(clientId)

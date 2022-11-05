@@ -16,13 +16,13 @@ class TayApplication : Application() {
         super.onCreate()
         // 다른 초기화 코드들
 
-        val naverClientId = getString(R.string.social_login_info_naver_client_id)
-        val naverClientSecret = getString(R.string.social_login_info_naver_client_secret)
+        val naverClientId = BuildConfig.NAVER_CLIENT_ID
+        val naverClientSecret = BuildConfig.NAVER_CLIENT_SECRET
         val naverClientName = getString(R.string.social_login_info_naver_client_name)
 
         NaverIdLoginSDK.initialize(this, naverClientId, naverClientSecret, naverClientName)
         // Kakao SDK 초기화
-        KakaoSdk.init(this, "c323d5d48d4d822eaa2a0fbd6e3ca567")
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
     }
 
     companion object {
