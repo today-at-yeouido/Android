@@ -7,6 +7,8 @@ plugins {
    // id 'com.google.gms.google-services'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
     compileSdk 32
@@ -22,6 +24,12 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key']
+        resValue "string", "kakao_oauth_host", properties['kakao_oauth_host']
+        buildConfigField "String", "NAVER_CLIENT_ID", properties['social_login_info_naver_client_id']
+        buildConfigField "String", "NAVER_CLIENT_SECRET", properties['social_login_info_naver_client_secret']
+        buildConfigField "String", "GOOGLE_CLIENT_ID", properties['google_client_ID']
+        buildConfigField "String", "GOOGLE_CLIENT_SECRET", properties['google_client_secret']
     }
 
     buildTypes {

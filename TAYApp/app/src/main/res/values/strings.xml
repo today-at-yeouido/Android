@@ -1,13 +1,7 @@
 <resources>
     <string name="app_name">TAYApp</string>
 
-    <string name="social_login_info_naver_client_id">vIeHTNd_bxmZUhkhPvW6</string>
-    <string name="social_login_info_naver_client_secret">fQPcwEZ65a</string>
     <string name="social_login_info_naver_client_name">네이버아이디 로그인</string>
-
-    <string name="google_client_ID">833085502267-tfa3nr5cg80fvoskb0flu8m1oi38ikb0.apps.googleusercontent.com</string>
-    <string name="google_client_secret">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</string>
-
     <!--   Bottom Item -->
     <string name="bottom_home">홈</string>
     <string name="bottom_scrap">스크랩</string>
