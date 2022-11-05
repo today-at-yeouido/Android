@@ -266,6 +266,7 @@ fun activityLauncher(
     } else {
         Log.d("##99","result code ${result.resultCode}")
         Log.d("##99","result data ${result.data}")
+        Log.d("##99","result data ${result.resultCode}")
         onError()
     }
 }

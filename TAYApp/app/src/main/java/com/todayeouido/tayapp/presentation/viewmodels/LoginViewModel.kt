@@ -108,7 +108,6 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val accessToken = handleKakaoLogin()
             val res = loginUseCases.requestSnsUseCase("kakao", accessToken!!)
-            Log.d("##12", "카카오 $res, 로그인스테이트 ${isLogin.value}")
             if (res) isLogin.value = true
             Log.d("##12", "카카오 $res, 로그인스테이트 ${isLogin.value}")
         }
@@ -118,9 +117,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val accessToken = handleNaverLogin()
             val res = loginUseCases.requestSnsUseCase("naver", accessToken)
-            Log.d("##12", "네이버 $res , 로그인스테이트 ${isLogin.value}")
             if (res) isLogin.value = true
-            Log.d("##12", "네이버 $res , 로그인스테이트 ${isLogin.value}")
         }
     }
 
@@ -134,11 +131,8 @@ class LoginViewModel @Inject constructor(
                 clientSecret = context.getString(R.string.google_client_secret)
             )
 
-            Log.d("##88", "구글 로그인  $serverAuthCode")
             val res = loginUseCases.requestSnsUseCase("google", accessToken)
-            Log.d("##12", "구글 $res, 로그인스테이트 ${isLogin.value}")
             if (res) isLogin.value = true
-            Log.d("##12", "구글 $res, 로그인스테이트 ${isLogin.value}")
         }
     }
 
@@ -146,11 +140,10 @@ class LoginViewModel @Inject constructor(
         val clientId = context.getString(R.string.google_client_ID)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
+            .requestIdToken(clientId)
             .requestServerAuthCode(clientId)
+            .requestEmail()
             .build()
-
         return GoogleSignIn.getClient(context, gso)
     }
 
