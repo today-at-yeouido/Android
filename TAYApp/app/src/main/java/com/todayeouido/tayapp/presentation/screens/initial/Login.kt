@@ -1,5 +1,7 @@
 package com.todayeouido.tayapp.presentation.screens.initial
 
+import android.app.Activity
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -19,6 +21,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -90,7 +93,7 @@ fun LoginScreen(
 @Composable
 private fun Login(
     requestLogin: (String, String) -> Unit,
-    kakaoLogin: () -> Unit,
+    kakaoLogin: (Context) -> Unit,
     naverLogin: () -> Unit,
     googleLogin: (GoogleSignInAccount) -> Unit,
     googleAuth: () -> GoogleSignInClient,
@@ -190,7 +193,7 @@ private fun InputField(
 
 @Composable
 private fun SocialField(
-    kakaoLogin: () -> Unit,
+    kakaoLogin: (Context) -> Unit,
     naverLogin: () -> Unit,
     googleLogin: (GoogleSignInAccount) -> Unit,
     googleAuth: () -> GoogleSignInClient,
@@ -211,14 +214,14 @@ private fun SocialField(
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-
+            val context = LocalContext.current as Activity
             Image(
                 painter = painterResource(id = R.drawable.btn_kakao_login),
                 contentDescription = "kakao_login",
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .width(250.dp)
-                    .clickable { kakaoLogin() }
+                    .clickable { kakaoLogin(context) }
             )
 
             Image(

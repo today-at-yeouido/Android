@@ -1,6 +1,9 @@
 package com.todayeouido.tayapp.presentation.viewmodels
 
+import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.ContextWrapper
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -104,9 +107,9 @@ class LoginViewModel @Inject constructor(
             }
         }
 
-    fun kakaoLogin() {
+    fun kakaoLogin(context: Context) {
         viewModelScope.launch {
-            val accessToken = handleKakaoLogin()
+            val accessToken = handleKakaoLogin(context)
             val res = loginUseCases.requestSnsUseCase("kakao", accessToken!!)
             if (res) isLogin.value = true
             Log.d("##12", "카카오 $res, 로그인스테이트 ${isLogin.value}")
@@ -147,7 +150,7 @@ class LoginViewModel @Inject constructor(
         return GoogleSignIn.getClient(context, gso)
     }
 
-    private suspend fun handleKakaoLogin(): String? =
+    private suspend fun handleKakaoLogin(context: Context): String? =
         suspendCancellableCoroutine { continuation ->
             // 카카오계정으로 로그인 공통 callback 구성
             // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
@@ -156,7 +159,6 @@ class LoginViewModel @Inject constructor(
                     Log.e("##88", "카카오계정으로 로그인 실패 $error")
 
                 } else if (token != null) {
-                    Log.i("##88", "카카오계정으로 로그인 성공 ${token.accessToken}")
                     continuation.resume(token.accessToken)
                 }
             }
@@ -170,13 +172,13 @@ class LoginViewModel @Inject constructor(
                         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                         // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                            Log.d("##88","카카오톡 권한 거부?")
                             return@loginWithKakaoTalk
                         }
-
                         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                     } else if (token != null) {
-                        Log.i("##88", "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        continuation.resume(token.accessToken)
                     }
                 }
             } else {
