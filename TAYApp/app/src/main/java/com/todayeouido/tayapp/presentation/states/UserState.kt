@@ -8,6 +8,7 @@ import com.todayeouido.tayapp.utils.ThemeConstants.SYSTEM
 object UserState {
     var user by mutableStateOf(UserInfo())
 
+    var textSize = mutableStateOf(1f)
     var mode by mutableStateOf(SYSTEM)
 
     var network by mutableStateOf(true)

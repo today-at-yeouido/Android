@@ -1,10 +1,6 @@
 package com.todayeouido.tayapp.data.repository
 
-import com.todayeouido.tayapp.data.remote.BillApi
 import com.todayeouido.tayapp.data.remote.UserSettingApi
-import com.todayeouido.tayapp.data.remote.dto.scrap.DeleteScrapRequestDto
-import com.todayeouido.tayapp.data.remote.dto.scrap.DeleteScrapResponseDto
-import com.todayeouido.tayapp.data.remote.dto.scrap.ScrapBillDto
 import com.todayeouido.tayapp.data.remote.dto.user.UserFavoriteCommitteeDto
 import com.todayeouido.tayapp.domain.repository.UserSettingRepository
 import retrofit2.Response
@@ -19,6 +15,4 @@ constructor(private val UserSettingApi: UserSettingApi) : UserSettingRepository 
     override suspend fun getUserCommittee(): Response<UserFavoriteCommitteeDto> {
         return UserSettingApi.getUserCommittee()
     }
-
-
 }

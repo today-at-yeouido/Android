@@ -1,6 +1,7 @@
 package com.todayeouido.tayapp.presentation.viewmodels
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,15 +13,13 @@ import com.todayeouido.tayapp.data.pref.model.toState
 import com.todayeouido.tayapp.data.remote.dto.login.RegistrationDto
 import com.todayeouido.tayapp.domain.use_case.AuthGoogleUseCase
 import com.todayeouido.tayapp.domain.use_case.LoginUseCases
-import com.todayeouido.tayapp.domain.use_case.mode.GetThemeModeUseCase
+import com.todayeouido.tayapp.domain.use_case.pref.GetThemeModeUseCase
 import com.todayeouido.tayapp.presentation.states.UserState
 import com.todayeouido.tayapp.presentation.states.LoginUserUiState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.Scopes
-import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -30,6 +29,7 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.todayeouido.tayapp.domain.use_case.pref.GetTextSizeModelUseCae
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -42,6 +42,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
     private val authGoogleUseCase: AuthGoogleUseCase,
     private val getThemeModeUseCase: GetThemeModeUseCase,
+    private val getTextSizeModelUseCae: GetTextSizeModelUseCae,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -59,14 +60,15 @@ class LoginViewModel @Inject constructor(
 
     init {
         checkLogin()
-        getThemeMode()
+        getPref()
     }
 
     private val context = application.applicationContext
 
-    private fun getThemeMode() {
+    private fun getPref() {
         viewModelScope.launch {
             UserState.mode = getThemeModeUseCase()
+            UserState.textSize.value = getTextSizeModelUseCae()
         }
     }
 
@@ -104,11 +106,10 @@ class LoginViewModel @Inject constructor(
             }
         }
 
-    fun kakaoLogin() {
+    fun kakaoLogin(context: Context) {
         viewModelScope.launch {
-            val accessToken = handleKakaoLogin()
+            val accessToken = handleKakaoLogin(context)
             val res = loginUseCases.requestSnsUseCase("kakao", accessToken!!)
-            Log.d("##12", "카카오 $res, 로그인스테이트 ${isLogin.value}")
             if (res) isLogin.value = true
             Log.d("##12", "카카오 $res, 로그인스테이트 ${isLogin.value}")
         }
@@ -118,9 +119,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val accessToken = handleNaverLogin()
             val res = loginUseCases.requestSnsUseCase("naver", accessToken)
-            Log.d("##12", "네이버 $res , 로그인스테이트 ${isLogin.value}")
             if (res) isLogin.value = true
-            Log.d("##12", "네이버 $res , 로그인스테이트 ${isLogin.value}")
         }
     }
 
@@ -134,11 +133,8 @@ class LoginViewModel @Inject constructor(
                 clientSecret = context.getString(R.string.google_client_secret)
             )
 
-            Log.d("##88", "구글 로그인  $serverAuthCode")
             val res = loginUseCases.requestSnsUseCase("google", accessToken)
-            Log.d("##12", "구글 $res, 로그인스테이트 ${isLogin.value}")
             if (res) isLogin.value = true
-            Log.d("##12", "구글 $res, 로그인스테이트 ${isLogin.value}")
         }
     }
 
@@ -146,15 +142,14 @@ class LoginViewModel @Inject constructor(
         val clientId = context.getString(R.string.google_client_ID)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
+            .requestIdToken(clientId)
             .requestServerAuthCode(clientId)
+            .requestEmail()
             .build()
-
         return GoogleSignIn.getClient(context, gso)
     }
 
-    private suspend fun handleKakaoLogin(): String? =
+    private suspend fun handleKakaoLogin(context: Context): String? =
         suspendCancellableCoroutine { continuation ->
             // 카카오계정으로 로그인 공통 callback 구성
             // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
@@ -163,7 +158,6 @@ class LoginViewModel @Inject constructor(
                     Log.e("##88", "카카오계정으로 로그인 실패 $error")
 
                 } else if (token != null) {
-                    Log.i("##88", "카카오계정으로 로그인 성공 ${token.accessToken}")
                     continuation.resume(token.accessToken)
                 }
             }
@@ -177,13 +171,13 @@ class LoginViewModel @Inject constructor(
                         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                         // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                            Log.d("##88","카카오톡 권한 거부?")
                             return@loginWithKakaoTalk
                         }
-
                         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                     } else if (token != null) {
-                        Log.i("##88", "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        continuation.resume(token.accessToken)
                     }
                 }
             } else {

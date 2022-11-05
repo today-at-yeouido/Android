@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.todayeouido.tayapp.domain.use_case.login.RequestLogoutUseCase
-import com.todayeouido.tayapp.domain.use_case.mode.SaveThemeModeUseCase
+import com.todayeouido.tayapp.domain.use_case.pref.SaveThemeModeUseCase
 import com.todayeouido.tayapp.presentation.states.UserState
 import com.todayeouido.tayapp.presentation.states.UserInfo
 import com.todayeouido.tayapp.utils.NoConnectivityException
@@ -13,16 +13,17 @@ import com.todayeouido.tayapp.utils.SocialConstants.NAVER
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.todayeouido.tayapp.domain.use_case.login.DeleteUserInfoUseCase
+import com.todayeouido.tayapp.domain.use_case.pref.SaveTextSizeModelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val logoutUseCase: RequestLogoutUseCase,
     private val saveThemeModeUseCase: SaveThemeModeUseCase,
+    private val saveTextSizeUseCase: SaveTextSizeModelUseCase,
     private val deleteUserInfoUseCase: DeleteUserInfoUseCase
 ) : ViewModel() {
     fun logout() {
@@ -61,6 +62,12 @@ class ProfileViewModel @Inject constructor(
             deleteUserInfoUseCase()
         }
         logout()
+    }
+
+    fun saveTextSize(size: Float){
+        viewModelScope.launch {
+            saveTextSizeUseCase(size)
+        }
     }
 
     fun saveThemeMode(mode: String) {

@@ -3,7 +3,6 @@ package com.todayeouido.tayapp.presentation.screens
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,7 +15,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -32,10 +30,8 @@ import com.todayeouido.tayapp.presentation.components.*
 import com.todayeouido.tayapp.presentation.states.BillDetailUiState
 import com.todayeouido.tayapp.presentation.ui.theme.KeyLine
 import com.todayeouido.tayapp.presentation.ui.theme.TayAppTheme
-import com.todayeouido.tayapp.presentation.ui.theme.lm_primary50
 import com.todayeouido.tayapp.presentation.utils.StateColor
 import com.todayeouido.tayapp.presentation.viewmodels.DetailViewModel
-import com.todayeouido.tayapp.utils.textDp
 
 @Composable
 fun BillTable(

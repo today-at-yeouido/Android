@@ -1,11 +1,9 @@
-package com.todayeouido.tayapp.presentation.screens.Profile
+package com.todayeouido.tayapp.presentation.screens.profile
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.IconToggleButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Circle
@@ -13,11 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.todayeouido.tayapp.presentation.components.CardProfileListItemWithNext
 import com.todayeouido.tayapp.presentation.components.TayCard
 import com.todayeouido.tayapp.presentation.components.TayTopAppBarWithBack
 import com.todayeouido.tayapp.presentation.ui.theme.*

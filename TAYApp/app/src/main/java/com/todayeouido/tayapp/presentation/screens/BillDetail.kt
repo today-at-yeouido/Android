@@ -36,6 +36,7 @@ import com.todayeouido.tayapp.presentation.ui.theme.*
 import com.todayeouido.tayapp.presentation.utils.StateColor
 import com.todayeouido.tayapp.presentation.utils.TayIcons
 import com.todayeouido.tayapp.presentation.viewmodels.DetailViewModel
+import com.todayeouido.tayapp.utils.mutableSize
 import kotlinx.coroutines.launch
 
 
@@ -333,7 +334,6 @@ private fun BillPointText(
         Title(string = "법안 핵심 내용")
 
         summary.forEach {
-
             if(it.contains("이에,") || it.startsWith("  이에")) {
                 Text(
                     text = buildAnnotatedString {
@@ -342,6 +342,7 @@ private fun BillPointText(
                         }
                     },
                     color = TayAppTheme.colors.headText,
+                    fontSize = 14.mutableSize,
                     style = TayAppTheme.typo.typography.body2
                 )
             } else if(it.contains("제안이유") || it.contains("주요내용") || it.contains("참고사항")) {
@@ -354,6 +355,7 @@ private fun BillPointText(
                 Text(
                     text = it,
                     color = TayAppTheme.colors.headText,
+                    fontSize = 14.mutableSize,
                     style = TayAppTheme.typo.typography.body2
                 )
             }
