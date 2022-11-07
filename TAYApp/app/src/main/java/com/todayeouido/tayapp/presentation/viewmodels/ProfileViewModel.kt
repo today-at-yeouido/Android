@@ -59,9 +59,31 @@ class ProfileViewModel @Inject constructor(
      */
     fun withdraw() {
         viewModelScope.launch {
-            deleteUserInfoUseCase()
+            try {
+                if (deleteUserInfoUseCase(UserState.user.refreshToken).last()) {
+                    when (UserState.user.sns) {
+                        NAVER -> {
+                            NaverIdLoginSDK.logout()
+                        }
+                        KAKAO -> {
+                            UserApiClient.instance.logout { error ->
+                                if (error != null) {
+                                    Log.e("##88", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+                                } else {
+                                    Log.i("##88", "로그아웃 성공. SDK에서 토큰 삭제됨")
+                                }
+                            }
+                        }
+                    }
+                    UserState.user = UserInfo()
+                }
+            } catch (e: NoConnectivityException) {
+                if (UserState.user.sns.isEmpty() && UserState.user.id != "Guest") UserState.user =
+                    UserInfo()
+                Log.e("##88", "로그아웃 실패. SDK에서 토큰 삭제됨")
+            }
         }
-        logout()
+
     }
 
     fun saveTextSize(size: Float){
