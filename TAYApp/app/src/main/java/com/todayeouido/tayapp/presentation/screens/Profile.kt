@@ -89,7 +89,12 @@ fun Profile(
                 CardGuestProfile { navController.navigate(Destinations.LOGIN) }
             }
             ProfileSettings(navController)
+
+            TayDivider()
+
             ProfileLineItems()
+
+            TayDivider()
 
             if(UserState.isLogin()) {
                 ProfileBottomButtons(
@@ -147,13 +152,7 @@ private fun ProfileLineItems() {
         CardProfileListItemWithOutIcon(
             text = "버전", subtext = "v.1.0.0"
         ) {
-            TayButton(
-                onClick = { /*TODO*/ }, contentColor = TayAppTheme.colors.headText
-            ) {
-                Text(
-                    text = "업데이트", fontWeight = FontWeight.Medium, fontSize = 14.sp
-                )
-            }
+
         }
     }
 }
