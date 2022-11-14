@@ -36,7 +36,7 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="오늘, 여의도"
             android:theme="@style/Theme.TAYApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
