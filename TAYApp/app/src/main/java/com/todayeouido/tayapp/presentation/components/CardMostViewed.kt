@@ -27,10 +27,6 @@ import com.todayeouido.tayapp.domain.model.News
 import com.todayeouido.tayapp.presentation.MainActivity
 import com.todayeouido.tayapp.presentation.components.MostViewedValues.Card_Gap
 import com.todayeouido.tayapp.presentation.states.FeedUiState
-import com.todayeouido.tayapp.presentation.ui.theme.CardNewsShape
-import com.todayeouido.tayapp.presentation.ui.theme.KeyLine
-import com.todayeouido.tayapp.presentation.ui.theme.TayAppTheme
-import com.todayeouido.tayapp.presentation.ui.theme.lm_card_yellow
 import com.todayeouido.tayapp.presentation.utils.StateColor
 import com.todayeouido.tayapp.presentation.utils.TayEmoji
 import com.todayeouido.tayapp.presentation.utils.TayIcons
@@ -40,6 +36,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.todayeouido.tayapp.presentation.ui.theme.*
 
 
 private object MostViewedValues {
@@ -210,7 +207,7 @@ private fun CardContent(bill: MostViewedBill.Bill) {
             Spacer(modifier = Modifier.height(13.dp))
             Text(
                 bill.billName,
-                color = TayAppTheme.colors.background,
+                color = lm_gray800,
                 fontSize = 18.textDp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 1.3.em,
@@ -223,7 +220,7 @@ private fun CardContent(bill: MostViewedBill.Bill) {
                 bill.proposer,
                 fontSize = 13.textDp,
                 fontWeight = FontWeight.Normal,
-                color = TayAppTheme.colors.layer1,
+                color = lm_gray700,
                 lineHeight = 1.2.em
             )
             Spacer(Modifier.height(7.dp))
@@ -232,7 +229,7 @@ private fun CardContent(bill: MostViewedBill.Bill) {
         Text(
             text = bill.emoji,
             fontSize = 72.textDp,
-            modifier = Modifier.requiredSize(90.dp)
+            //modifier = Modifier.requiredSize(90.dp)
         )
     }
 }
