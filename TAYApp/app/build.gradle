@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-parcelize'
+
    // id 'com.google.gms.google-services'
 }
 
@@ -17,7 +18,7 @@ android {
         applicationId "com.todayeouido.tayapp"
         minSdk 26
         targetSdk 32
-        versionCode 4
+        versionCode 6
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
