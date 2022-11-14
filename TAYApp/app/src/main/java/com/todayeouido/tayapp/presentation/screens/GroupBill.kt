@@ -46,7 +46,7 @@ fun GroupBill(
     bill: List<ScrapBillItemDto>,
     billName: String
 ){
-    Column {
+    Column(Modifier.navigationBarsPadding()) {
         TayTopAppBarWithBack(string = "입법현황 모두 보기", upPress = upPress)
 
         if (UserState.network) {
