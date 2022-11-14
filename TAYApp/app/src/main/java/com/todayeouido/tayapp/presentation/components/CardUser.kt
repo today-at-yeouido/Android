@@ -26,15 +26,13 @@ import com.todayeouido.tayapp.R
 import com.todayeouido.tayapp.data.remote.dto.bill.BillDto
 import com.todayeouido.tayapp.data.remote.dto.bill.RecommendBillDto
 import com.todayeouido.tayapp.presentation.states.UserState
-import com.todayeouido.tayapp.presentation.ui.theme.Card_Inner_Padding
-import com.todayeouido.tayapp.presentation.ui.theme.KeyLine
-import com.todayeouido.tayapp.presentation.ui.theme.TayAppTheme
 import com.todayeouido.tayapp.utils.ThemeConstants.LIGHT
 import com.todayeouido.tayapp.utils.ThemeConstants.SYSTEM
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
+import com.todayeouido.tayapp.presentation.ui.theme.*
 import kotlin.math.absoluteValue
 
 private object CardUserValue {
@@ -84,7 +82,7 @@ fun CardsUser(
 
         when {
             !UserState.isLogin() -> {
-                CardUserDialog(navigateToLogin, "로그인이 필요한 서비스입니다!", "로그인")
+                CardUserDialog(navigateToLogin, "로그인이 필요한 서비스입니다", "로그인하기")
             }
             UserState.isLogin() && recommendBill.isEmpty() -> {
                 CardUserDialog(navigateToFavorite, "관심 소관위를 설정해주세요!", buttonText = "설정하러 가기")
@@ -118,23 +116,24 @@ private fun BoxScope.CardUserDialog(
         Column(
             modifier = Modifier.Companion
                 .align(Alignment.Center)
-                .background(TayAppTheme.colors.layer3, RoundedCornerShape(12.dp))
-                .padding(16.dp),
+                .background(TayAppTheme.colors.bodyText, RoundedCornerShape(12.dp))
+                .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = explanation,
                 fontWeight = FontWeight.Medium,
-                fontSize = 15.sp
+                fontSize = 15.sp,
+                color = TayAppTheme.colors.background
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(38.dp))
             TayButton(
                 onClick = navigateToLogin,
                 Modifier.size(ButtonMediumWidth, ButtonMediumHeight),
                 backgroundColor = TayAppTheme.colors.primary,
                 contentColor = TayAppTheme.colors.headText
             ) {
-                Text(text = buttonText, fontSize = 15.sp)
+                Text(text = buttonText, fontSize = 15.sp, color = lm_gray800)
             }
         }
     }

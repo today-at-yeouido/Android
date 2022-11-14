@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -22,6 +23,8 @@ import com.todayeouido.tayapp.presentation.ui.theme.TayAppTheme
 import com.todayeouido.tayapp.presentation.utils.ExpandButton
 import com.todayeouido.tayapp.presentation.utils.NotificationButton
 import com.google.accompanist.flowlayout.FlowRow
+import com.todayeouido.tayapp.presentation.ui.theme.dm_gray100
+import com.todayeouido.tayapp.presentation.ui.theme.lm_gray100
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -103,6 +106,7 @@ fun TayHomeTopAppBar(
             isExpanded = isExpanded,
             onArrowClick = onArrowClick
         )
+        Divider(color = TayAppTheme.colors.layer2, thickness = 1.dp)
     }
 }
 

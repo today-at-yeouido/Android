@@ -56,7 +56,7 @@ fun Pill(
             Pill(
                 textColor = lm_gray600,
                 backgroundColor = lm_gray000,
-                border = BorderStroke(1.dp, TayAppTheme.colors.layer3)
+                border = BorderStroke(1.dp, lm_gray100)
             ) {
                 Text("$text", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }
@@ -64,7 +64,7 @@ fun Pill(
         "접수", "발의", "소관위접수" -> {
             Pill(
                 textColor = lm_gray700,
-                backgroundColor = TayAppTheme.colors.layer3
+                backgroundColor = lm_gray100
             ) {
                 Text("발의", fontSize = fontSize, fontWeight = FontWeight.Normal)
             }

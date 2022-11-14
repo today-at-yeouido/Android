@@ -89,6 +89,9 @@ fun Feed(
                             viewModel.tryGetRecentBill()
                         }
                         if (index == 0) {
+                            if(selectedCategory != 0) {
+                                CardCommitt(selectedCategory = selectedCategory)
+                            }
                             CardMostViewed(items = mostViewed, onBillSelected)
                             Spacer(modifier = Modifier.height(40.dp))
 

@@ -22,7 +22,7 @@ import com.todayeouido.tayapp.presentation.ui.theme.lm_gray800
 val ButtonSmallWidth = 100.dp
 val ButtonSmallHeight = 40.dp
 
-val ButtonMediumWidth = 128.dp
+val ButtonMediumWidth = 240.dp
 val ButtonMediumHeight = 40.dp
 
 val ButtonLargeWidth = 328.dp
