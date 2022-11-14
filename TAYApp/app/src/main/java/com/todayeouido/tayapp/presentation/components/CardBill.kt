@@ -74,13 +74,12 @@ fun CardBillWithScrap(
         enable = true,
         onClick = { onBillSelected(bill.bills.first().id) }
     ) {
-        Row(
+        Column(
             modifier = Modifier.padding(5.dp)
         ) {
             CardBillDefault(
                 modifier = Modifier
-                    .padding(9.dp)
-                    .weight(1f),
+                    .padding(9.dp),
                 title = bill.billName,
                 status = bill.bills.first().status,
                 bill = bill.bills.first().billType,
@@ -88,6 +87,7 @@ fun CardBillWithScrap(
                 people = bill.bills.first().proposer
             )
             BookmarkButton(
+                modifier = Modifier.align(Alignment.End),
                 isBookmarked = isBookMarked,
                 onClick = {
                     if(isBookMarked) onScrapClickClicked() else onScrapClickNotClicked()
