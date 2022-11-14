@@ -333,6 +333,15 @@ private fun BillPointText(
     ) {
         Title(string = "법안 핵심 내용")
 
+        if(summary.isEmpty()) {
+            Text(
+                text = "내용이 아직 없어요",
+                color = TayAppTheme.colors.headText,
+                fontSize = 14.mutableSize,
+                style = TayAppTheme.typo.typography.body2
+            )
+        }
+
         summary.forEach {
             if(it.contains("이에,") || it.startsWith("  이에")) {
                 Text(

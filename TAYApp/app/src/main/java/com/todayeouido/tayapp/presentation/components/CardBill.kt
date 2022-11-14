@@ -19,6 +19,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -73,13 +74,12 @@ fun CardBillWithScrap(
         enable = true,
         onClick = { onBillSelected(bill.bills.first().id) }
     ) {
-        Row(
+        Column(
             modifier = Modifier.padding(5.dp)
         ) {
             CardBillDefault(
                 modifier = Modifier
-                    .padding(9.dp)
-                    .weight(1f),
+                    .padding(9.dp),
                 title = bill.billName,
                 status = bill.bills.first().status,
                 bill = bill.bills.first().billType,
@@ -87,6 +87,7 @@ fun CardBillWithScrap(
                 people = bill.bills.first().proposer
             )
             BookmarkButton(
+                modifier = Modifier.align(Alignment.End),
                 isBookmarked = isBookMarked,
                 onClick = {
                     if(isBookMarked) onScrapClickClicked() else onScrapClickNotClicked()
@@ -123,7 +124,9 @@ fun CardBillWithEmoji(
                     text = bill.billName,
                     fontWeight = FontWeight.Medium,
                     color = TayAppTheme.colors.bodyText,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
 
@@ -170,21 +173,21 @@ fun CardBillDefault(
                     }
                 },
                 color = TayAppTheme.colors.bodyText,
-                modifier = Modifier
-                    .height(54.dp),
+                modifier = Modifier,
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                maxLines = 2
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         } else {
             Text(
                 text = title,
-                modifier = Modifier
-                    .height(54.dp),
+                modifier = Modifier,
                 color = TayAppTheme.colors.bodyText,
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                maxLines = 2
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Row(

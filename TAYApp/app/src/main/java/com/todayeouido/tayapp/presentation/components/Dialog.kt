@@ -72,15 +72,19 @@ fun SettingModeDialog(
                         onClick = {
                             onDismissRequest()
                         },
-                        modifier = Modifier.size(ButtonSmallWidth, ButtonSmallHeight),
-                        backgroundColor = TayAppTheme.colors.layer2,
+                        modifier = Modifier
+                            .height(ButtonSmallHeight)
+                            .fillMaxWidth().
+                            border(1.dp, TayAppTheme.colors.border, RoundedCornerShape(8.dp))
+                            .weight(1f),
+                        backgroundColor = TayAppTheme.colors.background,
                         contentColor = TayAppTheme.colors.bodyText
                     ) {
                         Text(text = "취소", style = TayAppTheme.typo.typography.button)
                     }
                     TayButton(
                         onClick = { setMode(UserState.mode) },
-                        modifier = Modifier.size(ButtonSmallWidth, ButtonSmallHeight),
+                        modifier = Modifier.height(ButtonSmallHeight).fillMaxWidth().weight(1f),
                         backgroundColor = TayAppTheme.colors.bodyText,
                         contentColor = TayAppTheme.colors.background
                     ) {
@@ -96,7 +100,8 @@ fun SettingModeDialog(
 private fun RadioRow(mode: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.clickable { UserState.mode = mode }
     ) {
         RadioButton(
             selected = UserState.mode == mode,

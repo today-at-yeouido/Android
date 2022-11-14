@@ -178,6 +178,7 @@ fun CardProfileListItem(
     icon: ImageVector = TayIcons.visibility_outlined,
     text: String = "입력",
     subtext: String = "",
+    isIcon: Boolean = true,
     onClick: () -> Unit = {},
     endComponent: @Composable RowScope. () -> Unit = {}
 ) {
@@ -190,11 +191,13 @@ fun CardProfileListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Icon(
-            imageVector = icon,
-            tint = TayAppTheme.colors.bodyText,
-            contentDescription = ""
-        )
+        if(isIcon) {
+            Icon(
+                imageVector = icon,
+                tint = TayAppTheme.colors.bodyText,
+                contentDescription = ""
+            )
+        }
         Text(
             "$text",
             fontWeight = FontWeight.Medium,
@@ -264,6 +267,7 @@ fun CardProfileListItemWithOutIcon(
     CardProfileListItem(
         text = text,
         subtext = subtext,
+        isIcon = false,
         endComponent = endComponent,
         onClick = onClick
     )

@@ -106,7 +106,8 @@ fun BillTable(
                         text = title,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(color = TayAppTheme.colors.border),
+                            .background(color = TayAppTheme.colors.layer2)
+                            .padding(2.dp),
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -166,7 +167,7 @@ private fun SubCondolenceText(
             lineHeight = 1.65.em,
             letterSpacing = (-0.2).sp,
             inlineContent = inlinePill,
-            modifier = Modifier.padding(horizontal = padding, vertical = 1.dp)
+            modifier = Modifier.padding(horizontal = padding, vertical = 5.dp)
         )
         if (sub.text.table.isNotEmpty()) {
             Log.d("##12", "table")

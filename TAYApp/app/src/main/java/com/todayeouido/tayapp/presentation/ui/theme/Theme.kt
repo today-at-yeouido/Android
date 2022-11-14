@@ -263,7 +263,7 @@ class TayColorSystem(
         background = other.background
         layer1 = other.layer1
         layer2 = other.layer2
-        layer2 = other.layer3
+        layer3 = other.layer3
         border = other.border
         fieldBorder = other.fieldBorder
         disableIcon = other.disableIcon
