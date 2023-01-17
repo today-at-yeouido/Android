@@ -17,7 +17,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//         This app draws behind the system bars
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val density = resources.displayMetrics.density
