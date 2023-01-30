@@ -17,6 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val density = resources.displayMetrics.density
