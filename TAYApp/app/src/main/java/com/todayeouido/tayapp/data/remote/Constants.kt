@@ -1,8 +1,8 @@
 package com.todayeouido.tayapp.data.remote
 
 object Constants {
-    const val BASE_URL_DEBUG = "http://todayeouido.co.kr:10304/yeouido/v0/"
-    const val BASE_URL_RELEASE = "http://todayeouido.co.kr:10303/yeouido/v0/"
+    const val BASE_URL_DEBUG = "https://api.todayeouido.co.kr/yeouido/v0/"
+    const val BASE_URL_RELEASE = "https://api.todayeouido.co.kr/yeouido/v0/"
     const val GOOGLE_URL = "https://www.googleapis.com/"
     const val AUTHORIZATION = "Authorization"
 
